@@ -1,7 +1,6 @@
 package dto;
 
 import entities.SportField;
-import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
 
@@ -45,16 +44,12 @@ public class ClosureUpdateForm {
         Id = id;
     }
 
-    @NotNull(message = "Id is required")
     private int Id;
 
-    @NotNull(message = "Start date is required")
     private LocalDate startDate;
 
-    @NotNull(message = "End date is required")
     private LocalDate endDate;
 
-    @NotNull(message = "SportField is required")
     private SportField sportField;
 
     private boolean active = true;
