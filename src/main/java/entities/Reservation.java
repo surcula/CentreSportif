@@ -37,7 +37,7 @@ public class Reservation {
 
     @ManyToOne
     @JoinColumn(name = "sports_field_id")
-    private SportsField sportsField;
+    private SportField sportField;
 
     @Column(name = "is_active", nullable = false)
     private boolean active = true;
@@ -106,12 +106,12 @@ public class Reservation {
         this.user = user;
     }
 
-    public SportsField getSportsField() {
-        return sportsField;
+    public SportField getSportsField() {
+        return sportField;
     }
 
-    public void setSportsField(SportsField sportsField) {
-        this.sportsField = sportsField;
+    public void setSportsField(SportField sportField) {
+        this.sportField = sportField;
     }
 
     public boolean isActive() {
