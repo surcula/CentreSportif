@@ -1,4 +1,6 @@
-package services;
+package servlets;
+
+import business.ServletUtils;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -11,6 +13,9 @@ import java.io.IOException;
 
 @WebServlet(name = "LoginServlet", value = "/login")
 public class LoginServlet extends HttpServlet {
+
+    private static final String TEMPLATE = "/views/template/template.jsp";
+    private static final String LOGIN_JSP = "/views/login.jsp";
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -27,33 +32,46 @@ public class LoginServlet extends HttpServlet {
                 session.setAttribute("userId", userId);
                 session.setAttribute("role", role);
 
-                response.sendRedirect(request.getContextPath() + "/home"); // ou accueil
+                ServletUtils.redirectToURL(response,request.getContextPath() + "/home");
             } catch (NumberFormatException e) {
-                request.setAttribute("error", "ID invalide");
-                request.setAttribute("content", "/views/login.jsp");
-                RequestDispatcher dispatcher = request.getRequestDispatcher("/views/template/template.jsp");
-                dispatcher.forward(request, response);
+                ServletUtils.forwardWithError(
+                        request,
+                        response,
+                        "ID invalide",
+                        LOGIN_JSP,
+                        TEMPLATE
+                );
+
             }
         } else {
-            request.setAttribute("error", "Veuillez remplir tous les champs");
-            request.setAttribute("content", "/views/login.jsp");
-            RequestDispatcher dispatcher = request.getRequestDispatcher("/views/template/template.jsp");
-            dispatcher.forward(request, response);
+            ServletUtils.forwardWithError(
+                    request,
+                    response,
+                    "Veuillez remplir tous les champs",
+                    LOGIN_JSP,
+                    TEMPLATE
+            );
+
         }
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
         String action = request.getParameter("action");
 
         if ("logout".equals(action)) {
             request.getSession().invalidate(); // détruit la session
-            response.sendRedirect(request.getContextPath() + "/login");
+            ServletUtils.redirectToURL(response,request.getContextPath() + "/login");
+
         } else {
-            request.setAttribute("content", "/views/login.jsp");
-            RequestDispatcher dispatcher = request.getRequestDispatcher("/views/template/template.jsp");
-            dispatcher.forward(request, response);
+            ServletUtils.forwardWithContent(
+                    request,
+                    response,
+                    LOGIN_JSP,
+                    TEMPLATE
+            );
         }
     }
 }
