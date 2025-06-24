@@ -1,4 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <!-- Footer-->
 <footer class="footer text-center">
     <div class="container">
@@ -35,6 +37,48 @@
 <div class="copyright py-4 text-center text-white">
     <div class="container"><small>Copyright &copy; FSSD 2025</small></div>
 </div>
+
+<!-- Toast container  -->
+<div class="position-fixed top-0 start-50 translate-middle-x p-3" style="z-index: 1100">
+    <div id="successToast" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+            <div class="toast-body">
+                ${successMessage}
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+    </div>
+</div>
+
+<c:if test="${not empty successMessage}">
+    <!-- Toast container (haut, centré) -->
+    <div class="position-fixed top-0 start-50 translate-middle-x p-3" style="z-index: 1100;">
+        <div id="successToast" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body">
+                        ${successMessage}
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            const toastElement = document.getElementById('successToast');
+            const toast = new bootstrap.Toast(toastElement);
+            toast.show();
+        });
+    </script>
+</c:if>
+
+
+
+
+
+
+
+
 
 
 <!-- Portfolio Modals-->

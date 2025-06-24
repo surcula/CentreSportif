@@ -19,7 +19,8 @@
 
     </c:if>
     <c:if test="${empty error}">
-        <p>${error}</p>
+        <a class="btn btn-primary my-3" href="${pageContext.request.contextPath}/hall?form=true">Ajouter un nouveau hall</a>
+
 
         <table class="table">
             <thead>
