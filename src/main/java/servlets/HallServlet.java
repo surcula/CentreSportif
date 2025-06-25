@@ -2,17 +2,13 @@ package servlets;
 
 import business.HallBusiness;
 import business.ServletUtils;
-import dto.HallCreateForm;
 import services.HallServiceImpl;
-
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
 
 @WebServlet(name = "Hall", value = "/hall")
@@ -24,12 +20,6 @@ public class HallServlet extends HttpServlet {
     private static final String HALL_JSP = "/views/hall.jsp";
     private static final String HALL_FORM_JSP = "/views/hall-form.jsp";
     private static final String HOME_JSP = "/views/home.jsp";
-
-    @Override
-    public void init() throws ServletException {
-        emf = Persistence.createEntityManagerFactory("default");
-
-    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

@@ -2,7 +2,6 @@ package servlets;
 
 import business.ServletUtils;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
