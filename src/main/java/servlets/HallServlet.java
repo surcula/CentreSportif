@@ -2,9 +2,9 @@ package servlets;
 
 import business.HallBusiness;
 import business.ServletUtils;
+import dto.EMF;
 import services.HallServiceImpl;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
@@ -15,16 +15,18 @@ import java.util.Map;
 public class HallServlet extends HttpServlet {
 
 
-    private EntityManagerFactory emf;
+    private EntityManager em;
     private static final String TEMPLATE = "/views/template/template.jsp";
     private static final String HALL_JSP = "/views/hall.jsp";
     private static final String HALL_FORM_JSP = "/views/hall-form.jsp";
     private static final String HOME_JSP = "/views/home.jsp";
 
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        EntityManager em = emf.createEntityManager();
+        em = EMF.getEM();
+
         if(request.getParameter("form") != null) {
             HttpSession session = request.getSession(false);
             if(session != null && "ADMIN".equals(session.getAttribute("role"))) {

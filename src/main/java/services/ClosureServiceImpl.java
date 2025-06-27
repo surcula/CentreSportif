@@ -4,6 +4,7 @@ import dto.ClosureCreateForm;
 import entities.Closure;
 import interfaces.ClosureService;
 import mappers.ClosureMapper;
+import org.apache.log4j.Logger;
 
 import javax.persistence.EntityManager;
 import java.util.List;
@@ -11,6 +12,8 @@ import java.util.List;
 public class ClosureServiceImpl implements ClosureService {
 
     private final EntityManager em;
+    // Log4j
+    private static Logger log = Logger.getLogger(EntityFinderImpl.class);
 
     public ClosureServiceImpl(EntityManager em) {
         this.em = em;

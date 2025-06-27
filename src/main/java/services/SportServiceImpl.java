@@ -4,12 +4,15 @@ import dto.SportCreateForm;
 import entities.Sport;
 import interfaces.SportService;
 import mappers.SportMapper;
+import org.apache.log4j.Logger;
 
 import javax.persistence.EntityManager;
 import java.util.List;
 
 public class SportServiceImpl implements SportService {
     private final EntityManager em;
+    // Log4j
+    private static Logger log = Logger.getLogger(EntityFinderImpl.class);
 
     public SportServiceImpl(EntityManager em) {
         this.em = em;

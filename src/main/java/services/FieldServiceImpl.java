@@ -4,12 +4,15 @@ import dto.FieldCreateForm;
 import entities.Field;
 import interfaces.FieldService;
 import mappers.FieldMapper;
+import org.apache.log4j.Logger;
 
 import javax.persistence.EntityManager;
 import java.util.List;
 
 public class FieldServiceImpl implements FieldService {
     private final EntityManager em;
+    // Log4j
+    private static Logger log = Logger.getLogger(EntityFinderImpl.class);
 
     public FieldServiceImpl(EntityManager em) {
         this.em = em;

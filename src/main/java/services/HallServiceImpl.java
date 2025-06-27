@@ -3,6 +3,7 @@ package services;
 import dto.HallCreateForm;
 import entities.Hall;
 import mappers.HallMapper;
+import org.apache.log4j.Logger;
 
 import javax.persistence.EntityManager;
 import java.util.List;
@@ -10,6 +11,8 @@ import java.util.List;
 public class HallServiceImpl implements interfaces.HallService {
 
     private final EntityManager em;
+    // Log4j
+    private static Logger log = Logger.getLogger(EntityFinderImpl.class);
 
     public HallServiceImpl(EntityManager em) {
         this.em = em;
