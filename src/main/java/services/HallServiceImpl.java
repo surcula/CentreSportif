@@ -1,5 +1,6 @@
 package services;
 
+import Tools.Result;
 import dto.HallCreateForm;
 import entities.Hall;
 import mappers.HallMapper;
@@ -15,31 +16,36 @@ public class HallServiceImpl implements interfaces.HallService {
     private static Logger log = Logger.getLogger(EntityFinderImpl.class);
 
     public HallServiceImpl(EntityManager em) {
+
         this.em = em;
     }
 
     @Override
-    public void create(HallCreateForm hallCreateForm) {
+    public Result create(HallCreateForm hallCreateForm) {
+
         em.persist(HallMapper.fromCreateForm(hallCreateForm));
+        return Result.ok();
     }
 
     @Override
-    public void update(Hall hall) {
+    public Result update(Hall hall) {
         em.merge(hall);
+        return Result.ok();
     }
 
     @Override
-    public void delete(Hall hall) {
+    public Result delete(Hall hall) {
         em.merge(hall);
+        return Result.ok();
     }
 
     @Override
-    public Hall getOneById(int id) {
-        return em.find(Hall.class, id);
+    public Result<Hall> getOneById(int id) {
+        return Result.ok(em.find(Hall.class, id));
     }
 
     @Override
-    public List<Hall> getAllHalls() {
-        return em.createQuery("select h from Hall h", Hall.class).getResultList();
+    public Result<List<Hall>> getAllActiveHalls() {
+        return Result.ok(em.createNamedQuery("getAllActiveHalls", Hall.class).getResultList());
     }
 }

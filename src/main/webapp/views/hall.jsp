@@ -6,6 +6,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <section class="page-section">
     <h2 class="page-section-heading text-center text-uppercase text-secondary mb-0">Les halls</h2>
@@ -19,8 +20,11 @@
 
     </c:if>
     <c:if test="${empty error}">
+    <c:if test="${sessionScope.role == 'ADMIN'
+             or sessionScope.role == 'BARMAN'
+             or sessionScope.role == 'SECRETARY'}">
         <a class="btn btn-primary my-3" href="${pageContext.request.contextPath}/hall?form=true">Ajouter un nouveau hall</a>
-
+    </c:if>
 
         <table class="table">
             <thead>
@@ -40,7 +44,11 @@
                 <tr>
                     <td>${status.index + 1}</td>
                     <td>${hall.hallName}</td>
-                    <td>${hall.width} X ${hall.length} X ${hall.height}</td>
+                    <td>
+                        <fmt:formatNumber value="${hall.width}" type="number" minFractionDigits="2" maxFractionDigits="2"/>
+                        X <fmt:formatNumber value="${hall.length}" type="number" minFractionDigits="2" maxFractionDigits="2"/>
+                        X <fmt:formatNumber value="${hall.height}" type="number" minFractionDigits="2" maxFractionDigits="2"/>
+                    </td>
                     <c:if test="${sessionScope.role == 'ADMIN'
              or sessionScope.role == 'BARMAN'
              or sessionScope.role == 'SECRETARY'}">

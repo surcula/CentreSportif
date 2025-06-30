@@ -16,7 +16,7 @@ public class ServletUtils {
      * @param contentPath
      * @param dispatcherJSP
      * @throws ServletException
-     * @throws IOException
+     * @throws IOException if an I/O error occurs
      */
     public static void forwardWithContent(HttpServletRequest request, HttpServletResponse response,String contentPath, String dispatcherJSP) throws ServletException, IOException {
         request.setAttribute("content", contentPath);
@@ -28,7 +28,7 @@ public class ServletUtils {
      * redirect url
      * @param response
      * @param url
-     * @throws IOException
+     * @throws IOException if an I/O error occurs
      */
     public static void redirectToURL(HttpServletResponse response, String url) throws IOException {
         response.sendRedirect(url);
@@ -91,5 +91,36 @@ public class ServletUtils {
         forwardWithContent(request, response, contentPath, dispatcherJSP);
     }
 
+    /**
+     * verify the role
+     * @param role
+     * @return
+     */
+    public static boolean hasRole(String role){
+        if (role == null) return false;
 
+        switch (role.toUpperCase()) {
+            case "ADMIN":
+            case "SECRETARY":
+            case "BARMAN":
+                return true;
+            default:
+                return false;
+        }
+    }
+
+
+    /**
+     * redirect with Success
+     * @param request
+     * @param response
+     * @param successMessage
+     * @param targetPath Path servlet (/...)
+     * @throws IOException if an I/O error occurs
+     */
+    public static void redirectWithSucces(HttpServletRequest request, HttpServletResponse response, String successMessage, String targetPath)
+            throws IOException {
+        request.getSession().setAttribute("successMessage", successMessage);
+        response.sendRedirect(request.getContextPath() + targetPath);
+    }
 }

@@ -1,5 +1,6 @@
 package business;
 
+import Tools.Result;
 import dto.HallCreateForm;
 import dto.HallUpdateForm;
 import entities.Hall;
@@ -24,59 +25,63 @@ public class HallBusiness {
     /**
      * validate data submitted by CreateForm
      *
-     * @param hallName
+     * @param strHallName
      * @param strWidth
      * @param strLength
      * @param strHeight
      * @param strActive
      * @return
      */
-    public static Map<String, String> initCreateForm(String hallName, String strWidth, String strLength, String strHeight, String strActive) {
+    public static Result<HallCreateForm> initCreateForm(String strHallName, String strWidth, String strLength, String strHeight, String strActive) {
         Map<String, String> errors = new HashMap<>();
 
-        if (hallName == null || hallName.trim().isEmpty()) {
-            errors.put("errorHallName", "Le nom est requis.");
-        }
+        String hallName = ValidateForm.stringIsEmpty(
+                strHallName,
+                "errorHallName",
+                "Hall name",
+                errors
+        );
 
-        Double width = null, length = null, height = null;
-
-        ValidateForm.parseDouble(
+        Double height = ValidateForm.parseDouble(
                 strHeight,
                 "errorHeight",
                 "Height",
                 errors
         );
 
-        ValidateForm.parseDouble(
+        Double length = ValidateForm.parseDouble(
                 strLength,
                 "errorLength",
                 "Length",
                 errors
         );
 
-        ValidateForm.parseDouble(
+        Double width = ValidateForm.parseDouble(
                 strWidth,
                 "errorWidth",
                 "Width",
                 errors
         );
 
-        if (strActive == null || (!strActive.equals("1") && !strActive.equals("0"))) {
-            errors.put("errorActive", "Le statut actif est requis.");
-        }
+        Boolean active = ValidateForm.parseBoolean(
+                strActive,
+                "errorActive",
+                "Active",
+                errors
+        );
 
-        if(errors.size() > 0) {
+        if (!errors.isEmpty()) {
 
+            return Result.fail(errors);
+        } else {
             HallCreateForm hallCreateForm = new HallCreateForm(
                     hallName,
-                    "1".equals(strActive),
+                    active,
                     width,
                     length,
                     height
             );
-            return errors;
-        }else{
-            return errors;
+            return Result.ok(hallCreateForm);
         }
 
     }

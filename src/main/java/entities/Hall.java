@@ -1,9 +1,15 @@
 package entities;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+
+/**
+ * Named Query
+ */
+@NamedQuery(
+        name = "getAllActiveHalls",
+        query = "SELECT h from Hall h "
+)
+
 
 @Entity
 @Table(name = "halls")
