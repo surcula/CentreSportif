@@ -18,7 +18,7 @@ public class ValidateForm {
             return Double.parseDouble(input);
         }
         catch (NumberFormatException e){
-            errors.put(fieldKey, fieldLabel + "is invalid");
+            errors.put(fieldKey, fieldLabel + " is invalid");
             return null;
         }
     }
@@ -50,12 +50,20 @@ public class ValidateForm {
      */
     public static Boolean parseBoolean(String input, String fieldKey, String fieldLabel, Map<String,String> errors) {
         if (input == null || (!input.equals("1") && !input.equals("0"))) {
-            errors.put(fieldKey, fieldLabel + " est requis.");
+            errors.put(fieldKey, fieldLabel + " is required.");
             return null;
         }else {
             return  "1".equals(input);
         }
     }
 
+    public static Integer parseInteger(String input, String fieldKey, String fieldLabel, Map<String,String> errors) {
+        if (input == null || (!input.equals("1") && !input.equals("0"))) {
+            errors.put(fieldKey, fieldLabel + " is required.");
+            return null;
+        }else{
+            return  Integer.parseInt(input);
+        }
+    }
 
 }

@@ -58,16 +58,18 @@ public class ServletUtils {
      *
      * @param request the HTTP servlet request
      * @param response the HTTP servlet response
-     * @param errorMessage the error message to display
+     * @param errorsMessages the error message to display
      * @param contentPath the relative path to the content JSP
      * @param dispatcherJSP the JSP template to use for forwarding
      * @throws ServletException if a servlet error occurs
      * @throws IOException if an I/O error occurs
      */
     public static void forwardWithErrors(HttpServletRequest request, HttpServletResponse response,
-                                         Map<String,String> errorMessage, String contentPath, String dispatcherJSP)
+                                         Map<String,String> errorsMessages, String contentPath, String dispatcherJSP)
             throws ServletException, IOException {
-        for(Map.Entry<String, String> entry : errorMessage.entrySet()) {
+        request.setAttribute("successMessage", null);
+
+        for(Map.Entry<String, String> entry : errorsMessages.entrySet()) {
             request.setAttribute(entry.getKey(), entry.getValue());
         }
         forwardWithContent(request, response, contentPath, dispatcherJSP);
@@ -122,5 +124,14 @@ public class ServletUtils {
             throws IOException {
         request.getSession().setAttribute("successMessage", successMessage);
         response.sendRedirect(request.getContextPath() + targetPath);
+    }
+
+    /**
+     * change le active
+     * @param active
+     * @return !active
+     */
+    public static boolean changeActive(boolean active){
+        return !active;
     }
 }

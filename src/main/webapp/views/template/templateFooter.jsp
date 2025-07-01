@@ -40,12 +40,12 @@
 
 <!-- Toast container  -->
 
-<c:if test="${not empty successMessage}">
+<c:if test="${not empty sessionScope.successMessage}">
     <div class="position-fixed top-0 start-50 translate-middle-x p-3" style="z-index: 1100;">
         <div id="successToast" class="toast align-items-center text-bg-success border-0 show" role="alert" aria-live="assertive" aria-atomic="true">
             <div class="d-flex">
                 <div class="toast-body">
-                        ${successMessage}
+                        ${sessionScope.successMessage}
                 </div>
                 <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
             </div>
@@ -59,6 +59,8 @@
             toast.show();
         });
     </script>
+    <!-- ❗ Supprimer après affichage pour éviter que le toast revienne -->
+    <c:remove var="successMessage" scope="session"/>
 </c:if>
 
 

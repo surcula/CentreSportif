@@ -36,6 +36,7 @@
              or sessionScope.role == 'BARMAN'
              or sessionScope.role == 'SECRETARY'}">
                     <th scope="col">Actif</th>
+                    <th> Détails </th>
                 </c:if>
             </tr>
             </thead>
@@ -53,6 +54,41 @@
              or sessionScope.role == 'BARMAN'
              or sessionScope.role == 'SECRETARY'}">
                         <td>${hall.active}</td>
+                        <td>
+                            <div class="btn-group" role="group" aria-label="Actions Hall">
+                                <!-- Bouton Modifier -->
+                                <a href="${pageContext.request.contextPath}/hall?editForm=${hall.id}" class="btn btn-outline-primary btn-sm">
+                                    <i class="bi bi-pencil-square"></i> Modifier
+                                </a>
+
+                                <!-- Bouton Supprimer ou Activer -->
+                                <c:choose>
+                                    <c:when test="${hall.active}">
+                                        <!-- Formulaire Supprimer -->
+                                        <form method="post" action="${pageContext.request.contextPath}/hall" onsubmit="return confirm('Supprimer ce hall ?')" style="display: inline;">
+                                            <input type="hidden" name="hallId" value="${hall.id}" />
+                                            <input type="hidden" name="action" value="delete" />
+                                            <button type="submit" class="btn btn-outline-danger btn-sm">
+                                                <i class="bi bi-trash"></i> Supprimer
+                                            </button>
+                                        </form>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <!-- Formulaire Activer -->
+                                        <form method="post" action="${pageContext.request.contextPath}/hall" onsubmit="return confirm('Activer ce hall ?')" style="display: inline;">
+                                            <input type="hidden" name="hallId" value="${hall.id}" />
+                                            <input type="hidden" name="action" value="activer" />
+                                            <button type="submit" class="btn btn-outline-warning btn-sm">
+                                                <i class="bi bi-trash"></i> Activer
+                                            </button>
+                                        </form>
+                                    </c:otherwise>
+                                </c:choose>
+
+
+
+                            </div>
+                        </td>
                     </c:if>
                 </tr>
             </c:forEach>
