@@ -5,7 +5,7 @@ import java.time.Instant;
 
 @Entity
 @Table(name = "sports_fields")
-public class SportsField {
+public class SportField {
     @Id
     @Column(name = "id", nullable = false)
     private int id;
