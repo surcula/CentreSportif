@@ -6,7 +6,7 @@
     <div class="container">
         <div class="row">
             <!-- Footer Location-->
-            <div class="col-lg-4 mb-5 mb-lg-0">
+            <div class="col-lg-4 mb-2 mb-lg-0">
                 <h4 class="text-uppercase mb-4">Location</h4>
                 <p class="lead mb-0">
                     2215 Avenue du sport
@@ -15,7 +15,7 @@
                 </p>
             </div>
             <!-- Footer Social Icons-->
-            <div class="col-lg-4 mb-5 mb-lg-0">
+            <div class="col-lg-4 mb-2 mb-lg-0">
                 <h4 class="text-uppercase mb-4">Around the Web</h4>
                 <a class="btn btn-outline-light btn-social mx-1" href="#!"><i class="fab fa-fw fa-facebook-f"></i></a>
                 <a class="btn btn-outline-light btn-social mx-1" href="#!"><i class="fab fa-fw fa-twitter"></i></a>
@@ -25,16 +25,16 @@
             <div class="col-lg-4">
                 <h4 class="text-uppercase mb-4">About FSSD</h4>
                 <p class="lead mb-0">
-                    Centre Sportif vous accueille tous les jours pour vous permettre de pratiquer vos sports préférés
-                    dans un cadre moderne et convivial. Notre équipe est là pour vous offrir des installations de
-                    qualité et des activités pour tous les âges.
+                    Le Centre Sportif vous accueille tous les jours dans un cadre moderne pour pratiquer
+                    vos sports préférés. Des installations de qualité et des activités pour
+                    tous les âges vous y attendent.
                 </p>
             </div>
         </div>
     </div>
 </footer>
 <!-- Copyright Section-->
-<div class="copyright py-4 text-center text-white">
+<div class="copyright py-1 text-center text-white">
     <div class="container"><small>Copyright &copy; FSSD 2025</small></div>
 </div>
 
