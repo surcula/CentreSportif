@@ -20,7 +20,7 @@
             <div class="divider-custom-line"></div>
         </div>
         <!-- Masthead Subheading-->
-        <p class="masthead-subheading font-weight-light mb-0">Franz - Sophie - Souk01 - David</p>
+        <p class="masthead-subheading font-weight-light mb-0">Franz - Sophie - Soukaïna - David</p>
     </div>
 </header>
 <h1>Page d'accueil</h1>
