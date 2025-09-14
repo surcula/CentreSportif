@@ -29,7 +29,7 @@ public interface ClosureService {
      * @param id
      * @return Closure
      */
-    Closure  getOneById(int id);
+    Closure getOneById(int id);
 
     /**
      * retrieves all closures

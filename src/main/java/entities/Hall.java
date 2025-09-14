@@ -5,10 +5,24 @@ import javax.persistence.*;
 /**
  * Named Query
  */
-@NamedQuery(
-        name = "getAllActiveHalls",
-        query = "SELECT h from Hall h "
-)
+@NamedQueries({
+        @NamedQuery(
+                name = "getAllActiveHalls",
+                query = "SELECT h FROM Hall h WHERE h.active = true"
+        ),
+        @NamedQuery(
+                name = "getAllHalls",
+                query = "SELECT h FROM Hall h"
+        ),
+        @NamedQuery(
+                name = "countAllActiveHalls",
+                query = "SELECT COUNT(h) FROM Hall h WHERE h.active = true"
+        ),
+        @NamedQuery(
+                name = "countAllHalls",
+                query = "SELECT COUNT(h) FROM Hall h"
+        )
+})
 
 
 @Entity
@@ -80,5 +94,14 @@ public class Hall {
     public void setActive(boolean active) {
         this.active = active;
     }
+
+    public Hall(String hallName, boolean active, Double width, Double length, Double height) {
+        this.hallName = hallName;
+        this.active = active;
+        this.width = width;
+        this.length = length;
+        this.height = height;
+    }
+    public Hall() {}
 
 }

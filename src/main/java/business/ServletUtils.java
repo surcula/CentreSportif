@@ -1,13 +1,19 @@
 package business;
 
+import Tools.Result;
+import entities.Hall;
+
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 
 public class ServletUtils {
+    // Log4j
+    private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(ServletUtils.class);
 
     /**
      * Forward the request to a jsp page
@@ -49,7 +55,8 @@ public class ServletUtils {
     public static void forwardWithError(HttpServletRequest request, HttpServletResponse response,
                                         String errorMessage, String contentPath, String dispatcherJSP)
             throws ServletException, IOException {
-        request.setAttribute("error", errorMessage);
+        log.warn(errorMessage);
+        request.setAttribute("errorMessage", errorMessage);
         forwardWithContent(request, response, contentPath, dispatcherJSP);
     }
 
@@ -98,7 +105,7 @@ public class ServletUtils {
      * @param role
      * @return
      */
-    public static boolean hasRole(String role){
+    public static boolean isFullAuthorized(String role){
         if (role == null) return false;
 
         switch (role.toUpperCase()) {
@@ -111,18 +118,20 @@ public class ServletUtils {
         }
     }
 
-
     /**
-     * redirect with Success
+     * Redirect with message error or success
      * @param request
      * @param response
-     * @param successMessage
-     * @param targetPath Path servlet (/...)
-     * @throws IOException if an I/O error occurs
+     * @param message
+     * @param type success or error
+     * @param targetPath url/path
+     * @throws IOException
      */
-    public static void redirectWithSucces(HttpServletRequest request, HttpServletResponse response, String successMessage, String targetPath)
+    public static void redirectWithMessage(HttpServletRequest request, HttpServletResponse response,
+                                           String message, String type, String targetPath)
             throws IOException {
-        request.getSession().setAttribute("successMessage", successMessage);
+        request.getSession().setAttribute("toastMessage", message);
+        request.getSession().setAttribute("toastType", type); // "success" ou "error"
         response.sendRedirect(request.getContextPath() + targetPath);
     }
 
@@ -132,6 +141,22 @@ public class ServletUtils {
      * @return !active
      */
     public static boolean changeActive(boolean active){
+
         return !active;
+    }
+
+    /**
+     * String To Integer
+     * @param input
+     * @return
+     */
+    public static Result<Integer> stringToInteger(String input) {
+        try{
+            return Result.ok(Integer.parseInt(input));
+        }catch (NumberFormatException e) {
+            Map<String, String> errors = new HashMap<>();
+            errors.put("parseInt", "Impossible de convertir '" + input + "' en nombre.");
+            return Result.fail(errors);
+        }
     }
 }
