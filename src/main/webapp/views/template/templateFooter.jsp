@@ -38,31 +38,35 @@
     <div class="container"><small>Copyright &copy; FSSD 2025</small></div>
 </div>
 
-<!-- Toast container  -->
-
-<c:if test="${not empty sessionScope.successMessage}">
+<c:if test="${not empty sessionScope.toastMessage}">
     <div class="position-fixed top-0 start-50 translate-middle-x p-3" style="z-index: 1100;">
-        <div id="successToast" class="toast align-items-center text-bg-success border-0 show" role="alert" aria-live="assertive" aria-atomic="true">
+        <div id="globalToast"
+             class="toast align-items-center
+             ${sessionScope.toastType == 'error' ? 'text-bg-danger' : 'text-bg-success'}
+             border-0 show"
+             role="alert" aria-live="assertive" aria-atomic="true">
             <div class="d-flex">
                 <div class="toast-body">
-                        ${sessionScope.successMessage}
+                        ${sessionScope.toastMessage}
                 </div>
-                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto"
+                        data-bs-dismiss="toast" aria-label="Close"></button>
             </div>
         </div>
     </div>
 
     <script>
         window.addEventListener('DOMContentLoaded', () => {
-            const toastElement = document.getElementById('successToast');
+            const toastElement = document.getElementById('globalToast');
             const toast = new bootstrap.Toast(toastElement);
             toast.show();
         });
     </script>
-    <!-- ❗ Supprimer après affichage pour éviter que le toast revienne -->
-    <c:remove var="successMessage" scope="session"/>
-</c:if>
 
+    <!-- Nettoyage pour éviter réapparition -->
+    <c:remove var="toastMessage" scope="session"/>
+    <c:remove var="toastType" scope="session"/>
+</c:if>
 
 
 

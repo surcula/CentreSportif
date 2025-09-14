@@ -2,6 +2,7 @@ package services;
 
 import Tools.Result;
 import dto.HallCreateForm;
+import dto.Page;
 import entities.Hall;
 import mappers.HallMapper;
 import org.apache.log4j.Logger;
@@ -15,7 +16,8 @@ public class HallServiceImpl implements interfaces.HallService {
 
     private final EntityManager em;
     // Log4j
-    private static Logger log = Logger.getLogger(HallServiceImpl.class);
+    private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(HallServiceImpl.class);
+
 
     public HallServiceImpl(EntityManager em) {
 
@@ -23,8 +25,8 @@ public class HallServiceImpl implements interfaces.HallService {
     }
 
     @Override
-    public Result create(HallCreateForm hallCreateForm) {
-        em.persist(HallMapper.fromCreateForm(hallCreateForm));
+    public Result create(Hall hallCreateForm) {
+        em.persist(hallCreateForm);
         log.info("Hall created");
         return Result.ok();
     }
@@ -60,9 +62,40 @@ public class HallServiceImpl implements interfaces.HallService {
     }
 
     @Override
-    public Result<List<Hall>> getAllActiveHalls() {
-        List<Hall> halls = em.createNamedQuery("getAllActiveHalls", Hall.class).getResultList();
+    public Result<List<Hall>> getAllActiveHalls(int page, int size) {
+        int test = page - size;
+        List<Hall> halls = em.createNamedQuery("getAllActiveHalls", Hall.class)
+                .setFirstResult(page)
+                .setMaxResults(size)
+                .getResultList();
         log.info("getAllActiveHalls : " + halls.size());
         return Result.ok(halls);
     }
+
+    @Override
+    public Result<List<Hall>> getAllHalls(int page, int size) {
+        int test = page - size;
+        List<Hall> halls = em.createNamedQuery("getAllHalls", Hall.class)
+                .setFirstResult(page)
+                .setMaxResults(size)
+                .getResultList();
+        log.info("getAllHalls : " + halls.size());
+        return Result.ok(halls);
+    }
+
+    @Override
+    public Result<Long> countActiveHalls() {
+        Long countAllHalls = em.createNamedQuery("countAllActiveHalls", Long.class).getSingleResult();
+        log.info("getAllHalls : " + countAllHalls);
+        return Result.ok(countAllHalls);
+    }
+
+    @Override
+    public Result<Long> countAllHalls() {
+        Long countAllHalls = em.createNamedQuery("countAllHalls", Long.class).getSingleResult();
+        log.info("getAllHalls : " + countAllHalls);
+        return Result.ok(countAllHalls);
+    }
+
+
 }

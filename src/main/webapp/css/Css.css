@@ -11059,3 +11059,10 @@ html {
 .copyright {
     background-color: #1a252f;
 }
+.imgCard{
+    max-height: 120px; /* pas trop petit sinon tu ne vois rien */
+    max-width: 120px;
+    object-fit: contain; /* garde les proportions */
+    margin: 0 auto; /* centre l’image */
+    display: block;
+}

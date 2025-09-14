@@ -1,16 +1,78 @@
 <%--
   Created by IntelliJ IDEA.
   User: david
-  Date: 9/13/2025
-  Time: 4:09 PM
+  Date: 6/23/2025
+  Time: 3:14 PM
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html>
-  <head>
-    <title>$Title$</title>
-  </head>
-  <body>
-  $END$
-  </body>
-</html>
+
+
+<!-- Section-->
+<section class="page-section portfolio" id="portfolio">
+    <div class="container">
+        <!-- Admin Section Heading-->
+        <h2 class="page-section-heading text-center text-uppercase text-secondary mb-0">Admin Hub</h2>
+        <!-- Icon Divider-->
+        <div class="divider-custom">
+            <div class="divider-custom-line"></div>
+            <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+            <div class="divider-custom-line"></div>
+        </div>
+    </div>
+
+
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+
+        <!-- Card Halls -->
+        <div class="col">
+            <div class="card shadow-sm text-center">
+                <div class="p-3">
+                    <img src="assets/img/halls.png" class="imgCard " alt="Hall sportif">
+                </div>
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">Gestion des halls</h5>
+                    <p class="card-text">Ajoutez, modifiez ou désactivez les halls sportifs.</p>
+                    <div class="mt-auto d-grid">
+                        <a href="${pageContext.request.contextPath}/hall" class="btn btn-primary">Gérer les halls</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card Fields -->
+        <div class="col">
+            <div class="card shadow-sm text-center">
+                <div class="p-3">
+                    <img src="assets/img/fields.png" class="imgCard" alt="Terrain sportif">
+                </div>
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">Gestion des terrains</h5>
+                    <p class="card-text">Ajoutez, modifiez ou désactivez les terrains sportifs.</p>
+                    <div class="mt-auto d-grid">
+                        <a href="${pageContext.request.contextPath}/field" class="btn btn-primary">Gérer les terrains</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card Sports -->
+        <div class="col">
+            <div class="card shadow-sm text-center">
+                <div class="p-3">
+                    <img src="assets/img/sports.png" class="imgCard" alt="Sports">
+                </div>
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">Gestion des sports</h5>
+                    <p class="card-text">Ajoutez, modifiez ou désactivez les sports.</p>
+                    <div class="mt-auto d-grid">
+                        <a href="${pageContext.request.contextPath}/sport" class="btn btn-primary">Gérer les sports</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</section>
+
