@@ -1,46 +1,95 @@
 package services;
 
-import dto.FieldCreateForm;
+import Tools.Result;
 import entities.Field;
 import interfaces.FieldService;
-import mappers.FieldMapper;
 import org.apache.log4j.Logger;
 
 import javax.persistence.EntityManager;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class FieldServiceImpl implements FieldService {
     private final EntityManager em;
     // Log4j
-    private static Logger log = Logger.getLogger(EntityFinderImpl.class);
+    private static Logger log = Logger.getLogger(FieldServiceImpl.class);
 
     public FieldServiceImpl(EntityManager em) {
         this.em = em;
     }
 
     @Override
-    public void create(FieldCreateForm fieldCreateForm) {
-        em.persist(FieldMapper.fromCreateForm(fieldCreateForm));
+    public Result create(Field fieldCreateForm) {
+
+        em.persist(fieldCreateForm);
+        log.info("Field created");
+        return Result.ok();
     }
 
     @Override
-    public void update(Field field) {
+    public Result update(Field field) {
+
         em.merge(field);
+        log.info("Field updated");
+        return Result.ok();
     }
 
     @Override
-    public void delete(Field field) {
+    public Result delete(Field field) {
+
         em.merge(field);
+        log.info("Field deleted");
+        return Result.ok();
     }
 
     @Override
-    public Field getOneById(int id) {
-        return em.find(Field.class, id);
+    public Result<Field> getOneById(int id) {
+
+        Field field = em.find(Field.class, id);
+        if (field != null) {
+            log.info("Field found");
+            return Result.ok(field);
+        }else  {
+            log.warn("field " + id + " not found");
+            Map<String, String> errors = new HashMap<>();
+            errors.put("notFound", "Aucun field trouvé avec l’ID " + id);
+            return Result.fail(errors);
+        }
     }
 
     @Override
-    public List<Field> getAllFields() {
-
-        return em.createQuery("select f from Field f", Field.class).getResultList();
+    public Result<List<Field>> getAllFields(int page, int size) {
+        List<Field> fields = em.createNamedQuery("getAllFields", Field.class)
+                .setFirstResult(page)
+                .setMaxResults(size)
+                .getResultList();
+        log.info("getAllHalls : " + fields.size());
+        return Result.ok(fields);
     }
+
+    @Override
+    public Result<List<Field>> getAllActiveFields(int page, int size) {
+        List<Field> fields = em.createNamedQuery("getAllActiveFields", Field.class)
+                .setFirstResult(page)
+                .setMaxResults(size)
+                .getResultList();
+        log.info("getAllActiveFields : " + fields.size());
+        return Result.ok(fields);
+    }
+
+    @Override
+    public Result<Long> countAllFields() {
+        Long countAllFields = em.createNamedQuery("countAllFields", Long.class).getSingleResult();
+        log.info("getAllFields : " + countAllFields);
+        return Result.ok(countAllFields);
+    }
+
+    @Override
+    public Result<Long> countAllActiveFields() {
+        Long countAllFields = em.createNamedQuery("countAllActiveFields", Long.class).getSingleResult();
+        log.info("countAllActiveFields : " + countAllFields);
+        return Result.ok(countAllFields);
+    }
+
 }

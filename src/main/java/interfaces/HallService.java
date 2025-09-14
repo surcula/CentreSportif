@@ -1,8 +1,6 @@
 package interfaces;
 
 import Tools.Result;
-import dto.HallCreateForm;
-import dto.Page;
 import entities.Hall;
 
 import java.util.List;

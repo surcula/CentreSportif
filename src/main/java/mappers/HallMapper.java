@@ -1,6 +1,5 @@
 package mappers;
 
-import dto.HallCreateForm;
 import dto.HallUpdateForm;
 import entities.Hall;
 

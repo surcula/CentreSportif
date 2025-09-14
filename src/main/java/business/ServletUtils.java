@@ -1,6 +1,7 @@
 package business;
 
 import Tools.Result;
+import com.sun.deploy.net.HttpRequest;
 import entities.Hall;
 
 import javax.servlet.RequestDispatcher;
@@ -128,11 +129,24 @@ public class ServletUtils {
      * @throws IOException
      */
     public static void redirectWithMessage(HttpServletRequest request, HttpServletResponse response,
-                                           String message, String type, String targetPath)
-            throws IOException {
+                                           String message, String type, String targetPath) throws IOException {
         request.getSession().setAttribute("toastMessage", message);
         request.getSession().setAttribute("toastType", type); // "success" ou "error"
         response.sendRedirect(request.getContextPath() + targetPath);
+    }
+
+    /**
+     * Redirect NoAuhtorized
+     * @param request
+     * @param response
+     * @throws IOException
+     */
+    public static void redirectNoAuthorized(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        redirectWithMessage(request,
+                response,
+                "Vous n'avez pas l'autorisation",
+                "error",
+                "/home");
     }
 
     /**

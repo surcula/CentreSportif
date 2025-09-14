@@ -23,7 +23,6 @@ public class HallControllerHelper {
         request.setAttribute("hallWidth", hall.getWidth());
         request.setAttribute("hallActive", hall.isActive());
         request.setAttribute("hallId", hall.getId());
-
         ServletUtils.forwardWithContent(request, response, HALL_FORM_JSP, TEMPLATE);
     }
 

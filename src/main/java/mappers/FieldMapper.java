@@ -1,19 +1,19 @@
 package mappers;
 
-import dto.FieldCreateForm;
+import dto.FieldUpdateForm;
 import entities.Field;
 
 public class FieldMapper {
     /**
-     * FieldCreateForm to field
-     * @param fieldCreateForm
+     * Update field
+     * @param fieldUpdateForm
      * @return
      */
-    public static Field fromCreateForm(FieldCreateForm fieldCreateForm) {
+    public static Field fromUpdateForm(FieldUpdateForm fieldUpdateForm) {
         Field field = new Field();
-        field.setFieldName(fieldCreateForm.getFieldName());
-        field.setHall(fieldCreateForm.getHall());
-        field.setActive(fieldCreateForm.isActive());
+        field.setFieldName(fieldUpdateForm.getFieldName());
+        field.setHall(fieldUpdateForm.getHall());
+        field.setActive(fieldUpdateForm.isActive());
         return field;
     }
 
