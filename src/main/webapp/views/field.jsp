@@ -59,6 +59,7 @@
             <tr>
                 <th scope="col">#</th>
                 <th scope="col">Nom</th>
+                <th scope="col">Hall</th>
                 <c:if test="${sessionScope.role == 'ADMIN'
              or sessionScope.role == 'BARMAN'
              or sessionScope.role == 'SECRETARY'}">
@@ -72,6 +73,7 @@
                 <tr>
                     <td>${(page - 1) * size + status.index + 1}</td>
                     <td>${field.fieldName}</td>
+                    <td>${field.hall.hallName}</td>
                     <c:if test="${sessionScope.role == 'ADMIN'
              or sessionScope.role == 'BARMAN'
              or sessionScope.role == 'SECRETARY'}">
