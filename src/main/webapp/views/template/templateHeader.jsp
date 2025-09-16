@@ -14,6 +14,10 @@
     <meta charset="UTF-8">
     <title>FSSD</title>
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/Css.css">
+    <!-- Ceci a été testé afin de scinder les fichiers css par auteur mais l'idéal est par page pour ne pas avoir 20000 lignes-->
+    <c:if test="${not empty pageCss}">
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/css/${pageCss}">
+    </c:if>
     <script src="${pageContext.request.contextPath}/javascript/Js.js"></script>
     <!-- Font Awesome icons (free version)-->
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>

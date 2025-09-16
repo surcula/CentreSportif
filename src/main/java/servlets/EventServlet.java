@@ -10,6 +10,7 @@ public class EventServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setAttribute("content", "/views/event.jsp");
+        //request.setAttribute("pageCss", "franz.css");
         RequestDispatcher dispatcher = request.getRequestDispatcher("/views/template/template.jsp");
         dispatcher.forward(request, response);
     }
