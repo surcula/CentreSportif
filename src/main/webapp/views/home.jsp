@@ -20,81 +20,84 @@
             <div class="divider-custom-line"></div>
         </div>
         <!-- Masthead Subheading-->
-        <p class="masthead-subheading font-weight-light mb-0">Franz - Sophie - Souk01 - David</p>
+        <p class="masthead-subheading font-weight-light mb-0">Franz - Sophie - Soukaïna - David</p>
     </div>
 </header>
-<h1>Page d'accueil</h1>
-<!-- Portfolio Section-->
+
+<!-- Sports presentation Section-->
 <section class="page-section portfolio" id="portfolio">
     <div class="container">
-        <!-- Portfolio Section Heading-->
-        <h2 class="page-section-heading text-center text-uppercase text-secondary mb-0">Portfolio</h2>
+        <!-- presentation Section Heading-->
+        <h2 class="page-section-heading text-center text-uppercase text-secondary mb-0">Sports</h2>
         <!-- Icon Divider-->
         <div class="divider-custom">
             <div class="divider-custom-line"></div>
             <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
             <div class="divider-custom-line"></div>
         </div>
-        <!-- Portfolio Grid Items-->
-        <div class="row justify-content-center">
-            <!-- Portfolio Item 1-->
-            <div class="col-md-6 col-lg-4 mb-5">
-                <div class="portfolio-item mx-auto" data-bs-toggle="modal" data-bs-target="#portfolioModal1">
-                    <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
-                        <div class="portfolio-item-caption-content text-center text-white"><i
-                                class="fas fa-plus fa-3x"></i></div>
+
+        <!-- Cards des sports-->
+        <div class="row row-cols-1 row-cols-md-5 g-4">
+
+            <!-- Soccer Halls -->
+            <div class="col">
+                <div class="card shadow-sm text-center">
+                    <div class="p-3">
+                        <img src="assets/img/soccer.jpg" class="imgCard " alt="soccer">
                     </div>
-                    <img class="img-fluid" src="assets/img/portfolio/cabin.png" alt="..."/>
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">Futsall</h5>
+                        <p class="card-text">Venez jouer en salle, quel que soit le temps !</p>
+                    </div>
                 </div>
             </div>
-            <!-- Portfolio Item 2-->
-            <div class="col-md-6 col-lg-4 mb-5">
-                <div class="portfolio-item mx-auto" data-bs-toggle="modal" data-bs-target="#portfolioModal2">
-                    <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
-                        <div class="portfolio-item-caption-content text-center text-white"><i
-                                class="fas fa-plus fa-3x"></i></div>
+
+            <!-- Basket Halls -->
+            <div class="col">
+                <div class="card shadow-sm text-center">
+                    <div class="p-3">
+                        <img src="assets/img/basket.png" class="imgCard " alt="basket">
                     </div>
-                    <img class="img-fluid" src="assets/img/portfolio/cake.png" alt="..."/>
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">Basket</h5>
+                        <p class="card-text">Matchs et entraînements toute l’année.</p>
+                    </div>
                 </div>
             </div>
-            <!-- Portfolio Item 3-->
-            <div class="col-md-6 col-lg-4 mb-5">
-                <div class="portfolio-item mx-auto" data-bs-toggle="modal" data-bs-target="#portfolioModal3">
-                    <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
-                        <div class="portfolio-item-caption-content text-center text-white"><i
-                                class="fas fa-plus fa-3x"></i></div>
+            <!-- Squash Halls -->
+            <div class="col">
+                <div class="card shadow-sm text-center">
+                    <div class="p-3">
+                        <img src="assets/img/squash.png" class="imgCard " alt="squash">
                     </div>
-                    <img class="img-fluid" src="assets/img/portfolio/circus.png" alt="..."/>
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">Squash</h5>
+                        <p class="card-text">Des terrains modernes pour les passionnés de raquettes</p>
+                    </div>
                 </div>
             </div>
-            <!-- Portfolio Item 4-->
-            <div class="col-md-6 col-lg-4 mb-5 mb-lg-0">
-                <div class="portfolio-item mx-auto" data-bs-toggle="modal" data-bs-target="#portfolioModal4">
-                    <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
-                        <div class="portfolio-item-caption-content text-center text-white"><i
-                                class="fas fa-plus fa-3x"></i></div>
+            <!-- tennis Halls -->
+            <div class="col">
+                <div class="card shadow-sm text-center">
+                    <div class="p-3">
+                        <img src="assets/img/tennis.jpg" class="imgCard " alt="tennis">
                     </div>
-                    <img class="img-fluid" src="assets/img/portfolio/game.png" alt="..."/>
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">Tennis</h5>
+                        <p class="card-text">Des terrains modernes pour les passionnés de raquettes</p>
+                    </div>
                 </div>
             </div>
-            <!-- Portfolio Item 5-->
-            <div class="col-md-6 col-lg-4 mb-5 mb-md-0">
-                <div class="portfolio-item mx-auto" data-bs-toggle="modal" data-bs-target="#portfolioModal5">
-                    <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
-                        <div class="portfolio-item-caption-content text-center text-white"><i
-                                class="fas fa-plus fa-3x"></i></div>
+            <!-- volleyball Halls -->
+            <div class="col">
+                <div class="card shadow-sm text-center">
+                    <div class="p-3">
+                        <img src="assets/img/volleyball.png" class="imgCard " alt="volleyball">
                     </div>
-                    <img class="img-fluid" src="assets/img/portfolio/safe.png" alt="..."/>
-                </div>
-            </div>
-            <!-- Portfolio Item 6-->
-            <div class="col-md-6 col-lg-4">
-                <div class="portfolio-item mx-auto" data-bs-toggle="modal" data-bs-target="#portfolioModal6">
-                    <div class="portfolio-item-caption d-flex align-items-center justify-content-center h-100 w-100">
-                        <div class="portfolio-item-caption-content text-center text-white"><i
-                                class="fas fa-plus fa-3x"></i></div>
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">Volleyball</h5>
+                        <p class="card-text">Un sport collectif fun et dynamique.</p>
                     </div>
-                    <img class="img-fluid" src="assets/img/portfolio/submarine.png" alt="..."/>
                 </div>
             </div>
         </div>
@@ -113,20 +116,19 @@
         </div>
         <!-- About Section Content-->
         <div class="row">
-            <div class="col-lg-4 ms-auto"><p class="lead">Freelancer is a free bootstrap theme created by Start
-                Bootstrap. The download includes the complete source files including HTML, CSS, and JavaScript as well
-                as optional SASS stylesheets for easy customization.</p></div>
+            <div class="col-lg-4 ms-auto"><p class="lead">
+                Bienvenue au <strong>Centre Sportif FSSD</strong>, un espace moderne et convivial dédié à la pratique sportive pour tous.
+                Nous proposons plusieurs disciplines accessibles à tous les âges et niveaux : football en salle, tennis, squash, volleyball et bien plus encore.
+
+            </p></div>
             <div class="col-lg-4 me-auto"><p class="lead">You can create your own custom avatar for the masthead, change
-                the icon in the dividers, and add your email address to the contact form to make it fully
-                functional!</p></div>
+                Nos infrastructures comprennent des <strong>halls sportifs spacieux</strong> et des <strong>terrains de qualité</strong>, disponibles toute l’année.
+                Grâce à notre système de réservation en ligne, vous pouvez facilement planifier vos séances seul, en famille ou entre amis.
+                Rejoignez-nous et profitez d’un lieu dynamique où sport rime avec plaisir et partage !
+
+            </p></div>
         </div>
-        <!-- About Section Button-->
-        <div class="text-center mt-4">
-            <a class="btn btn-xl btn-outline-light" href="https://startbootstrap.com/theme/freelancer/">
-                <i class="fas fa-download me-2"></i>
-                Free Download!
-            </a>
-        </div>
+
     </div>
 </section>
 <!-- Contact Section-->
@@ -148,14 +150,14 @@
                     <div class="form-floating mb-3">
                         <input class="form-control" id="name" type="text" placeholder="Enter your name..."
                                data-sb-validations="required"/>
-                        <label for="name">Full name</label>
-                        <div class="invalid-feedback" data-sb-feedback="name:required">A name is required.</div>
+                        <label for="name">Nom et Prénom</label>
+                        <div class="invalid-feedback" data-sb-feedback="name:required">Nom et prénom required.</div>
                     </div>
                     <!-- Email address input-->
                     <div class="form-floating mb-3">
                         <input class="form-control" id="email" type="email" placeholder="name@example.com"
                                data-sb-validations="required,email"/>
-                        <label for="email">Email address</label>
+                        <label for="email">Email</label>
                         <div class="invalid-feedback" data-sb-feedback="email:required">An email is required.</div>
                         <div class="invalid-feedback" data-sb-feedback="email:email">Email is not valid.</div>
                     </div>
@@ -163,8 +165,8 @@
                     <div class="form-floating mb-3">
                         <input class="form-control" id="phone" type="tel" placeholder="(123) 456-7890"
                                data-sb-validations="required"/>
-                        <label for="phone">Phone number</label>
-                        <div class="invalid-feedback" data-sb-feedback="phone:required">A phone number is required.
+                        <label for="phone">Téléphonne</label>
+                        <div class="invalid-feedback" data-sb-feedback="phone:required">Téléphonne is required.
                         </div>
                     </div>
                     <!-- Message input-->
@@ -191,7 +193,7 @@
                         <div class="text-center text-danger mb-3">Error sending message!</div>
                     </div>
                     <!-- Submit Button-->
-                    <button class="btn btn-primary btn-xl disabled" id="submitButton" type="submit">Send</button>
+                    <button class="btn btn-primary btn-xl disabled" id="submitButton" type="submit">Envoyer</button>
                 </form>
             </div>
         </div>
