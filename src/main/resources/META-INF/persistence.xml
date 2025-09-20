@@ -10,8 +10,7 @@
         <class>entities.Sport</class>
         <class>entities.SportField</class>
         <class>entities.HistoricalSportPrice</class>
-        <class>entities.Event</class>
-        <class>entities.Reservation</class>
+
         <!-- ajoute ici les autres classes -->
 
         <properties>
