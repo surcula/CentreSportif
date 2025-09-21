@@ -1,5 +1,7 @@
 package servlets;
 
+import business.ServletUtils;
+
 import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
@@ -9,10 +11,21 @@ import java.io.IOException;
 public class EventServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        request.setAttribute("content", "/views/event.jsp");
-        //request.setAttribute("pageCss", "franz.css");
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/views/template/template.jsp");
-        dispatcher.forward(request, response);
+        String eventForm = request.getParameter("form");
+        String editEventForm = request.getParameter("editForm");
+
+        if("true".equals(eventForm)) {
+            ServletUtils.forwardWithContent(request, response,"/views/event-form.jsp", "/views/template/template.jsp");
+        }
+
+        if(editEventForm != null) {
+            //modifier un évènement
+            request.setAttribute("eventId", editEventForm);
+
+            ServletUtils.forwardWithContent(request, response,"/views/event-form.jsp", "/views/template/template.jsp");
+        }
+
+
     }
 
     @Override

@@ -69,7 +69,7 @@
             <td>
                 <div class="btn-group" role="group" aria-label="Actions Reservation">
                     <!-- Bouton Modifier -->
-                    <a href="${pageContext.request.contextPath}/reservation?editForm=${reservation.id}"
+                    <a href="${pageContext.request.contextPath}/reservation?editForm=${125}"
                        class="btn btn-outline-primary btn-sm">
                         <i class="bi bi-pencil-square"></i> Modifier
                     </a>

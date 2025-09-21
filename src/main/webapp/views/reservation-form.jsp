@@ -19,7 +19,7 @@
     </h2>
     <!-- RETOUR -->
     <div class="text-start mb-3">
-        <a href="${pageContext.request.contextPath}/reservation" class="btn btn-outline-secondary">
+        <a href="${pageContext.request.contextPath}/views/template/template.jsp?content=../reservation.jsp" class="btn btn-outline-secondary">
             <i class="bi bi-arrow-left"></i> Retour vers les réservations
         </a>
     </div>

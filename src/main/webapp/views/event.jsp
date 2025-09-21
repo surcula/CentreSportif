@@ -65,8 +65,8 @@
                 <td>${hall.active}</td>
                 <td>
                     <div class="btn-group" role="group" aria-label="Actions Event">
-                        <!-- Bouton Modifier -->
-                        <a href="${pageContext.request.contextPath}/event?editForm=${event.id}"
+                        <!-- Bouton Modifier ne fonctionne pas encore car il faut ajouter un évènement-->
+                        <a href="${pageContext.request.contextPath}/event?editForm=${421}"
                            class="btn btn-outline-primary btn-sm">
                             <i class="bi bi-pencil-square"></i> Modifier
                         </a>
