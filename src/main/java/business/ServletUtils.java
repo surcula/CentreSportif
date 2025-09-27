@@ -25,7 +25,8 @@ public class ServletUtils {
      * @throws ServletException
      * @throws IOException if an I/O error occurs
      */
-    public static void forwardWithContent(HttpServletRequest request, HttpServletResponse response,String contentPath, String dispatcherJSP) throws ServletException, IOException {
+    public static void forwardWithContent(HttpServletRequest request, HttpServletResponse response,String contentPath, String dispatcherJSP)
+            throws ServletException, IOException {
         request.setAttribute("content", contentPath);
         RequestDispatcher dispatcher = request.getRequestDispatcher(dispatcherJSP);
         dispatcher.forward(request, response);
