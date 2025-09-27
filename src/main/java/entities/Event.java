@@ -1,10 +1,22 @@
 package entities;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.time.LocalDate;
+
+@NamedQueries({
+        @NamedQuery(
+                name = "Event.getAllActive",
+                query = "Select e FROM Event e where e.active = true order by e.beginDateHour asc"
+        ),
+        @NamedQuery(
+                name = "Event.countAllActive",
+                query = "select count(e) from Event e where e.active = true"
+        ),
+        @NamedQuery(
+                name = "Event.getAll",
+                query = "select e FROm Event e order by e.beginDateHour asc"
+        )
+})
 
 /**
  * Event entity to save the different event.

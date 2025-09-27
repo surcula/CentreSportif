@@ -98,7 +98,6 @@
                     <!-- Statut -->
                     <div class="form-floating mb-3">
                         <select class="form-select" id="status" name="status" required>
-                            <option value="2" ${formStatus == '2' ? 'selected' : ''}>A venir</option>
                             <option value="1" ${formStatus == '1' ? 'selected' : ''}>En cours</option>
                             <option value="0" ${formStatus == '0' ? 'selected' : ''}>Terminé</option>
                         </select>
