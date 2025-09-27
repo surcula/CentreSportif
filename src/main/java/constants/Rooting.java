@@ -7,4 +7,6 @@ public class Rooting {
     public static final String HOME_JSP = "/views/home.jsp";
     public static final String FIELD_JSP = "/views/field.jsp";
     public static final String FIELD_FORM_JSP = "/views/field-form.jsp";
+    public static final String EVENT_FORM_JSP = "/views/event-form.jsp";
+    public static final String RESERVATION_FORM_JSP = "/views/reservation-form.jsp";
 }
