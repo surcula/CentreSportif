@@ -28,7 +28,7 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-6"> <%-- Centré et largeur moyenne --%>
-                <form method="post" action="${pageContext.request.contextPath}/event" value="${not empty eventId ? 'edit' : 'create'}">
+                <form method="post" enctype="multipart/form-data" action="${pageContext.request.contextPath}/event" value="${not empty eventId ? 'edit' : 'create'}">
 
                     <!-- ID -->
                     <c:if test="${not empty formEventId}">
@@ -38,7 +38,7 @@
                         <!-- Champ visible mais non modifiable -->
                         <div class="form-floating mb-3">
                             <input class="form-control" type="text" id="eventIdDisplay"
-                                   placeholder="ID" value="${formeventId}" disabled />
+                                   placeholder="ID" value="${formEventId}" disabled />
                             <label for="eventIdDisplay">ID de l'évènement</label>
                         </div>
                     </c:if>
@@ -87,7 +87,7 @@
                     </c:if>
                     <!-- Image -->
                     <div class="form-floating mb-3">
-                        <input class="form-control" type="image" name="image" id="image"
+                        <input class="form-control" type="file" name="image" id="image"
                                placeholder="Sélectionnez une image" required
                                value="${formImage}"/>
                         <label for="image">Image</label>
