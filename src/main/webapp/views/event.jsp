@@ -15,22 +15,24 @@
 <c:set var="pages" value="${empty totalPages ? 1 : totalPages}"/>
 <c:set var="total" value="${empty totalElements ? fn:length(halls) : totalElements}"/>
 
-<!-- formulaire version David -->
+<!-- formulaire version David pour rester conforme dans la présentation du site -->
 <section class="page-section">
     <h2 class="page-section-heading text-center text-uppercase text-secondary mb-0">Les évènements</h2>
-    <!--<div class="alert alert-danger text-center">${error}</div>
+    <c:if test="${not empty error}">
+    <div class="alert alert-danger text-center">${error}</div>
     <div class="text-center mt-3">
         <a class="btn btn-success"
-           href="">Retry</a>
-    </div>-->
+           href="${pageContext.request.contextPath}/event">Retry</a>
+    </div>
+    </c:if>
     <a class="btn btn-primary my-3" href="${pageContext.request.contextPath}/event?form=true">Ajouter un nouvel
         évènement</a>
     <div class="d-flex justify-content-end align-items-center mb-2">
         <div class="me-3 text-muted small">
-            ${totalElements} résultat
+            ${totalElements} résultat<c:if test="${totalElements > 1}">s</c:if>
             — Page ${page} / ${totalPages}
         </div>
-        <form method="get" action="" class="d-flex align-items-center">
+        <form method="get" action="${pageContext.request.contextPath}/event" class="d-flex align-items-center">
             <label for="size" class="me-2 small">Taille page</label>
             <select id="size" name="size" class="form-select form-select-sm"
                     onchange="this.form.submit()">
@@ -55,6 +57,10 @@
         </tr>
         </thead>
         <tbody>
+        <c:if test="${empty events}">
+            <div class="alert alert-warning text-center">Aucun évènement à afficher.</div>
+        </c:if>
+        <c:forEach var="event" items="${events}" varStatus="status">
             <tr>
                 <td>${(page - 1) * size + status.index + 1}</td>
                 <td>${event.eventName}</td>
@@ -62,26 +68,28 @@
                 <td>${event.endDateHour}</td>
                 <td>${event.description}</td>
                 <td>${event.image}</td>
-                <td>${hall.active}</td>
+                <td>${event.active}</td>
                 <td>
                     <div class="btn-group" role="group" aria-label="Actions Event">
                         <!-- Bouton Modifier ne fonctionne pas encore car il faut ajouter un évènement-->
-                        <a href="${pageContext.request.contextPath}/event?editForm=${421}"
+                        <a href="${pageContext.request.contextPath}/event?editForm=${event.id}"
                            class="btn btn-outline-primary btn-sm">
                             <i class="bi bi-pencil-square"></i> Modifier
                         </a>
-
-                        <!-- Bouton Supprimer ou Activer -->
-
-                                <!-- Formulaire Supprimer -->
-                                <form method="post" action=""
-                                      onsubmit="return confirm('Supprimer cet évènement ?')" style="display: inline;">
-                                    <input type="hidden" name="eventId" value="${event.id}"/>
-                                    <input type="hidden" name="action" value="delete"/>
-                                    <button type="submit" class="btn btn-outline-danger btn-sm">
-                                        <i class="bi bi-trash"></i> Supprimer
-                                    </button>
-                                </form>
+                        <!--Choix entre le bouton activer ou supprimer en fonction du statut -->
+                        <c:choose>
+                            <c:when test="${event.active}">
+                            <!-- Formulaire Supprimer -->
+                            <form method="post" action="${pageContext.request.contextPath}/event"
+                                  onsubmit="return confirm('Supprimer cet évènement ?')" style="display: inline;">
+                                <input type="hidden" name="eventId" value="${event.id}"/>
+                                <input type="hidden" name="action" value="delete"/>
+                                <button type="submit" class="btn btn-outline-danger btn-sm">
+                                    <i class="bi bi-trash"></i> Supprimer
+                                </button>
+                            </form>
+                            </c:when>
+                            <c:otherwise>
                                 <!-- Formulaire Activer -->
                                 <form method="post" action="${pageContext.request.contextPath}/event"
                                       onsubmit="return confirm('Activer cet évènement ?')" style="display: inline;">
@@ -91,52 +99,57 @@
                                         <i class="bi bi-trash"></i> Activer
                                     </button>
                                 </form>
+                            </c:otherwise>
+                        </c:choose>
                     </div>
                 </td>
             </tr>
+        </c:forEach>
         </tbody>
     </table>
-    <nav aria-label="Pagination">
-        <ul class="pagination justify-content-center">
-            <!-- URLs avec conservation du size -->
-            <c:url var="firstUrl" value="/hall">
-                <c:param name="page" value="1"/>
-                <c:param name="size" value="${pageSize}"/>
-            </c:url>
-            <c:url var="prevUrl" value="/hall">
-                <c:param name="page" value="${currentPage - 1}"/>
-                <c:param name="size" value="${pageSize}"/>
-            </c:url>
-            <c:url var="nextUrl" value="/hall">
-                <c:param name="page" value="${currentPage + 1}"/>
-                <c:param name="size" value="${pageSize}"/>
-            </c:url>
-            <c:url var="lastUrl" value="/hall">
-                <c:param name="page" value="${pages}"/>
-                <c:param name="size" value="${pageSize}"/>
-            </c:url>
-            <!-- First -->
-            <li class="page-item <c:if test='${currentPage == 1}'>disabled</c:if>">
-                <a class="page-link" href="${firstUrl}">&laquo; Première</a>
-            </li>
-            <!-- Prev -->
-            <li class="page-item <c:if test='${currentPage == 1}'>disabled</c:if>">
-                <a class="page-link" href="${prevUrl}">Précédent</a>
-            </li>
-            <!-- Indicateur simple (tu peux ajouter des numéros si tu veux) -->
-            <li class="page-item disabled">
-                <span class="page-link">Page ${currentPage} / ${pages}</span>
-            </li>
-            <!-- Next -->
-            <li class="page-item <c:if test='${currentPage >= pages}'>disabled</c:if>">
-                <a class="page-link" href="${nextUrl}">Suivant</a>
-            </li>
-            <!-- Last -->
-            <li class="page-item <c:if test='${currentPage >= pages}'>disabled</c:if>">
-                <a class="page-link" href="${lastUrl}">Dernière &raquo;</a>
-            </li>
-        </ul>
-    </nav>
+    <c:if test="${pages>1}">
+        <nav aria-label="Pagination">
+            <ul class="pagination justify-content-center">
+                <!-- URLs avec conservation du size -->
+                <c:url var="firstUrl" value="/event">
+                    <c:param name="page" value="1"/>
+                    <c:param name="size" value="${pageSize}"/>
+                </c:url>
+                <c:url var="prevUrl" value="/event">
+                    <c:param name="page" value="${currentPage - 1}"/>
+                    <c:param name="size" value="${pageSize}"/>
+                </c:url>
+                <c:url var="nextUrl" value="/hall">
+                    <c:param name="page" value="${currentPage + 1}"/>
+                    <c:param name="size" value="${pageSize}"/>
+                </c:url>
+                <c:url var="lastUrl" value="/event">
+                    <c:param name="page" value="${pages}"/>
+                    <c:param name="size" value="${pageSize}"/>
+                </c:url>
+                <!-- First -->
+                <li class="page-item <c:if test='${currentPage == 1}'>disabled</c:if>">
+                    <a class="page-link" href="${firstUrl}">&laquo; Première</a>
+                </li>
+                <!-- Prev -->
+                <li class="page-item <c:if test='${currentPage == 1}'>disabled</c:if>">
+                    <a class="page-link" href="${prevUrl}">Précédent</a>
+                </li>
+                <!-- Indicateur simple (tu peux ajouter des numéros si tu veux) -->
+                <li class="page-item disabled">
+                    <span class="page-link">Page ${currentPage} / ${pages}</span>
+                </li>
+                <!-- Next -->
+                <li class="page-item <c:if test='${currentPage >= pages}'>disabled</c:if>">
+                    <a class="page-link" href="${nextUrl}">Suivant</a>
+                </li>
+                <!-- Last -->
+                <li class="page-item <c:if test='${currentPage >= pages}'>disabled</c:if>">
+                    <a class="page-link" href="${lastUrl}">Dernière &raquo;</a>
+                </li>
+            </ul>
+        </nav>
+    </c:if>
 </section>
 
 

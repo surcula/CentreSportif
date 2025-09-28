@@ -6,15 +6,19 @@ import java.time.LocalDate;
 @NamedQueries({
         @NamedQuery(
                 name = "Event.getAllActive",
-                query = "Select e FROM Event e where e.active = true order by e.beginDateHour asc"
+                query = "SELECT e FROM Event e WHERE e.active = true ORDER BY e.beginDateHour ASC"
+        ),
+        @NamedQuery(
+                name = "Event.count",
+                query = "SELECT count(e) FROM Event e"
         ),
         @NamedQuery(
                 name = "Event.countAllActive",
-                query = "select count(e) from Event e where e.active = true"
+                query = "SELECT count(e) FROM Event e WHERE e.active = true"
         ),
         @NamedQuery(
                 name = "Event.getAll",
-                query = "select e FROm Event e order by e.beginDateHour asc"
+                query = "SELECT e FROM Event e ORDER BY e.beginDateHour DESC"
         )
 })
 

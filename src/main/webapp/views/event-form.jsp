@@ -80,7 +80,7 @@
                         <input class="form-control" type="text" name="description" id="description"
                                placeholder="Information" required
                                value="${formDescription}"/>
-                        <label for="description">Descrription</label>
+                        <label for="description">Description</label>
                     </div>
                     <c:if test="${not empty errorDesciption}">
                         <div class="text-danger mb-3">${errorDescription}</div>
@@ -88,8 +88,7 @@
                     <!-- Image -->
                     <div class="form-floating mb-3">
                         <input class="form-control" type="file" name="image" id="image"
-                               placeholder="Sélectionnez une image" required
-                               value="${formImage}"/>
+                               placeholder="Sélectionnez une image" required/>
                         <label for="image">Image</label>
                     </div>
                     <c:if test="${not empty errorImage}">

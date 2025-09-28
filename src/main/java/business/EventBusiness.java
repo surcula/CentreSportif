@@ -1,15 +1,18 @@
 package business;
 
-import com.sun.javafx.collections.MappingChange;
+import dto.Page;
 import entities.Event;
 import Tools.Result;
+import enums.Scope;
+import services.EventServiceImpl;
 import java.time.format.DateTimeParseException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static jdk.nashorn.internal.runtime.regexp.joni.Config.log;
 
 /**
  * Class to handle event-related validation
@@ -19,6 +22,17 @@ import java.util.Map;
 
 
 public class EventBusiness {
+    /**
+     * Constructor
+     * @param eventService
+     */
+    public EventBusiness(EventServiceImpl eventService) {
+        this.eventService = eventService;
+    }
+
+    private EventServiceImpl eventService;
+    // Log4j
+    private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(HallBusiness.class);
     /**
      * Initialisation and validation of the data submitted via the Event creation Form
      * @param name the name of the event
@@ -66,6 +80,61 @@ public class EventBusiness {
         }else {
             return Result.fail(errors);
         }
+    }
+
+    /**
+     * Method to get all the events page
+     * @param page
+     * @param size
+     * @param scope
+     * @return Result
+     */
+    public Result<Page<Event>> getAllEventsPaged(int page, int size, Scope scope) {
+
+        int pageNumber = Math.max(1, page);
+        int pageSize = Math.max(1, size);
+        int offset = (pageNumber - 1) * pageSize;
+
+        Result<List<Event>> content = scope == Scope.ALL?
+                paginationGetAllEvent(offset,pageSize):
+                paginationGetAllActiveEvent(offset, pageSize);
+        if(!content.isSuccess()) {
+            log.error(content.getErrors());
+            return Result.fail(content.getErrors());
+        }
+
+        Result<Long> total = (scope == Scope.ALL)
+                ? eventService.countAllEvents()
+                : eventService.countActiveEvents();
+        if(!total.isSuccess()) {
+            log.error(content.getErrors());
+            return Result.fail(total.getErrors());
+        }
+
+        // Création de la page
+        Page<Event> pageObj = Page.of(content.getData(), pageNumber, pageSize, total.getData());
+        log.info("Pagination réussie[allEvents] → " + pageObj);
+        return Result.ok(pageObj);
+    }
+
+    /**
+     * Retrieves Event for PAgination
+     * @param page
+     * @param size
+     * @return
+     */
+    private Result<List<Event>> paginationGetAllEvent(int page, int size) {
+        return eventService.getAllActiveEvents(page, size);
+    }
+
+    /**
+     * Retrieves ActiveEvent for Pagination
+     * @param page
+     * @param size
+     * @return
+     */
+    private Result<List<Event>> paginationGetAllActiveEvent(int page, int size) {
+        return eventService.getAllEvents2(page, size);
     }
 
 }

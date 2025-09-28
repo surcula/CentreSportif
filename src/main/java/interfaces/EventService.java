@@ -1,6 +1,7 @@
 package interfaces;
 
 import Tools.Result;
+import dto.Page;
 import entities.Event;
 import java.util.List;
 
@@ -50,7 +51,14 @@ public interface EventService {
      * @param size the number of events per page
      * @return a list of all events
      */
-    Result<List<Event>> getAllEvents(int page, int size);
+    Result<Page<Event>> getAllEvents(int page, int size);
+
+    /**
+     * Method to search all events with a list to call in EventBusiness
+     * @param page the number of the page
+     * @param size the size of the items
+     */
+    Result<List<Event>> getAllEvents2(int page, int size);
 
     /**
      * count all active events

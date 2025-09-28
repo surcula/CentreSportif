@@ -1,6 +1,8 @@
 package services;
 
 import Tools.Result;
+import dto.EMF;
+import dto.Page;
 import entities.Event;
 import interfaces.EventService;
 import javax.persistence.EntityManager;
@@ -17,7 +19,7 @@ import java.util.Map;
  */
 public class EventServiceImpl implements interfaces.EventService {
 
-    private final EntityManager em;
+    private EntityManager em;
 
     /**
      * Constructor for an EventServiceImpl with the specified EntityManager
@@ -100,15 +102,46 @@ public class EventServiceImpl implements interfaces.EventService {
      * @return Result.okj method
      */
     @Override
-    public Result<List<Event>> getAllEvents(int page, int size) {
-        int firstResult = (page - 1) * size;
-
-        List<Event> events = em.createNamedQuery("Event.getAll", Event.class)
-                .setFirstResult(firstResult)
-                .setMaxResults(size)
-                .getResultList();
-
-        return Result.ok(events);
+    public Result<Page<Event>> getAllEvents(int page, int size) {
+        em = EMF.getEM();
+        EventService eventService = new EventServiceImpl(em);
+        try {
+            int firstResult = (page - 1) * size;
+            System.out.println(">> Pagination : page = " + page + ", size = " + size );
+            List<Event> events = em.createNamedQuery("Event.getAll", Event.class)
+                    .setFirstResult(firstResult)
+                    .setMaxResults(size)
+                    .getResultList();
+            System.out.println(">> Evènements récupérés : " + events.size() );
+            Long totalElements = em.createQuery("Select count(e) from Event e", Long.class)
+                    .getSingleResult();
+            Page<Event> pageData = Page.of(events, page, size, totalElements);
+            return Result.ok(pageData);
+        }catch (Exception e){
+            e.printStackTrace();
+            Map<String, String> errors = new HashMap<>();
+            errors.put("Introuvable", "erreur lors du chargement des évènements " + e.getMessage());
+            return Result.fail(errors);
+        }
+    }
+    public Result<List<Event>> getAllEvents2(int page, int size){
+        em = EMF.getEM();
+        //EventService eventService = new EventServiceImpl(em);
+        try {
+            int firstResult = (page - 1) * size;
+            System.out.println(">> Pagination : page = " + page + ", size = " + size );
+            List<Event> events = em.createNamedQuery("Event.getAll", Event.class)
+                    .setFirstResult(firstResult)
+                    .setMaxResults(size)
+                    .getResultList();
+            System.out.println(">> Evènements récupérés : " + events.size() );
+            return Result.ok(events);
+        }catch (Exception e){
+            e.printStackTrace();
+            Map<String, String> errors = new HashMap<>();
+            errors.put("Introuvable", "erreur lors du chargement des évènements " + e.getMessage());
+            return Result.fail(errors);
+        }
     }
 
     /**
