@@ -1,5 +1,6 @@
 package interfaces;
 
+import Tools.Result;
 import entities.HistoricalSportPrice;
 
 import java.util.List;
@@ -12,11 +13,11 @@ public interface HistoricalSportPriceService {
      * @param id
      * @return
      */
-    HistoricalSportPrice getOneById(int id);
+    Result<HistoricalSportPrice> getOneById(int id);
 
     /**
      * retrieves all historicalSportPrices
      * @return a list of all historicalSportPrices
      */
-    List<HistoricalSportPrice> getAllHistoricalSportPrices() ;
+    Result<List<HistoricalSportPrice>> getAllHistoricalSportPrices() ;
 }

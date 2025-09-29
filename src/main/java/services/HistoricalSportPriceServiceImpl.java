@@ -1,5 +1,6 @@
 package services;
 
+import Tools.Result;
 import entities.HistoricalSportPrice;
 import interfaces.HistoricalSportPriceService;
 import org.apache.log4j.Logger;
@@ -17,12 +18,14 @@ public class HistoricalSportPriceServiceImpl implements HistoricalSportPriceServ
     }
 
     @Override
-    public HistoricalSportPrice getOneById(int id) {
-        return em.find(HistoricalSportPrice.class, id);
+    public Result<HistoricalSportPrice> getOneById(int id) {
+
+        return Result.ok(em.find(HistoricalSportPrice.class, id));
+
     }
 
     @Override
-    public List<HistoricalSportPrice> getAllHistoricalSportPrices() {
-        return em.createQuery("Select h from HistoricalSportPrice h", HistoricalSportPrice.class).getResultList();
+    public Result<List<HistoricalSportPrice>> getAllHistoricalSportPrices() {
+        return Result.ok(em.createQuery("Select h from HistoricalSportPrice h", HistoricalSportPrice.class).getResultList());
     }
 }

@@ -1,5 +1,6 @@
 package services;
 
+import Tools.Result;
 import dto.ClosureCreateForm;
 import entities.Closure;
 import interfaces.ClosureService;
@@ -20,27 +21,50 @@ public class ClosureServiceImpl implements ClosureService {
     }
 
     @Override
-    public void create(ClosureCreateForm closureCreateForm) {
-        em.persist(ClosureMapper.fromCreateForm(closureCreateForm));
+    public Result create(Closure closureCreateForm) {
+        em.persist(closureCreateForm);
+        return Result.ok();
     }
 
     @Override
-    public void update(Closure closure) {
+    public Result update(Closure closure) {
+
         em.merge(closure);
+        return Result.ok();
     }
 
     @Override
-    public void delete(Closure closure) {
+    public Result softDelete(Closure closure) {
+
         em.merge(closure);
+        return Result.ok();
     }
 
     @Override
-    public Closure getOneById(int id) {
-        return em.find(Closure.class, id);
+    public Result<Closure> getOneById(int id) {
+
+        return Result.ok(em.find(Closure.class, id));
     }
 
     @Override
-    public List<Closure> getAllClosures() {
-        return em.createQuery("Select c from Closure c", Closure.class).getResultList();
+    public Result<List<Closure>> getAllActiveClosures(int page, int size) {
+        return null;
     }
+
+    @Override
+    public Result<List<Closure>> getAllClosures(int page, int size) {
+        return null;
+    }
+
+    @Override
+    public Result<Long> countActiveClosures() {
+        return null;
+    }
+
+    @Override
+    public Result<Long> countAllClosures() {
+        return null;
+    }
+
+
 }

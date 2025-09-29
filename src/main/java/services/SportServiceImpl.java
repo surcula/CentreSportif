@@ -1,5 +1,6 @@
 package services;
 
+import Tools.Result;
 import dto.SportCreateForm;
 import entities.Sport;
 import interfaces.SportService;
@@ -19,27 +20,51 @@ public class SportServiceImpl implements SportService {
     }
 
     @Override
-    public void create(SportCreateForm sportCreateForm) {
-        em.persist(SportMapper.fromCreateForm(sportCreateForm));
+    public Result create(Sport sportCreateForm) {
+
+        em.persist(sportCreateForm);
+        return Result.ok();
     }
 
     @Override
-    public void update(Sport sport) {
+    public Result update(Sport sport) {
+
         em.merge(sport);
+        return Result.ok();
     }
 
     @Override
-    public void delete(Sport sport) {
+    public Result softDelete(Sport sport) {
+
         em.merge(sport);
+        return Result.ok();
     }
 
     @Override
-    public Sport getOneById(int id) {
-        return em.find(Sport.class, id);
+    public Result<Sport> getOneById(int id) {
+
+        return Result.ok(em.find(Sport.class, id));
     }
 
     @Override
-    public List<Sport> getAllSports() {
-        return em.createQuery("Select s from Sport s", Sport.class).getResultList();
+    public Result<List<Sport>> getAllActiveSports(int page, int size) {
+        return null;
     }
+
+    @Override
+    public Result<List<Sport>> getAllSports(int page, int size) {
+        return null;
+    }
+
+    @Override
+    public Result<Long> countActiveSports() {
+        return null;
+    }
+
+    @Override
+    public Result<Long> countAllSports() {
+        return null;
+    }
+
+
 }

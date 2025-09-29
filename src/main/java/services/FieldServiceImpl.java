@@ -1,5 +1,6 @@
 package services;
 
+import Tools.Result;
 import dto.FieldCreateForm;
 import entities.Field;
 import interfaces.FieldService;
@@ -15,32 +16,57 @@ public class FieldServiceImpl implements FieldService {
     private static Logger log = Logger.getLogger(EntityFinderImpl.class);
 
     public FieldServiceImpl(EntityManager em) {
+
         this.em = em;
+
+    }
+
+
+    @Override
+    public Result create(Field fieldCreateForm) {
+        em.persist(fieldCreateForm);
+        return Result.ok();
     }
 
     @Override
-    public void create(FieldCreateForm fieldCreateForm) {
-        em.persist(FieldMapper.fromCreateForm(fieldCreateForm));
-    }
+    public Result update(Field field) {
 
-    @Override
-    public void update(Field field) {
         em.merge(field);
+        return Result.ok();
     }
 
     @Override
-    public void delete(Field field) {
+    public Result softDelete(Field field) {
+
         em.merge(field);
+        return Result.ok();
     }
 
     @Override
-    public Field getOneById(int id) {
-        return em.find(Field.class, id);
+    public Result<Field> getOneById(int id) {
+
+        return Result.ok(em.find(Field.class, id));
     }
 
     @Override
-    public List<Field> getAllFields() {
-
-        return em.createQuery("select f from Field f", Field.class).getResultList();
+    public Result<List<Field>> getAllFields(int page, int size) {
+        return null;
     }
+
+    @Override
+    public Result<List<Field>> getAllActiveFields(int page, int size) {
+        return null;
+    }
+
+    @Override
+    public Result<Long> countAllFields() {
+        return null;
+    }
+
+    @Override
+    public Result<Long> countAllActiveFields() {
+        return null;
+    }
+
+
 }

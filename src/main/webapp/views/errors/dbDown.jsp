@@ -16,7 +16,7 @@
 <p>La base de données est actuellement hors ligne.<br>
     Merci de réessayer dans quelques minutes.</p>
 <div class="retry">
-    <a href="<%= request.getContextPath() %>/">Recharger la page</a>
+    <a href="<%= request.getContextPath() %>/">GO HOME</a>
 </div>
 </body>
 </html>

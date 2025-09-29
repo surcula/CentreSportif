@@ -13,6 +13,7 @@ public interface HallService {
      * Create a new hall
      * @param hallCreateForm
      */
+
     Result create(Hall hallCreateForm) ;
 
     /**
@@ -25,7 +26,7 @@ public interface HallService {
      * soft-delete a hall by setting its isActive flag to false
      * @param hall
      */
-    Result delete(Hall hall) ;
+    Result softDelete(Hall hall) ;
 
     /**
      * retrieves a hall by its id
@@ -48,13 +49,13 @@ public interface HallService {
 
     /**
      * count all active halls
-     * @return a list of all halls
+     * @return a number
      */
     Result<Long> countActiveHalls() ;
 
     /**
      * count all halls
-     * @return a list of all halls
+     * @return a number
      */
     Result<Long> countAllHalls() ;
 

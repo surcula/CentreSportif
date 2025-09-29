@@ -1,6 +1,8 @@
 package services;
 
+import Tools.Result;
 import dto.SportFieldCreateForm;
+import entities.Hall;
 import entities.SportField;
 import interfaces.SportFieldService;
 import mappers.SportFieldMapper;
@@ -19,28 +21,47 @@ public class SportFieldServiceImpl implements SportFieldService {
     }
 
     @Override
-    public void create(SportFieldCreateForm sportFieldCreateForm) {
-        em.persist(SportFieldMapper.fromCreateForm(sportFieldCreateForm));
+    public Result create(SportField sportFieldCreateForm) {
+        em.persist(sportFieldCreateForm);
+        return Result.ok();
     }
-
     @Override
-    public void update(SportField sportField) {
+    public Result update(SportField sportField) {
         em.merge(sportField);
-
+        return Result.ok();
     }
 
     @Override
-    public void delete(SportField sportField) {
+    public Result softDelete(SportField sportField) {
         em.merge(sportField);
+        return Result.ok();
     }
 
     @Override
-    public SportField getOneById(int id) {
-        return em.find(SportField.class, id);
+    public Result<SportField> getOneById(int id) {
+
+        return Result.ok(em.find(SportField.class, id));
     }
 
     @Override
-    public List<SportField> getAllSportFields() {
-        return em.createQuery("Select s from SportField s", SportField.class).getResultList();
+    public Result<List<Hall>> getAllActiveHalls(int page, int size) {
+        return null;
     }
+
+    @Override
+    public Result<List<Hall>> getAllHalls(int page, int size) {
+        return null;
+    }
+
+    @Override
+    public Result<Long> countActiveHalls() {
+        return null;
+    }
+
+    @Override
+    public Result<Long> countAllHalls() {
+        return null;
+    }
+
+
 }

@@ -39,7 +39,7 @@ public class HallServiceImpl implements interfaces.HallService {
     }
 
     @Override
-    public Result delete(Hall hall) {
+    public Result softDelete(Hall hall) {
         em.merge(hall);
         log.info("Hall " + hall.getId() + " is not active");
         return Result.ok();

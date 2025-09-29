@@ -21,9 +21,7 @@ import java.io.IOException;
 @WebServlet(name = "Hall", value = "/hall")
 public class HallServlet extends HttpServlet {
 
-    private EntityManager em;
-    private HallServiceImpl hallService;
-    private HallBusiness hallBusiness;
+
     // Log4j
     private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(HallServlet.class);
 
@@ -36,41 +34,32 @@ public class HallServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        em = EMF.getEM();
         HttpSession session = request.getSession(false); //Retourne une session si existante
         String form = request.getParameter("form");
         String editForm = request.getParameter("editForm");
+        String role = (session != null && session.getAttribute("role") != null)
+                ? session.getAttribute("role").toString()
+                : null;
+        boolean fullAccess = ServletUtils.isFullAuthorized(role);
 
+        // --- Formulaire de création ---
         if (form != null) {
-            String role = (session != null && session.getAttribute("role") != null)
-                    ? session.getAttribute("role").toString()
-                    : null;
-
-            if (!ServletUtils.isFullAuthorized(role)) {
-                ServletUtils.redirectWithMessage(request,
-                        response,
-                        "Vous n'avez pas l'autorisation",
-                        "error",
-                        "/home");
+            if (!fullAccess) {
+                ServletUtils.redirectNoAuthorized(request, response);
                 return;
             }
 
             HallControllerHelper.handleFormDisplay(request, response);
             return;
-        } else if (editForm != null) {
-            String role = (session != null && session.getAttribute("role") != null)
-                    ? session.getAttribute("role").toString()
-                    : null;
+        }
 
-            if (!ServletUtils.isFullAuthorized(role)) {
-                ServletUtils.redirectWithMessage(request,
-                        response,
-                        "Vous n'avez pas l'autorisation",
-                        "error",
-                        "/home");
+        // --- Formulaire d'édition ---
+        if (editForm != null) {
+            if (!fullAccess) {
+                ServletUtils.redirectNoAuthorized(request, response);
                 return;
             }
-
+            EntityManager em = EMF.getEM();
             try {
                 HallServiceImpl hallService = new HallServiceImpl(em);
                 Result<Hall> result = hallService.getOneById(Integer.parseInt(editForm));
@@ -85,44 +74,42 @@ public class HallServlet extends HttpServlet {
             } finally {
                 em.close();
             }
-        } else {
-            try {
-                HallServiceImpl hallService = new HallServiceImpl(em);
-                hallBusiness = new HallBusiness(hallService);
+            return;
+        }
+        // --- Liste paginée ---
+        EntityManager em = EMF.getEM();
+        try {
+            HallServiceImpl hallService = new HallServiceImpl(em);
+            HallBusiness hallBusiness = new HallBusiness(hallService);
 
-                Result<Integer> pageRes = ServletUtils.stringToInteger(request.getParameter("page"));
-                int page = pageRes.isSuccess() ? Math.max(1, pageRes.getData()) : 1;
+            Result<Integer> pageRes = ServletUtils.stringToInteger(request.getParameter("page"));
+            int page = pageRes.isSuccess() ? Math.max(1, pageRes.getData()) : 1;
 
-                Result<Integer> sizeRes = ServletUtils.stringToInteger(request.getParameter("size"));
-                int size = sizeRes.isSuccess() ? Math.min(10, Math.max(1, sizeRes.getData())) : 10;
+            Result<Integer> sizeRes = ServletUtils.stringToInteger(request.getParameter("size"));
+            int size = sizeRes.isSuccess() ? Math.min(10, Math.max(1, sizeRes.getData())) : 10;
 
+            Result<Page<Hall>> result = fullAccess
+                    ? hallBusiness.getAllHallsPaged(page, size, Scope.ALL)
+                    : hallBusiness.getAllHallsPaged(page, size, Scope.ACTIVE);
 
-                String role = (session != null && session.getAttribute("role") != null)
-                        ? session.getAttribute("role").toString() : null;
+            if (result.isSuccess()) {
+                Page<Hall> p = result.getData();
+                request.setAttribute("halls", p.getContent());
+                request.setAttribute("page", p.getPage());
+                request.setAttribute("size", p.getSize());
+                request.setAttribute("totalPages", p.getTotalPages());
+                request.setAttribute("totalElements", p.getTotalElements());
+                request.setAttribute("fullAccess", fullAccess);
 
-                Result<Page<Hall>> result = ServletUtils.isFullAuthorized(role)
-                        ? hallBusiness.getAllHallsPaged(page, size, Scope.ALL)
-                        : hallBusiness.getAllHallsPaged(page, size, Scope.ACTIVE);
-
-                if (result.isSuccess()) {
-                    Page<Hall> p = result.getData();
-                    request.setAttribute("halls", p.getContent());
-                    request.setAttribute("page", p.getPage());
-                    request.setAttribute("size", p.getSize());
-                    request.setAttribute("totalPages", p.getTotalPages());
-                    request.setAttribute("totalElements", p.getTotalElements());
-                    request.setAttribute("fullAccess", ServletUtils.isFullAuthorized(role));
-
-                    HallControllerHelper.handleList(request, response, p.getContent());
-                } else {
-                    ServletUtils.forwardWithErrors(request, response, result.getErrors(), HALL_JSP, TEMPLATE);
-                }
-            } catch (Exception e) {
-                log.error("Erreur doGet halls", e); // <= avec la stack trace
-                ServletUtils.forwardWithError(request, response, e.getMessage(), HALL_JSP, TEMPLATE);
-            } finally {
-                em.close();
+                HallControllerHelper.handleList(request, response, p.getContent());
+            } else {
+                ServletUtils.forwardWithErrors(request, response, result.getErrors(), HALL_JSP, TEMPLATE);
             }
+        } catch (Exception e) {
+            log.error("Erreur doGet halls", e); // <= avec la stack trace
+            ServletUtils.forwardWithError(request, response, e.getMessage(), HALL_JSP, TEMPLATE);
+        } finally {
+            em.close();
         }
     }
 
@@ -132,19 +119,17 @@ public class HallServlet extends HttpServlet {
 
         //Vérifier les droits
         HttpSession session = request.getSession(false);
-        if (!(session != null && ServletUtils.isFullAuthorized(session.getAttribute("role").toString())) ) {
-            log.error("NOK");
-            ServletUtils.redirectWithMessage(request,response,"Vous n'avez pas l'autorisation", "error","/home");
-
+        if (!(session != null && ServletUtils.isFullAuthorized(session.getAttribute("role").toString()))) {
+            ServletUtils.redirectNoAuthorized(request, response);
             return;
         }
 
         //Activer un hall désactivé
         if ("activer".equals(request.getParameter("action"))) {
+            EntityManager em = EMF.getEM();
             try {
                 int id = Integer.parseInt(request.getParameter("hallId"));
-                em = EMF.getEM();
-                hallService = new HallServiceImpl(em);
+                HallServiceImpl hallService = new HallServiceImpl(em);
                 em.getTransaction().begin();
                 Result<Hall> result = hallService.getOneById(id);
                 if (!result.isSuccess()) {
@@ -158,7 +143,7 @@ public class HallServlet extends HttpServlet {
                 em.getTransaction().commit();
 
                 log.info("Hall " + hall.getId() + " activé avec succès");
-                ServletUtils.redirectWithMessage(request, response, "Hall activé avec succès", "succes","/hall");
+                ServletUtils.redirectWithMessage(request, response, "Hall activé avec succès", "success", "/hall");
 
             } catch (Exception e) {
                 log.error("Erreur d'activation : " + e.getMessage());
@@ -167,15 +152,15 @@ public class HallServlet extends HttpServlet {
                 if (em != null && em.getTransaction().isActive()) em.getTransaction().rollback();
                 if (em != null) em.close();
             }
-            return; // pour ne pas continuer sur le reste du doPost
+            return;
         }
 
         //Delete ?
         if ("delete".equals(request.getParameter("action"))) {
+            EntityManager em = EMF.getEM();
             try {
                 int id = Integer.parseInt(request.getParameter("hallId"));
-                em = EMF.getEM();
-                hallService = new HallServiceImpl(em);
+                HallServiceImpl hallService = new HallServiceImpl(em);
                 em.getTransaction().begin();
 
 
@@ -191,7 +176,7 @@ public class HallServlet extends HttpServlet {
                 em.getTransaction().commit();
 
                 log.info("Hall " + hall.getId() + " désactivé avec succès");
-                ServletUtils.redirectWithMessage(request, response, "Hall supprimé avec succès", "success" , "/hall");
+                ServletUtils.redirectWithMessage(request, response, "Hall supprimé avec succès", "success", "/hall");
 
             } catch (Exception e) {
                 log.error("Erreur suppression : " + e.getMessage());
@@ -200,7 +185,7 @@ public class HallServlet extends HttpServlet {
                 if (em != null && em.getTransaction().isActive()) em.getTransaction().rollback();
                 if (em != null) em.close();
             }
-            return; // pour ne pas continuer sur le reste du doPost
+            return;
         }
 
 
@@ -217,6 +202,7 @@ public class HallServlet extends HttpServlet {
 
             //edit ou create ?
             if (request.getParameter("hallId") != null) {
+                EntityManager em = EMF.getEM();
                 try {
                     // Création dto
                     HallUpdateForm hallUpdateForm = new HallUpdateForm(
@@ -228,8 +214,7 @@ public class HallServlet extends HttpServlet {
                             baseResult.getData().getWidth()
 
                     );
-                    em = EMF.getEM();
-                    hallService = new HallServiceImpl(em);
+                    HallServiceImpl hallService = new HallServiceImpl(em);
                     em.getTransaction().begin();
                     hallService.update(HallMapper.fromUpdateForm(hallUpdateForm));
                     em.getTransaction().commit();
@@ -266,9 +251,9 @@ public class HallServlet extends HttpServlet {
                     em.close();
                 }
             } else {
+                EntityManager em = EMF.getEM();
                 try {
-                    em = EMF.getEM();
-                    hallService = new HallServiceImpl(em);
+                    HallServiceImpl hallService = new HallServiceImpl(em);
                     em.getTransaction().begin();
                     hallService.create(baseResult.getData());
                     em.getTransaction().commit();
