@@ -11,7 +11,7 @@ import java.util.List;
 public class HistoricalSportPriceServiceImpl implements HistoricalSportPriceService {
     private final EntityManager em;
     // Log4j
-    private static Logger log = Logger.getLogger(EntityFinderImpl.class);
+    private static Logger log = Logger.getLogger(HistoricalSportPriceServiceImpl.class);
 
     public HistoricalSportPriceServiceImpl(EntityManager em) {
         this.em = em;

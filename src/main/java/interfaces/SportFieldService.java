@@ -34,26 +34,26 @@ public interface SportFieldService {
     Result<SportField> getOneById(int id);
 
     /**
-     * retrieves all ACTIVE halls
-     * @return a list of all halls
+     * retrieves all ACTIVE SportFields
+     * @return a list of all SportFields
      */
-    Result<List<Hall>> getAllActiveHalls(int page, int size) ;
+    Result<List<SportField>> getAllActiveSportFields(int page, int size) ;
 
     /**
-     * retrieves all halls
-     * @return a list of all halls
+     * retrieves all SportFields
+     * @return a list of all SportFields
      */
-    Result<List<Hall>> getAllHalls(int page, int size) ;
+    Result<List<SportField>> getAllSportFields(int page, int size) ;
 
     /**
-     * count all active halls
+     * count all active SportFields
      * @return number
      */
-    Result<Long> countActiveHalls() ;
+    Result<Long> countActiveSportField() ;
 
     /**
-     * count all halls
+     * count all SportFields
      * @return number
      */
-    Result<Long> countAllHalls() ;
+    Result<Long> countAllSportFields() ;
 }

@@ -3,6 +3,28 @@ package entities;
 import javax.persistence.*;
 import java.time.Instant;
 
+/**
+ * Named Query
+ */
+@NamedQueries({
+        @NamedQuery(
+                name = "getAllActiveSportFields",
+                query = "SELECT sP FROM SportField sP WHERE sP.active = true"
+        ),
+        @NamedQuery(
+                name = "getAllSportFields",
+                query = "SELECT sP FROM SportField sP"
+        ),
+        @NamedQuery(
+                name = "countAllActiveSportFields",
+                query = "SELECT COUNT(sP) FROM SportField sP WHERE sP.active = true"
+        ),
+        @NamedQuery(
+                name = "countAllSportFields",
+                query = "SELECT COUNT(sP) FROM SportField sP"
+        )
+})
+
 @Entity
 @Table(name = "sports_fields")
 public class SportField {

@@ -2,6 +2,7 @@ package services;
 
 import Tools.Result;
 import entities.Hall;
+import entities.Sport;
 import entities.SportField;
 import interfaces.SportFieldService;
 import org.apache.log4j.Logger;
@@ -12,7 +13,7 @@ import java.util.List;
 public class SportFieldServiceImpl implements SportFieldService {
     private final EntityManager em;
     // Log4j
-    private static Logger log = Logger.getLogger(EntityFinderImpl.class);
+    private static Logger log = Logger.getLogger(SportFieldServiceImpl.class);
 
     public SportFieldServiceImpl(EntityManager em) {
         this.em = em;
@@ -42,23 +43,39 @@ public class SportFieldServiceImpl implements SportFieldService {
     }
 
     @Override
-    public Result<List<Hall>> getAllActiveHalls(int page, int size) {
-        return null;
+    public Result<List<SportField>> getAllActiveSportFields(int page, int size) {
+        List<SportField> sportFields = em.createNamedQuery("getAllActiveSportFields", SportField.class)
+                .setFirstResult(page)
+                .setMaxResults(size)
+                .getResultList();
+        log.info("getAllActiveHalls : " + sportFields.size());
+        return Result.ok(sportFields);
     }
 
     @Override
-    public Result<List<Hall>> getAllHalls(int page, int size) {
-        return null;
+    public Result<List<SportField>> getAllSportFields(int page, int size) {
+        List<SportField> sportFields = em.createNamedQuery("getAllSportFields", SportField.class)
+                .setFirstResult(page)
+                .setMaxResults(size)
+                .getResultList();
+        log.info("getAllActiveHalls : " + sportFields.size());
+        return Result.ok(sportFields);
     }
 
     @Override
-    public Result<Long> countActiveHalls() {
-        return null;
+    public Result<Long> countActiveSportField() {
+        Long countSportFields = em.createNamedQuery("countAllActiveSportFields", Long.class)
+                        .getSingleResult();
+        log.info("getAllActiveHalls : " + countSportFields);
+        return Result.ok(countSportFields);
     }
 
     @Override
-    public Result<Long> countAllHalls() {
-        return null;
+    public Result<Long> countAllSportFields() {
+        Long countSportFields = em.createNamedQuery("countAllSportFields", Long.class)
+                .getSingleResult();
+        log.info("getAllHalls : " + countSportFields);
+        return Result.ok(countSportFields);
     }
 
 

@@ -1,6 +1,7 @@
 package services;
 
 import Tools.Result;
+import entities.Hall;
 import entities.Sport;
 import interfaces.SportService;
 import org.apache.log4j.Logger;
@@ -11,7 +12,7 @@ import java.util.List;
 public class SportServiceImpl implements SportService {
     private final EntityManager em;
     // Log4j
-    private static Logger log = Logger.getLogger(EntityFinderImpl.class);
+    private static Logger log = Logger.getLogger(SportServiceImpl.class);
 
     public SportServiceImpl(EntityManager em) {
         this.em = em;
@@ -46,22 +47,40 @@ public class SportServiceImpl implements SportService {
 
     @Override
     public Result<List<Sport>> getAllActiveSports(int page, int size) {
-        return null;
+
+        List<Sport> sports = em.createNamedQuery("getAllActiveSports", Sport.class)
+                .setFirstResult(page)
+                .setMaxResults(size)
+                .getResultList();
+        log.info("getAllActiveHalls : " + sports.size());
+        return Result.ok(sports);
     }
 
     @Override
     public Result<List<Sport>> getAllSports(int page, int size) {
-        return null;
+        List<Sport> sports = em.createNamedQuery("getAllSports", Sport.class)
+                .setFirstResult(page)
+                .setMaxResults(size)
+                .getResultList();
+        log.info("getAllActiveHalls : " + sports.size());
+        return Result.ok(sports);
     }
 
     @Override
     public Result<Long> countActiveSports() {
-        return null;
+        Long countAllActiveSports = em.createNamedQuery("countAllActiveSports", Long.class)
+                .getSingleResult();
+        log.info("getAllActiveHalls : " + countAllActiveSports);
+        return Result.ok(countAllActiveSports);
     }
 
     @Override
     public Result<Long> countAllSports() {
-        return null;
+
+        Long countAllSports = em.createNamedQuery("countAllSports", Long.class)
+                .getSingleResult();
+        log.info("getAllActiveHalls : " + countAllSports);
+        return Result.ok(countAllSports);
     }
 
 

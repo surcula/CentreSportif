@@ -59,7 +59,6 @@ public class HallServiceImpl implements interfaces.HallService {
 
     @Override
     public Result<List<Hall>> getAllActiveHalls(int page, int size) {
-        int test = page - size;
         List<Hall> halls = em.createNamedQuery("getAllActiveHalls", Hall.class)
                 .setFirstResult(page)
                 .setMaxResults(size)
