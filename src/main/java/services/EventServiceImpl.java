@@ -1,16 +1,14 @@
 package services;
 
 import Tools.Result;
-import dto.EMF;
-import dto.Page;
 import entities.Event;
-import interfaces.EventService;
 import javax.persistence.EntityManager;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+import dto.EMF;
+import dto.Page;
+import interfaces.EventService;
 
 /**
  * Implementation of the {@link EventService} interface
@@ -20,6 +18,7 @@ import java.util.Map;
 public class EventServiceImpl implements interfaces.EventService {
 
     private EntityManager em;
+    private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(EventServiceImpl.class);
 
     /**
      * Constructor for an EventServiceImpl with the specified EntityManager
@@ -146,19 +145,24 @@ public class EventServiceImpl implements interfaces.EventService {
 
     /**
      * Method to count the active events
-     * @return
+     * @return result method
      */
     @Override
     public Result<Long> countActiveEvents() {
-        return null;
+        Long countAllEvents = em.createNamedQuery("Event.countAllActive", Long.class).getSingleResult();
+        log.info("getAllEvents : " + countAllEvents);
+        return Result.ok(countAllEvents);
+
     }
 
     /**
      * Method to count all the events
-     * @return
+     * @return result method
      */
     @Override
     public Result<Long> countAllEvents() {
-        return null;
+        Long countAllEvents = em.createNamedQuery("Event.getAll", Long.class).getSingleResult();
+        log.info("getAllEvents : " + countAllEvents);
+        return Result.ok(countAllEvents);
     }
 }

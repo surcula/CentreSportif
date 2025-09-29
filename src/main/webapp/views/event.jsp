@@ -17,6 +17,8 @@
 
 <!-- formulaire version David pour rester conforme dans la présentation du site -->
 <section class="page-section">
+    <h1>Debug JSP: ${events != null ? fn:length(events) : 'null'}</h1>
+    <p>Events list: ${not empty events ? events.size() : "vide ou null"}</p>
     <h2 class="page-section-heading text-center text-uppercase text-secondary mb-0">Les évènements</h2>
     <c:if test="${not empty error}">
     <div class="alert alert-danger text-center">${error}</div>
@@ -58,7 +60,9 @@
         </thead>
         <tbody>
         <c:if test="${empty events}">
-            <div class="alert alert-warning text-center">Aucun évènement à afficher.</div>
+            <tr>
+                <td colspan="8" class="alert alert-warning text-center">Aucun évènement à afficher.</td>
+            </tr>
         </c:if>
         <c:forEach var="event" items="${events}" varStatus="status">
             <tr>

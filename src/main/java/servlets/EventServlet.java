@@ -2,12 +2,9 @@ package servlets;
 
 
 import business.EventBusiness;
-import business.HallBusiness;
 import controllers.helpers.EventControllerHelper;
-import controllers.helpers.HallControllerHelper;
 import dto.Page;
 import entities.Event;
-import entities.Hall;
 import enums.Scope;
 import services.EventServiceImpl;
 import business.ServletUtils;
@@ -20,11 +17,10 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+
 import dto.EMF;
 import Tools.Result;
-import constants.Rooting;
-import org.apache.log4j.Logger;
-import services.HallServiceImpl;
+
 
 
 /**
@@ -131,19 +127,18 @@ public class EventServlet extends HttpServlet {
                 request.setAttribute("totalPages", p.getTotalPages());
                 request.setAttribute("totalElements", p.getTotalElements());
                 request.setAttribute("fullAccess", fullAccess);
-
+                //request.getRequestDispatcher("/views/template/template.jsp").forward(request, response);
                 EventControllerHelper.handleList(request, response, p.getContent());
             } else {
-                ServletUtils.forwardWithErrors(request, response, result.getErrors(), HALL_JSP, TEMPLATE);
+                ServletUtils.forwardWithErrors(request, response, result.getErrors(), EVENT_JSP, TEMPLATE);
             }
         } catch (Exception e) {
             log.error("Erreur doGet events", e); // <= avec la stack trace
-            ServletUtils.forwardWithError(request, response, e.getMessage(), HALL_JSP, TEMPLATE);
+            ServletUtils.forwardWithError(request, response, e.getMessage(), EVENT_JSP, TEMPLATE);
         } finally {
             em.close();
         }
-        request.setAttribute("content", "/views/event/event.jsp");
-        request.getRequestDispatcher("/views/template.jsp").forward(request, response);
+
 
 
     }
