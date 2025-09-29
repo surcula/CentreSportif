@@ -2,6 +2,30 @@ package entities;
 
 import javax.persistence.*;
 
+
+/**
+ * Named Query
+ */
+@NamedQueries({
+        @NamedQuery(
+                name = "getAllActiveFields",
+                query = "SELECT f FROM Field f WHERE f.active = true"
+        ),
+        @NamedQuery(
+                name = "getAllFields",
+                query = "SELECT f FROM Field f"
+        ),
+        @NamedQuery(
+                name = "countAllActiveFields",
+                query = "SELECT COUNT(f) FROM Field f WHERE f.active = true"
+        ),
+        @NamedQuery(
+                name = "countAllFields",
+                query = "SELECT COUNT(f) FROM Field f"
+        )
+})
+
+
 @Entity
 @Table(name = "fields")
 public class Field {

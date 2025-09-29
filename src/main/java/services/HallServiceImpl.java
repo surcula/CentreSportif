@@ -1,11 +1,7 @@
 package services;
 
 import Tools.Result;
-import dto.HallCreateForm;
-import dto.Page;
 import entities.Hall;
-import mappers.HallMapper;
-import org.apache.log4j.Logger;
 
 import javax.persistence.EntityManager;
 import java.util.HashMap;
@@ -74,7 +70,6 @@ public class HallServiceImpl implements interfaces.HallService {
 
     @Override
     public Result<List<Hall>> getAllHalls(int page, int size) {
-        int test = page - size;
         List<Hall> halls = em.createNamedQuery("getAllHalls", Hall.class)
                 .setFirstResult(page)
                 .setMaxResults(size)

@@ -160,7 +160,6 @@
                     <a class="page-link" href="${prevUrl}">Précédent</a>
                 </li>
 
-                <!-- Indicateur simple (tu peux ajouter des numéros si tu veux) -->
                 <li class="page-item disabled">
                     <span class="page-link">Page ${currentPage} / ${pages}</span>
                 </li>

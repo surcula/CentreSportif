@@ -1,6 +1,7 @@
 package interfaces;
 
 import Tools.Result;
+import Tools.Result;
 import entities.Field;
 
 import java.util.List;
@@ -11,11 +12,13 @@ public interface FieldService {
      * @param fieldCreateForm
      */
     Result create(Field fieldCreateForm) ;
+    Result create(Field fieldCreateForm) ;
 
     /**
      * Update an existing field
      * @param field
      */
+    Result update(Field field) ;
     Result update(Field field) ;
 
     /**
@@ -30,11 +33,31 @@ public interface FieldService {
      * @return Field
      */
     Result<Field> getOneById(int id);
+    Result<Field> getOneById(int id);
 
     /**
      * retrieves all fields
      * @return a list of all fields
      */
+    Result<List<Field>> getAllFields(int page, int size) ;
+
+    /**
+     * retrieves all ACTIVE fields
+     * @return a list of all ACTIVE fields
+     */
+    Result<List<Field>> getAllActiveFields(int page, int size) ;
+
+    /**
+     * count all fields
+     * @return a long
+     */
+    Result<Long> countAllFields() ;
+
+    /**
+     * count all ACTIVE fields
+     * @return a long
+     */
+    Result<Long> countAllActiveFields() ;
     Result<List<Field>> getAllFields(int page, int size) ;
 
     /**

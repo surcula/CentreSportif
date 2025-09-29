@@ -4,16 +4,17 @@ import Tools.Result;
 import dto.FieldCreateForm;
 import entities.Field;
 import interfaces.FieldService;
-import mappers.FieldMapper;
 import org.apache.log4j.Logger;
 
 import javax.persistence.EntityManager;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class FieldServiceImpl implements FieldService {
     private final EntityManager em;
     // Log4j
-    private static Logger log = Logger.getLogger(EntityFinderImpl.class);
+    private static Logger log = Logger.getLogger(FieldServiceImpl.class);
 
     public FieldServiceImpl(EntityManager em) {
 
@@ -29,6 +30,8 @@ public class FieldServiceImpl implements FieldService {
     }
 
     @Override
+    public Result update(Field field) {
+
     public Result update(Field field) {
 
         em.merge(field);

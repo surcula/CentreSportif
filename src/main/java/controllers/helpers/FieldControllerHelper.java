@@ -2,13 +2,13 @@ package controllers.helpers;
 
 import business.ServletUtils;
 import entities.Field;
+import entities.Hall;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
-
 import static constants.Rooting.*;
 
 public class FieldControllerHelper {
@@ -29,4 +29,3 @@ public class FieldControllerHelper {
         ServletUtils.forwardWithContent(request, response, FIELD_FORM_JSP, TEMPLATE);
     }
 }
-

@@ -9,6 +9,7 @@ import services.FieldServiceImpl;
 import java.util.List;
 
 public class FieldBusiness {
+
     private FieldServiceImpl fieldService;
     // Log4j
     private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(FieldBusiness.class);
@@ -70,4 +71,5 @@ public class FieldBusiness {
     private Result<List<Field>> paginationGetAllActiveField(int page, int size) {
         return fieldService.getAllActiveFields(page, size);
     }
+
 }
