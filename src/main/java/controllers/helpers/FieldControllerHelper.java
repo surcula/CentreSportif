@@ -23,9 +23,7 @@ public class FieldControllerHelper {
     }
 
     public static void handleEditForm(HttpServletRequest request, HttpServletResponse response, Field field) throws ServletException, IOException {
-        request.setAttribute("fieldName", field.getFieldName());
-        request.setAttribute("fieldActive", field.isActive());
-        request.setAttribute("fieldId", field.getId());
+        request.setAttribute("field", field);
         ServletUtils.forwardWithContent(request, response, FIELD_FORM_JSP, TEMPLATE);
     }
 }

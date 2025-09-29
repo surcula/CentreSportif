@@ -5,13 +5,17 @@
   Time: 6:12 PM
   To change this template use File | Settings | File Templates.
 --%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <fmt:setLocale value="en_US" /> <!-- Pour forcer le point comme séparateur décimal -->
 
-<c:set var="formfieldId" value="${not empty param.fieldId ? param.fieldId : fieldId}" />
-<c:set var="formfieldName" value="${not empty param.fieldName ? param.fieldName : fieldName}" />
+<c:set var="formfieldId" value="${not empty param.fieldId ? param.fieldId : field.id}" />
+<c:set var="formfieldName" value="${not empty param.fieldName ? param.fieldName : field.fieldName}" />
+<c:set var="formActive" value="${not empty param.active ? param.active : (field.active ? '1' : '0')}" />
+<c:set var="formHallId"
+       value="${not empty param.hallId ? param.hallId : (not empty field ? field.hall.id : '')}" />
 
 
 <c:choose>
@@ -21,10 +25,12 @@
         <section class="page-section">
             <h2 class="text-center">
                 <c:choose>
-                    <c:when test="${not empty fieldId}">Modifier un terrain</c:when>
+                    <c:when test="${not empty formfieldId}">Modifier un terrain</c:when>
                     <c:otherwise>Ajouter un terrain</c:otherwise>
                 </c:choose>
             </h2>
+
+
             <!-- RETOUR -->
             <div class="text-start mb-3">
                 <a href="${pageContext.request.contextPath}/field" class="btn btn-outline-secondary">
@@ -40,12 +46,12 @@
                             <!-- ID -->
                             <c:if test="${not empty formfieldId}">
                                 <!-- Champ caché pour envoyer l'ID -->
-                                <input type="hidden" name="fieldId" value="${formFieldId}" />
+                                <input type="hidden" name="fieldId" value="${formfieldId}" />
 
                                 <!-- Champ visible mais non modifiable -->
                                 <div class="form-floating mb-3">
                                     <input class="form-control" type="text" id="fieldIdDisplay"
-                                           placeholder="ID" value="${formFieldId}" disabled />
+                                           placeholder="ID" value="${formfieldId}" disabled />
                                     <label for="fieldIdDisplay">ID du field</label>
                                 </div>
                             </c:if>
@@ -62,6 +68,22 @@
                                 <div class="text-danger mb-3">${errorfieldName}</div>
                             </c:if>
 
+
+                            <!-- Hall -->
+                            <div class="form-floating mb-3">
+                                <select class="form-select" id="hallId" name="hallId" required>
+                                    <option value="">-- Choisir un hall --</option>
+                                    <c:forEach var="h" items="${halls}">
+                                        <option value="${h.id}" ${formHallId == h.id ? 'selected' : ''}>
+                                                ${h.hallName}
+                                        </option>
+                                    </c:forEach>
+                                </select>
+                                <label for="hallId">Hall associé</label>
+                            </div>
+                            <c:if test="${not empty errorHallId}">
+                                <div class="text-danger mb-3">${errorHallId}</div>
+                            </c:if>
 
                             <!-- Active -->
                             <div class="form-floating mb-3">

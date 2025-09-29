@@ -59,8 +59,16 @@ public class HallServiceImpl implements interfaces.HallService {
 
     @Override
     public Result<List<Hall>> getAllActiveHalls(int page, int size) {
+        page = Math.max(page, 1);
+        if(size <= 0){
+            List<Hall> halls = em.createNamedQuery("getAllActiveHalls", Hall.class)
+                    .getResultList();
+            log.info("getAllActiveHalls : " + halls.size());
+            return Result.ok(halls);
+        }
+        int firstResult = (page - 1) * size;
         List<Hall> halls = em.createNamedQuery("getAllActiveHalls", Hall.class)
-                .setFirstResult(page)
+                .setFirstResult(firstResult)
                 .setMaxResults(size)
                 .getResultList();
         log.info("getAllActiveHalls : " + halls.size());
@@ -69,8 +77,16 @@ public class HallServiceImpl implements interfaces.HallService {
 
     @Override
     public Result<List<Hall>> getAllHalls(int page, int size) {
+        page = Math.max(page, 1);
+        if(size <= 0){
+            List<Hall> halls = em.createNamedQuery("getAllHalls", Hall.class)
+                    .getResultList();
+            log.info("getAllHalls : " + halls.size());
+            return Result.ok(halls);
+        }
+        int firstResult = (page - 1) * size;
         List<Hall> halls = em.createNamedQuery("getAllHalls", Hall.class)
-                .setFirstResult(page)
+                .setFirstResult(firstResult)
                 .setMaxResults(size)
                 .getResultList();
         log.info("getAllHalls : " + halls.size());

@@ -8,14 +8,17 @@ import controllers.helpers.FieldControllerHelper;
 import dto.EMF;
 import dto.Page;
 import entities.Field;
+import entities.Hall;
 import enums.Scope;
 import services.FieldServiceImpl;
+import services.HallServiceImpl;
 
 import javax.persistence.EntityManager;
 import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 import java.io.IOException;
+import java.util.List;
 
 import static constants.Rooting.*;
 
@@ -43,8 +46,25 @@ public class FieldServlet extends HttpServlet {
                 ServletUtils.redirectNoAuthorized(request,response);
                 return;
             }
+            EntityManager em = EMF.getEM();
+            try{
+                HallServiceImpl hallService = new HallServiceImpl(em);
+                Result<List<Hall>> halls = hallService.getAllHalls(0,0);
+                if(halls.isSuccess()){
+                    log.info("Chargement de la liste de halls pour le formulaire : OK");
+                    request.setAttribute("halls", halls.getData());
+                }else {
+                    log.warn("impossible de charger la liste de halls : " + halls.getErrors());
+                    request.setAttribute("errors", halls.getErrors());
+                }
+                FieldControllerHelper.handleFormDisplay(request, response);
+            }catch (Exception e){
+                log.error(e.getMessage());
+                ServletUtils.forwardWithError(request,response,"Erreur lors du chargement du formulaire de terrain",HOME_JSP,TEMPLATE);
+            }finally {
+                em.close();
+            }
 
-            FieldControllerHelper.handleFormDisplay(request, response);
         } else if (editForm != null) {
 
             if (!fullAccess) {
@@ -54,6 +74,17 @@ public class FieldServlet extends HttpServlet {
             EntityManager em = EMF.getEM();
             try {
 
+                //On charge les halls
+                HallServiceImpl hallService = new HallServiceImpl(em);
+                Result<List<Hall>> halls = hallService.getAllHalls(0,0);
+                if(halls.isSuccess()){
+                    log.info("Chargement de la liste de halls pour le formulaire : OK");
+                    request.setAttribute("halls", halls.getData());
+                }else {
+                    log.warn("impossible de charger la liste de halls : " + halls.getErrors());
+                    request.setAttribute("errors", halls.getErrors());
+                }
+                //On charge le field
                 FieldServiceImpl fieldService = new FieldServiceImpl(em);
                 Result<Field> result = fieldService.getOneById(Integer.parseInt(editForm));
                 if (result.isSuccess()) {
@@ -62,7 +93,7 @@ public class FieldServlet extends HttpServlet {
                     ServletUtils.forwardWithErrors(request, response, result.getErrors(), FIELD_FORM_JSP, TEMPLATE);
                 }
             } catch (Exception e) {
-                log.error(e);
+                log.error("Erreur lors du chargement du terrain en édition",e);
                 ServletUtils.forwardWithError(request, response, e.getMessage(), FIELD_JSP, TEMPLATE);
             } finally {
                 em.close();
