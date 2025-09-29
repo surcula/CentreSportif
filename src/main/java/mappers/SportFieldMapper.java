@@ -1,24 +1,25 @@
 package mappers;
 
-import dto.SportFieldCreateForm;
+import dto.SportFieldUpdateForm;
 import entities.SportField;
 
 public class SportFieldMapper {
 
     /**
-     * Mapping sportFieldCreateForm to sportField
-     * @param sportFieldCreateForm
+     * Mapping sportUpdateForm to sportField
+     * @param sportFieldUpdateForm
      * @return
      */
-    public static SportField fromCreateForm(SportFieldCreateForm sportFieldCreateForm) {
+    public static SportField fromCreateForm(SportFieldUpdateForm sportFieldUpdateForm) {
         SportField sportField = new SportField();
-        sportField.setField(sportFieldCreateForm.getField());
-        sportField.setSport(sportFieldCreateForm.getSport());
-        sportField.setDay(sportFieldCreateForm.getDay());
-        sportField.setDateStart(sportFieldCreateForm.getDateStart());
-        sportField.setStartTime(sportFieldCreateForm.getStartTime());
-        sportField.setEndTime(sportFieldCreateForm.getEndTime());
-        sportField.setActive(sportFieldCreateForm.isActive());
+        sportField.setId(sportFieldUpdateForm.getId());
+        sportField.setField(sportFieldUpdateForm.getField());
+        sportField.setSport(sportFieldUpdateForm.getSport());
+        sportField.setDay(sportFieldUpdateForm.getDay());
+        sportField.setDateStart(sportFieldUpdateForm.getDateStart());
+        sportField.setStartTime(sportFieldUpdateForm.getStartTime());
+        sportField.setEndTime(sportFieldUpdateForm.getEndTime());
+        sportField.setActive(sportFieldUpdateForm.isActive());
         return sportField;
     }
 

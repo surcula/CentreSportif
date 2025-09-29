@@ -1,20 +1,20 @@
 package mappers;
 
-import dto.SportCreateForm;
+import dto.SportUpdateForm;
 import entities.Sport;
 
 public class SportMapper {
 
     /**
      * SportCreateForm to Sport
-     * @param sportCreateForm
+     * @param sportUpdateForm
      * @return
      */
-    public static Sport fromCreateForm(SportCreateForm sportCreateForm) {
+    public static Sport fromCreateForm(SportUpdateForm sportUpdateForm) {
         Sport sport = new Sport();
-        sport.setSportName(sportCreateForm.getSportName());
-        sport.setActive(sportCreateForm.isActive());
-        sport.setPrice(sportCreateForm.getPrice());
+        sport.setSportName(sportUpdateForm.getSportName());
+        sport.setActive(sportUpdateForm.isActive());
+        sport.setPrice(sportUpdateForm.getPrice());
         return sport;
     }
 }

@@ -1,10 +1,8 @@
 package services;
 
 import Tools.Result;
-import dto.ClosureCreateForm;
 import entities.Closure;
 import interfaces.ClosureService;
-import mappers.ClosureMapper;
 import org.apache.log4j.Logger;
 
 import javax.persistence.EntityManager;

@@ -1,11 +1,9 @@
 package services;
 
 import Tools.Result;
-import dto.SportFieldCreateForm;
 import entities.Hall;
 import entities.SportField;
 import interfaces.SportFieldService;
-import mappers.SportFieldMapper;
 import org.apache.log4j.Logger;
 
 import javax.persistence.EntityManager;

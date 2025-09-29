@@ -1,7 +1,6 @@
 package interfaces;
 
 import Tools.Result;
-import dto.SportFieldCreateForm;
 import entities.Hall;
 import entities.SportField;
 

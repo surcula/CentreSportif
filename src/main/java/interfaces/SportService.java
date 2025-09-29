@@ -1,7 +1,6 @@
 package interfaces;
 
 import Tools.Result;
-import dto.SportCreateForm;
 import entities.Sport;
 
 import java.util.List;

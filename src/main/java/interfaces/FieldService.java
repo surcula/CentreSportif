@@ -12,13 +12,11 @@ public interface FieldService {
      * @param fieldCreateForm
      */
     Result create(Field fieldCreateForm) ;
-    Result create(Field fieldCreateForm) ;
 
     /**
      * Update an existing field
      * @param field
      */
-    Result update(Field field) ;
     Result update(Field field) ;
 
     /**
@@ -32,7 +30,6 @@ public interface FieldService {
      * @param id
      * @return Field
      */
-    Result<Field> getOneById(int id);
     Result<Field> getOneById(int id);
 
     /**
@@ -58,23 +55,5 @@ public interface FieldService {
      * @return a long
      */
     Result<Long> countAllActiveFields() ;
-    Result<List<Field>> getAllFields(int page, int size) ;
 
-    /**
-     * retrieves all ACTIVE fields
-     * @return a list of all ACTIVE fields
-     */
-    Result<List<Field>> getAllActiveFields(int page, int size) ;
-
-    /**
-     * count all fields
-     * @return a long
-     */
-    Result<Long> countAllFields() ;
-
-    /**
-     * count all ACTIVE fields
-     * @return a long
-     */
-    Result<Long> countAllActiveFields() ;
 }

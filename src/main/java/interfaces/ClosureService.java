@@ -1,7 +1,6 @@
 package interfaces;
 
 import Tools.Result;
-import dto.ClosureCreateForm;
 import entities.Closure;
 
 import java.util.List;
