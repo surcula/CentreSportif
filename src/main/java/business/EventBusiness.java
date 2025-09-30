@@ -113,7 +113,7 @@ public class EventBusiness {
 
         // Création de la page
         Page<Event> pageObj = Page.of(content.getData(), pageNumber, pageSize, total.getData());
-        log.info("Pagination réussie[allEvents] → " + pageObj);
+        //log.info("Pagination réussie[allEvents] → " + pageObj);
         return Result.ok(pageObj);
     }
 

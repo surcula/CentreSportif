@@ -103,10 +103,18 @@ public class EventServiceImpl implements interfaces.EventService {
     @Override
     public Result<Page<Event>> getAllEvents(int page, int size) {
         em = EMF.getEM();
-        EventService eventService = new EventServiceImpl(em);
         try {
+            //Vérification que les valeurs entrées sont valies (suite à un problème de negative start position
+            if (page < 1) page = 1;
+            if (size < 1) size = 10;
+            //-------------------------------------------------------------
             int firstResult = (page - 1) * size;
+            if(firstResult < 0){
+                System.err.println("ERREUR GRAVE : firstResult est négatif. Valeur calculée : " + firstResult + " (page= " + page + ", size=" + size + ")");
+                firstResult = 0;//réinitialisation pour empêcher l'exception.
+            }
             System.out.println(">> Pagination : page = " + page + ", size = " + size );
+
             List<Event> events = em.createNamedQuery("Event.getAll", Event.class)
                     .setFirstResult(firstResult)
                     .setMaxResults(size)
@@ -126,8 +134,20 @@ public class EventServiceImpl implements interfaces.EventService {
     public Result<List<Event>> getAllEvents2(int page, int size){
         em = EMF.getEM();
         //EventService eventService = new EventServiceImpl(em);
+        //Vérification que les valeurs entrées sont valies (suite à un problème de negative start position
+        if (page < 1) page = 1;
+        if (size < 1) size = 10;
+        //-------------------------------------------------------------
         try {
+            //Vérification que les valeurs entrées sont valies (suite à un problème de negative start position
+            if (page < 1) page = 1;
+            if (size < 1) size = 10;
+            //-------------------------------------------------------------
             int firstResult = (page - 1) * size;
+            if(firstResult < 0){
+                System.err.println("ERREUR GRAVE : firstResult est négatif. Valeur calculée : " + firstResult + " (page= " + page + ", size=" + size + ")");
+                firstResult = 0;//réinitialisation pour empêcher l'exception.
+            }
             System.out.println(">> Pagination : page = " + page + ", size = " + size );
             List<Event> events = em.createNamedQuery("Event.getAll", Event.class)
                     .setFirstResult(firstResult)

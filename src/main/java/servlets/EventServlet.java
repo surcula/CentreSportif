@@ -66,10 +66,10 @@ public class EventServlet extends HttpServlet {
         String form = request.getParameter("form");
         String editForm = request.getParameter("editForm");
         String role = (session != null && session.getAttribute("role") != null)
-               ? session.getAttribute("role").toString()
+              ? session.getAttribute("role").toString()
                 : null;
         boolean fullAccess = ServletUtils.isFullAuthorized(role);
-        // --- Formulaire de création ---
+        //--- Formulaire de création ---
         if (form != null) {
             if (!fullAccess) {
                 ServletUtils.redirectNoAuthorized(request, response);
@@ -80,7 +80,7 @@ public class EventServlet extends HttpServlet {
             return;
         }
 
-        // --- Formulaire d'édition ---
+        //--- Formulaire d'édition ---
         if (editForm != null) {
             if (!fullAccess) {
                 ServletUtils.redirectNoAuthorized(request, response);
@@ -121,14 +121,16 @@ public class EventServlet extends HttpServlet {
 
             if (result.isSuccess()) {
                 Page<Event> p = result.getData();
-                request.setAttribute("events", p.getContent());
+                //request.setAttribute("events", p.getContent());
                 request.setAttribute("page", p.getPage());
                 request.setAttribute("size", p.getSize());
                 request.setAttribute("totalPages", p.getTotalPages());
                 request.setAttribute("totalElements", p.getTotalElements());
                 request.setAttribute("fullAccess", fullAccess);
-                //request.getRequestDispatcher("/views/template/template.jsp").forward(request, response);
                 EventControllerHelper.handleList(request, response, p.getContent());
+                //request.getRequestDispatcher("/views/template/template.jsp").forward(request, response);
+                return;
+
             } else {
                 ServletUtils.forwardWithErrors(request, response, result.getErrors(), EVENT_JSP, TEMPLATE);
             }
@@ -138,9 +140,6 @@ public class EventServlet extends HttpServlet {
         } finally {
             em.close();
         }
-
-
-
     }
     /**
      * The method to send data in DB

@@ -68,14 +68,13 @@
             <tr>
                 <td>${(page - 1) * size + status.index + 1}</td>
                 <td>${event.eventName}</td>
-                <td>${event.startDateHour}</td>
+                <td>${event.beginDateHour}</td>
                 <td>${event.endDateHour}</td>
-                <td>${event.description}</td>
-                <td>${event.image}</td>
+                <td>${event.info}</td>
+                <td>${event.picture}</td>
                 <td>${event.active}</td>
                 <td>
                     <div class="btn-group" role="group" aria-label="Actions Event">
-                        <!-- Bouton Modifier ne fonctionne pas encore car il faut ajouter un évènement-->
                         <a href="${pageContext.request.contextPath}/event?editForm=${event.id}"
                            class="btn btn-outline-primary btn-sm">
                             <i class="bi bi-pencil-square"></i> Modifier
