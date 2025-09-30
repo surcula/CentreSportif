@@ -157,18 +157,4 @@ public class ServletUtils {
         return !active;
     }
 
-    /**
-     * String To Integer
-     * @param input
-     * @return
-     */
-    public static Result<Integer> stringToInteger(String input) {
-        try{
-            return Result.ok(Integer.parseInt(input));
-        }catch (NumberFormatException e) {
-            Map<String, String> errors = new HashMap<>();
-            errors.put("parseInt", "Impossible de convertir '" + input + "' en nombre.");
-            return Result.fail(errors);
-        }
-    }
 }

@@ -1,5 +1,6 @@
 package servlets;
 
+import Tools.ParamUtils;
 import Tools.Result;
 import business.HallBusiness;
 import business.ServletUtils;
@@ -25,12 +26,6 @@ public class HallServlet extends HttpServlet {
     // Log4j
     private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(HallServlet.class);
 
-
-    @Override
-    public void init(ServletConfig config) throws ServletException {
-        super.init(config);
-    }
-
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
@@ -51,65 +46,75 @@ public class HallServlet extends HttpServlet {
 
             HallControllerHelper.handleFormDisplay(request, response);
             return;
-        }
-
-        // --- Formulaire d'édition ---
-        if (editForm != null) {
+            // --- Formulaire d'édition ---
+        } else if (editForm != null) {
             if (!fullAccess) {
                 ServletUtils.redirectNoAuthorized(request, response);
+                return;
+            }
+            Result<Integer> hallUpdateId = ParamUtils.verifyId(editForm);
+            if (!hallUpdateId.isSuccess()) {
+                log.error("Erreur lors de la conversion de l'id du hall" );
+                ServletUtils.forwardWithError(request, response, "Erreur lors de la conversion de l'id du hall", HALL_JSP, TEMPLATE);
                 return;
             }
             EntityManager em = EMF.getEM();
             try {
                 HallServiceImpl hallService = new HallServiceImpl(em);
-                Result<Hall> result = hallService.getOneById(Integer.parseInt(editForm));
+                Result<Hall> result = hallService.getOneById(hallUpdateId.getData());
                 if (result.isSuccess()) {
                     HallControllerHelper.handleEditForm(request, response, result.getData());
                 } else {
                     ServletUtils.forwardWithErrors(request, response, result.getErrors(), HALL_FORM_JSP, TEMPLATE);
+                    return;
                 }
             } catch (Exception e) {
-                log.error(e.getMessage());
+                log.error("Erreur lors du chargement du formulaire du hall", e);
                 ServletUtils.forwardWithError(request, response, e.getMessage(), HALL_JSP, TEMPLATE);
+                return;
             } finally {
                 em.close();
             }
             return;
-        }
-        // --- Liste paginée ---
-        EntityManager em = EMF.getEM();
-        try {
-            HallServiceImpl hallService = new HallServiceImpl(em);
-            HallBusiness hallBusiness = new HallBusiness(hallService);
+        } else {
+            // --- Liste paginée ---
+            EntityManager em = EMF.getEM();
+            try {
+                HallServiceImpl hallService = new HallServiceImpl(em);
+                HallBusiness hallBusiness = new HallBusiness(hallService);
 
-            Result<Integer> pageRes = ServletUtils.stringToInteger(request.getParameter("page"));
-            int page = pageRes.isSuccess() ? Math.max(1, pageRes.getData()) : 1;
+                Result<Integer> pageRes = ParamUtils.stringToInteger(request.getParameter("page"));
+                int page = pageRes.isSuccess() ? Math.max(1, pageRes.getData()) : 1;
 
-            Result<Integer> sizeRes = ServletUtils.stringToInteger(request.getParameter("size"));
-            int size = sizeRes.isSuccess() ? Math.min(10, Math.max(1, sizeRes.getData())) : 10;
+                Result<Integer> sizeRes = ParamUtils.stringToInteger(request.getParameter("size"));
+                int size = sizeRes.isSuccess() ? Math.min(10, Math.max(1, sizeRes.getData())) : 10;
 
-            Result<Page<Hall>> result = fullAccess
-                    ? hallBusiness.getAllHallsPaged(page, size, Scope.ALL)
-                    : hallBusiness.getAllHallsPaged(page, size, Scope.ACTIVE);
+                Result<Page<Hall>> result = fullAccess
+                        ? hallBusiness.getAllHallsPaged(page, size, Scope.ALL)
+                        : hallBusiness.getAllHallsPaged(page, size, Scope.ACTIVE);
 
-            if (result.isSuccess()) {
-                Page<Hall> p = result.getData();
-                request.setAttribute("halls", p.getContent());
-                request.setAttribute("page", p.getPage());
-                request.setAttribute("size", p.getSize());
-                request.setAttribute("totalPages", p.getTotalPages());
-                request.setAttribute("totalElements", p.getTotalElements());
-                request.setAttribute("fullAccess", fullAccess);
+                if (result.isSuccess()) {
+                    Page<Hall> p = result.getData();
+                    request.setAttribute("halls", p.getContent());
+                    request.setAttribute("page", p.getPage());
+                    request.setAttribute("size", p.getSize());
+                    request.setAttribute("totalPages", p.getTotalPages());
+                    request.setAttribute("totalElements", p.getTotalElements());
+                    request.setAttribute("fullAccess", fullAccess);
 
-                HallControllerHelper.handleList(request, response, p.getContent());
-            } else {
-                ServletUtils.forwardWithErrors(request, response, result.getErrors(), HALL_JSP, TEMPLATE);
+                    HallControllerHelper.handleList(request, response, p.getContent());
+
+                } else {
+                    ServletUtils.forwardWithErrors(request, response, result.getErrors(), HALL_JSP, TEMPLATE);
+                    return;
+                }
+            } catch (Exception e) {
+                log.error("Erreur doGet halls", e);
+                ServletUtils.forwardWithError(request, response, e.getMessage(), HALL_JSP, TEMPLATE);
+                return;
+            } finally {
+                em.close();
             }
-        } catch (Exception e) {
-            log.error("Erreur doGet halls", e); // <= avec la stack trace
-            ServletUtils.forwardWithError(request, response, e.getMessage(), HALL_JSP, TEMPLATE);
-        } finally {
-            em.close();
         }
     }
 

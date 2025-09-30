@@ -17,12 +17,7 @@ public class HallControllerHelper {
     }
 
     public static void handleEditForm(HttpServletRequest request, HttpServletResponse response, Hall hall) throws ServletException, IOException {
-        request.setAttribute("hallName", hall.getHallName());
-        request.setAttribute("hallHeight", hall.getHeight());
-        request.setAttribute("hallLength", hall.getLength());
-        request.setAttribute("hallWidth", hall.getWidth());
-        request.setAttribute("hallActive", hall.isActive());
-        request.setAttribute("hallId", hall.getId());
+        request.setAttribute("hall", hall);
         ServletUtils.forwardWithContent(request, response, HALL_FORM_JSP, TEMPLATE);
     }
 

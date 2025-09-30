@@ -1,6 +1,7 @@
 
 package servlets;
 
+import Tools.ParamUtils;
 import Tools.Result;
 import business.FieldBusiness;
 import business.ServletUtils;
@@ -8,17 +9,13 @@ import controllers.helpers.FieldControllerHelper;
 import dto.EMF;
 import dto.Page;
 import entities.Field;
-import entities.Hall;
 import enums.Scope;
 import services.FieldServiceImpl;
-import services.HallServiceImpl;
-
 import javax.persistence.EntityManager;
 import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 import java.io.IOException;
-import java.util.List;
 
 import static constants.Rooting.*;
 
@@ -27,8 +24,6 @@ public class FieldServlet extends HttpServlet {
 
     // Log4j
     private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(FieldServlet.class);
-
-
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -41,6 +36,7 @@ public class FieldServlet extends HttpServlet {
                 : null;
         boolean fullAccess = ServletUtils.isFullAuthorized(role);
 
+        // --- Formulaire de création ---
         if (form != null) {
             if (!fullAccess) {
                 ServletUtils.redirectNoAuthorized(request,response);
@@ -48,53 +44,40 @@ public class FieldServlet extends HttpServlet {
             }
             EntityManager em = EMF.getEM();
             try{
-                HallServiceImpl hallService = new HallServiceImpl(em);
-                Result<List<Hall>> halls = hallService.getAllHalls(0,0);
-                if(halls.isSuccess()){
-                    log.info("Chargement de la liste de halls pour le formulaire : OK");
-                    request.setAttribute("halls", halls.getData());
-                }else {
-                    log.warn("impossible de charger la liste de halls : " + halls.getErrors());
-                    request.setAttribute("errors", halls.getErrors());
-                }
-                FieldControllerHelper.handleFormDisplay(request, response);
+                FieldControllerHelper.handleFormDisplay(request, response,em);
             }catch (Exception e){
                 log.error(e.getMessage());
                 ServletUtils.forwardWithError(request,response,"Erreur lors du chargement du formulaire de terrain",HOME_JSP,TEMPLATE);
+                return;
             }finally {
                 em.close();
             }
-
+        // --- Formulaire d'édition ---
         } else if (editForm != null) {
-
             if (!fullAccess) {
                 ServletUtils.redirectNoAuthorized(request,response);
                 return;
             }
+            Result<Integer> fieldUpdateId = ParamUtils.verifyId(editForm);
+            if(!fieldUpdateId.isSuccess()){
+                log.error("Erreur lors de la conversion de l'id du field");
+                ServletUtils.forwardWithError(request, response,"Erreur lors de la conversion de l'id du field", FIELD_JSP, TEMPLATE);
+                return;
+            }
             EntityManager em = EMF.getEM();
             try {
-
-                //On charge les halls
-                HallServiceImpl hallService = new HallServiceImpl(em);
-                Result<List<Hall>> halls = hallService.getAllHalls(0,0);
-                if(halls.isSuccess()){
-                    log.info("Chargement de la liste de halls pour le formulaire : OK");
-                    request.setAttribute("halls", halls.getData());
-                }else {
-                    log.warn("impossible de charger la liste de halls : " + halls.getErrors());
-                    request.setAttribute("errors", halls.getErrors());
-                }
-                //On charge le field
                 FieldServiceImpl fieldService = new FieldServiceImpl(em);
-                Result<Field> result = fieldService.getOneById(Integer.parseInt(editForm));
+                Result<Field> result = fieldService.getOneById(fieldUpdateId.getData());
                 if (result.isSuccess()) {
-                    FieldControllerHelper.handleEditForm(request, response, result.getData());
+                    FieldControllerHelper.handleEditForm(request, response, result.getData(),em);
                 } else {
                     ServletUtils.forwardWithErrors(request, response, result.getErrors(), FIELD_FORM_JSP, TEMPLATE);
+                    return;
                 }
             } catch (Exception e) {
                 log.error("Erreur lors du chargement du terrain en édition",e);
                 ServletUtils.forwardWithError(request, response, e.getMessage(), FIELD_JSP, TEMPLATE);
+                return;
             } finally {
                 em.close();
             }
@@ -104,10 +87,10 @@ public class FieldServlet extends HttpServlet {
                 FieldServiceImpl fieldService = new FieldServiceImpl(em);
                 FieldBusiness fieldBusiness = new FieldBusiness(fieldService);
 
-                Result<Integer> pageRes = ServletUtils.stringToInteger(request.getParameter("page"));
+                Result<Integer> pageRes = ParamUtils.stringToInteger(request.getParameter("page"));
                 int page = pageRes.isSuccess() ? Math.max(1, pageRes.getData()) : 1;
 
-                Result<Integer> sizeRes = ServletUtils.stringToInteger(request.getParameter("size"));
+                Result<Integer> sizeRes = ParamUtils.stringToInteger(request.getParameter("size"));
                 int size = sizeRes.isSuccess() ? Math.min(10, Math.max(1, sizeRes.getData())) : 10;
 
                 Result<Page<Field>> result = fullAccess
@@ -126,10 +109,12 @@ public class FieldServlet extends HttpServlet {
                     FieldControllerHelper.handleList(request, response, p.getContent());
                 } else {
                     ServletUtils.forwardWithErrors(request, response, result.getErrors(), FIELD_JSP, TEMPLATE);
+                    return;
                 }
             } catch (Exception e) {
                 log.error("Erreur doGet fields", e);
                 ServletUtils.forwardWithError(request, response, e.getMessage(), FIELD_JSP, TEMPLATE);
+                return;
             } finally {
                 em.close();
             }
