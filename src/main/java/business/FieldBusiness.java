@@ -34,14 +34,15 @@ public class FieldBusiness {
 
         Map<String, String> errors = new HashMap<>();
 
-        String fieldName = ValidateForm.stringIsEmpty(
+        Result<String> fieldName = ValidateForm.stringIsEmpty(
                 strFieldName,
                 "errorFieldName",
                 "Field name",
                 errors
         );
+        //Attention il faut vérifier le result FIELDNAME, j'ai fais des modifications.
         //Vérification de la taille du fieldName
-        Result<String> lengthFieldName = ValidateForm.stringLength(fieldName,0,255);
+        Result<String> lengthFieldName = ValidateForm.stringLength(fieldName.getData(),0,255);
         if(!lengthFieldName.isSuccess()) errors.putAll(lengthFieldName.getErrors());
 
         //Vérification de l'id du hall [Normalement pas besoin d'aller en DB dans ce cas-ci]
