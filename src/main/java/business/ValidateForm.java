@@ -68,7 +68,7 @@ public class ValidateForm {
      * @return
      */
     public static Result<String> stringLength(String input,int minLength, int maxLength) {
-        if (input != null && input.length() > maxLength && input.length() > minLength) {
+        if (input != null && input.length() <= maxLength && input.length() > minLength) {
             return Result.ok(input);
         }else{
             HashMap<String, String> errors = new HashMap<>();
