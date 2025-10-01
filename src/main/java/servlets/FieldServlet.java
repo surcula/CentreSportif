@@ -4,13 +4,16 @@ package servlets;
 import Tools.ParamUtils;
 import Tools.Result;
 import business.FieldBusiness;
+import business.HallBusiness;
 import business.ServletUtils;
 import controllers.helpers.FieldControllerHelper;
 import dto.EMF;
 import dto.Page;
 import entities.Field;
+import entities.Hall;
 import enums.Scope;
 import services.FieldServiceImpl;
+
 import javax.persistence.EntityManager;
 import javax.servlet.*;
 import javax.servlet.http.*;
@@ -123,6 +126,56 @@ public class FieldServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        //Vérifier les droits
+        HttpSession session = request.getSession(false);
+        if (!(session != null && ServletUtils.isFullAuthorized(session.getAttribute("role").toString()))) {
+            ServletUtils.redirectNoAuthorized(request, response);
+            return;
+        }
+        String action =  request.getParameter("action");
+        String idParam = request.getParameter("fieldId");
+
+        Result<Integer> idResult = ParamUtils.verifyId(idParam);
+        if (!idResult.isSuccess()) {
+            ServletUtils.forwardWithErrors(request, response, idResult.getErrors(), FIELD_JSP, TEMPLATE);
+            return;
+        }
+
+        //Activer ou softDelete un field
+        if ("activer".equals(action) || "delete".equals(action) ) {
+            EntityManager em = EMF.getEM();
+            try {
+                FieldServiceImpl fieldService = new FieldServiceImpl(em);
+                em.getTransaction().begin();
+                Result<Field> result = fieldService.getOneById(idResult.getData());
+                if (!result.isSuccess()) {
+                    throw new Exception("field introuvable");
+                }
+                Field field = result.getData();
+                field.setActive(ServletUtils.changeActive(field.isActive()));
+                fieldService.update(field);
+                em.getTransaction().commit();
+                log.info("field " + field.getId() + " activé/softDelete avec succès");
+                ServletUtils.redirectWithMessage(request, response, "field activé/softDelete avec succès", "success", "/field");
+                return;
+            } catch (Exception e) {
+                log.error("Erreur d'activation/softDelete : " + e.getMessage());
+                ServletUtils.forwardWithError(request, response, e.getMessage(), FIELD_JSP, TEMPLATE);
+            } finally {
+                if (em != null && em.getTransaction().isActive()) em.getTransaction().rollback();
+                if (em != null) em.close();
+            }
+            return;
+        //create
+        }else if (idParam == null){
+            //Verification des champs
+            Result<Field> baseResult = FieldBusiness.initCreateForm(
+                    request.getParameter("fieldName"),
+                    request.getParameter("hallId"),
+                    request.getParameter("active")
+            );
+        }
+
 
     }
 }

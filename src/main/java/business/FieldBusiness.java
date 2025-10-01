@@ -1,12 +1,15 @@
 package business;
 
+import Tools.ParamUtils;
 import Tools.Result;
 import dto.Page;
 import entities.Field;
 import enums.Scope;
 import services.FieldServiceImpl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class FieldBusiness {
 
@@ -16,6 +19,36 @@ public class FieldBusiness {
 
     public FieldBusiness(FieldServiceImpl fieldService) {
         this.fieldService = fieldService;
+    }
+
+
+    /**
+     * validate field Form
+     * @param strFieldName
+     * @param strHallId
+     * @param strActive
+     * @return
+     */
+    public static Result<Field> initCreateForm(String strFieldName, String strHallId, String strActive) {
+        Field field = new Field();
+
+        Map<String, String> errors = new HashMap<>();
+
+        String fieldName = ValidateForm.stringIsEmpty(
+                strFieldName,
+                "errorFieldName",
+                "Field name",
+                errors
+        );
+        //Vérification de la taille du fieldName
+        Result<String> lengthFieldName = ValidateForm.stringLength(fieldName,0,255);
+        if(!lengthFieldName.isSuccess()) errors.putAll(lengthFieldName.getErrors());
+
+        //Vérification de l'id du hall [Normalement pas besoin d'aller en DB dans ce cas-ci]
+        Result<Integer> idResult = ParamUtils.verifyId(strHallId);
+        if(!idResult.isSuccess()) errors.putAll(idResult.getErrors());
+
+        return Result.ok(field);
     }
 
     /**

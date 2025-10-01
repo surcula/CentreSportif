@@ -43,7 +43,6 @@ public class HallServlet extends HttpServlet {
                 ServletUtils.redirectNoAuthorized(request, response);
                 return;
             }
-
             HallControllerHelper.handleFormDisplay(request, response);
             return;
             // --- Formulaire d'édition ---
@@ -101,7 +100,6 @@ public class HallServlet extends HttpServlet {
                     request.setAttribute("totalPages", p.getTotalPages());
                     request.setAttribute("totalElements", p.getTotalElements());
                     request.setAttribute("fullAccess", fullAccess);
-
                     HallControllerHelper.handleList(request, response, p.getContent());
 
                 } else {
@@ -149,7 +147,7 @@ public class HallServlet extends HttpServlet {
 
                 log.info("Hall " + hall.getId() + " activé avec succès");
                 ServletUtils.redirectWithMessage(request, response, "Hall activé avec succès", "success", "/hall");
-
+                return;
             } catch (Exception e) {
                 log.error("Erreur d'activation : " + e.getMessage());
                 ServletUtils.forwardWithError(request, response, e.getMessage(), HALL_JSP, TEMPLATE);
@@ -192,7 +190,6 @@ public class HallServlet extends HttpServlet {
             }
             return;
         }
-
 
         //Verification des champs
         Result<Hall> baseResult = HallBusiness.initCreateForm(
