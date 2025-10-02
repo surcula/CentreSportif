@@ -36,13 +36,13 @@ public interface SportService {
      * retrieves all ACTIVE Sports
      * @return a list of all Sports
      */
-    Result<List<Sport>> getAllActiveSports(int page, int size) ;
+    Result<List<Sport>> getAllActiveSports(int offset, int size) ;
 
     /**
      * retrieves all Sports
      * @return a list of all Sports
      */
-    Result<List<Sport>> getAllSports(int page, int size) ;
+    Result<List<Sport>> getAllSports(int offset, int size) ;
 
     /**
      * count all active Sports

@@ -9,19 +9,19 @@ import java.time.Instant;
 @NamedQueries({
         @NamedQuery(
                 name = "getAllActiveSportFields",
-                query = "SELECT sP FROM SportField sP WHERE sP.active = true"
+                query = "SELECT sp FROM SportField sp WHERE sp.active = true order by sp.id asc"
         ),
         @NamedQuery(
                 name = "getAllSportFields",
-                query = "SELECT sP FROM SportField sP"
+                query = "SELECT sp FROM SportField sp order by sp.id asc"
         ),
         @NamedQuery(
                 name = "countAllActiveSportFields",
-                query = "SELECT COUNT(sP) FROM SportField sP WHERE sP.active = true"
+                query = "SELECT COUNT(sp) FROM SportField sp WHERE sp.active = true"
         ),
         @NamedQuery(
                 name = "countAllSportFields",
-                query = "SELECT COUNT(sP) FROM SportField sP"
+                query = "SELECT COUNT(sp) FROM SportField sp"
         )
 })
 

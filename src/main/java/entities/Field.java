@@ -9,11 +9,11 @@ import javax.persistence.*;
 @NamedQueries({
         @NamedQuery(
                 name = "getAllActiveFields",
-                query = "SELECT f FROM Field f WHERE f.active = true"
+                query = "SELECT f FROM Field f WHERE f.active = true ORDER BY f.id asc"
         ),
         @NamedQuery(
                 name = "getAllFields",
-                query = "SELECT f FROM Field f"
+                query = "SELECT f FROM Field f ORDER BY f.id asc"
         ),
         @NamedQuery(
                 name = "countAllActiveFields",

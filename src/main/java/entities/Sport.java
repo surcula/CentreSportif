@@ -9,11 +9,11 @@ import javax.persistence.*;
 @NamedQueries({
         @NamedQuery(
                 name = "getAllActiveSports",
-                query = "SELECT s FROM Sport s WHERE s.active = true"
+                query = "SELECT s FROM Sport s WHERE s.active = true order by s.id asc"
         ),
         @NamedQuery(
                 name = "getAllSports",
-                query = "SELECT s FROM Sport s"
+                query = "SELECT s FROM Sport s order by s.id asc"
         ),
         @NamedQuery(
                 name = "countAllActiveSports",

@@ -4,9 +4,7 @@ package servlets;
 import Tools.ParamUtils;
 import Tools.Result;
 import business.FieldBusiness;
-import business.HallBusiness;
 import business.ServletUtils;
-import business.ValidateForm;
 import controllers.helpers.FieldControllerHelper;
 import dto.EMF;
 import dto.FieldUpdateForm;
@@ -14,16 +12,13 @@ import dto.Page;
 import entities.Field;
 import entities.Hall;
 import enums.Scope;
-import interfaces.HallService;
 import mappers.FieldMapper;
 import services.FieldServiceImpl;
 import services.HallServiceImpl;
-
 import javax.persistence.EntityManager;
 import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
-import javax.xml.bind.ValidationEvent;
 import java.io.IOException;
 
 import static constants.Rooting.*;
@@ -59,7 +54,7 @@ public class FieldServlet extends HttpServlet {
                 ServletUtils.forwardWithError(request, response, "Erreur lors du chargement du formulaire de terrain", HOME_JSP, TEMPLATE);
                 return;
             } finally {
-                em.close();
+                if (em != null) em.close();
             }
             // --- Formulaire d'édition ---
         } else if (editForm != null) {
@@ -88,7 +83,7 @@ public class FieldServlet extends HttpServlet {
                 ServletUtils.forwardWithError(request, response, e.getMessage(), FIELD_JSP, TEMPLATE);
                 return;
             } finally {
-                em.close();
+                if (em != null) em.close();
             }
         } else {
             EntityManager em = EMF.getEM();
@@ -100,7 +95,7 @@ public class FieldServlet extends HttpServlet {
                 int page = pageRes.isSuccess() ? Math.max(1, pageRes.getData()) : 1;
 
                 Result<Integer> sizeRes = ParamUtils.stringToInteger(request.getParameter("size"));
-                int size = sizeRes.isSuccess() ? Math.min(10, Math.max(1, sizeRes.getData())) : 10;
+                int size = sizeRes.isSuccess() ? Math.min(20, Math.max(1, sizeRes.getData())) : 10;
 
                 Result<Page<Field>> result = fullAccess
                         ? fieldBusiness.getAllFieldsPaged(page, size, Scope.ALL)
@@ -125,7 +120,7 @@ public class FieldServlet extends HttpServlet {
                 ServletUtils.forwardWithError(request, response, e.getMessage(), FIELD_JSP, TEMPLATE);
                 return;
             } finally {
-                em.close();
+                if (em != null) em.close();
             }
         }
     }
@@ -157,17 +152,16 @@ public class FieldServlet extends HttpServlet {
             try {
                 FieldServiceImpl fieldService = new FieldServiceImpl(em);
                 em.getTransaction().begin();
-                Result<Field> result = fieldService.getOneById(idResult.getData());
-                if (!result.isSuccess()) {
+                Result<Field> fieldResult = fieldService.getOneById(idResult.getData());
+                if (!fieldResult.isSuccess()) {
                     log.error("Erreur field non trouvé ");
-                    ServletUtils.forwardWithError(request, response, "erreur field non trouvé.", FIELD_FORM_JSP, TEMPLATE);
+                    ServletUtils.forwardWithError(request, response, "erreur field non trouvé.", FIELD_JSP, TEMPLATE);
                     return;
                 }
-                Field field = result.getData();
-                field.setActive(ServletUtils.changeActive(field.isActive()));
-                fieldService.update(field);
+                fieldResult.getData().setActive(ServletUtils.changeActive(fieldResult.getData().isActive()));
+                fieldService.update(fieldResult.getData());
                 em.getTransaction().commit();
-                log.info("field " + field.getId() + " activé/softDelete avec succès");
+                log.info("field " + fieldResult.getData().getId() + " activé/softDelete avec succès");
                 ServletUtils.redirectWithMessage(request, response, "field activé/softDelete avec succès", "success", "/field");
                 return;
             } catch (Exception e) {
@@ -178,19 +172,18 @@ public class FieldServlet extends HttpServlet {
                 if (em != null) em.close();
             }
             return;
-            //create -- edit
         } else {
             //Create
             //Verification des champs
             if (idParam == null) {
-                Result<Field> baseResult = FieldBusiness.initCreateForm(
+                Result<Field> fieldCreateResult = FieldBusiness.initCreateForm(
                         request.getParameter("fieldName"),
                         request.getParameter("hallId"),
                         request.getParameter("active")
                 );
-                if (!baseResult.isSuccess()) {
-                    log.error("Erreur lors de la " + (idParam == null ? "création" : "édition") + "du field : " + baseResult.getErrors());
-                    ServletUtils.forwardWithErrors(request, response, baseResult.getErrors(), FIELD_FORM_JSP, TEMPLATE);
+                if (!fieldCreateResult.isSuccess()) {
+                    log.error("Erreur lors de la " + (idParam == null ? "création" : "édition") + "du field : " + fieldCreateResult.getErrors());
+                    ServletUtils.forwardWithErrors(request, response, fieldCreateResult.getErrors(), FIELD_FORM_JSP, TEMPLATE);
                     return;
                 } else {
                     Result<Integer> hallId = ParamUtils.verifyId(request.getParameter("hallId"));
@@ -205,54 +198,57 @@ public class FieldServlet extends HttpServlet {
                         FieldServiceImpl fieldService = new FieldServiceImpl(em);
                         em.getTransaction().begin();
                         Result<Hall> hall = hallService.getOneById(hallId.getData());
-                        baseResult.getData().setHall(hall.getData());
-                        fieldService.create(baseResult.getData());
+                        fieldCreateResult.getData().setHall(hall.getData());
+                        fieldService.create(fieldCreateResult.getData());
                         em.getTransaction().commit();
                         log.info("Field créé avec success.");
                         ServletUtils.redirectWithMessage(request, response, "field avec success.", "success", "/field");
                         return;
                     } catch (Exception e) {
                         log.error("Une erreur est survenue lors de la création du field. " + e.getMessage());
-                        ServletUtils.forwardWithError(request, response, "Une erreur est survenue lors de la création du field. ", HALL_FORM_JSP, TEMPLATE);
+                        ServletUtils.forwardWithError(request, response, "Une erreur est survenue lors de la création du field. ", FIELD_FORM_JSP, TEMPLATE);
+                        return;
                     } finally {
                         if (em.getTransaction().isActive()) {
                             em.getTransaction().rollback();
                         }
-                        em.close();
+                        if (em != null) em.close();
                     }
                 }
                 //Edit
             } else {
-                Result<FieldUpdateForm> baseResult = FieldBusiness.initUpdateForm(
+                Result<FieldUpdateForm> fieldUpdateFormResult = FieldBusiness.initUpdateForm(
                         request.getParameter("fieldName"),
                         request.getParameter("hallId"),
                         request.getParameter("active")
                 );
                 EntityManager em = EMF.getEM();
-                try{
+                try {
                     FieldServiceImpl fieldService = new FieldServiceImpl(em);
                     em.getTransaction().begin();
                     HallServiceImpl hallService = new HallServiceImpl(em);
-                    Result<Hall> hall = hallService.getOneById(baseResult.getData().getHallId());
-                    if(!hall.isSuccess()){
+                    Result<Hall> hall = hallService.getOneById(fieldUpdateFormResult.getData().getHallId());
+                    if (!hall.isSuccess()) {
                         log.error("Hall :" + idResult.getData() + " n'existe pas");
-                        ServletUtils.forwardWithError(request,response,"Le hall n'existe pas",FIELD_FORM_JSP, TEMPLATE);
+                        ServletUtils.forwardWithError(request, response, "Le hall n'existe pas", FIELD_FORM_JSP, TEMPLATE);
+                        return;
                     }
                     Result<Field> field = fieldService.getOneById(idResult.getData());
-                    FieldMapper.fromUpdateForm(baseResult.getData() , hall.getData(), field.getData());
+                    FieldMapper.fromUpdateForm(fieldUpdateFormResult.getData(), hall.getData(), field.getData());
                     fieldService.update(field.getData());
                     em.getTransaction().commit();
                     log.info("Field modifié avec success.");
                     ServletUtils.redirectWithMessage(request, response, "field modifié avec success.", "success", "/field");
                     return;
-                }catch (Exception e){
+                } catch (Exception e) {
                     log.error("Erreur lors de l'update du field", e);
                     ServletUtils.forwardWithError(request, response, "Erreur lors de l'update du field", FIELD_FORM_JSP, TEMPLATE);
-                }finally {
+                    return;
+                } finally {
                     if (em.getTransaction().isActive()) {
                         em.getTransaction().rollback();
                     }
-                    em.close();
+                    if (em != null) em.close();
                 }
             }
         }

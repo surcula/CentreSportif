@@ -72,7 +72,7 @@ public class HallServlet extends HttpServlet {
                 ServletUtils.forwardWithError(request, response, e.getMessage(), HALL_JSP, TEMPLATE);
                 return;
             } finally {
-                em.close();
+                if (em != null) em.close();
             }
             return;
         } else {
@@ -86,7 +86,7 @@ public class HallServlet extends HttpServlet {
                 int page = pageRes.isSuccess() ? Math.max(1, pageRes.getData()) : 1;
 
                 Result<Integer> sizeRes = ParamUtils.stringToInteger(request.getParameter("size"));
-                int size = sizeRes.isSuccess() ? Math.min(10, Math.max(1, sizeRes.getData())) : 10;
+                int size = sizeRes.isSuccess() ? Math.min(20, Math.max(1, sizeRes.getData())) : 10;
 
                 Result<Page<Hall>> result = fullAccess
                         ? hallBusiness.getAllHallsPaged(page, size, Scope.ALL)
@@ -111,7 +111,7 @@ public class HallServlet extends HttpServlet {
                 ServletUtils.forwardWithError(request, response, e.getMessage(), HALL_JSP, TEMPLATE);
                 return;
             } finally {
-                em.close();
+                if (em != null) em.close();
             }
         }
     }
@@ -122,177 +122,126 @@ public class HallServlet extends HttpServlet {
 
         //Vérifier les droits
         HttpSession session = request.getSession(false);
-        if (!(session != null && ServletUtils.isFullAuthorized(session.getAttribute("role").toString()))) {
+        String role = (session != null) ? (String) session.getAttribute("role") : null;
+        if (role == null || !ServletUtils.isFullAuthorized(role)) {
             ServletUtils.redirectNoAuthorized(request, response);
             return;
         }
 
-        //Activer un hall désactivé
-        if ("activer".equals(request.getParameter("action"))) {
+        String action = request.getParameter("action");
+        String idParam = request.getParameter("hallId");
+
+        //On vérifie l'id si c'est possible ou non.
+        Result<Integer> idResult = ParamUtils.verifyId(idParam);
+        if (idParam != null) {
+
+            if (!idResult.isSuccess()) {
+                ServletUtils.forwardWithErrors(request, response, idResult.getErrors(), HALL_JSP, TEMPLATE);
+                return;
+            }
+        }
+
+        //Activer ou softDelete un hall
+        if ("activer".equals(action) || "delete".equals(action)) {
             EntityManager em = EMF.getEM();
             try {
-                int id = Integer.parseInt(request.getParameter("hallId"));
                 HallServiceImpl hallService = new HallServiceImpl(em);
                 em.getTransaction().begin();
-                Result<Hall> result = hallService.getOneById(id);
-                if (!result.isSuccess()) {
-                    throw new Exception("Hall introuvable");
+                Result<Hall> hallResult = hallService.getOneById(idResult.getData());
+                if (!hallResult.isSuccess()) {
+                    log.error("Erreur hall non trouvé ");
+                    ServletUtils.forwardWithError(request, response, "erreur hall non trouvé.", HALL_JSP, TEMPLATE);
+                    return;
                 }
-
-                Hall hall = result.getData();
-                hall.setActive(ServletUtils.changeActive(hall.isActive()));
-                hallService.update(hall);
-
+                hallResult.getData().setActive(ServletUtils.changeActive(hallResult.getData().isActive()));
+                hallService.update(hallResult.getData());
                 em.getTransaction().commit();
-
-                log.info("Hall " + hall.getId() + " activé avec succès");
-                ServletUtils.redirectWithMessage(request, response, "Hall activé avec succès", "success", "/hall");
+                log.info("hall " + hallResult.getData().getId() + " activé/softDelete avec succès");
+                ServletUtils.redirectWithMessage(request, response, "hall activé/softDelete avec succès", "success", "/hall");
                 return;
             } catch (Exception e) {
-                log.error("Erreur d'activation : " + e.getMessage());
+                log.error("Erreur d'activation/softDelete : " + e.getMessage());
                 ServletUtils.forwardWithError(request, response, e.getMessage(), HALL_JSP, TEMPLATE);
             } finally {
                 if (em != null && em.getTransaction().isActive()) em.getTransaction().rollback();
                 if (em != null) em.close();
             }
             return;
-        }
-
-        //Delete ?
-        if ("delete".equals(request.getParameter("action"))) {
-            EntityManager em = EMF.getEM();
-            try {
-                int id = Integer.parseInt(request.getParameter("hallId"));
-                HallServiceImpl hallService = new HallServiceImpl(em);
-                em.getTransaction().begin();
-
-
-                Result<Hall> result = hallService.getOneById(id);
-                if (!result.isSuccess()) {
-                    throw new Exception("Hall introuvable");
-                }
-
-                Hall hall = result.getData();
-                hall.setActive(ServletUtils.changeActive(hall.isActive()));
-                hallService.update(hall);
-
-                em.getTransaction().commit();
-
-                log.info("Hall " + hall.getId() + " désactivé avec succès");
-                ServletUtils.redirectWithMessage(request, response, "Hall supprimé avec succès", "success", "/hall");
-
-            } catch (Exception e) {
-                log.error("Erreur suppression : " + e.getMessage());
-                ServletUtils.forwardWithError(request, response, e.getMessage(), HALL_JSP, TEMPLATE);
-            } finally {
-                if (em != null && em.getTransaction().isActive()) em.getTransaction().rollback();
-                if (em != null) em.close();
-            }
-            return;
-        }
-
-        //Verification des champs
-        Result<Hall> baseResult = HallBusiness.initCreateForm(
-                request.getParameter("hallName"),
-                request.getParameter("width"),
-                request.getParameter("length"),
-                request.getParameter("height"),
-                request.getParameter("active")
-        );
-
-        if (baseResult.isSuccess()) {
-
-            //edit ou create ?
-            if (request.getParameter("hallId") != null) {
-                EntityManager em = EMF.getEM();
-                try {
-                    // Création dto
-                    HallUpdateForm hallUpdateForm = new HallUpdateForm(
-                            Integer.parseInt(request.getParameter("hallId")),
-                            baseResult.getData().getHallName(),
-                            baseResult.getData().isActive(),
-                            baseResult.getData().getHeight(),
-                            baseResult.getData().getLength(),
-                            baseResult.getData().getWidth()
-
-                    );
-                    HallServiceImpl hallService = new HallServiceImpl(em);
-                    em.getTransaction().begin();
-                    hallService.update(HallMapper.fromUpdateForm(hallUpdateForm));
-                    em.getTransaction().commit();
-                    log.info("Hall " + hallUpdateForm.getId() + " modified successfully");
-                    ServletUtils.redirectWithMessage(
-                            request,
-                            response,
-                            "Hall modifié avec succès",
-                            "success",
-                            "/hall"
-                    );
-                } catch (NumberFormatException e) {
-                    log.error("Id du hall invalide" + e.getMessage());
-                    ServletUtils.forwardWithError(
-                            request,
-                            response,
-                            "Id du hall invalide",
-                            HALL_FORM_JSP,
-                            TEMPLATE
-                    );
-                } catch (Exception e) {
-                    log.error(e.getMessage());
-                    ServletUtils.forwardWithError(
-                            request,
-                            response,
-                            e.getMessage(),
-                            HALL_FORM_JSP,
-                            TEMPLATE
-                    );
-                } finally {
-                    if (em.getTransaction().isActive()) {
-                        em.getTransaction().rollback();
-                    }
-                    em.close();
-                }
-            } else {
-                EntityManager em = EMF.getEM();
-                try {
-                    HallServiceImpl hallService = new HallServiceImpl(em);
-                    em.getTransaction().begin();
-                    hallService.create(baseResult.getData());
-                    em.getTransaction().commit();
-                    log.info("Hall created successfully");
-                    ServletUtils.redirectWithMessage(
-                            request,
-                            response,
-                            "Hall créé avec succès",
-                            "success",
-                            "/hall"
-                    );
-                } catch (Exception e) {
-                    log.error(e.getMessage());
-                    ServletUtils.forwardWithError(
-                            request,
-                            response,
-                            e.getMessage(),
-                            HALL_FORM_JSP,
-                            TEMPLATE
-                    );
-                } finally {
-                    if (em.getTransaction().isActive()) {
-                        em.getTransaction().rollback();
-                    }
-                    em.close();
-                }
-            }
+            //create -- edit
         } else {
-            ServletUtils.forwardWithErrors(
-                    request,
-                    response,
-                    baseResult.getErrors(),
-                    HALL_FORM_JSP,
-                    TEMPLATE
-            );
-
+            //Create
+            //Verification des champs
+            if (idParam == null) {
+                Result<Hall> baseResult = HallBusiness.initCreateForm(
+                        request.getParameter("hallName"),
+                        request.getParameter("width"),
+                        request.getParameter("length"),
+                        request.getParameter("height"),
+                        request.getParameter("active")
+                );
+                if (!baseResult.isSuccess()) {
+                    log.error("Erreur lors de la " + (idParam == null ? "création" : "édition") + "du hall : " + baseResult.getErrors());
+                    ServletUtils.forwardWithErrors(request, response, baseResult.getErrors(), HALL_FORM_JSP, TEMPLATE);
+                    return;
+                } else {
+                    EntityManager em = EMF.getEM();
+                    try {
+                        HallServiceImpl hallService = new HallServiceImpl(em);
+                        em.getTransaction().begin();
+                        hallService.create(baseResult.getData());
+                        em.getTransaction().commit();
+                        log.info("Hall créé avec success.");
+                        ServletUtils.redirectWithMessage(request, response, "hall créé avec success.", "success", "/hall");
+                        return;
+                    } catch (Exception e) {
+                        log.error("Une erreur est survenue lors de la création du hall. " + e.getMessage());
+                        ServletUtils.forwardWithError(request, response, "Une erreur est survenue lors de la création du hall. ", HALL_FORM_JSP, TEMPLATE);
+                        return;
+                    } finally {
+                        if (em.getTransaction().isActive()) {
+                            em.getTransaction().rollback();
+                        }
+                        if (em != null) em.close();
+                    }
+                }
+                //Edit
+            } else {
+                Result<HallUpdateForm> hallUpdateFormResult = HallBusiness.initUpdateForm(
+                        request.getParameter("hallName"),
+                        request.getParameter("width"),
+                        request.getParameter("length"),
+                        request.getParameter("height"),
+                        request.getParameter("active")
+                );
+                EntityManager em = EMF.getEM();
+                try{
+                    HallServiceImpl hallService = new HallServiceImpl(em);
+                    em.getTransaction().begin();
+                    Result<Hall> hall = hallService.getOneById(idResult.getData());
+                    if(!hall.isSuccess()){
+                        log.error("Hall :" + idResult.getData() + " n'existe pas");
+                        ServletUtils.forwardWithError(request,response,"Le hall n'existe pas",HALL_FORM_JSP, TEMPLATE);
+                        return;
+                    }
+                    HallMapper.fromUpdateForm(hallUpdateFormResult.getData(),hall.getData());
+                    hallService.update(hall.getData());
+                    em.getTransaction().commit();
+                    log.info("Hall modifié avec success.");
+                    ServletUtils.redirectWithMessage(request, response, "Hall modifié avec success.", "success", "/hall");
+                    return;
+                }catch (Exception e){
+                    log.error("Erreur lors de l'update du hall", e);
+                    ServletUtils.forwardWithError(request, response, "Erreur lors de l'update du hall", HALL_FORM_JSP, TEMPLATE);
+                    return;
+                }finally {
+                    if (em.getTransaction().isActive()) {
+                        em.getTransaction().rollback();
+                    }
+                    if (em != null) em.close();
+                }
+            }
         }
+
 
     }
 }
