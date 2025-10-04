@@ -50,7 +50,6 @@ public class LoginServlet extends HttpServlet {
                     LOGIN_JSP,
                     TEMPLATE
             );
-
         }
     }
 
