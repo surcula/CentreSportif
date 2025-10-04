@@ -8,6 +8,14 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+
+<c:set var="currentPage" value="${empty page ? 1 : page}"/>
+<c:set var="pageSize" value="${empty size ? 10 : size}"/>
+<c:set var="pages" value="${empty totalPages ? 1 : totalPages}"/>
+<c:set var="total" value="${empty totalElements ? fn:length(halls) : totalElements}"/>
+
+
 <section class="page-section">
     <h2 class="page-section-heading text-center text-uppercase text-secondary mb-0">Les halls</h2>
 
@@ -20,11 +28,31 @@
 
     </c:if>
     <c:if test="${empty error}">
-    <c:if test="${sessionScope.role == 'ADMIN'
+        <c:if test="${sessionScope.role == 'ADMIN'
              or sessionScope.role == 'BARMAN'
              or sessionScope.role == 'SECRETARY'}">
-        <a class="btn btn-primary my-3" href="${pageContext.request.contextPath}/hall?form=true">Ajouter un nouveau hall</a>
-    </c:if>
+            <a class="btn btn-primary my-3" href="${pageContext.request.contextPath}/hall?form=true">Ajouter un nouveau
+                hall</a>
+        </c:if>
+
+        <!-- Nb résultat + choix affichage -->
+        <div class="d-flex justify-content-end align-items-center mb-2">
+            <div class="me-3 text-muted small">
+                    ${totalElements} résultat<c:if test="${totalElements > 1}">s</c:if>
+                — Page ${page} / ${totalPages}
+            </div>
+            <form method="get" action="${pageContext.request.contextPath}/hall" class="d-flex align-items-center">
+                <label for="size" class="me-2 small">Taille page</label>
+                <select id="size" name="size" class="form-select form-select-sm"
+                        onchange="this.form.submit()">
+                    <option value="5" ${size == 5 ? 'selected' : ''}>5</option>
+                    <option value="10" ${size == 10 ? 'selected' : ''}>10</option>
+                    <option value="20" ${size == 20 ? 'selected' : ''}>20</option>
+                </select>
+                <input type="hidden" name="page" value="${page}"/>
+            </form>
+        </div>
+
 
         <table class="table">
             <thead>
@@ -36,19 +64,22 @@
              or sessionScope.role == 'BARMAN'
              or sessionScope.role == 'SECRETARY'}">
                     <th scope="col">Actif</th>
-                    <th> Détails </th>
+                    <th> Détails</th>
                 </c:if>
             </tr>
             </thead>
             <tbody>
             <c:forEach var="hall" items="${halls}" varStatus="status">
                 <tr>
-                    <td>${status.index + 1}</td>
+                    <td>${(page - 1) * size + status.index + 1}</td>
                     <td>${hall.hallName}</td>
                     <td>
-                        <fmt:formatNumber value="${hall.width}" type="number" minFractionDigits="2" maxFractionDigits="2"/>
-                        X <fmt:formatNumber value="${hall.length}" type="number" minFractionDigits="2" maxFractionDigits="2"/>
-                        X <fmt:formatNumber value="${hall.height}" type="number" minFractionDigits="2" maxFractionDigits="2"/>
+                        <fmt:formatNumber value="${hall.width}" type="number" minFractionDigits="2"
+                                          maxFractionDigits="2"/>
+                        X <fmt:formatNumber value="${hall.length}" type="number" minFractionDigits="2"
+                                            maxFractionDigits="2"/>
+                        X <fmt:formatNumber value="${hall.height}" type="number" minFractionDigits="2"
+                                            maxFractionDigits="2"/>
                     </td>
                     <c:if test="${sessionScope.role == 'ADMIN'
              or sessionScope.role == 'BARMAN'
@@ -57,7 +88,8 @@
                         <td>
                             <div class="btn-group" role="group" aria-label="Actions Hall">
                                 <!-- Bouton Modifier -->
-                                <a href="${pageContext.request.contextPath}/hall?editForm=${hall.id}" class="btn btn-outline-primary btn-sm">
+                                <a href="${pageContext.request.contextPath}/hall?editForm=${hall.id}"
+                                   class="btn btn-outline-primary btn-sm">
                                     <i class="bi bi-pencil-square"></i> Modifier
                                 </a>
 
@@ -65,9 +97,10 @@
                                 <c:choose>
                                     <c:when test="${hall.active}">
                                         <!-- Formulaire Supprimer -->
-                                        <form method="post" action="${pageContext.request.contextPath}/hall" onsubmit="return confirm('Supprimer ce hall ?')" style="display: inline;">
-                                            <input type="hidden" name="hallId" value="${hall.id}" />
-                                            <input type="hidden" name="action" value="delete" />
+                                        <form method="post" action="${pageContext.request.contextPath}/hall"
+                                              onsubmit="return confirm('Supprimer ce hall ?')" style="display: inline;">
+                                            <input type="hidden" name="hallId" value="${hall.id}"/>
+                                            <input type="hidden" name="action" value="delete"/>
                                             <button type="submit" class="btn btn-outline-danger btn-sm">
                                                 <i class="bi bi-trash"></i> Supprimer
                                             </button>
@@ -75,18 +108,16 @@
                                     </c:when>
                                     <c:otherwise>
                                         <!-- Formulaire Activer -->
-                                        <form method="post" action="${pageContext.request.contextPath}/hall" onsubmit="return confirm('Activer ce hall ?')" style="display: inline;">
-                                            <input type="hidden" name="hallId" value="${hall.id}" />
-                                            <input type="hidden" name="action" value="activer" />
+                                        <form method="post" action="${pageContext.request.contextPath}/hall"
+                                              onsubmit="return confirm('Activer ce hall ?')" style="display: inline;">
+                                            <input type="hidden" name="hallId" value="${hall.id}"/>
+                                            <input type="hidden" name="action" value="activer"/>
                                             <button type="submit" class="btn btn-outline-warning btn-sm">
                                                 <i class="bi bi-trash"></i> Activer
                                             </button>
                                         </form>
                                     </c:otherwise>
                                 </c:choose>
-
-
-
                             </div>
                         </td>
                     </c:if>
@@ -95,4 +126,55 @@
             </tbody>
         </table>
     </c:if>
+
+    <!-- pagination -->
+    <c:if test="${pages > 1}">
+        <nav aria-label="Pagination">
+            <ul class="pagination justify-content-center">
+
+                <!-- URLs avec conservation du size -->
+                <c:url var="firstUrl" value="/hall">
+                    <c:param name="page" value="1"/>
+                    <c:param name="size" value="${pageSize}"/>
+                </c:url>
+                <c:url var="prevUrl" value="/hall">
+                    <c:param name="page" value="${currentPage - 1}"/>
+                    <c:param name="size" value="${pageSize}"/>
+                </c:url>
+                <c:url var="nextUrl" value="/hall">
+                    <c:param name="page" value="${currentPage + 1}"/>
+                    <c:param name="size" value="${pageSize}"/>
+                </c:url>
+                <c:url var="lastUrl" value="/hall">
+                    <c:param name="page" value="${pages}"/>
+                    <c:param name="size" value="${pageSize}"/>
+                </c:url>
+
+                <!-- First -->
+                <li class="page-item <c:if test='${currentPage == 1}'>disabled</c:if>">
+                    <a class="page-link" href="${firstUrl}">&laquo; Première</a>
+                </li>
+
+                <!-- Prev -->
+                <li class="page-item <c:if test='${currentPage == 1}'>disabled</c:if>">
+                    <a class="page-link" href="${prevUrl}">Précédent</a>
+                </li>
+
+                <li class="page-item disabled">
+                    <span class="page-link">Page ${currentPage} / ${pages}</span>
+                </li>
+
+                <!-- Next -->
+                <li class="page-item <c:if test='${currentPage >= pages}'>disabled</c:if>">
+                    <a class="page-link" href="${nextUrl}">Suivant</a>
+                </li>
+
+                <!-- Last -->
+                <li class="page-item <c:if test='${currentPage >= pages}'>disabled</c:if>">
+                    <a class="page-link" href="${lastUrl}">Dernière &raquo;</a>
+                </li>
+            </ul>
+        </nav>
+    </c:if>
+
 </section>

@@ -1,5 +1,8 @@
 package business;
 
+import Tools.Result;
+
+import java.util.HashMap;
 import java.util.Map;
 
 public class ValidateForm {
@@ -12,14 +15,14 @@ public class ValidateForm {
      * @param errors
      * @return
      */
-    public static Double parseDouble(String input, String fieldKey, String fieldLabel, Map<String,String> errors) {
+    public static Result<Double> parseDouble(String input, String fieldKey, String fieldLabel, Map<String,String> errors) {
 
         try{
-            return Double.parseDouble(input);
+            return Result.ok(Double.parseDouble(input));
         }
         catch (NumberFormatException e){
             errors.put(fieldKey, fieldLabel + " is invalid");
-            return null;
+            return Result.fail(errors);
         }
     }
 
@@ -31,12 +34,12 @@ public class ValidateForm {
      * @param errors
      * @return
      */
-    public static String stringIsEmpty(String input, String fieldKey, String fieldLabel, Map<String,String> errors) {
+    public static Result<String> stringIsEmpty(String input, String fieldKey, String fieldLabel, Map<String,String> errors) {
         if (input == null || input.trim().isEmpty()) {
             errors.put(fieldKey,fieldLabel + " is required.");
-            return null;
+            return Result.fail(errors);
         }else {
-            return  input;
+            return  Result.ok(input);
         }
     }
 
@@ -48,21 +51,29 @@ public class ValidateForm {
      * @param errors
      * @return
      */
-    public static Boolean parseBoolean(String input, String fieldKey, String fieldLabel, Map<String,String> errors) {
+    public static Result<Boolean> parseBoolean(String input, String fieldKey, String fieldLabel, Map<String,String> errors) {
         if (input == null || (!input.equals("1") && !input.equals("0"))) {
             errors.put(fieldKey, fieldLabel + " is required.");
-            return null;
+            return Result.fail(errors);
         }else {
-            return  "1".equals(input);
+            return  Result.ok("1".equals(input));
         }
     }
 
-    public static Integer parseInteger(String input, String fieldKey, String fieldLabel, Map<String,String> errors) {
-        if (input == null || (!input.equals("1") && !input.equals("0"))) {
-            errors.put(fieldKey, fieldLabel + " is required.");
-            return null;
+    /**
+     * verify maxLength and minLength
+     * @param input
+     * @param maxLength
+     * @param minLength
+     * @return
+     */
+    public static Result<String> stringLength(String input,int minLength, int maxLength) {
+        if (input != null && input.length() > maxLength && input.length() > minLength) {
+            return Result.ok(input);
         }else{
-            return  Integer.parseInt(input);
+            HashMap<String, String> errors = new HashMap<>();
+            errors.put("length", "la taille doit être comprise entre : " + minLength +  " et " + maxLength);
+            return  Result.fail(errors);
         }
     }
 

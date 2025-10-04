@@ -6,7 +6,7 @@
     <div class="container">
         <div class="row">
             <!-- Footer Location-->
-            <div class="col-lg-4 mb-5 mb-lg-0">
+            <div class="col-lg-4 mb-2 mb-lg-0">
                 <h4 class="text-uppercase mb-4">Location</h4>
                 <p class="lead mb-0">
                     2215 Avenue du sport
@@ -15,7 +15,7 @@
                 </p>
             </div>
             <!-- Footer Social Icons-->
-            <div class="col-lg-4 mb-5 mb-lg-0">
+            <div class="col-lg-4 mb-2 mb-lg-0">
                 <h4 class="text-uppercase mb-4">Around the Web</h4>
                 <a class="btn btn-outline-light btn-social mx-1" href="#!"><i class="fab fa-fw fa-facebook-f"></i></a>
                 <a class="btn btn-outline-light btn-social mx-1" href="#!"><i class="fab fa-fw fa-twitter"></i></a>
@@ -25,44 +25,48 @@
             <div class="col-lg-4">
                 <h4 class="text-uppercase mb-4">About FSSD</h4>
                 <p class="lead mb-0">
-                    Centre Sportif vous accueille tous les jours pour vous permettre de pratiquer vos sports préférés
-                    dans un cadre moderne et convivial. Notre équipe est là pour vous offrir des installations de
-                    qualité et des activités pour tous les âges.
+                    Le Centre Sportif vous accueille tous les jours dans un cadre moderne pour pratiquer
+                    vos sports préférés. Des installations de qualité et des activités pour
+                    tous les âges vous y attendent.
                 </p>
             </div>
         </div>
     </div>
 </footer>
 <!-- Copyright Section-->
-<div class="copyright py-4 text-center text-white">
+<div class="copyright py-1 text-center text-white">
     <div class="container"><small>Copyright &copy; FSSD 2025</small></div>
 </div>
 
-<!-- Toast container  -->
-
-<c:if test="${not empty sessionScope.successMessage}">
+<c:if test="${not empty sessionScope.toastMessage}">
     <div class="position-fixed top-0 start-50 translate-middle-x p-3" style="z-index: 1100;">
-        <div id="successToast" class="toast align-items-center text-bg-success border-0 show" role="alert" aria-live="assertive" aria-atomic="true">
+        <div id="globalToast"
+             class="toast align-items-center
+             ${sessionScope.toastType == 'error' ? 'text-bg-danger' : 'text-bg-success'}
+             border-0 show"
+             role="alert" aria-live="assertive" aria-atomic="true">
             <div class="d-flex">
                 <div class="toast-body">
-                        ${sessionScope.successMessage}
+                        ${sessionScope.toastMessage}
                 </div>
-                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto"
+                        data-bs-dismiss="toast" aria-label="Close"></button>
             </div>
         </div>
     </div>
 
     <script>
         window.addEventListener('DOMContentLoaded', () => {
-            const toastElement = document.getElementById('successToast');
+            const toastElement = document.getElementById('globalToast');
             const toast = new bootstrap.Toast(toastElement);
             toast.show();
         });
     </script>
-    <!-- ❗ Supprimer après affichage pour éviter que le toast revienne -->
-    <c:remove var="successMessage" scope="session"/>
-</c:if>
 
+    <!-- Nettoyage pour éviter réapparition -->
+    <c:remove var="toastMessage" scope="session"/>
+    <c:remove var="toastType" scope="session"/>
+</c:if>
 
 
 

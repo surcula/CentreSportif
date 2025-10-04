@@ -23,7 +23,9 @@
                 <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded"
                                                      href="${pageContext.request.contextPath}/home">Accueil</a>
                 </li>
-                <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="#">Réservation</a>
+                <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="${pageContext.request.contextPath}/views/template/template.jsp?content=../reservation.jsp">Réservation</a>
+                </li>
+                <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="${pageContext.request.contextPath}/views/template/template.jsp?content=../event.jsp">Evènements</a>
                 </li>
                 <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="#">Abonnements</a>
                 </li>
@@ -32,6 +34,17 @@
                     pratiques</a></li>
                 <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="#">Sponsors</a>
                 </li>
+
+                <c:if test="${sessionScope.role == 'ADMIN'
+             or sessionScope.role == 'BARMAN'
+             or sessionScope.role == 'SECRETARY'}">
+                    <li class="nav-item">
+                        <a class="nav-link fw-bold text-warning" href="${pageContext.request.contextPath}/admin">
+                            ADMIN
+                        </a>
+                    </li>
+                </c:if>
+
                 <c:choose>
                     <c:when test="${not empty sessionScope.role}">
                         <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded"

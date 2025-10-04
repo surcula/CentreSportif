@@ -1,9 +1,29 @@
 package entities;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+
+
+/**
+ * Named Query
+ */
+@NamedQueries({
+        @NamedQuery(
+                name = "getAllActiveSports",
+                query = "SELECT s FROM Sport s WHERE s.active = true"
+        ),
+        @NamedQuery(
+                name = "getAllSports",
+                query = "SELECT s FROM Sport s"
+        ),
+        @NamedQuery(
+                name = "countAllActiveSports",
+                query = "SELECT COUNT(s) FROM Sport s WHERE s.active = true"
+        ),
+        @NamedQuery(
+                name = "countAllSports",
+                query = "SELECT COUNT(s) FROM Sport s"
+        )
+})
 
 @Entity
 @Table(name = "sports")

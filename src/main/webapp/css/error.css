@@ -1,0 +1,28 @@
+body {
+    font-family: Arial, sans-serif;
+    background: #f9fafb;
+    color: #333;
+    text-align: center;
+    padding-top: 80px;
+}
+h1 {
+    font-size: 2em;
+    color: #c53030;
+}
+p {
+    font-size: 1.1em;
+    margin-top: 1em;
+}
+.retry {
+    margin-top: 2em;
+}
+.retry a {
+    background: #2563eb;
+    color: white;
+    padding: 10px 18px;
+    border-radius: 6px;
+    text-decoration: none;
+}
+.retry a:hover {
+    background: #1d4ed8;
+}

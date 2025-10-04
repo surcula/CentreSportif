@@ -23,7 +23,9 @@
 
 
 <c:choose>
-    <c:when test="${sessionScope.role =='ADMIN'}">
+    <c:when test="${sessionScope.role == 'ADMIN'
+             or sessionScope.role == 'BARMAN'
+             or sessionScope.role == 'SECRETARY'}">
         <section class="page-section">
             <h2 class="text-center">
                 <c:choose>
@@ -31,6 +33,13 @@
                     <c:otherwise>Ajouter un hall</c:otherwise>
                 </c:choose>
             </h2>
+            <!-- RETOUR -->
+            <div class="text-start mb-3">
+                <a href="${pageContext.request.contextPath}/hall" class="btn btn-outline-secondary">
+                    <i class="bi bi-arrow-left"></i> Retour vers les halls
+                </a>
+            </div>
+
             <div class="container">
                 <div class="row justify-content-center">
                     <div class="col-md-6"> <%-- Centré et largeur moyenne --%>
