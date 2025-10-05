@@ -33,35 +33,35 @@ public class HallBusiness {
     public static Result<Hall> initCreateForm(String strHallName, String strWidth, String strLength, String strHeight, String strActive) {
         Map<String, String> errors = new HashMap<>();
 
-        String hallName = ValidateForm.stringIsEmpty(
+        Result<String> hallName = ValidateForm.stringIsEmpty(
                 strHallName,
                 "errorHallName",
                 "Hall name",
                 errors
         );
 
-        Double height = ValidateForm.parseDouble(
+        Result<Double> height = ValidateForm.parseDouble(
                 strHeight,
                 "errorHeight",
                 "Height",
                 errors
         );
 
-        Double length = ValidateForm.parseDouble(
+        Result<Double> length = ValidateForm.parseDouble(
                 strLength,
                 "errorLength",
                 "Length",
                 errors
         );
 
-        Double width = ValidateForm.parseDouble(
+        Result<Double> width = ValidateForm.parseDouble(
                 strWidth,
                 "errorWidth",
                 "Width",
                 errors
         );
 
-        Boolean active = ValidateForm.parseBoolean(
+        Result<Boolean> active = ValidateForm.parseBoolean(
                 strActive,
                 "errorActive",
                 "Active",
@@ -73,11 +73,11 @@ public class HallBusiness {
             return Result.fail(errors);
         } else {
             Hall hallCreateForm = new Hall(
-                    hallName,
-                    active,
-                    width,
-                    length,
-                    height
+                    hallName.getData(),
+                    active.getData(),
+                    width.getData(),
+                    length.getData(),
+                    height.getData()
             );
             return Result.ok(hallCreateForm);
         }

@@ -1,6 +1,7 @@
 package servlets;
 
 
+import Tools.ParamUtils;
 import business.EventBusiness;
 import controllers.helpers.EventControllerHelper;
 import dto.Page;
@@ -109,10 +110,10 @@ public class EventServlet extends HttpServlet {
             EventServiceImpl eventService = new EventServiceImpl(em);
             EventBusiness eventBusiness = new EventBusiness(eventService);
 
-            Result<Integer> pageRes = ServletUtils.stringToInteger(request.getParameter("page"));
+            Result<Integer> pageRes = ParamUtils.stringToInteger(request.getParameter("page"));
             int page = pageRes.isSuccess() ? Math.max(1, pageRes.getData()) : 1;
 
-            Result<Integer> sizeRes = ServletUtils.stringToInteger(request.getParameter("size"));
+            Result<Integer> sizeRes = ParamUtils.stringToInteger(request.getParameter("size"));
             int size = sizeRes.isSuccess() ? Math.min(10, Math.max(1, sizeRes.getData())) : 10;
 
             Result<Page<Event>> result = fullAccess

@@ -1,9 +1,6 @@
 package business;
 
 import Tools.Result;
-import com.sun.deploy.net.HttpRequest;
-import entities.Hall;
-
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -160,18 +157,4 @@ public class ServletUtils {
         return !active;
     }
 
-    /**
-     * String To Integer
-     * @param input
-     * @return
-     */
-    public static Result<Integer> stringToInteger(String input) {
-        try{
-            return Result.ok(Integer.parseInt(input));
-        }catch (NumberFormatException e) {
-            Map<String, String> errors = new HashMap<>();
-            errors.put("parseInt", "Impossible de convertir '" + input + "' en nombre.");
-            return Result.fail(errors);
-        }
-    }
 }

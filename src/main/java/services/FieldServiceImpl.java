@@ -4,7 +4,6 @@ import Tools.Result;
 import entities.Field;
 import interfaces.FieldService;
 import org.apache.log4j.Logger;
-
 import javax.persistence.EntityManager;
 import java.util.HashMap;
 import java.util.List;
@@ -36,7 +35,7 @@ public class FieldServiceImpl implements FieldService {
     }
 
     @Override
-    public Result delete(Field field) {
+    public Result softDelete(Field field) {
 
         em.merge(field);
         log.info("Field deleted");

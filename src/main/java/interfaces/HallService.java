@@ -11,6 +11,7 @@ public interface HallService {
      * Create a new hall
      * @param hallCreateForm
      */
+
     Result create(Hall hallCreateForm) ;
 
     /**
@@ -23,7 +24,7 @@ public interface HallService {
      * soft-delete a hall by setting its isActive flag to false
      * @param hall
      */
-    Result delete(Hall hall) ;
+    Result softDelete(Hall hall) ;
 
     /**
      * retrieves a hall by its id
@@ -33,26 +34,34 @@ public interface HallService {
     Result<Hall> getOneById(int id);
 
     /**
-     * retrieves all ACTIVE halls
-     * @return a list of all halls
+     * Retrieves all active Halls with optional pagination.
+     *
+     * @param page page number starting at 1 (values <= 0 are treated as 1)
+     * @param size number of elements per page.
+     *             If size <= 0, all active halls are returned without pagination.
+     * @return Result containing a list of active Halls (never null).
      */
     Result<List<Hall>> getAllActiveHalls(int page, int size) ;
 
     /**
-     * retrieves all halls
-     * @return a list of all halls
+     * Retrieves all Halls with optional pagination.
+     *
+     * @param page page number starting at 1 (values <= 0 are treated as 1)
+     * @param size number of elements per page.
+     *             If size <= 0, all active halls are returned without pagination.
+     * @return Result containing a list of Halls (never null).
      */
     Result<List<Hall>> getAllHalls(int page, int size) ;
 
     /**
      * count all active halls
-     * @return a list of all halls
+     * @return a number
      */
     Result<Long> countActiveHalls() ;
 
     /**
      * count all halls
-     * @return a list of all halls
+     * @return a number
      */
     Result<Long> countAllHalls() ;
 

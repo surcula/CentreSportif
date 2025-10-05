@@ -1,6 +1,6 @@
 package interfaces;
 
-import dto.ClosureCreateForm;
+import Tools.Result;
 import entities.Closure;
 
 import java.util.List;
@@ -10,30 +10,48 @@ public interface ClosureService {
      * Create a new closure
      * @param closureCreateForm
      */
-    void create(ClosureCreateForm closureCreateForm) ;
+    Result create(Closure closureCreateForm) ;
 
     /**
      * Update an existing closure
      * @param closure
      */
-    void update(Closure  closure) ;
+    Result update(Closure  closure) ;
 
     /**
      * soft-delete a closure by setting its isActive flag to false
      * @param closure
      */
-    void delete(Closure closure) ;
+    Result softDelete(Closure closure) ;
 
     /**
      * retrieves a closure by its Id
      * @param id
      * @return Closure
      */
-    Closure getOneById(int id);
+    Result<Closure> getOneById(int id);
+
+    /**
+     * retrieves all ACTIVE closure
+     * @return a list of all closures
+     */
+    Result<List<Closure>> getAllActiveClosures(int page, int size) ;
 
     /**
      * retrieves all closures
-     * @return list of all Closures
+     * @return a list of all closures
      */
-    List<Closure> getAllClosures() ;
+    Result<List<Closure>> getAllClosures(int page, int size) ;
+
+    /**
+     * count all active halls
+     * @return number
+     */
+    Result<Long> countActiveClosures() ;
+
+    /**
+     * count all closures
+     * @return number
+     */
+    Result<Long> countAllClosures() ;
 }

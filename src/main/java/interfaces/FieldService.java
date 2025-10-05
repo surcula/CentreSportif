@@ -1,6 +1,7 @@
 package interfaces;
 
 import Tools.Result;
+import Tools.Result;
 import entities.Field;
 
 import java.util.List;
@@ -22,7 +23,7 @@ public interface FieldService {
      * soft-delete a field by setting its isActive flag to false
      * @param field
      */
-    Result delete(Field field) ;
+    Result softDelete(Field field) ;
 
     /**
      * retrieves a field by its id
@@ -54,4 +55,5 @@ public interface FieldService {
      * @return a long
      */
     Result<Long> countAllActiveFields() ;
+
 }
