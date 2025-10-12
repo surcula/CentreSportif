@@ -61,8 +61,10 @@ public class HallServlet extends HttpServlet {
             try {
                 HallServiceImpl hallService = new HallServiceImpl(em);
                 Result<Hall> result = hallService.getOneById(hallUpdateId.getData());
+
                 if (result.isSuccess()) {
                     HallControllerHelper.handleEditForm(request, response, result.getData());
+                    return;
                 } else {
                     ServletUtils.forwardWithErrors(request, response, result.getErrors(), HALL_FORM_JSP, TEMPLATE);
                     return;
@@ -74,7 +76,6 @@ public class HallServlet extends HttpServlet {
             } finally {
                 if (em != null) em.close();
             }
-            return;
         } else {
             // --- Liste paginée ---
             EntityManager em = EMF.getEM();

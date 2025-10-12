@@ -121,7 +121,7 @@
                 Nous proposons plusieurs disciplines accessibles à tous les âges et niveaux : football en salle, tennis, squash, volleyball et bien plus encore.
 
             </p></div>
-            <div class="col-lg-4 me-auto"><p class="lead">You can create your own custom avatar for the masthead, change
+            <div class="col-lg-4 me-auto"><p class="lead">
                 Nos infrastructures comprennent des <strong>halls sportifs spacieux</strong> et des <strong>terrains de qualité</strong>, disponibles toute l’année.
                 Grâce à notre système de réservation en ligne, vous pouvez facilement planifier vos séances seul, en famille ou entre amis.
                 Rejoignez-nous et profitez d’un lieu dynamique où sport rime avec plaisir et partage !

@@ -21,6 +21,7 @@ public class HallControllerHelper {
      */
     public static void handleFormDisplay(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         ServletUtils.forwardWithContent(request, response, HALL_FORM_JSP, TEMPLATE);
+        return;
     }
 
     /**
@@ -34,6 +35,7 @@ public class HallControllerHelper {
     public static void handleEditForm(HttpServletRequest request, HttpServletResponse response, Hall hall) throws ServletException, IOException {
         request.setAttribute("hall", hall);
         ServletUtils.forwardWithContent(request, response, HALL_FORM_JSP, TEMPLATE);
+        return;
     }
 
     /**
@@ -47,5 +49,6 @@ public class HallControllerHelper {
     public static void handleList(HttpServletRequest request, HttpServletResponse response, List<Hall> halls) throws ServletException, IOException {
         request.setAttribute("halls", halls);
         ServletUtils.forwardWithContent(request, response, HALL_JSP, TEMPLATE);
+        return;
     }
 }

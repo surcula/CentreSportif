@@ -77,4 +77,24 @@ public class ValidateForm {
         }
     }
 
+    /**
+     * String to Double with errors
+     * @param input data form
+     * @param fieldKey error name
+     * @param fieldLabel label name
+     * @param errors
+     * @return
+     */
+    public static Result<Integer> stringToInteger(String input, String fieldKey, String fieldLabel, Map<String,String> errors) {
+
+        try{
+            return Result.ok(Integer.parseInt(input));
+        }
+        catch (NumberFormatException e){
+            errors.put(fieldKey, fieldLabel + " is invalid");
+            return Result.fail(errors);
+        }
+    }
+
+
 }

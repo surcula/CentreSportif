@@ -10,6 +10,16 @@ public class SportUpdateForm {
 
     private double price;
 
+    public int getSessionDuration() {
+        return sessionDuration;
+    }
+
+    public void setSessionDuration(int sessionDuration) {
+        this.sessionDuration = sessionDuration;
+    }
+
+    private int sessionDuration;
+
     public double getPrice() {
         return price;
     }
