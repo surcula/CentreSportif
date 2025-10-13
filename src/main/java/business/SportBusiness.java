@@ -25,12 +25,10 @@ public class SportBusiness {
     /**
      * validate create form
      * @param strSportName
-     * @param strPrice
-     * @param strSessionDuration
      * @param strActive
      * @return
      */
-    public static Result<Sport> initCreateForm(String strSportName, String strPrice, String strSessionDuration, String strActive) {
+    public static Result<Sport> initCreateForm(String strSportName,String strActive) {
 
         Map<String, String> errors = new HashMap<>();
 
@@ -41,14 +39,6 @@ public class SportBusiness {
         Result<String> lengthSportName = ValidateForm.stringLength(sportName.getData(),0,255);
         if(!lengthSportName.isSuccess()) errors.putAll(lengthSportName.getErrors());
 
-        //Vérification du Parse de la sessionDuration en integer
-        Result<Integer> sessionDuration = ParamUtils.stringToInteger(strSessionDuration);
-        if(!sessionDuration.isSuccess()) errors.putAll(sessionDuration.getErrors());
-
-        //Vérification du Parse de la price en integer
-        Result<Double> price = ValidateForm.parseDouble(strPrice, "errorPrice", "Price", errors);
-        if(!price.isSuccess()) errors.putAll(price.getErrors());
-
         //Vérification du boolean
         Result<Boolean> active = ValidateForm.parseBoolean(strActive, "errorActive", "Active", errors);
         if(!active.isSuccess()) errors.putAll(active.getErrors());
@@ -57,19 +47,17 @@ public class SportBusiness {
             return Result.fail(errors);
         }
 
-        Result<Sport> Sport = toEntity(sportName.getData(), price.getData(), sessionDuration.getData() ,active.getData());
+        Result<Sport> Sport = toEntity(sportName.getData(),active.getData());
         return Result.ok(Sport.getData());
     }
 
     /**
      * validate update form
      * @param strSportName
-     * @param strPrice
-     * @param strSessionDuration
      * @param strActive
      * @return
      */
-    public static Result<SportUpdateForm> initUpdateForm(String strSportName, String strPrice, String strSessionDuration, String strActive) {
+    public static Result<SportUpdateForm> initUpdateForm(String strSportName, String strActive) {
 
         Map<String, String> errors = new HashMap<>();
 
@@ -81,14 +69,6 @@ public class SportBusiness {
         Result<String> lengthSportName = ValidateForm.stringLength(sportName.getData(),0,255);
         if(!lengthSportName.isSuccess()) errors.putAll(lengthSportName.getErrors());
 
-        //Vérification du Parse Price
-        Result<Double> price = ValidateForm.parseDouble(strPrice, "errorPrice", "Price", errors);
-        if(!price.isSuccess()) errors.putAll(price.getErrors());
-
-        //Vérification du parse de la durée de session
-        Result<Integer> sessionDuration = ValidateForm.stringToInteger(strSessionDuration,"errorSessionDuration", "Session Duration", errors);
-        if(!sessionDuration.isSuccess()) errors.putAll(sessionDuration.getErrors());
-
         //Vérification du boolean
         Result<Boolean> active = ValidateForm.parseBoolean(strActive, "errorActive", "Active", errors);
         if(!active.isSuccess()) errors.putAll(active.getErrors());
@@ -97,7 +77,7 @@ public class SportBusiness {
             return Result.fail(errors);
         }
 
-        Result<SportUpdateForm> sportUpdateForm = toUpdateForm(sportName.getData(), price.getData() ,sessionDuration.getData(), active.getData());
+        Result<SportUpdateForm> sportUpdateForm = toUpdateForm(sportName.getData(), active.getData());
         return Result.ok(sportUpdateForm.getData());
     }
 
@@ -160,16 +140,12 @@ public class SportBusiness {
     /**
      * create a sport object with params
      * @param strSportName
-     * @param price
-     * @param sessionDuration
      * @param active
      * @return
      */
-    private static Result<Sport> toEntity(String strSportName, double price, int sessionDuration ,boolean active){
+    private static Result<Sport> toEntity(String strSportName, boolean active){
         Sport sport = new Sport();
         sport.setSportName(strSportName);
-        sport.setPrice(price);
-        sport.setSessionDuration(sessionDuration);
         sport.setActive(active);
         return Result.ok(sport);
     }
@@ -177,16 +153,12 @@ public class SportBusiness {
     /**
      * create a sportUpdateForm object with params
      * @param strSportName
-     * @param price
-     * @param sessionDuration
      * @param active
      * @return
      */
-    private static Result<SportUpdateForm> toUpdateForm(String strSportName, double price, int sessionDuration , boolean active){
+    private static Result<SportUpdateForm> toUpdateForm(String strSportName,boolean active){
         SportUpdateForm sportUpdateForm = new SportUpdateForm();
         sportUpdateForm.setSportName(strSportName);
-        sportUpdateForm.setPrice(price);
-        sportUpdateForm.setSessionDuration(sessionDuration);
         sportUpdateForm.setActive(active);
         return Result.ok(sportUpdateForm);
     }

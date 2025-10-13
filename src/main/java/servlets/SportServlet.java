@@ -177,8 +177,6 @@ public class SportServlet extends HttpServlet {
             if (idParam == null) {
                 Result<Sport> sportCreateResult = SportBusiness.initCreateForm(
                         request.getParameter("sportName"),
-                        request.getParameter("price"),
-                        request.getParameter("sessionDuration"),
                         request.getParameter("active")
                 );
                 if (!sportCreateResult.isSuccess()) {
@@ -210,8 +208,6 @@ public class SportServlet extends HttpServlet {
             } else {
                 Result<SportUpdateForm> sportUpdateFormResult = SportBusiness.initUpdateForm(
                         request.getParameter("sportName"),
-                        request.getParameter("price"),
-                        request.getParameter("sessionDuration"),
                         request.getParameter("active")
                 );
                 if (!sportUpdateFormResult.isSuccess()) {

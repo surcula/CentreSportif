@@ -59,8 +59,6 @@
             <tr>
                 <th scope="col">#</th>
                 <th scope="col">Nom du sport</th>
-                <th scope="col">Prix du sport</th>
-                <th scope="col">La durée de la session</th>
                 <c:if test="${sessionScope.role == 'ADMIN'
              or sessionScope.role == 'BARMAN'
              or sessionScope.role == 'SECRETARY'}">
@@ -74,11 +72,6 @@
                 <tr>
                     <td>${(pages - 1) * pageSize + status.index + 1}</td>
                     <td>${sport.sportName}</td>
-                    <td>
-                        <fmt:formatNumber value="${sport.price}" type="number"
-                                          minFractionDigits="2" maxFractionDigits="2"/>
-                    </td>
-                    <td>${sport.sessionDuration}</td>
                     <c:if test="${sessionScope.role == 'ADMIN'
              or sessionScope.role == 'BARMAN'
              or sessionScope.role == 'SECRETARY'}">

@@ -8,27 +8,6 @@ public class SportUpdateForm {
 
     private boolean active = true;
 
-    private double price;
-
-    public int getSessionDuration() {
-        return sessionDuration;
-    }
-
-    public void setSessionDuration(int sessionDuration) {
-        this.sessionDuration = sessionDuration;
-    }
-
-    private int sessionDuration;
-
-    public double getPrice() {
-        return price;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
-    }
-
-
     public int getId() {
         return id;
     }

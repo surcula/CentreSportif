@@ -13,7 +13,5 @@ public class SportMapper {
     public static void fromUpdateForm(SportUpdateForm sportUpdateForm, Sport sport) {
         sport.setSportName(sportUpdateForm.getSportName());
         sport.setActive(sportUpdateForm.isActive());
-        sport.setSessionDuration(sportUpdateForm.getSessionDuration());
-        sport.setPrice(sportUpdateForm.getPrice());
     }
 }

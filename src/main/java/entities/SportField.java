@@ -52,6 +52,12 @@ public class SportField {
     @Column(name = "day", nullable = false)
     private int day;
 
+    @Column(name = "price", nullable = false, precision = 10, scale = 2)
+    private double price;
+
+    @Column(name = "session_duration", nullable = false)
+    private int sessionDuration;
+
     @Column(name = "is_active", nullable = false)
     private boolean active = true;
 
@@ -109,6 +115,21 @@ public class SportField {
 
     public void setDay(int day) {
         this.day = day;
+    }
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public int getSessionDuration() {
+        return sessionDuration;
+    }
+
+    public void setSessionDuration(int sessionDuration) {
+        this.sessionDuration = sessionDuration;
     }
 
     public boolean isActive() {
