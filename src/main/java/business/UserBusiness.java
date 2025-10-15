@@ -10,6 +10,8 @@ import entities.User;
 import enums.UserCivilite;
 import enums.UserGender;
 import javax.persistence.EntityManager;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.HashMap;
@@ -24,10 +26,10 @@ public class UserBusiness {
     /**
      *
      * @param p Map contenant les paramètres du formulaire (ex: firstName, email, phone, etc.)
-     * @param em EntityManager pour interagir avec la base de données (recherche City, Role, etc.)
+     *
      * @return Result.ok(User) si tous les champs sont valides, sinon Result.fail(Map<champ,erreur>)
      */
-    public static Result<User> buildUserFromRequest(Map<String, String> p, EntityManager em) {
+    public static Result<User> buildUserFromRequest(Map<String, String> p) {
         Map<String, String> errors = new HashMap<>();
         // recuperation champs formulaire//
         String firstName = trim(p.get("firstName"));
@@ -60,6 +62,7 @@ public class UserBusiness {
             dob = LocalDate.parse(birthdate);
             LocalDate today = LocalDate.now();
 
+            //Vérifier si la date est dans le futur
             if (dob.isAfter(today)) {
                 errors.put("birthdate", "Date de naissance dans le futur");
             }
@@ -77,10 +80,10 @@ public class UserBusiness {
         }
 
         // Civilité / Genre
-        UserGender g = mapGender(gender);
-        UserCivilite c = mapCivilite(civilite);
-        if (g == null) errors.put("gender", "Genre requis");
-        if (c == null) errors.put("civilite", "Civilité requise");
+        UserGender userGender = mapGender(gender);
+        UserCivilite userCivilite = mapCivilite(civilite);
+        if (userGender == null) errors.put("gender", "Genre requis");
+        if (userCivilite == null) errors.put("civilite", "Civilité requise");
 
         // Adresse verification
         if (len(street) == 0) errors.put("street", "Rue obligatoire");
@@ -93,13 +96,14 @@ public class UserBusiness {
         // Si erreur, on arrête ici
         if (!errors.isEmpty()) return Result.fail(errors);
 
-        // Récupération de la ville
-        Integer cid = Integer.parseInt(cityId);
-        City city = em.find(City.class, cid);
-        if (city == null) {
-            errors.put("cityId", "Ville introuvable");
-            return Result.fail(errors);
-        }
+//        // Récupération de la ville
+//        Integer cid = Integer.parseInt(cityId);
+//        City city = em.find(City.class, cid);
+//        if (city == null) {
+//            errors.put("cityId", "Ville introuvable");
+//            return Result.fail(errors);
+//        }
+        //address.setCity(city);
 
         // Création de l'adresse
         Address address = new Address();
@@ -115,7 +119,7 @@ public class UserBusiness {
             }
         }
         address.setBoxNumber(boxNum);
-        address.setCity(city);
+
         address.setActive(true);
 
         // Création de l'utilisateur
@@ -125,22 +129,13 @@ public class UserBusiness {
         u.setEmail(email);
         u.setPhone(phone);
         u.setBirthdate(dob);
-        u.setGender(g);
-        u.setCivilite(c);
+        u.setGender(userGender);
+        u.setCivilite(userCivilite);
         u.setPassword(password); // (option : hash plus tard)
         u.setActive(true);
         u.setBlacklist(false);
         u.setAddress(address);
 
-        // Rôle par défaut
-        Role role = em.createQuery("SELECT r FROM Role r WHERE r.roleName = :rn", Role.class)
-                .setParameter("rn", "membre")
-                .setMaxResults(1)
-                .getResultList()
-                .stream()
-                .findFirst()
-                .orElse(null);
-        if (role != null) u.setRole(role);
 
         // Succès
         return Result.ok(u);
@@ -177,5 +172,12 @@ public class UserBusiness {
             default: return null;
         }
 
+    }
+
+
+    public String HashPAssword(String password) throws NoSuchAlgorithmException {
+        MessageDigest digest = MessageDigest.getInstance("SHA-256");
+        byte[] test = digest.digest(password.getBytes());
+        return test.toString();
     }
 }

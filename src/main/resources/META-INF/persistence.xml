@@ -15,6 +15,7 @@
         <class>entities.Role</class>
         <class>entities.Address</class>
         <class>entities.City</class>
+        <class>entities.Country</class>
 
 
         <!-- ajoute ici les autres classes -->

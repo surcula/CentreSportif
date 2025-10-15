@@ -85,23 +85,14 @@
             </div>
 
             <div class="mb-3">
-                <label for="zip" class="form-label">Code postal</label>
-                <input id="zip" name="zip" class="form-control"
-                       value="${not empty old.zip ? old.zip : (not empty zip ? zip : param.zip)}" />
-                <boutton class="btn btn-outline-primary mt-2" type="submit" name="action" value="checkZip">
-                    vérifier le code postal et charger les villes
-                </boutton>
-            </div>
-
-            <div class="mb-3">
                 <label for="cityId" class="form-label">Ville</label>
                 <select id="cityId" name="cityId" class="form-select">
                     <option value="">— sélectionnez une ville —</option>
-                    <c:forEach var="ci"
-                               items="${not empty cities ? cities : (not empty cityList ? cityList : allCities)}">
-                        <option value="${ci.id}"
-                                <c:if test="${old.cityId == ci.id || param.cityId == ci.id}">selected</c:if>>
-                                ${ci.cityName}
+                    <c:forEach var="city"
+                               items="${cities}">
+                        <option value="${city.id}"
+                                <c:if test="${old.cityId == city.id || param.cityId == city.id}">selected</c:if>>
+                                ${city.cityName} - ${city.zipCode}
                         </option>
                     </c:forEach>
                 </select>
@@ -110,7 +101,7 @@
                     <label for="countryId" class="form-label">Pays</label>
                     <select id="countryId" name="countryId" class="form-select">
                         <option value="">— sélectionnez un pays —</option>
-                        <c:forEach var="c" items="${not empty countries ? countries : (not empty countryList ? countryList : allCountries)}">
+                        <c:forEach var="c" items="${countries}">
                             <option value="${c.id}"
                                     <c:if test="${old.countryId == c.id || param.countryId  == c.id}">selected</c:if>>
                                 ${c.countryName}

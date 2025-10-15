@@ -6,7 +6,11 @@ import business.UserBusiness;
 import dto.EMF;
 import entities.Address;
 import entities.City;
+import entities.Country;
 import entities.User;
+import org.apache.log4j.Logger;
+import services.CitiesServiceImpl;
+import services.CountriesServiceImpl;
 import services.UserServiceImpl;
 
 import javax.persistence.EntityManager;
@@ -19,31 +23,45 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import static constants.Rooting.TEMPLATE;
-import static constants.Rooting.USER_FORM_JSP;
+import static constants.Rooting.*;
+
 
 @WebServlet(name = "UserServlet", value = "/user")
 public class UserServlet extends HttpServlet {
-    private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(UserServlet.class);
+    private static final Logger log = Logger.getLogger(UserServlet.class);
+
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        javax.persistence.EntityManager em = null;
+
+        EntityManager em = EMF.getEM();
         try {
-            em = dto.EMF.getEM();
-            java.util.List<entities.Country> countries = em.createQuery(
-                    "SELECT c FROM Country c WHERE c.active = true ORDER BY c.countryName", entities.Country.class
-            ).getResultList();
-            req.setAttribute("countries", countries);
-            req.setAttribute("countryList", countries);
-            req.setAttribute("allCountries", countries);
+            //Recup countries
+            CountriesServiceImpl countriesService = new CountriesServiceImpl(em);
+            Result<List<Country>> countries = countriesService.getAllActiveCountries();
+            //            if(!countries.isSuccess()){
+            //                countries.getData();
+            // log.error("échecs lors de la récupération des pays");
+            //            }
+
+
+            //Recup cities
+            CitiesServiceImpl citiesService = new CitiesServiceImpl(em);
+            Result<List<City>> cities = citiesService.getAllActiveCities();
+            //            if(!cities.isSuccess()){
+            //                cities.getData();
+            //            }
+
+            //Attacher à la requete pour l'affichage
+            req.setAttribute("countries", countries.getData());
+            req.setAttribute("cities", cities.getData());
         } catch (Throwable t) {
-            org.apache.log4j.Logger.getLogger(UserServlet.class).error("EMF init / load countries failed", t);
+            log.error("EMF init / load countries failed", t);
             // on n’empêche pas l’affichage de la page si EM indispo
         } finally {
             if (em != null) em.close();
         }
-
-        business.ServletUtils.forwardWithContent(req, resp, constants.Rooting.USER_FORM_JSP, constants.Rooting.TEMPLATE);
+        business.ServletUtils.forwardWithContent(req, resp, USER_FORM_JSP, TEMPLATE);
     }
 
     @Override
@@ -52,7 +70,7 @@ public class UserServlet extends HttpServlet {
         req.getParameterMap().forEach((k,v) -> p.put(k, v != null && v.length>0 ? v[0] : null));
         String action = p.get("action");
 
-        EntityManager em = null;
+        EntityManager em = EMF.getEM();
         try {
             // Sécuriser EMF.getEM() pour éviter le 500
             try {
@@ -137,7 +155,7 @@ public class UserServlet extends HttpServlet {
                 }
 
                 // Construction + validations
-                Result<User> built = UserBusiness.buildUserFromRequest(p, em);
+                Result<User> built = UserBusiness.buildUserFromRequest(p);
                 if (!built.isSuccess()) {
                     req.setAttribute("errors", built.getErrors());
                     req.setAttribute("old", p);
@@ -169,6 +187,7 @@ public class UserServlet extends HttpServlet {
                 // Persist
                 User user = built.getData();
                 Address address = user.getAddress();
+
 
                 em.getTransaction().begin();
                 em.persist(address);
