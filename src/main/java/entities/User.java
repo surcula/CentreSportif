@@ -3,13 +3,24 @@ package entities;
 import enums.UserCivilite;
 import enums.UserGender;
 
+import javax.persistence.Column;
+import javax.persistence.Convert;
+
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+
 import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
+@NamedQueries({
+        @NamedQuery(name = "User.findByEmail", query = "SELECT u FROM User u WHERE u.email = :email"),
+        @NamedQuery(name = "User.countByEmail", query = "SELECT COUNT(u) FROM User u WHERE u.email = :email")
+})
 @Table(name = "users")
 public class User {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private int id;
 
@@ -32,11 +43,11 @@ public class User {
     @Column(name = "phone", nullable = false)
     private String phone;
 
-    @Lob
+    @Enumerated(EnumType.STRING)
     @Column(name = "gender", nullable = false)
     private UserGender gender;
 
-    @Lob
+    @Enumerated(EnumType.STRING)
     @Column(name = "civilite", nullable = false)
     private UserCivilite civilite;
 

@@ -30,6 +30,7 @@ public class HallBusiness {
      * @param strActive
      * @return
      */
+
     public static Result<Hall> initCreateForm(String strHallName, String strWidth, String strLength, String strHeight, String strActive) {
         Map<String, String> errors = new HashMap<>();
 

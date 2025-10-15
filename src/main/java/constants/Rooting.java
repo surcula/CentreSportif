@@ -10,4 +10,6 @@ public class Rooting {
     public static final String EVENT_FORM_JSP = "/views/event-form.jsp";
     public static final String EVENT_JSP = "/views/event.jsp";
     public static final String RESERVATION_FORM_JSP = "/views/reservation-form.jsp";
+    public static final String USER_FORM_JSP = "/views/user-form.jsp";
+
 }
