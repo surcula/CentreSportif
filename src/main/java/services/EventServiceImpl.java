@@ -120,6 +120,9 @@ public class EventServiceImpl implements interfaces.EventService {
                     .setMaxResults(size)
                     .getResultList();
             System.out.println(">> Evènements récupérés : " + events.size() );
+            for (Event e : events) {
+                System.out.println("Event: " + e.getEventName() + " / Active :" + e.isActive());
+            }
             Long totalElements = em.createQuery("Select count(e) from Event e", Long.class)
                     .getSingleResult();
             Page<Event> pageData = Page.of(events, page, size, totalElements);

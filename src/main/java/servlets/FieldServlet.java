@@ -10,17 +10,15 @@ import controllers.helpers.FieldControllerHelper;
 import dto.EMF;
 import dto.Page;
 import entities.Field;
-import entities.Hall;
 import enums.Scope;
 import services.FieldServiceImpl;
-
 import javax.persistence.EntityManager;
 import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 import java.io.IOException;
-
 import static constants.Rooting.*;
+import java.lang.*;
 
 @WebServlet(name = "Field", value = "/field")
 public class FieldServlet extends HttpServlet {
@@ -90,7 +88,7 @@ public class FieldServlet extends HttpServlet {
                 FieldServiceImpl fieldService = new FieldServiceImpl(em);
                 FieldBusiness fieldBusiness = new FieldBusiness(fieldService);
 
-                Result<Integer> pageRes = ParamUtils.stringToInteger(request.getParameter("page"));
+                Result<Integer> pageRes =ParamUtils.stringToInteger(request.getParameter("page"));
                 int page = pageRes.isSuccess() ? Math.max(1, pageRes.getData()) : 1;
 
                 Result<Integer> sizeRes = ParamUtils.stringToInteger(request.getParameter("size"));
@@ -175,8 +173,6 @@ public class FieldServlet extends HttpServlet {
                     request.getParameter("active")
             );
         }
-
-
     }
 }
 

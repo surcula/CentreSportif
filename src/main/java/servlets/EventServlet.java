@@ -108,7 +108,7 @@ public class EventServlet extends HttpServlet {
         EntityManager em = EMF.getEM();
         try {
             EventServiceImpl eventService = new EventServiceImpl(em);
-            EventBusiness eventBusiness = new EventBusiness(eventService);
+            EventBusiness eventBusiness = new EventBusiness(eventService, em);
 
             Result<Integer> pageRes = ParamUtils.stringToInteger(request.getParameter("page"));
             int page = pageRes.isSuccess() ? Math.max(1, pageRes.getData()) : 1;
@@ -122,14 +122,12 @@ public class EventServlet extends HttpServlet {
 
             if (result.isSuccess()) {
                 Page<Event> p = result.getData();
-                //request.setAttribute("events", p.getContent());
                 request.setAttribute("page", p.getPage());
                 request.setAttribute("size", p.getSize());
                 request.setAttribute("totalPages", p.getTotalPages());
                 request.setAttribute("totalElements", p.getTotalElements());
                 request.setAttribute("fullAccess", fullAccess);
                 EventControllerHelper.handleList(request, response, p.getContent());
-                //request.getRequestDispatcher("/views/template/template.jsp").forward(request, response);
                 return;
 
             } else {
@@ -154,12 +152,6 @@ public class EventServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        //vérifier les droits lorsque l'utilisateur est connecté mais la connexion n'est pas opérationnelle
-        //HttpSession session = request.getSession(false);
-        //if(session == null || ServletUtils.isFullAuthorized(session.getAttribute("role").toString())) {
-        //    ServletUtils.redirectWithMessage(request, response, "Accès refusé", "error", "/home");
-        //    return;
-        //}
         //traitement de récupération de l'image
         Part imagePart = request.getPart("image");
         String imageName = null;
