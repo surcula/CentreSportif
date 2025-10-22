@@ -15,6 +15,7 @@ public class EventControllerHelper {
     }
 
     public static void handleEditForm(HttpServletRequest request, HttpServletResponse response, Event event) throws ServletException, IOException {
+        request.setAttribute("event", event);
         request.setAttribute("eventName", event.getEventName());
         request.setAttribute("eventBeginDateHour", event.getBeginDateHour());
         request.setAttribute("eventEndDateHour", event.getEndDateHour());

@@ -5,6 +5,9 @@ import entities.Event;
 import Tools.Result;
 import enums.Scope;
 import services.EventServiceImpl;
+
+import javax.persistence.EntityManager;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -26,8 +29,10 @@ public class EventBusiness {
      * Constructor
      * @param eventService
      */
-    public EventBusiness(EventServiceImpl eventService) {
+    private EntityManager em;
+    public EventBusiness(EventServiceImpl eventService, EntityManager em) {
         this.eventService = eventService;
+        this.em = em;
     }
 
     private EventServiceImpl eventService;
@@ -53,31 +58,60 @@ public class EventBusiness {
         if(name == null || name.trim().isEmpty()) {
             errors.put("name", "Le nom est obligatoire");
         } else {
-            event.setEventName(name);
+            event.setEventName(name.trim());
         }
-        //Validation des dates
+        //Validation et converson des dates et heures
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
-        try {
-            event.setBeginDateHour(LocalDate.parse(startDateStr, formatter));
-        }catch (DateTimeParseException e){
-            errors.put("startDateHour", "Format de date invalide");
-        }
-        try {
-            event.setEndDateHour(LocalDate.parse(endDateStr, formatter));
-        }catch (DateTimeParseException e){
-            errors.put("endDateHour", "Format de date invalide");
-        }
+        LocalDateTime startDate = null;
+        LocalDateTime endDate = null;
 
-        event.setInfo(description);
-        event.setPicture(image);
-
-        boolean isActive = "1".equals(status);//1 = en cours
+        //Date de début
+        if(startDateStr == null || startDateStr.trim().isEmpty()) {
+            errors.put("startDateHour", "Le date et heure de début sont obligatoires");
+        }else {
+            try {
+                //CORRECTION
+                startDate = LocalDateTime.parse(startDateStr, formatter);
+                event.setBeginDateHour(startDate);
+            } catch (DateTimeParseException e) {
+                errors.put("startDateHour", "Format de date invalide (doit être yyyy-MM-ddTHH:mm).");
+            }
+        }
+        //Date de fin
+        if(endDateStr == null || endDateStr.trim().isEmpty()) {
+            errors.put("endDateHour", "Le date et heure de fin sont obligatoires");
+        }else {
+            try {
+                //CORRECTION
+                endDate = LocalDateTime.parse(endDateStr, formatter);
+                event.setEndDateHour(endDate);
+            } catch (DateTimeParseException e) {
+                errors.put("endDateHour", "Format de date invalide (doit être yyyy-MM-ddTHH:mm).");
+            }
+        }
+        //validation que la date de début est antérieure ou égale à la date de fin
+        if(startDate != null && endDate != null && startDate.isAfter(endDate)) {
+            errors.put("endDateHour", "La date de fin ne peut pas être antérieure à la date de début.");
+        }
+        //Description
+        if (description == null || description.trim().isEmpty()) {
+            errors.put("description", "La description est obligatoire");
+        } else {
+            event.setInfo(description.trim());
+        }
+        //image
+        if(image == null || image.trim().isEmpty()){
+            errors.put("image", "L'image est obligatoire.");
+        } else {
+            event.setPicture(image);
+        }
+        //statut
+        boolean isActive = "1".equals(status);
         event.setActive(isActive);
-
         if(errors.isEmpty()) {
             return Result.ok(event);
-        }else {
+        } else {
             return Result.fail(errors);
         }
     }
@@ -95,46 +129,41 @@ public class EventBusiness {
         int pageSize = Math.max(1, size);
         int offset = (pageNumber - 1) * pageSize;
 
-        Result<List<Event>> content = scope == Scope.ALL?
-                paginationGetAllEvent(offset,pageSize):
-                paginationGetAllActiveEvent(offset, pageSize);
-        if(!content.isSuccess()) {
-            log.error(content.getErrors());
-            return Result.fail(content.getErrors());
+        try {
+            List<Event> events;
+
+            if(scope == Scope.ALL) {
+                System.out.println(">>>>>> [ADMIN] Récupération de tous les évènements (actifs + inactifs) ");
+                events = em.createNamedQuery("Event.getAll", Event.class)
+                        .setFirstResult(offset)
+                        .setMaxResults(pageSize)
+                        .getResultList();
+            }
+            else {
+                System.out.println(">>>>>>> [USER] Récupération uniquement des évènements actifs");
+                events = em.createNamedQuery("Event.getAllActive", Event.class)
+                        .setFirstResult(offset)
+                        .setMaxResults(pageSize)
+                        .getResultList();
+            }
+            // Log de debug
+            System.out.println((">>>>> Nombre d'évènement récupérés : " + events.size()));
+            //Total d'éléments pour la pagination
+            Long totalElements = (scope == Scope.ALL)
+                    ? em.createQuery("SELECT COUNT(e) FROM Event e", Long.class).getSingleResult()
+                    : em.createQuery("SELECT COUNT(e) FROM Event e WHERE E.active = true", Long.class).getSingleResult();
+            //Création de la page
+            Page<Event> pageData = Page.of(events, pageNumber, pageSize, totalElements);
+
+            return Result.ok(pageData);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            Map<String, String> errors = new HashMap<>();
+            errors.put("Erreur","Erreur lors de la récupération des évènements : " + e.getMessage());
+            return Result.fail(errors);
         }
-
-        Result<Long> total = (scope == Scope.ALL)
-                ? eventService.countAllEvents()
-                : eventService.countActiveEvents();
-        if(!total.isSuccess()) {
-            log.error(content.getErrors());
-            return Result.fail(total.getErrors());
-        }
-
-        // Création de la page
-        Page<Event> pageObj = Page.of(content.getData(), pageNumber, pageSize, total.getData());
-        //log.info("Pagination réussie[allEvents] → " + pageObj);
-        return Result.ok(pageObj);
     }
 
-    /**
-     * Retrieves Event for PAgination
-     * @param page
-     * @param size
-     * @return
-     */
-    private Result<List<Event>> paginationGetAllEvent(int page, int size) {
-        return eventService.getAllActiveEvents(page, size);
-    }
-
-    /**
-     * Retrieves ActiveEvent for Pagination
-     * @param page
-     * @param size
-     * @return
-     */
-    private Result<List<Event>> paginationGetAllActiveEvent(int page, int size) {
-        return eventService.getAllEvents2(page, size);
-    }
 
 }

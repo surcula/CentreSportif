@@ -7,6 +7,7 @@ import controllers.helpers.EventControllerHelper;
 import dto.Page;
 import entities.Event;
 import enums.Scope;
+import javafx.beans.binding.IntegerExpression;
 import services.EventServiceImpl;
 import business.ServletUtils;
 import static constants.Rooting.*;
@@ -108,7 +109,7 @@ public class EventServlet extends HttpServlet {
         EntityManager em = EMF.getEM();
         try {
             EventServiceImpl eventService = new EventServiceImpl(em);
-            EventBusiness eventBusiness = new EventBusiness(eventService);
+            EventBusiness eventBusiness = new EventBusiness(eventService, em);
 
             Result<Integer> pageRes = ParamUtils.stringToInteger(request.getParameter("page"));
             int page = pageRes.isSuccess() ? Math.max(1, pageRes.getData()) : 1;
@@ -122,14 +123,12 @@ public class EventServlet extends HttpServlet {
 
             if (result.isSuccess()) {
                 Page<Event> p = result.getData();
-                //request.setAttribute("events", p.getContent());
                 request.setAttribute("page", p.getPage());
                 request.setAttribute("size", p.getSize());
                 request.setAttribute("totalPages", p.getTotalPages());
                 request.setAttribute("totalElements", p.getTotalElements());
                 request.setAttribute("fullAccess", fullAccess);
                 EventControllerHelper.handleList(request, response, p.getContent());
-                //request.getRequestDispatcher("/views/template/template.jsp").forward(request, response);
                 return;
 
             } else {
@@ -153,59 +152,136 @@ public class EventServlet extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-        //vérifier les droits lorsque l'utilisateur est connecté mais la connexion n'est pas opérationnelle
-        //HttpSession session = request.getSession(false);
-        //if(session == null || ServletUtils.isFullAuthorized(session.getAttribute("role").toString())) {
-        //    ServletUtils.redirectWithMessage(request, response, "Accès refusé", "error", "/home");
-        //    return;
-        //}
-        //traitement de récupération de l'image
-        Part imagePart = request.getPart("image");
-        String imageName = null;
-        if(imagePart != null && imagePart.getSize() > 0) {
-            //Récupération du nom de l'image
-            String fileName = Paths.get(imagePart.getSubmittedFileName()).getFileName().toString();
-            //Création du nom unique pour l'image
-            String uniqueFileName = System.currentTimeMillis() + "_" + fileName;
-            //Configuration du dossier de destination de l'image
-            String uploadDirectory = getServletContext().getRealPath("/webapp/assets/img/uploads");
-            //Création du dossier s'il n'existe pas
-            Files.createDirectories(Paths.get(uploadDirectory));
-            //Chemin complet pour l'image
-            Path filePath = Paths.get(uploadDirectory, uniqueFileName);
-            //sauvegarde du fichier
-            imagePart.write(filePath.toAbsolutePath().toString());
-            imageName = uniqueFileName;
-
-        }
-        //Validation des données
-        Result<Event> baseresult = EventBusiness.initCreateForm(
-                request.getParameter("eventName"),
-                request.getParameter("startDateHour"),
-                request.getParameter("endDateHour"),
-                request.getParameter("description"),
-                imageName,
-                request.getParameter("status")
-        );
-
-        if(baseresult.isSuccess()){
+        em = EMF.getEM();
+        eventService = new EventServiceImpl(em);
+        String eventIdStr = request.getParameter("eventId");
+        boolean isEdit = (eventIdStr != null && !eventIdStr.isEmpty());
+        log.info("doPost invoked - eventIdStr = " + request.getParameter("eventId"));
+        //Changer le statut de Terminé vers En cours et supprimer mettre le statut de En cours vers terminé
+        String action = request.getParameter("action");
+        if (isEdit && action != null && !action.isEmpty()) {
             try {
-                em = EMF.getEM();
-                eventService = new EventServiceImpl(em);
-                em.getTransaction().begin();
+                int eventId = Integer.parseInt(eventIdStr);
+                Result<Event> existingEventRest = eventService.getOneById(eventId);
 
-                eventService.create(baseresult.getData());
+                if(!existingEventRest.isSuccess()) {
+                    ServletUtils.redirectWithMessage(request, response, "Evènement introuvable pour la mise à jour du statut.", EVENT_JSP, TEMPLATE);
+                    return;
+                }
+                Event eventToUpdate = existingEventRest.getData();
+
+                em.getTransaction().begin();;
+
+                String successMessage = "";
+                if ("delete".equals(action)) {
+                    //utilisation de delete du EventServiceImpl
+                    eventService.delete(eventToUpdate);
+                    successMessage = "Evènènement marqué comme terminé avec succès.";
+                } else if ("activer".equals(action)) {
+                    //utilisation de update du EventServiceImpl
+                    eventToUpdate.setActive(true);;
+                    eventService.update(eventToUpdate);
+                    successMessage = "Evènement remis En cours avec succès.";
+                } else {
+                    //opération inadéquate
+                    em.getTransaction().rollback();
+                    ServletUtils.redirectWithMessage(request, response, "Action de statut non reconnue.", EVENT_JSP, TEMPLATE );
+                    return;
+                }
                 em.getTransaction().commit();
-                ServletUtils.redirectWithMessage(request, response, "Evènement créé avec succès", "success", "/views/template/template.jsp?content=../event.jsp" );
+
+                ServletUtils.redirectWithMessage(request, response, successMessage, "success", "/event");
+                return;
+
             }catch (Exception e) {
-                if(em.getTransaction().isActive()) em.getTransaction().rollback();
-                ServletUtils.forwardWithError(request, response, e.getMessage(), EVENT_FORM_JSP, TEMPLATE);
-            }finally {
-                if (em != null) em.close();
+                if (em.getTransaction().isActive()) em.getTransaction().rollback();
+                ServletUtils.redirectWithMessage(request, response, "Erreur lors de la mise à jour du statut : " +  e.getMessage(), EVENT_JSP, TEMPLATE);
+                return;
+            } finally {
+                if(em != null) em.close();
             }
-        }else {
-            ServletUtils.forwardWithErrors(request, response, baseresult.getErrors(), EVENT_FORM_JSP,TEMPLATE);
+        }
+
+        // initialisation de l'entité Event
+        Event event;
+        String currentPicture = null;
+
+
+        try {
+            if (isEdit) {
+                //MODIFICATION
+                int eventId = Integer.parseInt(eventIdStr);
+                Result<Event> existingEventRes = eventService.getOneById(eventId);
+                if(!existingEventRes.isSuccess()) {
+                    ServletUtils.forwardWithError(request, response, "Evènement introuvable.", EVENT_FORM_JSP, TEMPLATE);
+                    return;
+                }
+                event = existingEventRes.getData();
+                currentPicture = event.getPicture();
+            }
+            else {
+                //CREATION
+                event = new Event();
+            }
+            //traitement de récupération de l'image
+            Part imagePart = request.getPart("image");
+            String imageName = null;
+            if(imagePart != null && imagePart.getSize() > 0) {
+                //Récupération du nom de l'image
+                String fileName = Paths.get(imagePart.getSubmittedFileName()).getFileName().toString();
+                //Création du nom unique pour l'image
+                String uniqueFileName = System.currentTimeMillis() + "_" + fileName;
+                //Configuration du dossier de destination de l'image
+                String uploadDirectory = getServletContext().getRealPath("/webapp/assets/img/uploads");
+                //Création du dossier s'il n'existe pas
+                Files.createDirectories(Paths.get(uploadDirectory));
+                //Chemin complet pour l'image
+                Path filePath = Paths.get(uploadDirectory, uniqueFileName);
+                //sauvegarde du fichier
+                imagePart.write(filePath.toAbsolutePath().toString());
+                imageName = uniqueFileName;
+            }
+            //Validation des données
+            Result<Event> baseresult = EventBusiness.initCreateForm(
+                    request.getParameter("eventName"),
+                    request.getParameter("startDateHour"),
+                    request.getParameter("endDateHour"),
+                    request.getParameter("description"),
+                    imageName,
+                    request.getParameter("status")
+            );
+            if(baseresult.isSuccess()) {
+                Event filledEvent = baseresult.getData();
+
+                em.getTransaction().begin();
+                if(isEdit) {
+                    event.setEventName(filledEvent.getEventName());
+                    event.setBeginDateHour(filledEvent.getBeginDateHour());
+                    event.setEndDateHour(filledEvent.getEndDateHour());
+                    event.setInfo(filledEvent.getInfo());
+                    //pour ne pas devoir changer l'image et pouvoir valider le formulaire sans devoir insérer une nouvelle image
+                    if(filledEvent.getPicture() !=null && !filledEvent.getPicture().isEmpty()){
+                        event.setPicture(filledEvent.getPicture());
+                    }
+                    event.setPicture(filledEvent.getPicture());
+                    event.setActive(filledEvent.isActive());
+                    eventService.update(event);
+                } else {
+                    eventService.create(filledEvent);
+                }
+                em.getTransaction().commit();
+
+                ServletUtils.redirectWithMessage(request, response, isEdit ? "Evènement modifié avec succès" : "Evènement créé avec succès",
+                        "success", "/event");
+            } else {
+                request.setAttribute("event", isEdit ? event : baseresult.getData());
+                ServletUtils.forwardWithErrors(request, response, baseresult.getErrors(), EVENT_FORM_JSP, TEMPLATE);
+            }
+        } catch (Exception e) {
+            if (em.getTransaction().isActive()) em.getTransaction().rollback();
+            ServletUtils.forwardWithError(request, response, e.getMessage(), EVENT_FORM_JSP, TEMPLATE);
+        } finally {
+            if (em != null) em.close();
         }
     }
 }

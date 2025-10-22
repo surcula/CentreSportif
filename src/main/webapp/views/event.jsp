@@ -72,7 +72,16 @@
                 <td>${event.endDateHour}</td>
                 <td>${event.info}</td>
                 <td>${event.picture}</td>
-                <td>${event.active}</td>
+                <td>
+                    <c:choose>
+                        <c:when test="${event.active}">
+                            <span class = "badge bg-success">En cours</span>
+                        </c:when>
+                        <c:otherwise>
+                            <span class = "badge bg-secondary">Terminé</span>
+                        </c:otherwise>
+                    </c:choose>
+                </td>
                 <td>
                     <div class="btn-group" role="group" aria-label="Actions Event">
                         <a href="${pageContext.request.contextPath}/event?editForm=${event.id}"
@@ -99,7 +108,7 @@
                                     <input type="hidden" name="eventId" value="${event.id}"/>
                                     <input type="hidden" name="action" value="activer"/>
                                     <button type="submit" class="btn btn-outline-warning btn-sm">
-                                        <i class="bi bi-trash"></i> Activer
+                                        <i class="bi bi-check-circle"></i> Activer
                                     </button>
                                 </form>
                             </c:otherwise>
@@ -122,7 +131,7 @@
                     <c:param name="page" value="${currentPage - 1}"/>
                     <c:param name="size" value="${pageSize}"/>
                 </c:url>
-                <c:url var="nextUrl" value="/hall">
+                <c:url var="nextUrl" value="/event">
                     <c:param name="page" value="${currentPage + 1}"/>
                     <c:param name="size" value="${pageSize}"/>
                 </c:url>

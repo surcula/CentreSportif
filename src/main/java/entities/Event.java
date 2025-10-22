@@ -2,6 +2,7 @@ package entities;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @NamedQueries({
         @NamedQuery(
@@ -48,13 +49,13 @@ public class Event {
      * @param beginDateHour
      */
     @Column(name = "begin_date_hour", nullable = false)
-    private LocalDate beginDateHour;
+    private LocalDateTime beginDateHour;
     /**
      * The end date of the event
      * @param endDateHour
      */
     @Column(name = "end_date_hour", nullable = false)
-    private LocalDate endDateHour;
+    private LocalDateTime endDateHour;
     /**
      * The description of the event
      * @param info
@@ -111,7 +112,7 @@ public class Event {
      * @return beginDateHour
      *
      */
-    public LocalDate getBeginDateHour() {
+    public LocalDateTime getBeginDateHour() {
         return beginDateHour;
     }
     /**
@@ -119,7 +120,7 @@ public class Event {
      * @param beginDateHour
      *
      */
-    public void setBeginDateHour(LocalDate beginDateHour) {
+    public void setBeginDateHour(LocalDateTime beginDateHour) {
         this.beginDateHour = beginDateHour;
     }
     /**
@@ -127,7 +128,7 @@ public class Event {
      * @return endDateHour
      *
      */
-    public LocalDate getEndDateHour() {
+    public LocalDateTime getEndDateHour() {
         return endDateHour;
     }
     /**
@@ -135,7 +136,7 @@ public class Event {
      * @param endDateHour
      *
      */
-    public void setEndDateHour(LocalDate endDateHour) {
+    public void setEndDateHour(LocalDateTime endDateHour) {
         this.endDateHour = endDateHour;
     }
     /**
