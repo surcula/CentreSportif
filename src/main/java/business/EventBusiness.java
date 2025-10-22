@@ -7,6 +7,7 @@ import enums.Scope;
 import services.EventServiceImpl;
 
 import javax.persistence.EntityManager;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -57,31 +58,60 @@ public class EventBusiness {
         if(name == null || name.trim().isEmpty()) {
             errors.put("name", "Le nom est obligatoire");
         } else {
-            event.setEventName(name);
+            event.setEventName(name.trim());
         }
-        //Validation des dates
+        //Validation et converson des dates et heures
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
-        try {
-            event.setBeginDateHour(LocalDate.parse(startDateStr, formatter));
-        }catch (DateTimeParseException e){
-            errors.put("startDateHour", "Format de date invalide");
-        }
-        try {
-            event.setEndDateHour(LocalDate.parse(endDateStr, formatter));
-        }catch (DateTimeParseException e){
-            errors.put("endDateHour", "Format de date invalide");
-        }
+        LocalDateTime startDate = null;
+        LocalDateTime endDate = null;
 
-        event.setInfo(description);
-        event.setPicture(image);
-
-        boolean isActive = "1".equals(status);//1 = en cours
+        //Date de début
+        if(startDateStr == null || startDateStr.trim().isEmpty()) {
+            errors.put("startDateHour", "Le date et heure de début sont obligatoires");
+        }else {
+            try {
+                //CORRECTION
+                startDate = LocalDateTime.parse(startDateStr, formatter);
+                event.setBeginDateHour(startDate);
+            } catch (DateTimeParseException e) {
+                errors.put("startDateHour", "Format de date invalide (doit être yyyy-MM-ddTHH:mm).");
+            }
+        }
+        //Date de fin
+        if(endDateStr == null || endDateStr.trim().isEmpty()) {
+            errors.put("endDateHour", "Le date et heure de fin sont obligatoires");
+        }else {
+            try {
+                //CORRECTION
+                endDate = LocalDateTime.parse(endDateStr, formatter);
+                event.setEndDateHour(endDate);
+            } catch (DateTimeParseException e) {
+                errors.put("endDateHour", "Format de date invalide (doit être yyyy-MM-ddTHH:mm).");
+            }
+        }
+        //validation que la date de début est antérieure ou égale à la date de fin
+        if(startDate != null && endDate != null && startDate.isAfter(endDate)) {
+            errors.put("endDateHour", "La date de fin ne peut pas être antérieure à la date de début.");
+        }
+        //Description
+        if (description == null || description.trim().isEmpty()) {
+            errors.put("description", "La description est obligatoire");
+        } else {
+            event.setInfo(description.trim());
+        }
+        //image
+        if(image == null || image.trim().isEmpty()){
+            errors.put("image", "L'image est obligatoire.");
+        } else {
+            event.setPicture(image);
+        }
+        //statut
+        boolean isActive = "1".equals(status);
         event.setActive(isActive);
-
         if(errors.isEmpty()) {
             return Result.ok(event);
-        }else {
+        } else {
             return Result.fail(errors);
         }
     }
