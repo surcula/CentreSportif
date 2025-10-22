@@ -68,15 +68,6 @@
     <c:remove var="toastType" scope="session"/>
 </c:if>
 
-
-
-
-
-
-
-
-
-
 <!-- Portfolio Modals-->
 <!-- Portfolio Modal 1-->
 <div class="portfolio-modal modal fade" id="portfolioModal1" tabindex="-1" aria-labelledby="portfolioModal1"

@@ -1,6 +1,7 @@
 package business;
 
 import Tools.Result;
+import dto.HallUpdateForm;
 import dto.Page;
 import entities.Hall;
 import enums.Scope;
@@ -33,59 +34,77 @@ public class HallBusiness {
     public static Result<Hall> initCreateForm(String strHallName, String strWidth, String strLength, String strHeight, String strActive) {
         Map<String, String> errors = new HashMap<>();
 
-        Result<String> hallName = ValidateForm.stringIsEmpty(
-                strHallName,
-                "errorHallName",
-                "Hall name",
-                errors
-        );
+        Result<String> hallName = ValidateForm.stringIsEmpty(strHallName, "errorHallName", "HallName", errors);
+        if (!hallName.isSuccess()) errors.putAll(hallName.getErrors());
 
-        Result<Double> height = ValidateForm.parseDouble(
-                strHeight,
-                "errorHeight",
-                "Height",
-                errors
-        );
+        Result<String> hallNameLength = ValidateForm.stringLength(strHallName, 0, 255);
+        if (!hallNameLength.isSuccess()) errors.putAll(hallNameLength.getErrors());
 
-        Result<Double> length = ValidateForm.parseDouble(
-                strLength,
-                "errorLength",
-                "Length",
-                errors
-        );
+        Result<Double> height = ValidateForm.parseDouble(strHeight, "errorHeight", "Height", errors);
+        if (!height.isSuccess()) errors.putAll(height.getErrors());
 
-        Result<Double> width = ValidateForm.parseDouble(
-                strWidth,
-                "errorWidth",
-                "Width",
-                errors
-        );
+        Result<Double> length = ValidateForm.parseDouble(strLength, "errorLength", "Length", errors);
+        if (!length.isSuccess()) errors.putAll(length.getErrors());
 
-        Result<Boolean> active = ValidateForm.parseBoolean(
-                strActive,
-                "errorActive",
-                "Active",
-                errors
-        );
+        Result<Double> width = ValidateForm.parseDouble(strWidth, "errorWidth", "Width", errors);
+        if (!width.isSuccess()) errors.putAll(width.getErrors());
+
+        Result<Boolean> active = ValidateForm.parseBoolean(strActive, "errorActive", "Active", errors);
+        if (!active.isSuccess()) errors.putAll(active.getErrors());
 
         if (!errors.isEmpty()) {
-
             return Result.fail(errors);
         } else {
-            Hall hallCreateForm = new Hall(
-                    hallName.getData(),
-                    active.getData(),
-                    width.getData(),
-                    length.getData(),
-                    height.getData()
-            );
-            return Result.ok(hallCreateForm);
+            Result<Hall> hallCreateForm = toEntity(hallName.getData(), width.getData(), length.getData(), height.getData(), active.getData());
+            return Result.ok(hallCreateForm.getData());
         }
 
     }
 
     /**
+     * validate data submitted by CreateForm
+     *
+     * @param strHallName
+     * @param strWidth
+     * @param strLength
+     * @param strHeight
+     * @param strActive
+     * @return
+     */
+    public static Result<HallUpdateForm> initUpdateForm(String strHallName, String strWidth, String strLength, String strHeight, String strActive) {
+        Map<String, String> errors = new HashMap<>();
+
+        Result<String> hallName = ValidateForm.stringIsEmpty(strHallName, "errorHallName", "HallName", errors);
+        if (!hallName.isSuccess()) errors.putAll(hallName.getErrors());
+
+        Result<String> hallNameLength = ValidateForm.stringLength(strHallName, 0, 255);
+        if (!hallNameLength.isSuccess()) errors.putAll(hallNameLength.getErrors());
+
+        Result<Double> height = ValidateForm.parseDouble(strHeight, "errorHeight", "Height", errors);
+        if (!height.isSuccess()) errors.putAll(height.getErrors());
+
+        Result<Double> length = ValidateForm.parseDouble(strLength, "errorLength", "Length", errors);
+        if (!length.isSuccess()) errors.putAll(length.getErrors());
+
+        Result<Double> width = ValidateForm.parseDouble(strWidth, "errorWidth", "Width", errors);
+        if (!width.isSuccess()) errors.putAll(width.getErrors());
+
+        Result<Boolean> active = ValidateForm.parseBoolean(strActive, "errorActive", "Active", errors);
+        if (!active.isSuccess()) errors.putAll(active.getErrors());
+
+        if (!errors.isEmpty()) {
+            return Result.fail(errors);
+        } else {
+            Result<HallUpdateForm> hallUpdateForm = toUpdateForm(hallName.getData(), width.getData(), length.getData(), height.getData(), active.getData());
+            return Result.ok(hallUpdateForm.getData());
+        }
+
+    }
+
+
+    /**
      * Pagination ALL Halls
+     *
      * @param page
      * @param size
      * @return
@@ -96,10 +115,10 @@ public class HallBusiness {
         int pageSize = Math.max(1, size);
         int offset = (pageNumber - 1) * pageSize;
 
-        Result<List<Hall>> content = scope == Scope.ALL?
-                paginationGetAllHall(offset,pageSize):
+        Result<List<Hall>> content = scope == Scope.ALL ?
+                paginationGetAllHall(offset, pageSize) :
                 paginationGetAllActiveHall(offset, pageSize);
-        if(!content.isSuccess()) {
+        if (!content.isSuccess()) {
             log.error(content.getErrors());
             return Result.fail(content.getErrors());
         }
@@ -107,7 +126,7 @@ public class HallBusiness {
         Result<Long> total = (scope == Scope.ALL)
                 ? hallService.countAllHalls()
                 : hallService.countActiveHalls();
-        if(!total.isSuccess()) {
+        if (!total.isSuccess()) {
             log.error(content.getErrors());
             return Result.fail(total.getErrors());
         }
@@ -120,6 +139,7 @@ public class HallBusiness {
 
     /**
      * Retrieves HAll for PAgination
+     *
      * @param page
      * @param size
      * @return
@@ -130,11 +150,40 @@ public class HallBusiness {
 
     /**
      * Retrieves ActiveHall for PAgination
+     *
      * @param page
      * @param size
      * @return
      */
     private Result<List<Hall>> paginationGetAllActiveHall(int page, int size) {
         return hallService.getAllActiveHalls(page, size);
+    }
+
+    /**
+     * create hall with form params validates
+     * @return
+     */
+    private static Result<Hall> toEntity(String hallName, double width, double length, double height, boolean active){
+        Hall hall = new Hall();
+        hall.setHallName(hallName);
+        hall.setWidth(width);
+        hall.setLength(length);
+        hall.setHeight(height);
+        hall.setActive(active);
+        return Result.ok(hall);
+    }
+
+    /**
+     * create hall with form params validates
+     * @return
+     */
+    private static Result<HallUpdateForm> toUpdateForm(String hallName, double width, double length, double height, boolean active){
+        HallUpdateForm hallUpdateForm = new HallUpdateForm();
+        hallUpdateForm.setHallName(hallName);
+        hallUpdateForm.setWidth(width);
+        hallUpdateForm.setLength(length);
+        hallUpdateForm.setHeight(height);
+        hallUpdateForm.setActive(active);
+        return Result.ok(hallUpdateForm);
     }
 }

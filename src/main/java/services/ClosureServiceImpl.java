@@ -56,9 +56,9 @@ public class ClosureServiceImpl implements ClosureService {
     }
 
     @Override
-    public Result<List<Closure>> getAllActiveClosures(int page, int size) {
+    public Result<List<Closure>> getAllActiveClosures(int offset, int size) {
         List<Closure> closures = em.createNamedQuery("getAllActiveClosures", Closure.class)
-                .setFirstResult(page)
+                .setFirstResult(offset)
                 .setMaxResults(size)
                 .getResultList();
         log.info("getAllActiveHalls : " + closures.size());
@@ -66,9 +66,9 @@ public class ClosureServiceImpl implements ClosureService {
     }
 
     @Override
-    public Result<List<Closure>> getAllClosures(int page, int size) {
+    public Result<List<Closure>> getAllClosures(int offset, int size) {
         List<Closure> closures = em.createNamedQuery("getAllClosures", Closure.class)
-                .setFirstResult(page)
+                .setFirstResult(offset)
                 .setMaxResults(size)
                 .getResultList();
         log.info("getAllActiveHalls : " + closures.size());
@@ -90,6 +90,4 @@ public class ClosureServiceImpl implements ClosureService {
         log.info("getAllActiveClosures : " + countAllClosures);
         return Result.ok(countAllClosures);
     }
-
-
 }

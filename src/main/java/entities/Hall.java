@@ -8,11 +8,11 @@ import javax.persistence.*;
 @NamedQueries({
         @NamedQuery(
                 name = "getAllActiveHalls",
-                query = "SELECT h FROM Hall h WHERE h.active = true"
+                query = "SELECT h FROM Hall h WHERE h.active = true ORDER BY h.id asc"
         ),
         @NamedQuery(
                 name = "getAllHalls",
-                query = "SELECT h FROM Hall h"
+                query = "SELECT h FROM Hall h ORDER BY h.id asc"
         ),
         @NamedQuery(
                 name = "countAllActiveHalls",

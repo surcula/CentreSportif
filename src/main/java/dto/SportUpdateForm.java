@@ -8,17 +8,6 @@ public class SportUpdateForm {
 
     private boolean active = true;
 
-    private double price;
-
-    public double getPrice() {
-        return price;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
-    }
-
-
     public int getId() {
         return id;
     }

@@ -2,7 +2,6 @@ package services;
 
 import Tools.Result;
 import entities.Hall;
-
 import javax.persistence.EntityManager;
 import java.util.HashMap;
 import java.util.List;
@@ -58,17 +57,16 @@ public class HallServiceImpl implements interfaces.HallService {
     }
 
     @Override
-    public Result<List<Hall>> getAllActiveHalls(int page, int size) {
-        page = Math.max(page, 1);
+    public Result<List<Hall>> getAllActiveHalls(int offset, int size) {
+        offset = Math.max(offset, 0);
         if(size <= 0){
             List<Hall> halls = em.createNamedQuery("getAllActiveHalls", Hall.class)
                     .getResultList();
             log.info("getAllActiveHalls : " + halls.size());
             return Result.ok(halls);
         }
-        int firstResult = (page - 1) * size;
         List<Hall> halls = em.createNamedQuery("getAllActiveHalls", Hall.class)
-                .setFirstResult(firstResult)
+                .setFirstResult(offset)
                 .setMaxResults(size)
                 .getResultList();
         log.info("getAllActiveHalls : " + halls.size());
@@ -76,17 +74,16 @@ public class HallServiceImpl implements interfaces.HallService {
     }
 
     @Override
-    public Result<List<Hall>> getAllHalls(int page, int size) {
-        page = Math.max(page, 1);
+    public Result<List<Hall>> getAllHalls(int offset, int size) {
+        offset = Math.max(offset, 0);
         if(size <= 0){
             List<Hall> halls = em.createNamedQuery("getAllHalls", Hall.class)
                     .getResultList();
             log.info("getAllHalls : " + halls.size());
             return Result.ok(halls);
         }
-        int firstResult = (page - 1) * size;
         List<Hall> halls = em.createNamedQuery("getAllHalls", Hall.class)
-                .setFirstResult(firstResult)
+                .setFirstResult(offset)
                 .setMaxResults(size)
                 .getResultList();
         log.info("getAllHalls : " + halls.size());

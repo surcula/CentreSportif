@@ -1,8 +1,6 @@
 package services;
 
 import Tools.Result;
-import entities.Hall;
-import entities.Sport;
 import entities.SportField;
 import interfaces.SportFieldService;
 import org.apache.log4j.Logger;
@@ -43,9 +41,9 @@ public class SportFieldServiceImpl implements SportFieldService {
     }
 
     @Override
-    public Result<List<SportField>> getAllActiveSportFields(int page, int size) {
+    public Result<List<SportField>> getAllActiveSportFields(int offset, int size) {
         List<SportField> sportFields = em.createNamedQuery("getAllActiveSportFields", SportField.class)
-                .setFirstResult(page)
+                .setFirstResult(offset)
                 .setMaxResults(size)
                 .getResultList();
         log.info("getAllActiveHalls : " + sportFields.size());
@@ -53,9 +51,9 @@ public class SportFieldServiceImpl implements SportFieldService {
     }
 
     @Override
-    public Result<List<SportField>> getAllSportFields(int page, int size) {
+    public Result<List<SportField>> getAllSportFields(int offset, int size) {
         List<SportField> sportFields = em.createNamedQuery("getAllSportFields", SportField.class)
-                .setFirstResult(page)
+                .setFirstResult(offset)
                 .setMaxResults(size)
                 .getResultList();
         log.info("getAllActiveHalls : " + sportFields.size());

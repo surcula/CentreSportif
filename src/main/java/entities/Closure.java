@@ -9,11 +9,11 @@ import java.time.LocalDate;
 @NamedQueries({
         @NamedQuery(
                 name = "getAllActiveClosures",
-                query = "SELECT c FROM Closure c WHERE c.active = true"
+                query = "SELECT c FROM Closure c WHERE c.active = true order by c.id asc "
         ),
         @NamedQuery(
                 name = "getAllClosures",
-                query = "SELECT c FROM Closure c"
+                query = "SELECT c FROM Closure c order by c.id asc"
         ),
         @NamedQuery(
                 name = "countAllActiveClosures",

@@ -4,7 +4,6 @@ import Tools.Result;
 import entities.HistoricalSportPrice;
 import interfaces.HistoricalSportPriceService;
 import org.apache.log4j.Logger;
-
 import javax.persistence.EntityManager;
 import java.util.List;
 
@@ -26,6 +25,7 @@ public class HistoricalSportPriceServiceImpl implements HistoricalSportPriceServ
 
     @Override
     public Result<List<HistoricalSportPrice>> getAllHistoricalSportPrices() {
-        return Result.ok(em.createQuery("Select h from HistoricalSportPrice h", HistoricalSportPrice.class).getResultList());
+        return null;
     }
+
 }

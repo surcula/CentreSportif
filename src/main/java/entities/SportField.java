@@ -9,19 +9,19 @@ import java.time.Instant;
 @NamedQueries({
         @NamedQuery(
                 name = "getAllActiveSportFields",
-                query = "SELECT sP FROM SportField sP WHERE sP.active = true"
+                query = "SELECT sp FROM SportField sp WHERE sp.active = true order by sp.id asc"
         ),
         @NamedQuery(
                 name = "getAllSportFields",
-                query = "SELECT sP FROM SportField sP"
+                query = "SELECT sp FROM SportField sp order by sp.id asc"
         ),
         @NamedQuery(
                 name = "countAllActiveSportFields",
-                query = "SELECT COUNT(sP) FROM SportField sP WHERE sP.active = true"
+                query = "SELECT COUNT(sp) FROM SportField sp WHERE sp.active = true"
         ),
         @NamedQuery(
                 name = "countAllSportFields",
-                query = "SELECT COUNT(sP) FROM SportField sP"
+                query = "SELECT COUNT(sp) FROM SportField sp"
         )
 })
 
@@ -51,6 +51,12 @@ public class SportField {
 
     @Column(name = "day", nullable = false)
     private int day;
+
+    @Column(name = "price", nullable = false, precision = 10, scale = 2)
+    private double price;
+
+    @Column(name = "session_duration", nullable = false)
+    private int sessionDuration;
 
     @Column(name = "is_active", nullable = false)
     private boolean active = true;
@@ -109,6 +115,21 @@ public class SportField {
 
     public void setDay(int day) {
         this.day = day;
+    }
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public int getSessionDuration() {
+        return sessionDuration;
+    }
+
+    public void setSessionDuration(int sessionDuration) {
+        this.sessionDuration = sessionDuration;
     }
 
     public boolean isActive() {

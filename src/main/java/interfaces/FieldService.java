@@ -36,13 +36,13 @@ public interface FieldService {
      * retrieves all fields
      * @return a list of all fields
      */
-    Result<List<Field>> getAllFields(int page, int size) ;
+    Result<List<Field>> getAllFields(int offset, int size) ;
 
     /**
      * retrieves all ACTIVE fields
      * @return a list of all ACTIVE fields
      */
-    Result<List<Field>> getAllActiveFields(int page, int size) ;
+    Result<List<Field>> getAllActiveFields(int offset, int size) ;
 
     /**
      * count all fields
