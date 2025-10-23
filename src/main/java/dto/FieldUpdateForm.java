@@ -7,7 +7,15 @@ public class FieldUpdateForm {
 
     private String fieldName;
 
-    private Hall hall;
+    public int getHallId() {
+        return hallId;
+    }
+
+    public void setHallId(int hallId) {
+        this.hallId = hallId;
+    }
+
+    private int hallId;
 
     private boolean active = true;
 
@@ -27,13 +35,6 @@ public class FieldUpdateForm {
         this.fieldName = fieldName;
     }
 
-    public Hall getHall() {
-        return hall;
-    }
-
-    public void setHall(Hall hall) {
-        this.hall = hall;
-    }
     public boolean isActive() {
         return active;
     }

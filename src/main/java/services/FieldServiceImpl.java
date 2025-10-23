@@ -58,9 +58,9 @@ public class FieldServiceImpl implements FieldService {
     }
 
     @Override
-    public Result<List<Field>> getAllFields(int page, int size) {
+    public Result<List<Field>> getAllFields(int offset, int size) {
         List<Field> fields = em.createNamedQuery("getAllFields", Field.class)
-                .setFirstResult(page)
+                .setFirstResult(offset)
                 .setMaxResults(size)
                 .getResultList();
         log.info("getAllHalls : " + fields.size());
@@ -68,9 +68,9 @@ public class FieldServiceImpl implements FieldService {
     }
 
     @Override
-    public Result<List<Field>> getAllActiveFields(int page, int size) {
+    public Result<List<Field>> getAllActiveFields(int offset, int size) {
         List<Field> fields = em.createNamedQuery("getAllActiveFields", Field.class)
-                .setFirstResult(page)
+                .setFirstResult(offset)
                 .setMaxResults(size)
                 .getResultList();
         log.info("getAllActiveFields : " + fields.size());

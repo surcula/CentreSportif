@@ -45,8 +45,6 @@
             </form>
         </div>
     </div>
-
-
     <c:if test="${not empty error}">
         <p style="color:red;">${error}</p>
     </c:if>

@@ -6,15 +6,12 @@ import entities.Sport;
 public class SportMapper {
 
     /**
-     * SportCreateForm to Sport
+     * Sportupdateform to Sport
      * @param sportUpdateForm
      * @return
      */
-    public static Sport fromCreateForm(SportUpdateForm sportUpdateForm) {
-        Sport sport = new Sport();
+    public static void fromUpdateForm(SportUpdateForm sportUpdateForm, Sport sport) {
         sport.setSportName(sportUpdateForm.getSportName());
         sport.setActive(sportUpdateForm.isActive());
-        sport.setPrice(sportUpdateForm.getPrice());
-        return sport;
     }
 }

@@ -37,13 +37,13 @@ public interface SportFieldService {
      * retrieves all ACTIVE SportFields
      * @return a list of all SportFields
      */
-    Result<List<SportField>> getAllActiveSportFields(int page, int size) ;
+    Result<List<SportField>> getAllActiveSportFields(int offset, int size) ;
 
     /**
      * retrieves all SportFields
      * @return a list of all SportFields
      */
-    Result<List<SportField>> getAllSportFields(int page, int size) ;
+    Result<List<SportField>> getAllSportFields(int offset, int size) ;
 
     /**
      * count all active SportFields

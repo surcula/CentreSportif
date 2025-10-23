@@ -11,4 +11,8 @@
 
   <a class="nav-link py-3 px-0 px-lg-3 rounded"
      href="${pageContext.request.contextPath}/hall">Voir les halls</a>
+  <a class="nav-link py-3 px-0 px-lg-3 rounded"
+     href="${pageContext.request.contextPath}/field">Voir les terrains</a>
+  <a class="nav-link py-3 px-0 px-lg-3 rounded"
+     href="${pageContext.request.contextPath}/sport">Voir les sports</a>
 </section>

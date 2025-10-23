@@ -17,6 +17,8 @@
 
 <!-- formulaire version David pour rester conforme dans la présentation du site -->
 <section class="page-section">
+    <h1>Debug JSP: ${events != null ? fn:length(events) : 'null'}</h1>
+    <p>Events list: ${not empty events ? events.size() : "vide ou null"}</p>
     <h2 class="page-section-heading text-center text-uppercase text-secondary mb-0">Les évènements</h2>
     <c:if test="${not empty error}">
     <div class="alert alert-danger text-center">${error}</div>
@@ -58,20 +60,30 @@
         </thead>
         <tbody>
         <c:if test="${empty events}">
-            <div class="alert alert-warning text-center">Aucun évènement à afficher.</div>
+            <tr>
+                <td colspan="8" class="alert alert-warning text-center">Aucun évènement à afficher.</td>
+            </tr>
         </c:if>
         <c:forEach var="event" items="${events}" varStatus="status">
             <tr>
                 <td>${(page - 1) * size + status.index + 1}</td>
                 <td>${event.eventName}</td>
-                <td>${event.startDateHour}</td>
+                <td>${event.beginDateHour}</td>
                 <td>${event.endDateHour}</td>
-                <td>${event.description}</td>
-                <td>${event.image}</td>
-                <td>${event.active}</td>
+                <td>${event.info}</td>
+                <td>${event.picture}</td>
+                <td>
+                    <c:choose>
+                        <c:when test="${event.active}">
+                            <span class = "badge bg-success">En cours</span>
+                        </c:when>
+                        <c:otherwise>
+                            <span class = "badge bg-secondary">Terminé</span>
+                        </c:otherwise>
+                    </c:choose>
+                </td>
                 <td>
                     <div class="btn-group" role="group" aria-label="Actions Event">
-                        <!-- Bouton Modifier ne fonctionne pas encore car il faut ajouter un évènement-->
                         <a href="${pageContext.request.contextPath}/event?editForm=${event.id}"
                            class="btn btn-outline-primary btn-sm">
                             <i class="bi bi-pencil-square"></i> Modifier
@@ -96,7 +108,7 @@
                                     <input type="hidden" name="eventId" value="${event.id}"/>
                                     <input type="hidden" name="action" value="activer"/>
                                     <button type="submit" class="btn btn-outline-warning btn-sm">
-                                        <i class="bi bi-trash"></i> Activer
+                                        <i class="bi bi-check-circle"></i> Activer
                                     </button>
                                 </form>
                             </c:otherwise>
@@ -119,7 +131,7 @@
                     <c:param name="page" value="${currentPage - 1}"/>
                     <c:param name="size" value="${pageSize}"/>
                 </c:url>
-                <c:url var="nextUrl" value="/hall">
+                <c:url var="nextUrl" value="/event">
                     <c:param name="page" value="${currentPage + 1}"/>
                     <c:param name="size" value="${pageSize}"/>
                 </c:url>

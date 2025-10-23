@@ -35,13 +35,13 @@ public interface ClosureService {
      * retrieves all ACTIVE closure
      * @return a list of all closures
      */
-    Result<List<Closure>> getAllActiveClosures(int page, int size) ;
+    Result<List<Closure>> getAllActiveClosures(int offset, int size) ;
 
     /**
      * retrieves all closures
      * @return a list of all closures
      */
-    Result<List<Closure>> getAllClosures(int page, int size) ;
+    Result<List<Closure>> getAllClosures(int offset, int size) ;
 
     /**
      * count all active halls

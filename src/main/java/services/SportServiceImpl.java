@@ -1,7 +1,6 @@
 package services;
 
 import Tools.Result;
-import entities.Hall;
 import entities.Sport;
 import interfaces.SportService;
 import org.apache.log4j.Logger;
@@ -46,10 +45,10 @@ public class SportServiceImpl implements SportService {
     }
 
     @Override
-    public Result<List<Sport>> getAllActiveSports(int page, int size) {
+    public Result<List<Sport>> getAllActiveSports(int offset, int size) {
 
         List<Sport> sports = em.createNamedQuery("getAllActiveSports", Sport.class)
-                .setFirstResult(page)
+                .setFirstResult(offset)
                 .setMaxResults(size)
                 .getResultList();
         log.info("getAllActiveHalls : " + sports.size());
@@ -57,9 +56,9 @@ public class SportServiceImpl implements SportService {
     }
 
     @Override
-    public Result<List<Sport>> getAllSports(int page, int size) {
+    public Result<List<Sport>> getAllSports(int offset, int size) {
         List<Sport> sports = em.createNamedQuery("getAllSports", Sport.class)
-                .setFirstResult(page)
+                .setFirstResult(offset)
                 .setMaxResults(size)
                 .getResultList();
         log.info("getAllActiveHalls : " + sports.size());

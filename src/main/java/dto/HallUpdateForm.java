@@ -59,21 +59,4 @@ public class HallUpdateForm {
         this.active = active;
     }
 
-    /**
-     *
-     * @param id
-     * @param hallName
-     * @param active
-     * @param height
-     * @param length
-     * @param width
-     */
-    public HallUpdateForm(int id, String hallName, boolean active, double height, double length, double width) {
-        this.id = id;
-        this.hallName = hallName;
-        this.active = active;
-        this.height = height;
-        this.length = length;
-        this.width = width;
-    }
 }

@@ -1,16 +1,14 @@
 package services;
 
 import Tools.Result;
-import dto.EMF;
-import dto.Page;
 import entities.Event;
-import interfaces.EventService;
 import javax.persistence.EntityManager;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+import dto.EMF;
+import dto.Page;
+import interfaces.EventService;
 
 /**
  * Implementation of the {@link EventService} interface
@@ -20,6 +18,7 @@ import java.util.Map;
 public class EventServiceImpl implements interfaces.EventService {
 
     private EntityManager em;
+    private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(EventServiceImpl.class);
 
     /**
      * Constructor for an EventServiceImpl with the specified EntityManager
@@ -104,15 +103,26 @@ public class EventServiceImpl implements interfaces.EventService {
     @Override
     public Result<Page<Event>> getAllEvents(int page, int size) {
         em = EMF.getEM();
-        EventService eventService = new EventServiceImpl(em);
         try {
+            //Vérification que les valeurs entrées sont valies (suite à un problème de negative start position
+            if (page < 1) page = 1;
+            if (size < 1) size = 10;
+            //-------------------------------------------------------------
             int firstResult = (page - 1) * size;
+            if(firstResult < 0){
+                System.err.println("ERREUR GRAVE : firstResult est négatif. Valeur calculée : " + firstResult + " (page= " + page + ", size=" + size + ")");
+                firstResult = 0;//réinitialisation pour empêcher l'exception.
+            }
             System.out.println(">> Pagination : page = " + page + ", size = " + size );
+
             List<Event> events = em.createNamedQuery("Event.getAll", Event.class)
                     .setFirstResult(firstResult)
                     .setMaxResults(size)
                     .getResultList();
             System.out.println(">> Evènements récupérés : " + events.size() );
+            for (Event e : events) {
+                System.out.println("Event: " + e.getEventName() + " / Active :" + e.isActive());
+            }
             Long totalElements = em.createQuery("Select count(e) from Event e", Long.class)
                     .getSingleResult();
             Page<Event> pageData = Page.of(events, page, size, totalElements);
@@ -127,8 +137,20 @@ public class EventServiceImpl implements interfaces.EventService {
     public Result<List<Event>> getAllEvents2(int page, int size){
         em = EMF.getEM();
         //EventService eventService = new EventServiceImpl(em);
+        //Vérification que les valeurs entrées sont valies (suite à un problème de negative start position
+        if (page < 1) page = 1;
+        if (size < 1) size = 10;
+        //-------------------------------------------------------------
         try {
+            //Vérification que les valeurs entrées sont valies (suite à un problème de negative start position
+            if (page < 1) page = 1;
+            if (size < 1) size = 10;
+            //-------------------------------------------------------------
             int firstResult = (page - 1) * size;
+            if(firstResult < 0){
+                System.err.println("ERREUR GRAVE : firstResult est négatif. Valeur calculée : " + firstResult + " (page= " + page + ", size=" + size + ")");
+                firstResult = 0;//réinitialisation pour empêcher l'exception.
+            }
             System.out.println(">> Pagination : page = " + page + ", size = " + size );
             List<Event> events = em.createNamedQuery("Event.getAll", Event.class)
                     .setFirstResult(firstResult)
@@ -146,19 +168,24 @@ public class EventServiceImpl implements interfaces.EventService {
 
     /**
      * Method to count the active events
-     * @return
+     * @return result method
      */
     @Override
     public Result<Long> countActiveEvents() {
-        return null;
+        Long countAllEvents = em.createNamedQuery("Event.countAllActive", Long.class).getSingleResult();
+        log.info("getAllEvents : " + countAllEvents);
+        return Result.ok(countAllEvents);
+
     }
 
     /**
      * Method to count all the events
-     * @return
+     * @return result method
      */
     @Override
     public Result<Long> countAllEvents() {
-        return null;
+        Long countAllEvents = em.createNamedQuery("Event.getAll", Long.class).getSingleResult();
+        log.info("getAllEvents : " + countAllEvents);
+        return Result.ok(countAllEvents);
     }
 }

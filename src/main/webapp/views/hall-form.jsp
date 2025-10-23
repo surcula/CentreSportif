@@ -7,15 +7,14 @@
 --%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
-<fmt:setLocale value="en_US" /> <!-- Pour forcer le point comme séparateur décimal -->
-
-<c:set var="formHallId" value="${not empty param.hallId ? param.hallId : hallId}" />
-<c:set var="formHallName" value="${not empty param.hallName ? param.hallName : hallName}" />
-<c:set var="formLengthRaw" value="${not empty param.length ? param.length : hallLength}" />
-<c:set var="formWidthRaw" value="${not empty param.width ? param.width : hallWidth}" />
-<c:set var="formHeightRaw" value="${not empty param.height ? param.height : hallHeight}" />
-<c:set var="formActive" value="${not empty param.active ? param.active : (hallActive ? '1' : '0')}" />
+<c:set var="formHallId" value="${not empty param.hallId ? param.hallId : hall.id}" />
+<c:set var="formHallName" value="${not empty param.hallName ? param.hallName : hall.hallName}" />
+<c:set var="formLengthRaw" value="${not empty param.length ? param.length : hall.length}" />
+<c:set var="formWidthRaw" value="${not empty param.width ? param.width : hall.width}" />
+<c:set var="formHeightRaw" value="${not empty param.height ? param.height : hall.height}" />
+<c:set var="formActive" value="${not empty param.active ? param.active : (hall.active ? '1' : '0')}" />
 
 <fmt:formatNumber var="formLength" value="${formLengthRaw}" type="number" minFractionDigits="2" maxFractionDigits="2"/>
 <fmt:formatNumber var="formWidth" value="${formWidthRaw}" type="number" minFractionDigits="2" maxFractionDigits="2"/>
@@ -29,7 +28,7 @@
         <section class="page-section">
             <h2 class="text-center">
                 <c:choose>
-                    <c:when test="${not empty hallId}">Modifier un hall</c:when>
+                    <c:when test="${not empty formHallId}">Modifier un hall</c:when>
                     <c:otherwise>Ajouter un hall</c:otherwise>
                 </c:choose>
             </h2>
@@ -43,7 +42,7 @@
             <div class="container">
                 <div class="row justify-content-center">
                     <div class="col-md-6"> <%-- Centré et largeur moyenne --%>
-                        <form method="post" action="${pageContext.request.contextPath}/hall" value="${not empty hallId ? 'edit' : 'create'}">
+                        <form method="post" action="${pageContext.request.contextPath}/hall" value="${not empty formHallId ? 'edit' : 'create'}">
 
                             <!-- ID -->
                             <c:if test="${not empty formHallId}">
@@ -54,7 +53,7 @@
                                 <div class="form-floating mb-3">
                                     <input class="form-control" type="text" id="hallIdDisplay"
                                            placeholder="ID" value="${formHallId}" disabled />
-                                    <label for="hallIdDisplay">ID du hall</label>
+                                    <label for="hallIdDisplay">Id du hall</label>
                                 </div>
                             </c:if>
 
@@ -72,7 +71,7 @@
 
                             <!-- Length -->
                             <div class="form-floating mb-3">
-                                <input class="form-control" type="number" step="0.01" name="length" id="length"
+                                <input class="form-control" type="number" step="0.01" min="0.01" name="length" id="length"
                                        placeholder="Longueur" required
                                        value="${formLength}"/>
                                 <label for="length">Longueur (m)</label>
@@ -83,7 +82,7 @@
 
                             <!-- Width -->
                             <div class="form-floating mb-3">
-                                <input class="form-control" type="number" step="0.01" name="width" id="width"
+                                <input class="form-control" type="number" step="0.01" min="0.01" name="width" id="width"
                                        placeholder="Largeur" required
                                        value="${formWidth}"/>
                                 <label for="width">Largeur (m)</label>
@@ -94,7 +93,7 @@
 
                             <!-- Height -->
                             <div class="form-floating mb-3">
-                                <input class="form-control" type="number" step="0.01" name="height" id="height"
+                                <input class="form-control" type="number" step="0.01" min="0.01" name="height" id="height"
                                        placeholder="Hauteur" required
                                        value="${formHeight}"/>
                                 <label for="height">Hauteur (m)</label>

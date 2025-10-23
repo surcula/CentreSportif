@@ -15,6 +15,7 @@ public class EventControllerHelper {
     }
 
     public static void handleEditForm(HttpServletRequest request, HttpServletResponse response, Event event) throws ServletException, IOException {
+        request.setAttribute("event", event);
         request.setAttribute("eventName", event.getEventName());
         request.setAttribute("eventBeginDateHour", event.getBeginDateHour());
         request.setAttribute("eventEndDateHour", event.getEndDateHour());
@@ -28,5 +29,9 @@ public class EventControllerHelper {
     public static void handleList(HttpServletRequest request, HttpServletResponse response, List<Event> events) throws ServletException, IOException {
         request.setAttribute("events", events);
         ServletUtils.forwardWithContent(request, response, EVENT_JSP, TEMPLATE);
+        //request.getRequestDispatcher("/views/template/template.jsp").forward(request, response);
+        System.out.println(">>>>>>>>>> \n\n===========================================");
+        System.out.println(">>>>>>>>>> handlelist est appelé");
+        System.out.println("===========================\n");
     }
 }

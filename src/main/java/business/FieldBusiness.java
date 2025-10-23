@@ -2,6 +2,7 @@ package business;
 
 import Tools.ParamUtils;
 import Tools.Result;
+import dto.FieldUpdateForm;
 import dto.Page;
 import entities.Field;
 import enums.Scope;
@@ -30,27 +31,67 @@ public class FieldBusiness {
      * @return
      */
     public static Result<Field> initCreateForm(String strFieldName, String strHallId, String strActive) {
-        Field field = new Field();
 
         Map<String, String> errors = new HashMap<>();
 
-        Result<String> fieldName = ValidateForm.stringIsEmpty(
-                strFieldName,
-                "errorFieldName",
-                "Field name",
-                errors
-        );
-        //Attention il faut vérifier le result FIELDNAME, j'ai fais des modifications.
+        Result<String> fieldName = ValidateForm.stringIsEmpty(strFieldName, "errorFieldName", "Field name", errors);
+        if(!fieldName.isSuccess()) errors.putAll(fieldName.getErrors());
+
         //Vérification de la taille du fieldName
         Result<String> lengthFieldName = ValidateForm.stringLength(fieldName.getData(),0,255);
         if(!lengthFieldName.isSuccess()) errors.putAll(lengthFieldName.getErrors());
 
-        //Vérification de l'id du hall [Normalement pas besoin d'aller en DB dans ce cas-ci]
-        Result<Integer> idResult = ParamUtils.verifyId(strHallId);
-        if(!idResult.isSuccess()) errors.putAll(idResult.getErrors());
+        //Vérification de l'id du hall [On ne va pas encore en DB le chercher]
+        Result<Integer> hallId = ParamUtils.verifyId(strHallId);
+        if(!hallId.isSuccess()) errors.putAll(hallId.getErrors());
 
-        return Result.ok(field);
+        //Vérification du boolean
+        Result<Boolean> active = ValidateForm.parseBoolean(strActive, "errorActive", "Active", errors);
+        if(!active.isSuccess()) errors.putAll(active.getErrors());
+
+        if(!errors.isEmpty()) {
+            return Result.fail(errors);
+        }
+
+        Result<Field> field = toEntity(fieldName.getData() ,active.getData());
+        return Result.ok(field.getData());
     }
+
+    /**
+     * validate field Form
+     * @param strFieldName
+     * @param strHallId
+     * @param strActive
+     * @return
+     */
+    public static Result<FieldUpdateForm> initUpdateForm(String strFieldName, String strHallId, String strActive) {
+
+        Map<String, String> errors = new HashMap<>();
+
+        Result<String> fieldName = ValidateForm.stringIsEmpty(strFieldName, "errorFieldName", "Field name", errors);
+        if(!fieldName.isSuccess()) errors.putAll(fieldName.getErrors());
+
+        //Vérification de la taille du fieldName
+        Result<String> lengthFieldName = ValidateForm.stringLength(fieldName.getData(),0,255);
+        if(!lengthFieldName.isSuccess()) errors.putAll(lengthFieldName.getErrors());
+
+        //Vérification de l'id du hall [On ne va pas encore en DB le chercher]
+        Result<Integer> hallId = ParamUtils.verifyId(strHallId);
+        if(!hallId.isSuccess()) errors.putAll(hallId.getErrors());
+
+        //Vérification du boolean
+        Result<Boolean> active = ValidateForm.parseBoolean(strActive, "errorActive", "Active", errors);
+        if(!active.isSuccess()) errors.putAll(active.getErrors());
+
+        if(!errors.isEmpty()) {
+            return Result.fail(errors);
+        }
+
+        Result<FieldUpdateForm> fieldUpdateForm = toUpdateForm(fieldName.getData(), hallId.getData() ,active.getData());
+        return Result.ok(fieldUpdateForm.getData());
+    }
+
+
 
     /**
      * Pagination ALL Fields
@@ -104,6 +145,33 @@ public class FieldBusiness {
      */
     private Result<List<Field>> paginationGetAllActiveField(int page, int size) {
         return fieldService.getAllActiveFields(page, size);
+    }
+
+    /**
+     * CreateField
+     * @param strFieldName
+     * @param active
+     * @return
+     */
+    private static Result<Field> toEntity(String strFieldName, boolean active){
+        Field field = new Field();
+        field.setFieldName(strFieldName);
+        field.setActive(active);
+        return Result.ok(field);
+    }
+
+    /**
+     * UpdateFieldForm
+     * @param strFieldName
+     * @param active
+     * @return
+     */
+    private static Result<FieldUpdateForm> toUpdateForm(String strFieldName, int hallId, boolean active){
+        FieldUpdateForm fieldUpdateForm = new FieldUpdateForm();
+        fieldUpdateForm.setFieldName(strFieldName);
+        fieldUpdateForm.setActive(active);
+        fieldUpdateForm.setHallId(hallId);
+        return Result.ok(fieldUpdateForm);
     }
 
 }
