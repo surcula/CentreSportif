@@ -1,36 +1,26 @@
-package entities;
+package dto;
 
-import javax.persistence.*;
+import entities.Field;
+import entities.Sport;
+
 import java.time.Instant;
 
-@Entity
-@Table(name = "sports_fields")
-public class SportsField {
-    @Id
-    @Column(name = "id", nullable = false)
+public class SportFieldUpdateForm {
+
     private int id;
 
-    @ManyToOne
-    @JoinColumn(name = "sport_id")
     private Sport sport;
 
-    @ManyToOne
-    @JoinColumn(name = "field_id")
     private Field field;
 
-    @Column(name = "start_time", nullable = false)
     private Instant startTime;
 
-    @Column(name = "end_time", nullable = false)
     private Instant endTime;
 
-    @Column(name = "date_start", nullable = false)
     private Instant dateStart;
 
-    @Column(name = "day", nullable = false)
     private int day;
 
-    @Column(name = "is_active", nullable = false)
     private boolean active = true;
 
     public int getId() {

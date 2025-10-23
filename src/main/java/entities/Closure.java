@@ -3,6 +3,29 @@ package entities;
 import javax.persistence.*;
 import java.time.LocalDate;
 
+/**
+ * Named Query
+ */
+@NamedQueries({
+        @NamedQuery(
+                name = "getAllActiveClosures",
+                query = "SELECT c FROM Closure c WHERE c.active = true order by c.id asc "
+        ),
+        @NamedQuery(
+                name = "getAllClosures",
+                query = "SELECT c FROM Closure c order by c.id asc"
+        ),
+        @NamedQuery(
+                name = "countAllActiveClosures",
+                query = "SELECT COUNT(c) FROM Closure c WHERE c.active = true"
+        ),
+        @NamedQuery(
+                name = "countAllClosures",
+                query = "SELECT COUNT(c) FROM Closure c"
+        )
+})
+
+
 @Entity
 @Table(name = "closures")
 public class Closure {
@@ -18,7 +41,7 @@ public class Closure {
 
     @ManyToOne
     @JoinColumn(name = "sports_field_id")
-    private SportsField sportsField;
+    private SportField sportField;
 
     @Column(name = "is_active", nullable = false)
     private boolean active = true;
@@ -47,12 +70,12 @@ public class Closure {
         this.endDate = endDate;
     }
 
-    public SportsField getSportsField() {
-        return sportsField;
+    public SportField getSportsField() {
+        return sportField;
     }
 
-    public void setSportsField(SportsField sportsField) {
-        this.sportsField = sportsField;
+    public void setSportsField(SportField sportField) {
+        this.sportField = sportField;
     }
 
     public boolean isActive() {

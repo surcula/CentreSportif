@@ -1,15 +1,14 @@
 package services;
 
-import java.io.Serializable;
-import java.util.*;
+import dto.EMF;
+import interfaces.EntityFinder;
+import org.apache.log4j.Logger;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.persistence.TemporalType;
-
-import dto.EMF;
-import interfaces.EntityFinder;
-import org.apache.log4j.Logger;
+import java.io.Serializable;
+import java.util.*;
 
 
 /** 

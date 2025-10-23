@@ -1,9 +1,29 @@
 package entities;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+
+
+/**
+ * Named Query
+ */
+@NamedQueries({
+        @NamedQuery(
+                name = "getAllActiveSports",
+                query = "SELECT s FROM Sport s WHERE s.active = true order by s.id asc"
+        ),
+        @NamedQuery(
+                name = "getAllSports",
+                query = "SELECT s FROM Sport s order by s.id asc"
+        ),
+        @NamedQuery(
+                name = "countAllActiveSports",
+                query = "SELECT COUNT(s) FROM Sport s WHERE s.active = true"
+        ),
+        @NamedQuery(
+                name = "countAllSports",
+                query = "SELECT COUNT(s) FROM Sport s"
+        )
+})
 
 @Entity
 @Table(name = "sports")
@@ -17,12 +37,6 @@ public class Sport {
 
     @Column(name = "is_active", nullable = false)
     private boolean active = true;
-
-    @Column(name = "price", nullable = false, precision = 10, scale = 2)
-    private double price;
-
-    @Column(name = "session_duration", nullable = false)
-    private int sessionDuration;
 
     public int getId() {
         return id;
@@ -48,20 +62,5 @@ public class Sport {
         this.active = active;
     }
 
-    public double getPrice() {
-        return price;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
-    }
-
-    public int getSessionDuration() {
-        return sessionDuration;
-    }
-
-    public void setSessionDuration(int sessionDuration) {
-        this.sessionDuration = sessionDuration;
-    }
 
 }

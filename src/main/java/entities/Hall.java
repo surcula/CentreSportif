@@ -1,9 +1,29 @@
 package entities;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+
+/**
+ * Named Query
+ */
+@NamedQueries({
+        @NamedQuery(
+                name = "getAllActiveHalls",
+                query = "SELECT h FROM Hall h WHERE h.active = true ORDER BY h.id asc"
+        ),
+        @NamedQuery(
+                name = "getAllHalls",
+                query = "SELECT h FROM Hall h ORDER BY h.id asc"
+        ),
+        @NamedQuery(
+                name = "countAllActiveHalls",
+                query = "SELECT COUNT(h) FROM Hall h WHERE h.active = true"
+        ),
+        @NamedQuery(
+                name = "countAllHalls",
+                query = "SELECT COUNT(h) FROM Hall h"
+        )
+})
+
 
 @Entity
 @Table(name = "halls")
@@ -74,5 +94,14 @@ public class Hall {
     public void setActive(boolean active) {
         this.active = active;
     }
+
+    public Hall(String hallName, boolean active, Double width, Double length, Double height) {
+        this.hallName = hallName;
+        this.active = active;
+        this.width = width;
+        this.length = length;
+        this.height = height;
+    }
+    public Hall() {}
 
 }

@@ -1,5 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<jsp:include page="/views/template/templateHeader.jsp" />
+<jsp:include page="/views/template/templateHeader.jsp"/>
 
 <%
     String content = (String) request.getAttribute("content");
@@ -9,7 +9,7 @@
 
     if (content != null && !content.contains("src/main") && content.endsWith(".jsp")) {
 %>
-<jsp:include page="<%= content %>" />
+<jsp:include page="<%= content %>"/>
 <%
 } else {
 %>
