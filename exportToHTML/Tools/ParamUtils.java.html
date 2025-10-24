@@ -1,0 +1,68 @@
+<html>
+<head>
+<title>ParamUtils.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cf8e6d;}
+.s1 { color: #bcbec4;}
+.s2 { color: #bcbec4;}
+.s3 { color: #5f826b; font-style: italic;}
+.s4 { color: #67a37c; font-style: italic;}
+.s5 { color: #7a7e85;}
+.s6 { color: #2aacb8;}
+.s7 { color: #6aab73;}
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+ParamUtils.java</font>
+</center></td></tr></table>
+<pre><span class="s0">package </span><span class="s1">Tools</span><span class="s2">;</span>
+
+<span class="s0">import </span><span class="s1">java</span><span class="s2">.</span><span class="s1">util</span><span class="s2">.</span><span class="s1">HashMap</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">java</span><span class="s2">.</span><span class="s1">util</span><span class="s2">.</span><span class="s1">Map</span><span class="s2">;</span>
+
+<span class="s0">public class </span><span class="s1">ParamUtils </span><span class="s2">{</span>
+
+    <span class="s3">/**</span>
+     <span class="s3">* verify id STRING to INTEGER</span>
+     <span class="s3">* </span><span class="s4">@param </span><span class="s3">idString</span>
+     <span class="s3">* </span><span class="s4">@return </span><span class="s3">id(Integer)</span>
+     <span class="s3">*/</span>
+    <span class="s0">public static </span><span class="s1">Result</span><span class="s2">&lt;</span><span class="s1">Integer</span><span class="s2">&gt; </span><span class="s1">verifyId</span><span class="s2">(</span><span class="s1">String idString</span><span class="s2">){</span>
+        <span class="s1">Result</span><span class="s2">&lt;</span><span class="s1">Integer</span><span class="s2">&gt; </span><span class="s1">idResult </span><span class="s2">= </span><span class="s1">stringToInteger</span><span class="s2">(</span><span class="s1">idString</span><span class="s2">);</span>
+        <span class="s5">// On retourne directement l'erreur</span>
+        <span class="s0">if</span><span class="s2">(!</span><span class="s1">idResult</span><span class="s2">.</span><span class="s1">isSuccess</span><span class="s2">()){</span>
+            <span class="s0">return </span><span class="s1">idResult</span><span class="s2">;</span>
+        <span class="s2">}</span>
+        <span class="s5">//On va vérifier si l'id est positif</span>
+        <span class="s0">if</span><span class="s2">(</span><span class="s1">idResult</span><span class="s2">.</span><span class="s1">getData</span><span class="s2">() &gt; </span><span class="s6">0 </span><span class="s2">){</span>
+            <span class="s0">return </span><span class="s1">idResult</span><span class="s2">;</span>
+        <span class="s2">}</span><span class="s0">else</span><span class="s2">{</span>
+            <span class="s1">Map</span><span class="s2">&lt;</span><span class="s1">String</span><span class="s2">, </span><span class="s1">String</span><span class="s2">&gt; </span><span class="s1">errors </span><span class="s2">= </span><span class="s0">new </span><span class="s1">HashMap</span><span class="s2">&lt;&gt;();</span>
+            <span class="s1">errors</span><span class="s2">.</span><span class="s1">put</span><span class="s2">(</span><span class="s7">&quot;id&quot;</span><span class="s2">, </span><span class="s7">&quot;Impossible de trouver un id négatif&quot;</span><span class="s2">);</span>
+            <span class="s0">return </span><span class="s1">Result</span><span class="s2">.</span><span class="s1">fail</span><span class="s2">(</span><span class="s1">errors</span><span class="s2">);</span>
+        <span class="s2">}</span>
+    <span class="s2">}</span>
+
+    <span class="s3">/**</span>
+     <span class="s3">* String To Integer</span>
+     <span class="s3">* </span><span class="s4">@param </span><span class="s3">input</span>
+     <span class="s3">* </span><span class="s4">@return</span>
+     <span class="s3">*/</span>
+    <span class="s0">public static </span><span class="s1">Result</span><span class="s2">&lt;</span><span class="s1">Integer</span><span class="s2">&gt; </span><span class="s1">stringToInteger</span><span class="s2">(</span><span class="s1">String input</span><span class="s2">) {</span>
+        <span class="s0">try</span><span class="s2">{</span>
+            <span class="s0">return </span><span class="s1">Result</span><span class="s2">.</span><span class="s1">ok</span><span class="s2">(</span><span class="s1">Integer</span><span class="s2">.</span><span class="s1">parseInt</span><span class="s2">(</span><span class="s1">input</span><span class="s2">));</span>
+        <span class="s2">}</span><span class="s0">catch </span><span class="s2">(</span><span class="s1">NumberFormatException e</span><span class="s2">) {</span>
+            <span class="s1">Map</span><span class="s2">&lt;</span><span class="s1">String</span><span class="s2">, </span><span class="s1">String</span><span class="s2">&gt; </span><span class="s1">errors </span><span class="s2">= </span><span class="s0">new </span><span class="s1">HashMap</span><span class="s2">&lt;&gt;();</span>
+            <span class="s1">errors</span><span class="s2">.</span><span class="s1">put</span><span class="s2">(</span><span class="s7">&quot;parseInt&quot;</span><span class="s2">, </span><span class="s7">&quot;Impossible de convertir '&quot; </span><span class="s2">+ </span><span class="s1">input </span><span class="s2">+ </span><span class="s7">&quot;' en nombre.&quot;</span><span class="s2">);</span>
+            <span class="s0">return </span><span class="s1">Result</span><span class="s2">.</span><span class="s1">fail</span><span class="s2">(</span><span class="s1">errors</span><span class="s2">);</span>
+        <span class="s2">}</span>
+    <span class="s2">}</span>
+
+<span class="s2">}</span>
+</pre>
+</body>
+</html>

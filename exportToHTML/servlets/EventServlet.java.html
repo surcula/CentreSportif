@@ -1,0 +1,310 @@
+<html>
+<head>
+<title>EventServlet.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cf8e6d;}
+.s1 { color: #bcbec4;}
+.s2 { color: #bcbec4;}
+.s3 { color: #5f826b; font-style: italic;}
+.s4 { color: #67a37c; font-style: italic;}
+.s5 { color: #6aab73;}
+.s6 { color: #7a7e85;}
+.s7 { color: #2aacb8;}
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+EventServlet.java</font>
+</center></td></tr></table>
+<pre><span class="s0">package </span><span class="s1">servlets</span><span class="s2">;</span>
+
+
+<span class="s0">import </span><span class="s1">Tools</span><span class="s2">.</span><span class="s1">ParamUtils</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">business</span><span class="s2">.</span><span class="s1">EventBusiness</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">controllers</span><span class="s2">.</span><span class="s1">helpers</span><span class="s2">.</span><span class="s1">EventControllerHelper</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">dto</span><span class="s2">.</span><span class="s1">Page</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">entities</span><span class="s2">.</span><span class="s1">Event</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">enums</span><span class="s2">.</span><span class="s1">Scope</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">javafx</span><span class="s2">.</span><span class="s1">beans</span><span class="s2">.</span><span class="s1">binding</span><span class="s2">.</span><span class="s1">IntegerExpression</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">services</span><span class="s2">.</span><span class="s1">EventServiceImpl</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">business</span><span class="s2">.</span><span class="s1">ServletUtils</span><span class="s2">;</span>
+<span class="s0">import static </span><span class="s1">constants</span><span class="s2">.</span><span class="s1">Rooting</span><span class="s2">.*;</span>
+<span class="s0">import </span><span class="s1">javax</span><span class="s2">.</span><span class="s1">persistence</span><span class="s2">.</span><span class="s1">EntityManager</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">javax</span><span class="s2">.</span><span class="s1">servlet</span><span class="s2">.*;</span>
+<span class="s0">import </span><span class="s1">javax</span><span class="s2">.</span><span class="s1">servlet</span><span class="s2">.</span><span class="s1">http</span><span class="s2">.*;</span>
+<span class="s0">import </span><span class="s1">javax</span><span class="s2">.</span><span class="s1">servlet</span><span class="s2">.</span><span class="s1">annotation</span><span class="s2">.*;</span>
+<span class="s0">import </span><span class="s1">java</span><span class="s2">.</span><span class="s1">io</span><span class="s2">.</span><span class="s1">IOException</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">java</span><span class="s2">.</span><span class="s1">nio</span><span class="s2">.</span><span class="s1">file</span><span class="s2">.</span><span class="s1">Files</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">java</span><span class="s2">.</span><span class="s1">nio</span><span class="s2">.</span><span class="s1">file</span><span class="s2">.</span><span class="s1">Path</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">java</span><span class="s2">.</span><span class="s1">nio</span><span class="s2">.</span><span class="s1">file</span><span class="s2">.</span><span class="s1">Paths</span><span class="s2">;</span>
+
+<span class="s0">import </span><span class="s1">dto</span><span class="s2">.</span><span class="s1">EMF</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">Tools</span><span class="s2">.</span><span class="s1">Result</span><span class="s2">;</span>
+
+
+
+<span class="s3">/**</span>
+ <span class="s3">* The class to view the JSP form page and to send the data of the form in DB</span>
+ <span class="s3">* </span><span class="s4">@author </span><span class="s3">Franz</span>
+ <span class="s3">*</span>
+ <span class="s3">*/</span>
+<span class="s1">@MultipartConfig</span>
+<span class="s1">@WebServlet</span><span class="s2">(</span><span class="s1">name </span><span class="s2">= </span><span class="s5">&quot;Event&quot;</span><span class="s2">, </span><span class="s1">value </span><span class="s2">= </span><span class="s5">&quot;/event&quot;</span><span class="s2">)</span>
+<span class="s0">public class </span><span class="s1">EventServlet </span><span class="s0">extends </span><span class="s1">HttpServlet </span><span class="s2">{</span>
+    <span class="s6">// Log4j</span>
+    <span class="s0">private static final </span><span class="s1">org</span><span class="s2">.</span><span class="s1">apache</span><span class="s2">.</span><span class="s1">log4j</span><span class="s2">.</span><span class="s1">Logger log </span><span class="s2">= </span><span class="s1">org</span><span class="s2">.</span><span class="s1">apache</span><span class="s2">.</span><span class="s1">log4j</span><span class="s2">.</span><span class="s1">Logger</span><span class="s2">.</span><span class="s1">getLogger</span><span class="s2">(</span><span class="s1">EventServlet</span><span class="s2">.</span><span class="s0">class</span><span class="s2">);</span>
+
+
+    <span class="s1">@Override</span>
+    <span class="s0">public void </span><span class="s1">init</span><span class="s2">(</span><span class="s1">ServletConfig config</span><span class="s2">) </span><span class="s0">throws </span><span class="s1">ServletException </span><span class="s2">{</span>
+        <span class="s0">super</span><span class="s2">.</span><span class="s1">init</span><span class="s2">(</span><span class="s1">config</span><span class="s2">);</span>
+        <span class="s1">log</span><span class="s2">.</span><span class="s1">info</span><span class="s2">(</span><span class="s5">&quot;&gt;&gt;&gt; [EventServlet] Initialisation de la servlet&quot;</span><span class="s2">);</span>
+    <span class="s2">}</span>
+    <span class="s3">/**</span>
+     <span class="s3">* Variable for the entity manager</span>
+     <span class="s3">*/</span>
+    <span class="s0">private </span><span class="s1">EntityManager em</span><span class="s2">;</span>
+    <span class="s3">/**</span>
+     <span class="s3">* variable to create the service for event</span>
+     <span class="s3">*/</span>
+    <span class="s0">private </span><span class="s1">EventServiceImpl eventService</span><span class="s2">;</span>
+    <span class="s3">/**</span>
+     <span class="s3">* variable to create the business for event</span>
+     <span class="s3">*/</span>
+    <span class="s0">private </span><span class="s1">EventBusiness eventBusiness</span><span class="s2">;</span>
+    <span class="s6">//private EntityManagerFactory entityManagerFactory;</span>
+    <span class="s3">/**</span>
+     <span class="s3">* Method to view the form</span>
+     <span class="s3">* </span><span class="s4">@param </span><span class="s3">request</span>
+     <span class="s3">* </span><span class="s4">@param </span><span class="s3">response</span>
+     <span class="s3">* </span><span class="s4">@throws </span><span class="s3">ServletException</span>
+     <span class="s3">* </span><span class="s4">@throws </span><span class="s3">IOException</span>
+     <span class="s3">*/</span>
+    <span class="s1">@Override</span>
+    <span class="s0">protected void </span><span class="s1">doGet</span><span class="s2">(</span><span class="s1">HttpServletRequest request</span><span class="s2">, </span><span class="s1">HttpServletResponse response</span><span class="s2">) </span><span class="s0">throws </span><span class="s1">ServletException</span><span class="s2">, </span><span class="s1">IOException </span><span class="s2">{</span>
+        <span class="s1">HttpSession session </span><span class="s2">= </span><span class="s1">request</span><span class="s2">.</span><span class="s1">getSession</span><span class="s2">(</span><span class="s0">false</span><span class="s2">); </span><span class="s6">//Retourne une session si existante</span>
+        <span class="s1">String form </span><span class="s2">= </span><span class="s1">request</span><span class="s2">.</span><span class="s1">getParameter</span><span class="s2">(</span><span class="s5">&quot;form&quot;</span><span class="s2">);</span>
+        <span class="s1">String editForm </span><span class="s2">= </span><span class="s1">request</span><span class="s2">.</span><span class="s1">getParameter</span><span class="s2">(</span><span class="s5">&quot;editForm&quot;</span><span class="s2">);</span>
+        <span class="s1">String role </span><span class="s2">= (</span><span class="s1">session </span><span class="s2">!= </span><span class="s0">null </span><span class="s2">&amp;&amp; </span><span class="s1">session</span><span class="s2">.</span><span class="s1">getAttribute</span><span class="s2">(</span><span class="s5">&quot;role&quot;</span><span class="s2">) != </span><span class="s0">null</span><span class="s2">)</span>
+              <span class="s2">? </span><span class="s1">session</span><span class="s2">.</span><span class="s1">getAttribute</span><span class="s2">(</span><span class="s5">&quot;role&quot;</span><span class="s2">).</span><span class="s1">toString</span><span class="s2">()</span>
+                <span class="s2">: </span><span class="s0">null</span><span class="s2">;</span>
+        <span class="s0">boolean </span><span class="s1">fullAccess </span><span class="s2">= </span><span class="s1">ServletUtils</span><span class="s2">.</span><span class="s1">isFullAuthorized</span><span class="s2">(</span><span class="s1">role</span><span class="s2">);</span>
+        <span class="s6">//--- Formulaire de création ---</span>
+        <span class="s0">if </span><span class="s2">(</span><span class="s1">form </span><span class="s2">!= </span><span class="s0">null</span><span class="s2">) {</span>
+            <span class="s0">if </span><span class="s2">(!</span><span class="s1">fullAccess</span><span class="s2">) {</span>
+                <span class="s1">ServletUtils</span><span class="s2">.</span><span class="s1">redirectNoAuthorized</span><span class="s2">(</span><span class="s1">request</span><span class="s2">, </span><span class="s1">response</span><span class="s2">);</span>
+                <span class="s0">return</span><span class="s2">;</span>
+            <span class="s2">}</span>
+
+            <span class="s1">EventControllerHelper</span><span class="s2">.</span><span class="s1">handleFormDisplay</span><span class="s2">(</span><span class="s1">request</span><span class="s2">, </span><span class="s1">response</span><span class="s2">);</span>
+            <span class="s0">return</span><span class="s2">;</span>
+        <span class="s2">}</span>
+
+        <span class="s6">//--- Formulaire d'édition ---</span>
+        <span class="s0">if </span><span class="s2">(</span><span class="s1">editForm </span><span class="s2">!= </span><span class="s0">null</span><span class="s2">) {</span>
+            <span class="s0">if </span><span class="s2">(!</span><span class="s1">fullAccess</span><span class="s2">) {</span>
+                <span class="s1">ServletUtils</span><span class="s2">.</span><span class="s1">redirectNoAuthorized</span><span class="s2">(</span><span class="s1">request</span><span class="s2">, </span><span class="s1">response</span><span class="s2">);</span>
+                <span class="s0">return</span><span class="s2">;</span>
+            <span class="s2">}</span>
+            <span class="s1">EntityManager em </span><span class="s2">= </span><span class="s1">EMF</span><span class="s2">.</span><span class="s1">getEM</span><span class="s2">();</span>
+            <span class="s0">try </span><span class="s2">{</span>
+                <span class="s1">EventServiceImpl eventService </span><span class="s2">= </span><span class="s0">new </span><span class="s1">EventServiceImpl</span><span class="s2">(</span><span class="s1">em</span><span class="s2">);</span>
+                <span class="s1">Result</span><span class="s2">&lt;</span><span class="s1">Event</span><span class="s2">&gt; </span><span class="s1">result </span><span class="s2">= </span><span class="s1">eventService</span><span class="s2">.</span><span class="s1">getOneById</span><span class="s2">(</span><span class="s1">Integer</span><span class="s2">.</span><span class="s1">parseInt</span><span class="s2">(</span><span class="s1">editForm</span><span class="s2">));</span>
+                <span class="s0">if </span><span class="s2">(</span><span class="s1">result</span><span class="s2">.</span><span class="s1">isSuccess</span><span class="s2">()) {</span>
+                    <span class="s1">EventControllerHelper</span><span class="s2">.</span><span class="s1">handleEditForm</span><span class="s2">(</span><span class="s1">request</span><span class="s2">, </span><span class="s1">response</span><span class="s2">, </span><span class="s1">result</span><span class="s2">.</span><span class="s1">getData</span><span class="s2">());</span>
+                <span class="s2">} </span><span class="s0">else </span><span class="s2">{</span>
+                    <span class="s1">ServletUtils</span><span class="s2">.</span><span class="s1">forwardWithErrors</span><span class="s2">(</span><span class="s1">request</span><span class="s2">, </span><span class="s1">response</span><span class="s2">, </span><span class="s1">result</span><span class="s2">.</span><span class="s1">getErrors</span><span class="s2">(), </span><span class="s1">EVENT_FORM_JSP</span><span class="s2">, </span><span class="s1">TEMPLATE</span><span class="s2">);</span>
+                <span class="s2">}</span>
+            <span class="s2">} </span><span class="s0">catch </span><span class="s2">(</span><span class="s1">Exception e</span><span class="s2">) {</span>
+                <span class="s1">log</span><span class="s2">.</span><span class="s1">error</span><span class="s2">(</span><span class="s1">e</span><span class="s2">.</span><span class="s1">getMessage</span><span class="s2">());</span>
+                <span class="s1">ServletUtils</span><span class="s2">.</span><span class="s1">forwardWithError</span><span class="s2">(</span><span class="s1">request</span><span class="s2">, </span><span class="s1">response</span><span class="s2">, </span><span class="s1">e</span><span class="s2">.</span><span class="s1">getMessage</span><span class="s2">(), </span><span class="s1">EVENT_JSP</span><span class="s2">, </span><span class="s1">TEMPLATE</span><span class="s2">);</span>
+            <span class="s2">} </span><span class="s0">finally </span><span class="s2">{</span>
+                <span class="s1">em</span><span class="s2">.</span><span class="s1">close</span><span class="s2">();</span>
+            <span class="s2">}</span>
+            <span class="s0">return</span><span class="s2">;</span>
+        <span class="s2">}</span>
+        <span class="s6">// --- Liste paginée ---</span>
+        <span class="s1">EntityManager em </span><span class="s2">= </span><span class="s1">EMF</span><span class="s2">.</span><span class="s1">getEM</span><span class="s2">();</span>
+        <span class="s0">try </span><span class="s2">{</span>
+            <span class="s1">EventServiceImpl eventService </span><span class="s2">= </span><span class="s0">new </span><span class="s1">EventServiceImpl</span><span class="s2">(</span><span class="s1">em</span><span class="s2">);</span>
+            <span class="s1">EventBusiness eventBusiness </span><span class="s2">= </span><span class="s0">new </span><span class="s1">EventBusiness</span><span class="s2">(</span><span class="s1">eventService</span><span class="s2">, </span><span class="s1">em</span><span class="s2">);</span>
+
+            <span class="s1">Result</span><span class="s2">&lt;</span><span class="s1">Integer</span><span class="s2">&gt; </span><span class="s1">pageRes </span><span class="s2">= </span><span class="s1">ParamUtils</span><span class="s2">.</span><span class="s1">stringToInteger</span><span class="s2">(</span><span class="s1">request</span><span class="s2">.</span><span class="s1">getParameter</span><span class="s2">(</span><span class="s5">&quot;page&quot;</span><span class="s2">));</span>
+            <span class="s0">int </span><span class="s1">page </span><span class="s2">= </span><span class="s1">pageRes</span><span class="s2">.</span><span class="s1">isSuccess</span><span class="s2">() ? </span><span class="s1">Math</span><span class="s2">.</span><span class="s1">max</span><span class="s2">(</span><span class="s7">1</span><span class="s2">, </span><span class="s1">pageRes</span><span class="s2">.</span><span class="s1">getData</span><span class="s2">()) : </span><span class="s7">1</span><span class="s2">;</span>
+
+            <span class="s1">Result</span><span class="s2">&lt;</span><span class="s1">Integer</span><span class="s2">&gt; </span><span class="s1">sizeRes </span><span class="s2">= </span><span class="s1">ParamUtils</span><span class="s2">.</span><span class="s1">stringToInteger</span><span class="s2">(</span><span class="s1">request</span><span class="s2">.</span><span class="s1">getParameter</span><span class="s2">(</span><span class="s5">&quot;size&quot;</span><span class="s2">));</span>
+            <span class="s0">int </span><span class="s1">size </span><span class="s2">= </span><span class="s1">sizeRes</span><span class="s2">.</span><span class="s1">isSuccess</span><span class="s2">() ? </span><span class="s1">Math</span><span class="s2">.</span><span class="s1">min</span><span class="s2">(</span><span class="s7">10</span><span class="s2">, </span><span class="s1">Math</span><span class="s2">.</span><span class="s1">max</span><span class="s2">(</span><span class="s7">1</span><span class="s2">, </span><span class="s1">sizeRes</span><span class="s2">.</span><span class="s1">getData</span><span class="s2">())) : </span><span class="s7">10</span><span class="s2">;</span>
+
+            <span class="s1">Result</span><span class="s2">&lt;</span><span class="s1">Page</span><span class="s2">&lt;</span><span class="s1">Event</span><span class="s2">&gt;&gt; </span><span class="s1">result </span><span class="s2">= </span><span class="s1">fullAccess</span>
+                    <span class="s2">? </span><span class="s1">eventBusiness</span><span class="s2">.</span><span class="s1">getAllEventsPaged</span><span class="s2">(</span><span class="s1">page</span><span class="s2">, </span><span class="s1">size</span><span class="s2">, </span><span class="s1">Scope</span><span class="s2">.</span><span class="s1">ALL</span><span class="s2">)</span>
+                    <span class="s2">: </span><span class="s1">eventBusiness</span><span class="s2">.</span><span class="s1">getAllEventsPaged</span><span class="s2">(</span><span class="s1">page</span><span class="s2">, </span><span class="s1">size</span><span class="s2">, </span><span class="s1">Scope</span><span class="s2">.</span><span class="s1">ACTIVE</span><span class="s2">);</span>
+
+            <span class="s0">if </span><span class="s2">(</span><span class="s1">result</span><span class="s2">.</span><span class="s1">isSuccess</span><span class="s2">()) {</span>
+                <span class="s1">Page</span><span class="s2">&lt;</span><span class="s1">Event</span><span class="s2">&gt; </span><span class="s1">p </span><span class="s2">= </span><span class="s1">result</span><span class="s2">.</span><span class="s1">getData</span><span class="s2">();</span>
+                <span class="s1">request</span><span class="s2">.</span><span class="s1">setAttribute</span><span class="s2">(</span><span class="s5">&quot;page&quot;</span><span class="s2">, </span><span class="s1">p</span><span class="s2">.</span><span class="s1">getPage</span><span class="s2">());</span>
+                <span class="s1">request</span><span class="s2">.</span><span class="s1">setAttribute</span><span class="s2">(</span><span class="s5">&quot;size&quot;</span><span class="s2">, </span><span class="s1">p</span><span class="s2">.</span><span class="s1">getSize</span><span class="s2">());</span>
+                <span class="s1">request</span><span class="s2">.</span><span class="s1">setAttribute</span><span class="s2">(</span><span class="s5">&quot;totalPages&quot;</span><span class="s2">, </span><span class="s1">p</span><span class="s2">.</span><span class="s1">getTotalPages</span><span class="s2">());</span>
+                <span class="s1">request</span><span class="s2">.</span><span class="s1">setAttribute</span><span class="s2">(</span><span class="s5">&quot;totalElements&quot;</span><span class="s2">, </span><span class="s1">p</span><span class="s2">.</span><span class="s1">getTotalElements</span><span class="s2">());</span>
+                <span class="s1">request</span><span class="s2">.</span><span class="s1">setAttribute</span><span class="s2">(</span><span class="s5">&quot;fullAccess&quot;</span><span class="s2">, </span><span class="s1">fullAccess</span><span class="s2">);</span>
+                <span class="s1">EventControllerHelper</span><span class="s2">.</span><span class="s1">handleList</span><span class="s2">(</span><span class="s1">request</span><span class="s2">, </span><span class="s1">response</span><span class="s2">, </span><span class="s1">p</span><span class="s2">.</span><span class="s1">getContent</span><span class="s2">());</span>
+                <span class="s0">return</span><span class="s2">;</span>
+
+            <span class="s2">} </span><span class="s0">else </span><span class="s2">{</span>
+                <span class="s1">ServletUtils</span><span class="s2">.</span><span class="s1">forwardWithErrors</span><span class="s2">(</span><span class="s1">request</span><span class="s2">, </span><span class="s1">response</span><span class="s2">, </span><span class="s1">result</span><span class="s2">.</span><span class="s1">getErrors</span><span class="s2">(), </span><span class="s1">EVENT_JSP</span><span class="s2">, </span><span class="s1">TEMPLATE</span><span class="s2">);</span>
+            <span class="s2">}</span>
+        <span class="s2">} </span><span class="s0">catch </span><span class="s2">(</span><span class="s1">Exception e</span><span class="s2">) {</span>
+            <span class="s1">log</span><span class="s2">.</span><span class="s1">error</span><span class="s2">(</span><span class="s5">&quot;Erreur doGet events&quot;</span><span class="s2">, </span><span class="s1">e</span><span class="s2">); </span><span class="s6">// &lt;= avec la stack trace</span>
+            <span class="s1">ServletUtils</span><span class="s2">.</span><span class="s1">forwardWithError</span><span class="s2">(</span><span class="s1">request</span><span class="s2">, </span><span class="s1">response</span><span class="s2">, </span><span class="s1">e</span><span class="s2">.</span><span class="s1">getMessage</span><span class="s2">(), </span><span class="s1">EVENT_JSP</span><span class="s2">, </span><span class="s1">TEMPLATE</span><span class="s2">);</span>
+        <span class="s2">} </span><span class="s0">finally </span><span class="s2">{</span>
+            <span class="s1">em</span><span class="s2">.</span><span class="s1">close</span><span class="s2">();</span>
+        <span class="s2">}</span>
+    <span class="s2">}</span>
+    <span class="s3">/**</span>
+     <span class="s3">* The method to send data in DB</span>
+     <span class="s3">* </span><span class="s4">@param </span><span class="s3">request</span>
+     <span class="s3">* </span><span class="s4">@param </span><span class="s3">response</span>
+     <span class="s3">* </span><span class="s4">@throws </span><span class="s3">ServletException</span>
+     <span class="s3">* </span><span class="s4">@throws </span><span class="s3">IOException</span>
+     <span class="s3">* </span><span class="s4">@return </span><span class="s3">request</span>
+     <span class="s3">* </span><span class="s4">@return </span><span class="s3">response</span>
+     <span class="s3">*/</span>
+    <span class="s1">@Override</span>
+    <span class="s0">protected void </span><span class="s1">doPost</span><span class="s2">(</span><span class="s1">HttpServletRequest request</span><span class="s2">, </span><span class="s1">HttpServletResponse response</span><span class="s2">) </span><span class="s0">throws </span><span class="s1">ServletException</span><span class="s2">, </span><span class="s1">IOException </span><span class="s2">{</span>
+        <span class="s1">em </span><span class="s2">= </span><span class="s1">EMF</span><span class="s2">.</span><span class="s1">getEM</span><span class="s2">();</span>
+        <span class="s1">eventService </span><span class="s2">= </span><span class="s0">new </span><span class="s1">EventServiceImpl</span><span class="s2">(</span><span class="s1">em</span><span class="s2">);</span>
+        <span class="s1">String eventIdStr </span><span class="s2">= </span><span class="s1">request</span><span class="s2">.</span><span class="s1">getParameter</span><span class="s2">(</span><span class="s5">&quot;eventId&quot;</span><span class="s2">);</span>
+        <span class="s0">boolean </span><span class="s1">isEdit </span><span class="s2">= (</span><span class="s1">eventIdStr </span><span class="s2">!= </span><span class="s0">null </span><span class="s2">&amp;&amp; !</span><span class="s1">eventIdStr</span><span class="s2">.</span><span class="s1">isEmpty</span><span class="s2">());</span>
+        <span class="s1">log</span><span class="s2">.</span><span class="s1">info</span><span class="s2">(</span><span class="s5">&quot;doPost invoked - eventIdStr = &quot; </span><span class="s2">+ </span><span class="s1">request</span><span class="s2">.</span><span class="s1">getParameter</span><span class="s2">(</span><span class="s5">&quot;eventId&quot;</span><span class="s2">));</span>
+        <span class="s6">//Changer le statut de Terminé vers En cours et supprimer mettre le statut de En cours vers terminé</span>
+        <span class="s1">String action </span><span class="s2">= </span><span class="s1">request</span><span class="s2">.</span><span class="s1">getParameter</span><span class="s2">(</span><span class="s5">&quot;action&quot;</span><span class="s2">);</span>
+        <span class="s0">if </span><span class="s2">(</span><span class="s1">isEdit </span><span class="s2">&amp;&amp; </span><span class="s1">action </span><span class="s2">!= </span><span class="s0">null </span><span class="s2">&amp;&amp; !</span><span class="s1">action</span><span class="s2">.</span><span class="s1">isEmpty</span><span class="s2">()) {</span>
+            <span class="s0">try </span><span class="s2">{</span>
+                <span class="s0">int </span><span class="s1">eventId </span><span class="s2">= </span><span class="s1">Integer</span><span class="s2">.</span><span class="s1">parseInt</span><span class="s2">(</span><span class="s1">eventIdStr</span><span class="s2">);</span>
+                <span class="s1">Result</span><span class="s2">&lt;</span><span class="s1">Event</span><span class="s2">&gt; </span><span class="s1">existingEventRest </span><span class="s2">= </span><span class="s1">eventService</span><span class="s2">.</span><span class="s1">getOneById</span><span class="s2">(</span><span class="s1">eventId</span><span class="s2">);</span>
+
+                <span class="s0">if</span><span class="s2">(!</span><span class="s1">existingEventRest</span><span class="s2">.</span><span class="s1">isSuccess</span><span class="s2">()) {</span>
+                    <span class="s1">ServletUtils</span><span class="s2">.</span><span class="s1">redirectWithMessage</span><span class="s2">(</span><span class="s1">request</span><span class="s2">, </span><span class="s1">response</span><span class="s2">, </span><span class="s5">&quot;Evènement introuvable pour la mise à jour du statut.&quot;</span><span class="s2">, </span><span class="s1">EVENT_JSP</span><span class="s2">, </span><span class="s1">TEMPLATE</span><span class="s2">);</span>
+                    <span class="s0">return</span><span class="s2">;</span>
+                <span class="s2">}</span>
+                <span class="s1">Event eventToUpdate </span><span class="s2">= </span><span class="s1">existingEventRest</span><span class="s2">.</span><span class="s1">getData</span><span class="s2">();</span>
+
+                <span class="s1">em</span><span class="s2">.</span><span class="s1">getTransaction</span><span class="s2">().</span><span class="s1">begin</span><span class="s2">();;</span>
+
+                <span class="s1">String successMessage </span><span class="s2">= </span><span class="s5">&quot;&quot;</span><span class="s2">;</span>
+                <span class="s0">if </span><span class="s2">(</span><span class="s5">&quot;delete&quot;</span><span class="s2">.</span><span class="s1">equals</span><span class="s2">(</span><span class="s1">action</span><span class="s2">)) {</span>
+                    <span class="s6">//utilisation de delete du EventServiceImpl</span>
+                    <span class="s1">eventService</span><span class="s2">.</span><span class="s1">delete</span><span class="s2">(</span><span class="s1">eventToUpdate</span><span class="s2">);</span>
+                    <span class="s1">successMessage </span><span class="s2">= </span><span class="s5">&quot;Evènènement marqué comme terminé avec succès.&quot;</span><span class="s2">;</span>
+                <span class="s2">} </span><span class="s0">else if </span><span class="s2">(</span><span class="s5">&quot;activer&quot;</span><span class="s2">.</span><span class="s1">equals</span><span class="s2">(</span><span class="s1">action</span><span class="s2">)) {</span>
+                    <span class="s6">//utilisation de update du EventServiceImpl</span>
+                    <span class="s1">eventToUpdate</span><span class="s2">.</span><span class="s1">setActive</span><span class="s2">(</span><span class="s0">true</span><span class="s2">);;</span>
+                    <span class="s1">eventService</span><span class="s2">.</span><span class="s1">update</span><span class="s2">(</span><span class="s1">eventToUpdate</span><span class="s2">);</span>
+                    <span class="s1">successMessage </span><span class="s2">= </span><span class="s5">&quot;Evènement remis En cours avec succès.&quot;</span><span class="s2">;</span>
+                <span class="s2">} </span><span class="s0">else </span><span class="s2">{</span>
+                    <span class="s6">//opération inadéquate</span>
+                    <span class="s1">em</span><span class="s2">.</span><span class="s1">getTransaction</span><span class="s2">().</span><span class="s1">rollback</span><span class="s2">();</span>
+                    <span class="s1">ServletUtils</span><span class="s2">.</span><span class="s1">redirectWithMessage</span><span class="s2">(</span><span class="s1">request</span><span class="s2">, </span><span class="s1">response</span><span class="s2">, </span><span class="s5">&quot;Action de statut non reconnue.&quot;</span><span class="s2">, </span><span class="s1">EVENT_JSP</span><span class="s2">, </span><span class="s1">TEMPLATE </span><span class="s2">);</span>
+                    <span class="s0">return</span><span class="s2">;</span>
+                <span class="s2">}</span>
+                <span class="s1">em</span><span class="s2">.</span><span class="s1">getTransaction</span><span class="s2">().</span><span class="s1">commit</span><span class="s2">();</span>
+
+                <span class="s1">ServletUtils</span><span class="s2">.</span><span class="s1">redirectWithMessage</span><span class="s2">(</span><span class="s1">request</span><span class="s2">, </span><span class="s1">response</span><span class="s2">, </span><span class="s1">successMessage</span><span class="s2">, </span><span class="s5">&quot;success&quot;</span><span class="s2">, </span><span class="s5">&quot;/event&quot;</span><span class="s2">);</span>
+                <span class="s0">return</span><span class="s2">;</span>
+
+            <span class="s2">}</span><span class="s0">catch </span><span class="s2">(</span><span class="s1">Exception e</span><span class="s2">) {</span>
+                <span class="s0">if </span><span class="s2">(</span><span class="s1">em</span><span class="s2">.</span><span class="s1">getTransaction</span><span class="s2">().</span><span class="s1">isActive</span><span class="s2">()) </span><span class="s1">em</span><span class="s2">.</span><span class="s1">getTransaction</span><span class="s2">().</span><span class="s1">rollback</span><span class="s2">();</span>
+                <span class="s1">ServletUtils</span><span class="s2">.</span><span class="s1">redirectWithMessage</span><span class="s2">(</span><span class="s1">request</span><span class="s2">, </span><span class="s1">response</span><span class="s2">, </span><span class="s5">&quot;Erreur lors de la mise à jour du statut : &quot; </span><span class="s2">+  </span><span class="s1">e</span><span class="s2">.</span><span class="s1">getMessage</span><span class="s2">(), </span><span class="s1">EVENT_JSP</span><span class="s2">, </span><span class="s1">TEMPLATE</span><span class="s2">);</span>
+                <span class="s0">return</span><span class="s2">;</span>
+            <span class="s2">} </span><span class="s0">finally </span><span class="s2">{</span>
+                <span class="s0">if</span><span class="s2">(</span><span class="s1">em </span><span class="s2">!= </span><span class="s0">null</span><span class="s2">) </span><span class="s1">em</span><span class="s2">.</span><span class="s1">close</span><span class="s2">();</span>
+            <span class="s2">}</span>
+        <span class="s2">}</span>
+
+        <span class="s6">// initialisation de l'entité Event</span>
+        <span class="s1">Event event</span><span class="s2">;</span>
+        <span class="s1">String currentPicture </span><span class="s2">= </span><span class="s0">null</span><span class="s2">;</span>
+
+
+        <span class="s0">try </span><span class="s2">{</span>
+            <span class="s0">if </span><span class="s2">(</span><span class="s1">isEdit</span><span class="s2">) {</span>
+                <span class="s6">//MODIFICATION</span>
+                <span class="s0">int </span><span class="s1">eventId </span><span class="s2">= </span><span class="s1">Integer</span><span class="s2">.</span><span class="s1">parseInt</span><span class="s2">(</span><span class="s1">eventIdStr</span><span class="s2">);</span>
+                <span class="s1">Result</span><span class="s2">&lt;</span><span class="s1">Event</span><span class="s2">&gt; </span><span class="s1">existingEventRes </span><span class="s2">= </span><span class="s1">eventService</span><span class="s2">.</span><span class="s1">getOneById</span><span class="s2">(</span><span class="s1">eventId</span><span class="s2">);</span>
+                <span class="s0">if</span><span class="s2">(!</span><span class="s1">existingEventRes</span><span class="s2">.</span><span class="s1">isSuccess</span><span class="s2">()) {</span>
+                    <span class="s1">ServletUtils</span><span class="s2">.</span><span class="s1">forwardWithError</span><span class="s2">(</span><span class="s1">request</span><span class="s2">, </span><span class="s1">response</span><span class="s2">, </span><span class="s5">&quot;Evènement introuvable.&quot;</span><span class="s2">, </span><span class="s1">EVENT_FORM_JSP</span><span class="s2">, </span><span class="s1">TEMPLATE</span><span class="s2">);</span>
+                    <span class="s0">return</span><span class="s2">;</span>
+                <span class="s2">}</span>
+                <span class="s1">event </span><span class="s2">= </span><span class="s1">existingEventRes</span><span class="s2">.</span><span class="s1">getData</span><span class="s2">();</span>
+                <span class="s1">currentPicture </span><span class="s2">= </span><span class="s1">event</span><span class="s2">.</span><span class="s1">getPicture</span><span class="s2">();</span>
+            <span class="s2">}</span>
+            <span class="s0">else </span><span class="s2">{</span>
+                <span class="s6">//CREATION</span>
+                <span class="s1">event </span><span class="s2">= </span><span class="s0">new </span><span class="s1">Event</span><span class="s2">();</span>
+            <span class="s2">}</span>
+            <span class="s6">//traitement de récupération de l'image</span>
+            <span class="s1">Part imagePart </span><span class="s2">= </span><span class="s1">request</span><span class="s2">.</span><span class="s1">getPart</span><span class="s2">(</span><span class="s5">&quot;image&quot;</span><span class="s2">);</span>
+            <span class="s1">String imageName </span><span class="s2">= </span><span class="s0">null</span><span class="s2">;</span>
+            <span class="s0">if</span><span class="s2">(</span><span class="s1">imagePart </span><span class="s2">!= </span><span class="s0">null </span><span class="s2">&amp;&amp; </span><span class="s1">imagePart</span><span class="s2">.</span><span class="s1">getSize</span><span class="s2">() &gt; </span><span class="s7">0</span><span class="s2">) {</span>
+                <span class="s6">//Récupération du nom de l'image</span>
+                <span class="s1">String fileName </span><span class="s2">= </span><span class="s1">Paths</span><span class="s2">.</span><span class="s1">get</span><span class="s2">(</span><span class="s1">imagePart</span><span class="s2">.</span><span class="s1">getSubmittedFileName</span><span class="s2">()).</span><span class="s1">getFileName</span><span class="s2">().</span><span class="s1">toString</span><span class="s2">();</span>
+                <span class="s6">//Création du nom unique pour l'image</span>
+                <span class="s1">String uniqueFileName </span><span class="s2">= </span><span class="s1">System</span><span class="s2">.</span><span class="s1">currentTimeMillis</span><span class="s2">() + </span><span class="s5">&quot;_&quot; </span><span class="s2">+ </span><span class="s1">fileName</span><span class="s2">;</span>
+                <span class="s6">//Configuration du dossier de destination de l'image</span>
+                <span class="s1">String uploadDirectory </span><span class="s2">= </span><span class="s1">getServletContext</span><span class="s2">().</span><span class="s1">getRealPath</span><span class="s2">(</span><span class="s5">&quot;/webapp/assets/img/uploads&quot;</span><span class="s2">);</span>
+                <span class="s6">//Création du dossier s'il n'existe pas</span>
+                <span class="s1">Files</span><span class="s2">.</span><span class="s1">createDirectories</span><span class="s2">(</span><span class="s1">Paths</span><span class="s2">.</span><span class="s1">get</span><span class="s2">(</span><span class="s1">uploadDirectory</span><span class="s2">));</span>
+                <span class="s6">//Chemin complet pour l'image</span>
+                <span class="s1">Path filePath </span><span class="s2">= </span><span class="s1">Paths</span><span class="s2">.</span><span class="s1">get</span><span class="s2">(</span><span class="s1">uploadDirectory</span><span class="s2">, </span><span class="s1">uniqueFileName</span><span class="s2">);</span>
+                <span class="s6">//sauvegarde du fichier</span>
+                <span class="s1">imagePart</span><span class="s2">.</span><span class="s1">write</span><span class="s2">(</span><span class="s1">filePath</span><span class="s2">.</span><span class="s1">toAbsolutePath</span><span class="s2">().</span><span class="s1">toString</span><span class="s2">());</span>
+                <span class="s1">imageName </span><span class="s2">= </span><span class="s1">uniqueFileName</span><span class="s2">;</span>
+            <span class="s2">}</span>
+            <span class="s6">//Validation des données</span>
+            <span class="s1">Result</span><span class="s2">&lt;</span><span class="s1">Event</span><span class="s2">&gt; </span><span class="s1">baseresult </span><span class="s2">= </span><span class="s1">EventBusiness</span><span class="s2">.</span><span class="s1">initCreateForm</span><span class="s2">(</span>
+                    <span class="s1">request</span><span class="s2">.</span><span class="s1">getParameter</span><span class="s2">(</span><span class="s5">&quot;eventName&quot;</span><span class="s2">),</span>
+                    <span class="s1">request</span><span class="s2">.</span><span class="s1">getParameter</span><span class="s2">(</span><span class="s5">&quot;startDateHour&quot;</span><span class="s2">),</span>
+                    <span class="s1">request</span><span class="s2">.</span><span class="s1">getParameter</span><span class="s2">(</span><span class="s5">&quot;endDateHour&quot;</span><span class="s2">),</span>
+                    <span class="s1">request</span><span class="s2">.</span><span class="s1">getParameter</span><span class="s2">(</span><span class="s5">&quot;description&quot;</span><span class="s2">),</span>
+                    <span class="s1">imageName</span><span class="s2">,</span>
+                    <span class="s1">request</span><span class="s2">.</span><span class="s1">getParameter</span><span class="s2">(</span><span class="s5">&quot;status&quot;</span><span class="s2">)</span>
+            <span class="s2">);</span>
+            <span class="s0">if</span><span class="s2">(</span><span class="s1">baseresult</span><span class="s2">.</span><span class="s1">isSuccess</span><span class="s2">()) {</span>
+                <span class="s1">Event filledEvent </span><span class="s2">= </span><span class="s1">baseresult</span><span class="s2">.</span><span class="s1">getData</span><span class="s2">();</span>
+
+                <span class="s1">em</span><span class="s2">.</span><span class="s1">getTransaction</span><span class="s2">().</span><span class="s1">begin</span><span class="s2">();</span>
+                <span class="s0">if</span><span class="s2">(</span><span class="s1">isEdit</span><span class="s2">) {</span>
+                    <span class="s1">event</span><span class="s2">.</span><span class="s1">setEventName</span><span class="s2">(</span><span class="s1">filledEvent</span><span class="s2">.</span><span class="s1">getEventName</span><span class="s2">());</span>
+                    <span class="s1">event</span><span class="s2">.</span><span class="s1">setBeginDateHour</span><span class="s2">(</span><span class="s1">filledEvent</span><span class="s2">.</span><span class="s1">getBeginDateHour</span><span class="s2">());</span>
+                    <span class="s1">event</span><span class="s2">.</span><span class="s1">setEndDateHour</span><span class="s2">(</span><span class="s1">filledEvent</span><span class="s2">.</span><span class="s1">getEndDateHour</span><span class="s2">());</span>
+                    <span class="s1">event</span><span class="s2">.</span><span class="s1">setInfo</span><span class="s2">(</span><span class="s1">filledEvent</span><span class="s2">.</span><span class="s1">getInfo</span><span class="s2">());</span>
+                    <span class="s6">//pour ne pas devoir changer l'image et pouvoir valider le formulaire sans devoir insérer une nouvelle image</span>
+                    <span class="s0">if</span><span class="s2">(</span><span class="s1">filledEvent</span><span class="s2">.</span><span class="s1">getPicture</span><span class="s2">() !=</span><span class="s0">null </span><span class="s2">&amp;&amp; !</span><span class="s1">filledEvent</span><span class="s2">.</span><span class="s1">getPicture</span><span class="s2">().</span><span class="s1">isEmpty</span><span class="s2">()){</span>
+                        <span class="s1">event</span><span class="s2">.</span><span class="s1">setPicture</span><span class="s2">(</span><span class="s1">filledEvent</span><span class="s2">.</span><span class="s1">getPicture</span><span class="s2">());</span>
+                    <span class="s2">}</span>
+                    <span class="s1">event</span><span class="s2">.</span><span class="s1">setPicture</span><span class="s2">(</span><span class="s1">filledEvent</span><span class="s2">.</span><span class="s1">getPicture</span><span class="s2">());</span>
+                    <span class="s1">event</span><span class="s2">.</span><span class="s1">setActive</span><span class="s2">(</span><span class="s1">filledEvent</span><span class="s2">.</span><span class="s1">isActive</span><span class="s2">());</span>
+                    <span class="s1">eventService</span><span class="s2">.</span><span class="s1">update</span><span class="s2">(</span><span class="s1">event</span><span class="s2">);</span>
+                <span class="s2">} </span><span class="s0">else </span><span class="s2">{</span>
+                    <span class="s1">eventService</span><span class="s2">.</span><span class="s1">create</span><span class="s2">(</span><span class="s1">filledEvent</span><span class="s2">);</span>
+                <span class="s2">}</span>
+                <span class="s1">em</span><span class="s2">.</span><span class="s1">getTransaction</span><span class="s2">().</span><span class="s1">commit</span><span class="s2">();</span>
+
+                <span class="s1">ServletUtils</span><span class="s2">.</span><span class="s1">redirectWithMessage</span><span class="s2">(</span><span class="s1">request</span><span class="s2">, </span><span class="s1">response</span><span class="s2">, </span><span class="s1">isEdit </span><span class="s2">? </span><span class="s5">&quot;Evènement modifié avec succès&quot; </span><span class="s2">: </span><span class="s5">&quot;Evènement créé avec succès&quot;</span><span class="s2">,</span>
+                        <span class="s5">&quot;success&quot;</span><span class="s2">, </span><span class="s5">&quot;/event&quot;</span><span class="s2">);</span>
+            <span class="s2">} </span><span class="s0">else </span><span class="s2">{</span>
+                <span class="s1">request</span><span class="s2">.</span><span class="s1">setAttribute</span><span class="s2">(</span><span class="s5">&quot;event&quot;</span><span class="s2">, </span><span class="s1">isEdit </span><span class="s2">? </span><span class="s1">event </span><span class="s2">: </span><span class="s1">baseresult</span><span class="s2">.</span><span class="s1">getData</span><span class="s2">());</span>
+                <span class="s1">ServletUtils</span><span class="s2">.</span><span class="s1">forwardWithErrors</span><span class="s2">(</span><span class="s1">request</span><span class="s2">, </span><span class="s1">response</span><span class="s2">, </span><span class="s1">baseresult</span><span class="s2">.</span><span class="s1">getErrors</span><span class="s2">(), </span><span class="s1">EVENT_FORM_JSP</span><span class="s2">, </span><span class="s1">TEMPLATE</span><span class="s2">);</span>
+            <span class="s2">}</span>
+        <span class="s2">} </span><span class="s0">catch </span><span class="s2">(</span><span class="s1">Exception e</span><span class="s2">) {</span>
+            <span class="s0">if </span><span class="s2">(</span><span class="s1">em</span><span class="s2">.</span><span class="s1">getTransaction</span><span class="s2">().</span><span class="s1">isActive</span><span class="s2">()) </span><span class="s1">em</span><span class="s2">.</span><span class="s1">getTransaction</span><span class="s2">().</span><span class="s1">rollback</span><span class="s2">();</span>
+            <span class="s1">ServletUtils</span><span class="s2">.</span><span class="s1">forwardWithError</span><span class="s2">(</span><span class="s1">request</span><span class="s2">, </span><span class="s1">response</span><span class="s2">, </span><span class="s1">e</span><span class="s2">.</span><span class="s1">getMessage</span><span class="s2">(), </span><span class="s1">EVENT_FORM_JSP</span><span class="s2">, </span><span class="s1">TEMPLATE</span><span class="s2">);</span>
+        <span class="s2">} </span><span class="s0">finally </span><span class="s2">{</span>
+            <span class="s0">if </span><span class="s2">(</span><span class="s1">em </span><span class="s2">!= </span><span class="s0">null</span><span class="s2">) </span><span class="s1">em</span><span class="s2">.</span><span class="s1">close</span><span class="s2">();</span>
+        <span class="s2">}</span>
+    <span class="s2">}</span>
+<span class="s2">}</span></pre>
+</body>
+</html>

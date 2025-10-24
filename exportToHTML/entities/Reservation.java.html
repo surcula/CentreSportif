@@ -1,0 +1,262 @@
+<html>
+<head>
+<title>Reservation.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cf8e6d;}
+.s1 { color: #bcbec4;}
+.s2 { color: #bcbec4;}
+.s3 { color: #5f826b; font-style: italic;}
+.s4 { color: #6aab73;}
+.s5 { color: #67a37c; font-style: italic;}
+.s6 { color: #2aacb8;}
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+Reservation.java</font>
+</center></td></tr></table>
+<pre><span class="s0">package </span><span class="s1">entities</span><span class="s2">;</span>
+
+<span class="s0">import </span><span class="s1">enums</span><span class="s2">.</span><span class="s1">ReservationStatus</span><span class="s2">;</span>
+
+<span class="s0">import </span><span class="s1">javax</span><span class="s2">.</span><span class="s1">persistence</span><span class="s2">.*;</span>
+<span class="s0">import </span><span class="s1">java</span><span class="s2">.</span><span class="s1">time</span><span class="s2">.</span><span class="s1">Instant</span><span class="s2">;</span>
+
+<span class="s3">/**</span>
+ <span class="s3">* Reservation entity to save the information of the reservation</span>
+ <span class="s3">*/</span>
+<span class="s1">@Entity</span>
+<span class="s1">@Table</span><span class="s2">(</span><span class="s1">name </span><span class="s2">= </span><span class="s4">&quot;reservations&quot;</span><span class="s2">)</span>
+<span class="s0">public class </span><span class="s1">Reservation </span><span class="s2">{</span>
+    <span class="s3">/**</span>
+     <span class="s3">* Id of the reservation</span>
+     <span class="s3">* automatically generated</span>
+     <span class="s3">* </span><span class="s5">@param </span><span class="s3">id</span>
+     <span class="s3">*/</span>
+    <span class="s1">@Id</span>
+    <span class="s1">@Column</span><span class="s2">(</span><span class="s1">name </span><span class="s2">= </span><span class="s4">&quot;id&quot;</span><span class="s2">, </span><span class="s1">nullable </span><span class="s2">= </span><span class="s0">false</span><span class="s2">)</span>
+    <span class="s0">private int </span><span class="s1">id</span><span class="s2">;</span>
+    <span class="s3">/**</span>
+     <span class="s3">* The name of the reservation</span>
+     <span class="s3">* </span><span class="s5">@param </span><span class="s3">reservation Name</span>
+     <span class="s3">*/</span>
+    <span class="s1">@Column</span><span class="s2">(</span><span class="s1">name </span><span class="s2">= </span><span class="s4">&quot;reservation_name&quot;</span><span class="s2">, </span><span class="s1">nullable </span><span class="s2">= </span><span class="s0">false</span><span class="s2">)</span>
+    <span class="s0">private </span><span class="s1">String reservationName</span><span class="s2">;</span>
+    <span class="s3">/**</span>
+     <span class="s3">* The starting date of the reservation</span>
+     <span class="s3">* </span><span class="s5">@param </span><span class="s3">startDateReservation</span>
+     <span class="s3">*/</span>
+    <span class="s1">@Column</span><span class="s2">(</span><span class="s1">name </span><span class="s2">= </span><span class="s4">&quot;start_date_reservation&quot;</span><span class="s2">, </span><span class="s1">nullable </span><span class="s2">= </span><span class="s0">false</span><span class="s2">)</span>
+    <span class="s0">private </span><span class="s1">Instant startDateReservation</span><span class="s2">;</span>
+    <span class="s3">/**</span>
+     <span class="s3">* The end date of the reservation</span>
+     <span class="s3">* </span><span class="s5">@param </span><span class="s3">endDateReservation</span>
+     <span class="s3">*/</span>
+    <span class="s1">@Column</span><span class="s2">(</span><span class="s1">name </span><span class="s2">= </span><span class="s4">&quot;end_date_reservation&quot;</span><span class="s2">, </span><span class="s1">nullable </span><span class="s2">= </span><span class="s0">false</span><span class="s2">)</span>
+    <span class="s0">private </span><span class="s1">Instant endDateReservation</span><span class="s2">;</span>
+    <span class="s3">/**</span>
+     <span class="s3">* the price of the reservation</span>
+     <span class="s3">* </span><span class="s5">@param </span><span class="s3">price</span>
+     <span class="s3">*/</span>
+    <span class="s1">@Column</span><span class="s2">(</span><span class="s1">name </span><span class="s2">= </span><span class="s4">&quot;price&quot;</span><span class="s2">, </span><span class="s1">nullable </span><span class="s2">= </span><span class="s0">false</span><span class="s2">, </span><span class="s1">precision </span><span class="s2">= </span><span class="s6">15</span><span class="s2">, </span><span class="s1">scale </span><span class="s2">= </span><span class="s6">2</span><span class="s2">)</span>
+    <span class="s0">private double </span><span class="s1">price</span><span class="s2">;</span>
+    <span class="s3">/**</span>
+     <span class="s3">* the VAT of the reservation</span>
+     <span class="s3">* </span><span class="s5">@param </span><span class="s3">TVA</span>
+     <span class="s3">*/</span>
+    <span class="s1">@Column</span><span class="s2">(</span><span class="s1">name </span><span class="s2">= </span><span class="s4">&quot;tva&quot;</span><span class="s2">, </span><span class="s1">nullable </span><span class="s2">= </span><span class="s0">false</span><span class="s2">, </span><span class="s1">precision </span><span class="s2">= </span><span class="s6">15</span><span class="s2">, </span><span class="s1">scale </span><span class="s2">= </span><span class="s6">2</span><span class="s2">)</span>
+    <span class="s0">private double </span><span class="s1">tva</span><span class="s2">;</span>
+    <span class="s3">/**</span>
+     <span class="s3">* The status of the reservation</span>
+     <span class="s3">* </span><span class="s5">@param </span><span class="s3">statut</span>
+     <span class="s3">*/</span>
+    <span class="s1">@Lob</span>
+    <span class="s1">@Column</span><span class="s2">(</span><span class="s1">name </span><span class="s2">= </span><span class="s4">&quot;statut&quot;</span><span class="s2">, </span><span class="s1">nullable </span><span class="s2">= </span><span class="s0">false</span><span class="s2">)</span>
+    <span class="s0">private </span><span class="s1">ReservationStatus statut</span><span class="s2">;</span>
+    <span class="s3">/**</span>
+     <span class="s3">* The name of the user found with id in the entity User</span>
+     <span class="s3">* </span><span class="s5">@param </span><span class="s3">user</span>
+     <span class="s3">*/</span>
+    <span class="s1">@ManyToOne</span>
+    <span class="s1">@JoinColumn</span><span class="s2">(</span><span class="s1">name </span><span class="s2">= </span><span class="s4">&quot;user_id&quot;</span><span class="s2">)</span>
+    <span class="s0">private </span><span class="s1">User user</span><span class="s2">;</span>
+    <span class="s3">/**</span>
+     <span class="s3">* the name of the sportField based on the entity SportField</span>
+     <span class="s3">* </span><span class="s5">@param </span><span class="s3">sportField</span>
+     <span class="s3">*/</span>
+    <span class="s1">@ManyToOne</span>
+    <span class="s1">@JoinColumn</span><span class="s2">(</span><span class="s1">name </span><span class="s2">= </span><span class="s4">&quot;sports_field_id&quot;</span><span class="s2">)</span>
+    <span class="s0">private </span><span class="s1">SportField sportField</span><span class="s2">;</span>
+    <span class="s3">/**</span>
+     <span class="s3">* The status of the sportField based on the entity SportField</span>
+     <span class="s3">* </span><span class="s5">@param </span><span class="s3">active</span>
+     <span class="s3">*/</span>
+    <span class="s1">@Column</span><span class="s2">(</span><span class="s1">name </span><span class="s2">= </span><span class="s4">&quot;is_active&quot;</span><span class="s2">, </span><span class="s1">nullable </span><span class="s2">= </span><span class="s0">false</span><span class="s2">)</span>
+    <span class="s0">private boolean </span><span class="s1">active </span><span class="s2">= </span><span class="s0">true</span><span class="s2">;</span>
+
+    <span class="s3">/**</span>
+     <span class="s3">* The method to get the id of the reservation</span>
+     <span class="s3">* </span><span class="s5">@return</span>
+     <span class="s3">*/</span>
+    <span class="s0">public int </span><span class="s1">getId</span><span class="s2">() {</span>
+        <span class="s0">return </span><span class="s1">id</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s3">/**</span>
+     <span class="s3">* The method to set the id of the reservation</span>
+     <span class="s3">* </span><span class="s5">@param </span><span class="s3">id</span>
+     <span class="s3">*/</span>
+    <span class="s0">public void </span><span class="s1">setId</span><span class="s2">(</span><span class="s0">int </span><span class="s1">id</span><span class="s2">) {</span>
+        <span class="s0">this</span><span class="s2">.</span><span class="s1">id </span><span class="s2">= </span><span class="s1">id</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s3">/**</span>
+     <span class="s3">* The method to get the name of the reservation</span>
+     <span class="s3">* </span><span class="s5">@return </span><span class="s3">reservationName</span>
+     <span class="s3">*/</span>
+    <span class="s0">public </span><span class="s1">String getReservationName</span><span class="s2">() {</span>
+        <span class="s0">return </span><span class="s1">reservationName</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s3">/**</span>
+     <span class="s3">* The method to set the name of the reservation</span>
+     <span class="s3">* </span><span class="s5">@param </span><span class="s3">reservationName</span>
+     <span class="s3">*/</span>
+    <span class="s0">public void </span><span class="s1">setReservationName</span><span class="s2">(</span><span class="s1">String reservationName</span><span class="s2">) {</span>
+        <span class="s0">this</span><span class="s2">.</span><span class="s1">reservationName </span><span class="s2">= </span><span class="s1">reservationName</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s3">/**</span>
+     <span class="s3">* The method to get the starting date of the reservation</span>
+     <span class="s3">* </span><span class="s5">@return </span><span class="s3">startDateReservation</span>
+     <span class="s3">*/</span>
+    <span class="s0">public </span><span class="s1">Instant getStartDateReservation</span><span class="s2">() {</span>
+        <span class="s0">return </span><span class="s1">startDateReservation</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s3">/**</span>
+     <span class="s3">* the method to set the starting date of the reservation</span>
+     <span class="s3">* </span><span class="s5">@param </span><span class="s3">startDateReservation</span>
+     <span class="s3">*/</span>
+    <span class="s0">public void </span><span class="s1">setStartDateReservation</span><span class="s2">(</span><span class="s1">Instant startDateReservation</span><span class="s2">) {</span>
+        <span class="s0">this</span><span class="s2">.</span><span class="s1">startDateReservation </span><span class="s2">= </span><span class="s1">startDateReservation</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s3">/**</span>
+     <span class="s3">* the method to get the end date of the reservation</span>
+     <span class="s3">* </span><span class="s5">@return </span><span class="s3">endDateReservation</span>
+     <span class="s3">*/</span>
+    <span class="s0">public </span><span class="s1">Instant getEndDateReservation</span><span class="s2">() {</span>
+        <span class="s0">return </span><span class="s1">endDateReservation</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s3">/**</span>
+     <span class="s3">* The method to set the end date of the reservation</span>
+     <span class="s3">* </span><span class="s5">@param </span><span class="s3">endDateReservation</span>
+     <span class="s3">*/</span>
+    <span class="s0">public void </span><span class="s1">setEndDateReservation</span><span class="s2">(</span><span class="s1">Instant endDateReservation</span><span class="s2">) {</span>
+        <span class="s0">this</span><span class="s2">.</span><span class="s1">endDateReservation </span><span class="s2">= </span><span class="s1">endDateReservation</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s3">/**</span>
+     <span class="s3">* The method to get the price of the reservation</span>
+     <span class="s3">* </span><span class="s5">@return </span><span class="s3">price</span>
+     <span class="s3">*/</span>
+    <span class="s0">public double </span><span class="s1">getPrice</span><span class="s2">() {</span>
+        <span class="s0">return </span><span class="s1">price</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s3">/**</span>
+     <span class="s3">* The method to set the price of the reservation</span>
+     <span class="s3">* </span><span class="s5">@param </span><span class="s3">price</span>
+     <span class="s3">*/</span>
+    <span class="s0">public void </span><span class="s1">setPrice</span><span class="s2">(</span><span class="s0">double </span><span class="s1">price</span><span class="s2">) {</span>
+        <span class="s0">this</span><span class="s2">.</span><span class="s1">price </span><span class="s2">= </span><span class="s1">price</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s3">/**</span>
+     <span class="s3">* The method to set the VAT of the reservation</span>
+     <span class="s3">* </span><span class="s5">@return </span><span class="s3">tva</span>
+     <span class="s3">*/</span>
+    <span class="s0">public double </span><span class="s1">getTva</span><span class="s2">() {</span>
+        <span class="s0">return </span><span class="s1">tva</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s3">/**</span>
+     <span class="s3">* The method to set the VAT of the reservation</span>
+     <span class="s3">* </span><span class="s5">@param </span><span class="s3">tva</span>
+     <span class="s3">*/</span>
+    <span class="s0">public void </span><span class="s1">setTva</span><span class="s2">(</span><span class="s0">double </span><span class="s1">tva</span><span class="s2">) {</span>
+        <span class="s0">this</span><span class="s2">.</span><span class="s1">tva </span><span class="s2">= </span><span class="s1">tva</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s3">/**</span>
+     <span class="s3">* The method to get the status of the reservation</span>
+     <span class="s3">* </span><span class="s5">@return </span><span class="s3">statut</span>
+     <span class="s3">*/</span>
+    <span class="s0">public </span><span class="s1">ReservationStatus getStatut</span><span class="s2">() {</span>
+        <span class="s0">return </span><span class="s1">statut</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s3">/**</span>
+     <span class="s3">* The method to set the status of the reservation</span>
+     <span class="s3">* </span><span class="s5">@param </span><span class="s3">statut</span>
+     <span class="s3">*/</span>
+    <span class="s0">public void </span><span class="s1">setStatut</span><span class="s2">(</span><span class="s1">ReservationStatus statut</span><span class="s2">) {</span>
+        <span class="s0">this</span><span class="s2">.</span><span class="s1">statut </span><span class="s2">= </span><span class="s1">statut</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s3">/**</span>
+     <span class="s3">* The method tu get the User of the reservation based on the id founded in the entity User</span>
+     <span class="s3">* </span><span class="s5">@return </span><span class="s3">user</span>
+     <span class="s3">*/</span>
+    <span class="s0">public </span><span class="s1">User getUser</span><span class="s2">() {</span>
+        <span class="s0">return </span><span class="s1">user</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s3">/**</span>
+     <span class="s3">* the method to set the user of the reservation</span>
+     <span class="s3">* </span><span class="s5">@param </span><span class="s3">user</span>
+     <span class="s3">*/</span>
+    <span class="s0">public void </span><span class="s1">setUser</span><span class="s2">(</span><span class="s1">User user</span><span class="s2">) {</span>
+        <span class="s0">this</span><span class="s2">.</span><span class="s1">user </span><span class="s2">= </span><span class="s1">user</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s3">/**</span>
+     <span class="s3">* The method to get the sportField of the reservation based on the entity SportField</span>
+     <span class="s3">* </span><span class="s5">@return </span><span class="s3">sportField</span>
+     <span class="s3">*/</span>
+    <span class="s0">public </span><span class="s1">SportField getSportsField</span><span class="s2">() {</span>
+        <span class="s0">return </span><span class="s1">sportField</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s3">/**</span>
+     <span class="s3">* The method to set the SportField of the reservation</span>
+     <span class="s3">* </span><span class="s5">@param </span><span class="s3">sportField</span>
+     <span class="s3">*/</span>
+    <span class="s0">public void </span><span class="s1">setSportsField</span><span class="s2">(</span><span class="s1">SportField sportField</span><span class="s2">) {</span>
+        <span class="s0">this</span><span class="s2">.</span><span class="s1">sportField </span><span class="s2">= </span><span class="s1">sportField</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s3">/**</span>
+     <span class="s3">* The method to get if the reservation is active or no</span>
+     <span class="s3">* </span><span class="s5">@return </span><span class="s3">active</span>
+     <span class="s3">*/</span>
+    <span class="s0">public boolean </span><span class="s1">isActive</span><span class="s2">() {</span>
+        <span class="s0">return </span><span class="s1">active</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s3">/**</span>
+     <span class="s3">* the method to set if the reservation is active or no</span>
+     <span class="s3">* </span><span class="s5">@param </span><span class="s3">active</span>
+     <span class="s3">*/</span>
+    <span class="s0">public void </span><span class="s1">setActive</span><span class="s2">(</span><span class="s0">boolean </span><span class="s1">active</span><span class="s2">) {</span>
+        <span class="s0">this</span><span class="s2">.</span><span class="s1">active </span><span class="s2">= </span><span class="s1">active</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+<span class="s2">}</span></pre>
+</body>
+</html>

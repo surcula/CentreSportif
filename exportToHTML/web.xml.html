@@ -1,0 +1,44 @@
+<html>
+<head>
+<title>web.xml</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #d5b778;}
+.s1 { color: #bcbec4;}
+.s2 { color: #6aab73;}
+.s3 { color: #bcbec4;}
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+web.xml</font>
+</center></td></tr></table>
+<pre><span class="s0">&lt;?</span><span class="s1">xml version</span><span class="s2">=&quot;1.0&quot; </span><span class="s1">encoding</span><span class="s2">=&quot;UTF-8&quot;</span><span class="s0">?&gt;</span>
+<span class="s0">&lt;web-app </span><span class="s1">xmlns</span><span class="s2">=&quot;http://xmlns.jcp.org/xml/ns/javaee&quot;</span>
+         <span class="s1">xmlns:xsi</span><span class="s2">=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span>
+         <span class="s1">xsi:schemaLocation</span><span class="s2">=&quot;http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd&quot;</span>
+         <span class="s1">version</span><span class="s2">=&quot;4.0&quot;</span><span class="s0">&gt;</span>
+
+    <span class="s0">&lt;error-page&gt;</span>
+        <span class="s0">&lt;exception-type&gt;</span><span class="s3">com.mysql.cj.jdbc.exceptions.CommunicationsException</span><span class="s0">&lt;/exception-type&gt;</span>
+        <span class="s0">&lt;location&gt;</span><span class="s3">/views/errors/dbDown.jsp</span><span class="s0">&lt;/location&gt;</span>
+    <span class="s0">&lt;/error-page&gt;</span>
+    <span class="s0">&lt;error-page&gt;</span>
+        <span class="s0">&lt;exception-type&gt;</span><span class="s3">java.sql.SQLNonTransientConnectionException</span><span class="s0">&lt;/exception-type&gt;</span>
+        <span class="s0">&lt;location&gt;</span><span class="s3">/views/errors/dbDown.jsp</span><span class="s0">&lt;/location&gt;</span>
+    <span class="s0">&lt;/error-page&gt;</span>
+    <span class="s0">&lt;error-page&gt;</span>
+        <span class="s0">&lt;exception-type&gt;</span><span class="s3">java.sql.SQLException</span><span class="s0">&lt;/exception-type&gt;</span>
+        <span class="s0">&lt;location&gt;</span><span class="s3">/views/errors/dbDown.jsp</span><span class="s0">&lt;/location&gt;</span>
+    <span class="s0">&lt;/error-page&gt;</span>
+    <span class="s0">&lt;error-page&gt;</span>
+        <span class="s0">&lt;error-code&gt;</span><span class="s3">503</span><span class="s0">&lt;/error-code&gt;</span>
+        <span class="s0">&lt;location&gt;</span><span class="s3">/views/errors/dbDown.jsp</span><span class="s0">&lt;/location&gt;</span>
+    <span class="s0">&lt;/error-page&gt;</span>
+
+<span class="s0">&lt;/web-app&gt;</span>
+</pre>
+</body>
+</html>

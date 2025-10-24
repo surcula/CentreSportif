@@ -1,0 +1,522 @@
+<html>
+<head>
+<title>centresportif.sql</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #7a7e85;}
+.s1 { color: #bcbec4;}
+.s2 { color: #cf8e6d;}
+.s3 { color: #bcbec4;}
+.s4 { color: #2aacb8;}
+.s5 { color: #6aab73;}
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+centresportif.sql</font>
+</center></td></tr></table>
+<pre><span class="s0">-- phpMyAdmin SQL Dump</span>
+<span class="s0">-- version 5.2.1</span>
+<span class="s0">-- https://www.phpmyadmin.net/</span>
+<span class="s0">--</span>
+<span class="s0">-- Host: 127.0.0.1:3306</span>
+<span class="s0">-- Generation Time: Jun 22, 2025 at 10:38 AM</span>
+<span class="s0">-- Server version: 9.1.0</span>
+<span class="s0">-- PHP Version: 8.3.14</span>
+
+<span class="s2">SET </span><span class="s1">SQL_MODE = &quot;NO_AUTO_VALUE_ON_ZERO&quot;</span><span class="s3">;</span>
+<span class="s2">START TRANSACTION</span><span class="s3">;</span>
+<span class="s2">SET </span><span class="s1">time_zone = &quot;+00:00&quot;</span><span class="s3">;</span>
+
+
+<span class="s0">/*!40101 </span><span class="s2">SET </span><span class="s1">@OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT </span><span class="s0">*/</span><span class="s3">;</span>
+<span class="s0">/*!40101 </span><span class="s2">SET </span><span class="s1">@OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS </span><span class="s0">*/</span><span class="s3">;</span>
+<span class="s0">/*!40101 </span><span class="s2">SET </span><span class="s1">@OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION </span><span class="s0">*/</span><span class="s3">;</span>
+<span class="s0">/*!40101 </span><span class="s2">SET NAMES </span><span class="s1">utf8mb4 </span><span class="s0">*/</span><span class="s3">;</span>
+
+<span class="s0">--</span>
+<span class="s0">-- Database: `centresportif`</span>
+<span class="s0">--</span>
+
+<span class="s0">-- --------------------------------------------------------</span>
+
+<span class="s0">--</span>
+<span class="s0">-- Table structure for table `addresses`</span>
+<span class="s0">--</span>
+
+<span class="s2">DROP TABLE IF EXISTS </span><span class="s1">`addresses`</span><span class="s3">;</span>
+<span class="s2">CREATE TABLE IF NOT EXISTS </span><span class="s1">`addresses` </span><span class="s3">(</span>
+  <span class="s1">`id` </span><span class="s2">int NOT NULL AUTO_INCREMENT</span><span class="s3">,</span>
+  <span class="s1">`street_name` </span><span class="s2">varchar</span><span class="s3">(</span><span class="s4">255</span><span class="s3">) </span><span class="s2">NOT NULL</span><span class="s3">,</span>
+  <span class="s1">`street_number` </span><span class="s2">int NOT NULL</span><span class="s3">,</span>
+  <span class="s1">`box_number` </span><span class="s2">decimal</span><span class="s3">(</span><span class="s4">15</span><span class="s3">,</span><span class="s4">2</span><span class="s3">) </span><span class="s2">DEFAULT NULL</span><span class="s3">,</span>
+  <span class="s1">`city_id` </span><span class="s2">int DEFAULT NULL</span><span class="s3">,</span>
+  <span class="s1">`is_active` </span><span class="s2">tinyint</span><span class="s3">(</span><span class="s4">1</span><span class="s3">) </span><span class="s2">NOT NULL DEFAULT </span><span class="s5">'1'</span><span class="s3">,</span>
+  <span class="s2">PRIMARY KEY </span><span class="s3">(</span><span class="s1">`id`</span><span class="s3">),</span>
+  <span class="s2">KEY </span><span class="s1">`city_id` </span><span class="s3">(</span><span class="s1">`city_id`</span><span class="s3">)</span>
+<span class="s3">) </span><span class="s2">ENGINE</span><span class="s1">=InnoDB </span><span class="s2">DEFAULT CHARSET</span><span class="s1">=latin1</span><span class="s3">;</span>
+
+<span class="s0">-- --------------------------------------------------------</span>
+
+<span class="s0">--</span>
+<span class="s0">-- Table structure for table `authorizations`</span>
+<span class="s0">--</span>
+
+<span class="s2">DROP TABLE IF EXISTS </span><span class="s1">`authorizations`</span><span class="s3">;</span>
+<span class="s2">CREATE TABLE IF NOT EXISTS </span><span class="s1">`authorizations` </span><span class="s3">(</span>
+  <span class="s1">`id` </span><span class="s2">int NOT NULL AUTO_INCREMENT</span><span class="s3">,</span>
+  <span class="s1">`authorizations_name` </span><span class="s2">varchar</span><span class="s3">(</span><span class="s4">255</span><span class="s3">) </span><span class="s2">NOT NULL</span><span class="s3">,</span>
+  <span class="s1">`is_active` </span><span class="s2">tinyint</span><span class="s3">(</span><span class="s4">1</span><span class="s3">) </span><span class="s2">NOT NULL DEFAULT </span><span class="s5">'1'</span><span class="s3">,</span>
+  <span class="s2">PRIMARY KEY </span><span class="s3">(</span><span class="s1">`id`</span><span class="s3">)</span>
+<span class="s3">) </span><span class="s2">ENGINE</span><span class="s1">=InnoDB </span><span class="s2">DEFAULT CHARSET</span><span class="s1">=latin1</span><span class="s3">;</span>
+
+<span class="s0">-- --------------------------------------------------------</span>
+
+<span class="s0">--</span>
+<span class="s0">-- Table structure for table `cities`</span>
+<span class="s0">--</span>
+
+<span class="s2">DROP TABLE IF EXISTS </span><span class="s1">`cities`</span><span class="s3">;</span>
+<span class="s2">CREATE TABLE IF NOT EXISTS </span><span class="s1">`cities` </span><span class="s3">(</span>
+  <span class="s1">`id` </span><span class="s2">int NOT NULL AUTO_INCREMENT</span><span class="s3">,</span>
+  <span class="s1">`city_name` </span><span class="s2">varchar</span><span class="s3">(</span><span class="s4">255</span><span class="s3">) </span><span class="s2">NOT NULL</span><span class="s3">,</span>
+  <span class="s1">`zip_code` </span><span class="s2">int NOT NULL</span><span class="s3">,</span>
+  <span class="s1">`country_id` </span><span class="s2">int DEFAULT NULL</span><span class="s3">,</span>
+  <span class="s1">`is_active` </span><span class="s2">tinyint</span><span class="s3">(</span><span class="s4">1</span><span class="s3">) </span><span class="s2">NOT NULL DEFAULT </span><span class="s5">'1'</span><span class="s3">,</span>
+  <span class="s2">PRIMARY KEY </span><span class="s3">(</span><span class="s1">`id`</span><span class="s3">),</span>
+  <span class="s2">KEY </span><span class="s1">`country_id` </span><span class="s3">(</span><span class="s1">`country_id`</span><span class="s3">)</span>
+<span class="s3">) </span><span class="s2">ENGINE</span><span class="s1">=InnoDB </span><span class="s2">DEFAULT CHARSET</span><span class="s1">=latin1</span><span class="s3">;</span>
+
+<span class="s0">-- --------------------------------------------------------</span>
+
+<span class="s0">--</span>
+<span class="s0">-- Table structure for table `closures`</span>
+<span class="s0">--</span>
+
+<span class="s2">DROP TABLE IF EXISTS </span><span class="s1">`closures`</span><span class="s3">;</span>
+<span class="s2">CREATE TABLE IF NOT EXISTS </span><span class="s1">`closures` </span><span class="s3">(</span>
+  <span class="s1">`id` </span><span class="s2">int NOT NULL AUTO_INCREMENT</span><span class="s3">,</span>
+  <span class="s1">`start_date` </span><span class="s2">date NOT NULL</span><span class="s3">,</span>
+  <span class="s1">`end_date` </span><span class="s2">date NOT NULL</span><span class="s3">,</span>
+  <span class="s1">`sports_field_id` </span><span class="s2">int DEFAULT NULL</span><span class="s3">,</span>
+  <span class="s1">`is_active` </span><span class="s2">tinyint</span><span class="s3">(</span><span class="s4">1</span><span class="s3">) </span><span class="s2">NOT NULL DEFAULT </span><span class="s5">'1'</span><span class="s3">,</span>
+  <span class="s2">PRIMARY KEY </span><span class="s3">(</span><span class="s1">`id`</span><span class="s3">),</span>
+  <span class="s2">KEY </span><span class="s1">`sports_field_id` </span><span class="s3">(</span><span class="s1">`sports_field_id`</span><span class="s3">)</span>
+<span class="s3">) </span><span class="s2">ENGINE</span><span class="s1">=InnoDB </span><span class="s2">DEFAULT CHARSET</span><span class="s1">=latin1</span><span class="s3">;</span>
+
+<span class="s0">-- --------------------------------------------------------</span>
+
+<span class="s0">--</span>
+<span class="s0">-- Table structure for table `countries`</span>
+<span class="s0">--</span>
+
+<span class="s2">DROP TABLE IF EXISTS </span><span class="s1">`countries`</span><span class="s3">;</span>
+<span class="s2">CREATE TABLE IF NOT EXISTS </span><span class="s1">`countries` </span><span class="s3">(</span>
+  <span class="s1">`id` </span><span class="s2">int NOT NULL AUTO_INCREMENT</span><span class="s3">,</span>
+  <span class="s1">`country_name` </span><span class="s2">varchar</span><span class="s3">(</span><span class="s4">255</span><span class="s3">) </span><span class="s2">NOT NULL</span><span class="s3">,</span>
+  <span class="s1">`iso_alpha3` </span><span class="s2">varchar</span><span class="s3">(</span><span class="s4">255</span><span class="s3">) </span><span class="s2">NOT NULL</span><span class="s3">,</span>
+  <span class="s1">`is_active` </span><span class="s2">tinyint NOT NULL DEFAULT </span><span class="s5">'1'</span><span class="s3">,</span>
+  <span class="s2">PRIMARY KEY </span><span class="s3">(</span><span class="s1">`id`</span><span class="s3">)</span>
+<span class="s3">) </span><span class="s2">ENGINE</span><span class="s1">=InnoDB </span><span class="s2">AUTO_INCREMENT</span><span class="s1">=</span><span class="s4">7 </span><span class="s2">DEFAULT CHARSET</span><span class="s1">=latin1</span><span class="s3">;</span>
+
+<span class="s0">-- --------------------------------------------------------</span>
+
+<span class="s0">--</span>
+<span class="s0">-- Table structure for table `discounts`</span>
+<span class="s0">--</span>
+
+<span class="s2">DROP TABLE IF EXISTS </span><span class="s1">`discounts`</span><span class="s3">;</span>
+<span class="s2">CREATE TABLE IF NOT EXISTS </span><span class="s1">`discounts` </span><span class="s3">(</span>
+  <span class="s1">`id` </span><span class="s2">int NOT NULL AUTO_INCREMENT</span><span class="s3">,</span>
+  <span class="s1">`discount_name` </span><span class="s2">varchar</span><span class="s3">(</span><span class="s4">255</span><span class="s3">) </span><span class="s2">NOT NULL</span><span class="s3">,</span>
+  <span class="s1">`percent` </span><span class="s2">decimal</span><span class="s3">(</span><span class="s4">15</span><span class="s3">,</span><span class="s4">2</span><span class="s3">) </span><span class="s2">NOT NULL</span><span class="s3">,</span>
+  <span class="s1">`is_active` </span><span class="s2">tinyint</span><span class="s3">(</span><span class="s4">1</span><span class="s3">) </span><span class="s2">NOT NULL DEFAULT </span><span class="s5">'1'</span><span class="s3">,</span>
+  <span class="s2">PRIMARY KEY </span><span class="s3">(</span><span class="s1">`id`</span><span class="s3">)</span>
+<span class="s3">) </span><span class="s2">ENGINE</span><span class="s1">=InnoDB </span><span class="s2">DEFAULT CHARSET</span><span class="s1">=latin1</span><span class="s3">;</span>
+
+<span class="s0">-- --------------------------------------------------------</span>
+
+<span class="s0">--</span>
+<span class="s0">-- Table structure for table `events`</span>
+<span class="s0">--</span>
+
+<span class="s2">DROP TABLE IF EXISTS </span><span class="s1">`events`</span><span class="s3">;</span>
+<span class="s2">CREATE TABLE IF NOT EXISTS </span><span class="s1">`events` </span><span class="s3">(</span>
+  <span class="s1">`id` </span><span class="s2">int NOT NULL AUTO_INCREMENT</span><span class="s3">,</span>
+  <span class="s1">`event_name` </span><span class="s2">varchar</span><span class="s3">(</span><span class="s4">255</span><span class="s3">) </span><span class="s2">NOT NULL</span><span class="s3">,</span>
+  <span class="s1">`begin_date_hour` </span><span class="s2">date NOT NULL</span><span class="s3">,</span>
+  <span class="s1">`end_date_hour` </span><span class="s2">date NOT NULL</span><span class="s3">,</span>
+  <span class="s1">`info` </span><span class="s2">varchar</span><span class="s3">(</span><span class="s4">255</span><span class="s3">) </span><span class="s2">NOT NULL</span><span class="s3">,</span>
+  <span class="s1">`picture` </span><span class="s2">varchar</span><span class="s3">(</span><span class="s4">255</span><span class="s3">) </span><span class="s2">NOT NULL</span><span class="s3">,</span>
+  <span class="s1">`is_active` </span><span class="s2">tinyint</span><span class="s3">(</span><span class="s4">1</span><span class="s3">) </span><span class="s2">NOT NULL DEFAULT </span><span class="s5">'1'</span><span class="s3">,</span>
+  <span class="s2">PRIMARY KEY </span><span class="s3">(</span><span class="s1">`id`</span><span class="s3">)</span>
+<span class="s3">) </span><span class="s2">ENGINE</span><span class="s1">=InnoDB </span><span class="s2">DEFAULT CHARSET</span><span class="s1">=latin1</span><span class="s3">;</span>
+
+<span class="s0">-- --------------------------------------------------------</span>
+
+<span class="s0">--</span>
+<span class="s0">-- Table structure for table `fields`</span>
+<span class="s0">--</span>
+
+<span class="s2">DROP TABLE IF EXISTS </span><span class="s1">`fields`</span><span class="s3">;</span>
+<span class="s2">CREATE TABLE IF NOT EXISTS </span><span class="s1">`fields` </span><span class="s3">(</span>
+  <span class="s1">`id` </span><span class="s2">int NOT NULL AUTO_INCREMENT</span><span class="s3">,</span>
+  <span class="s1">`field_name` </span><span class="s2">varchar</span><span class="s3">(</span><span class="s4">255</span><span class="s3">) </span><span class="s2">NOT NULL</span><span class="s3">,</span>
+  <span class="s1">`hall_id` </span><span class="s2">int DEFAULT NULL</span><span class="s3">,</span>
+  <span class="s1">`is_active` </span><span class="s2">tinyint</span><span class="s3">(</span><span class="s4">1</span><span class="s3">) </span><span class="s2">NOT NULL DEFAULT </span><span class="s5">'1'</span><span class="s3">,</span>
+  <span class="s2">PRIMARY KEY </span><span class="s3">(</span><span class="s1">`id`</span><span class="s3">),</span>
+  <span class="s2">KEY </span><span class="s1">`hall_id` </span><span class="s3">(</span><span class="s1">`hall_id`</span><span class="s3">)</span>
+<span class="s3">) </span><span class="s2">ENGINE</span><span class="s1">=InnoDB </span><span class="s2">DEFAULT CHARSET</span><span class="s1">=latin1</span><span class="s3">;</span>
+
+<span class="s0">-- --------------------------------------------------------</span>
+
+<span class="s0">--</span>
+<span class="s0">-- Table structure for table `halls`</span>
+<span class="s0">--</span>
+
+<span class="s2">DROP TABLE IF EXISTS </span><span class="s1">`halls`</span><span class="s3">;</span>
+<span class="s2">CREATE TABLE IF NOT EXISTS </span><span class="s1">`halls` </span><span class="s3">(</span>
+  <span class="s1">`id` </span><span class="s2">int NOT NULL AUTO_INCREMENT</span><span class="s3">,</span>
+  <span class="s1">`hall_name` </span><span class="s2">varchar</span><span class="s3">(</span><span class="s4">255</span><span class="s3">) </span><span class="s2">NOT NULL</span><span class="s3">,</span>
+  <span class="s1">`width` </span><span class="s2">decimal</span><span class="s3">(</span><span class="s4">5</span><span class="s3">,</span><span class="s4">2</span><span class="s3">) </span><span class="s2">NOT NULL</span><span class="s3">,</span>
+  <span class="s1">`length` </span><span class="s2">decimal</span><span class="s3">(</span><span class="s4">5</span><span class="s3">,</span><span class="s4">2</span><span class="s3">) </span><span class="s2">NOT NULL</span><span class="s3">,</span>
+  <span class="s1">`height` </span><span class="s2">decimal</span><span class="s3">(</span><span class="s4">5</span><span class="s3">,</span><span class="s4">2</span><span class="s3">) </span><span class="s2">NOT NULL</span><span class="s3">,</span>
+  <span class="s1">`is_active` </span><span class="s2">tinyint</span><span class="s3">(</span><span class="s4">1</span><span class="s3">) </span><span class="s2">NOT NULL DEFAULT </span><span class="s5">'1'</span><span class="s3">,</span>
+  <span class="s2">PRIMARY KEY </span><span class="s3">(</span><span class="s1">`id`</span><span class="s3">)</span>
+<span class="s3">) </span><span class="s2">ENGINE</span><span class="s1">=InnoDB </span><span class="s2">DEFAULT CHARSET</span><span class="s1">=latin1</span><span class="s3">;</span>
+
+<span class="s0">-- --------------------------------------------------------</span>
+
+<span class="s0">--</span>
+<span class="s0">-- Table structure for table `historicals_sports_prices`</span>
+<span class="s0">--</span>
+
+<span class="s2">DROP TABLE IF EXISTS </span><span class="s1">`historicals_sports_prices`</span><span class="s3">;</span>
+<span class="s2">CREATE TABLE IF NOT EXISTS </span><span class="s1">`historicals_sports_prices` </span><span class="s3">(</span>
+  <span class="s1">`id` </span><span class="s2">int NOT NULL AUTO_INCREMENT</span><span class="s3">,</span>
+  <span class="s1">`begin_date` </span><span class="s2">date NOT NULL</span><span class="s3">,</span>
+  <span class="s1">`price` </span><span class="s2">decimal</span><span class="s3">(</span><span class="s4">10</span><span class="s3">,</span><span class="s4">2</span><span class="s3">) </span><span class="s2">NOT NULL</span><span class="s3">,</span>
+  <span class="s1">`sport_id` </span><span class="s2">int DEFAULT NULL</span><span class="s3">,</span>
+  <span class="s2">PRIMARY KEY </span><span class="s3">(</span><span class="s1">`id`</span><span class="s3">),</span>
+  <span class="s2">KEY </span><span class="s1">`sport_id` </span><span class="s3">(</span><span class="s1">`sport_id`</span><span class="s3">)</span>
+<span class="s3">) </span><span class="s2">ENGINE</span><span class="s1">=InnoDB </span><span class="s2">DEFAULT CHARSET</span><span class="s1">=latin1</span><span class="s3">;</span>
+
+<span class="s0">-- --------------------------------------------------------</span>
+
+<span class="s0">--</span>
+<span class="s0">-- Table structure for table `orders`</span>
+<span class="s0">--</span>
+
+<span class="s2">DROP TABLE IF EXISTS </span><span class="s1">`orders`</span><span class="s3">;</span>
+<span class="s2">CREATE TABLE IF NOT EXISTS </span><span class="s1">`orders` </span><span class="s3">(</span>
+  <span class="s1">`id` </span><span class="s2">int NOT NULL AUTO_INCREMENT</span><span class="s3">,</span>
+  <span class="s1">`date_order` </span><span class="s2">datetime NOT NULL</span><span class="s3">,</span>
+  <span class="s1">`total_price` </span><span class="s2">decimal</span><span class="s3">(</span><span class="s4">15</span><span class="s3">,</span><span class="s4">2</span><span class="s3">) </span><span class="s2">NOT NULL</span><span class="s3">,</span>
+  <span class="s1">`tva` </span><span class="s2">decimal</span><span class="s3">(</span><span class="s4">15</span><span class="s3">,</span><span class="s4">2</span><span class="s3">) </span><span class="s2">NOT NULL</span><span class="s3">,</span>
+  <span class="s1">`user_id` </span><span class="s2">int DEFAULT NULL</span><span class="s3">,</span>
+  <span class="s1">`is_active` </span><span class="s2">tinyint</span><span class="s3">(</span><span class="s4">1</span><span class="s3">) </span><span class="s2">NOT NULL DEFAULT </span><span class="s5">'1'</span><span class="s3">,</span>
+  <span class="s1">`status` </span><span class="s2">enum</span><span class="s3">(</span><span class="s5">'on_hold'</span><span class="s3">,</span><span class="s5">'confirmed'</span><span class="s3">) </span><span class="s2">NOT NULL</span><span class="s3">,</span>
+  <span class="s2">PRIMARY KEY </span><span class="s3">(</span><span class="s1">`id`</span><span class="s3">),</span>
+  <span class="s2">KEY </span><span class="s1">`user_id` </span><span class="s3">(</span><span class="s1">`user_id`</span><span class="s3">)</span>
+<span class="s3">) </span><span class="s2">ENGINE</span><span class="s1">=InnoDB </span><span class="s2">DEFAULT CHARSET</span><span class="s1">=latin1</span><span class="s3">;</span>
+
+<span class="s0">-- --------------------------------------------------------</span>
+
+<span class="s0">--</span>
+<span class="s0">-- Table structure for table `orders_discounts`</span>
+<span class="s0">--</span>
+
+<span class="s2">DROP TABLE IF EXISTS </span><span class="s1">`orders_discounts`</span><span class="s3">;</span>
+<span class="s2">CREATE TABLE IF NOT EXISTS </span><span class="s1">`orders_discounts` </span><span class="s3">(</span>
+  <span class="s1">`id` </span><span class="s2">int NOT NULL AUTO_INCREMENT</span><span class="s3">,</span>
+  <span class="s1">`created_at` </span><span class="s2">datetime NOT NULL</span><span class="s3">,</span>
+  <span class="s1">`updated_at` </span><span class="s2">datetime NOT NULL</span><span class="s3">,</span>
+  <span class="s1">`order_id` </span><span class="s2">int NOT NULL</span><span class="s3">,</span>
+  <span class="s1">`discount_id` </span><span class="s2">int NOT NULL</span><span class="s3">,</span>
+  <span class="s1">`is_active` </span><span class="s2">tinyint</span><span class="s3">(</span><span class="s4">1</span><span class="s3">) </span><span class="s2">NOT NULL DEFAULT </span><span class="s5">'1'</span><span class="s3">,</span>
+  <span class="s2">PRIMARY KEY </span><span class="s3">(</span><span class="s1">`id`</span><span class="s3">),</span>
+  <span class="s2">KEY </span><span class="s1">`discount_id` </span><span class="s3">(</span><span class="s1">`discount_id`</span><span class="s3">),</span>
+  <span class="s2">KEY </span><span class="s1">`orders_discounts_ibfk_1` </span><span class="s3">(</span><span class="s1">`order_id`</span><span class="s3">)</span>
+<span class="s3">) </span><span class="s2">ENGINE</span><span class="s1">=InnoDB </span><span class="s2">DEFAULT CHARSET</span><span class="s1">=latin1</span><span class="s3">;</span>
+
+<span class="s0">-- --------------------------------------------------------</span>
+
+<span class="s0">--</span>
+<span class="s0">-- Table structure for table `orders_subscriptions`</span>
+<span class="s0">--</span>
+
+<span class="s2">DROP TABLE IF EXISTS </span><span class="s1">`orders_subscriptions`</span><span class="s3">;</span>
+<span class="s2">CREATE TABLE IF NOT EXISTS </span><span class="s1">`orders_subscriptions` </span><span class="s3">(</span>
+  <span class="s1">`id` </span><span class="s2">int NOT NULL AUTO_INCREMENT</span><span class="s3">,</span>
+  <span class="s1">`created_at` </span><span class="s2">datetime NOT NULL</span><span class="s3">,</span>
+  <span class="s1">`updated_at` </span><span class="s2">datetime NOT NULL</span><span class="s3">,</span>
+  <span class="s1">`subscription_id` </span><span class="s2">int NOT NULL</span><span class="s3">,</span>
+  <span class="s1">`order_id` </span><span class="s2">int NOT NULL</span><span class="s3">,</span>
+  <span class="s1">`is_active` </span><span class="s2">tinyint</span><span class="s3">(</span><span class="s4">1</span><span class="s3">) </span><span class="s2">NOT NULL DEFAULT </span><span class="s5">'1'</span><span class="s3">,</span>
+  <span class="s2">PRIMARY KEY </span><span class="s3">(</span><span class="s1">`id`</span><span class="s3">),</span>
+  <span class="s2">KEY </span><span class="s1">`order_id` </span><span class="s3">(</span><span class="s1">`order_id`</span><span class="s3">),</span>
+  <span class="s2">KEY </span><span class="s1">`orders_subscriptions_ibfk_1` </span><span class="s3">(</span><span class="s1">`subscription_id`</span><span class="s3">)</span>
+<span class="s3">) </span><span class="s2">ENGINE</span><span class="s1">=InnoDB </span><span class="s2">DEFAULT CHARSET</span><span class="s1">=latin1</span><span class="s3">;</span>
+
+<span class="s0">-- --------------------------------------------------------</span>
+
+<span class="s0">--</span>
+<span class="s0">-- Table structure for table `reservations`</span>
+<span class="s0">--</span>
+
+<span class="s2">DROP TABLE IF EXISTS </span><span class="s1">`reservations`</span><span class="s3">;</span>
+<span class="s2">CREATE TABLE IF NOT EXISTS </span><span class="s1">`reservations` </span><span class="s3">(</span>
+  <span class="s1">`id` </span><span class="s2">int NOT NULL AUTO_INCREMENT</span><span class="s3">,</span>
+  <span class="s1">`reservation_name` </span><span class="s2">varchar</span><span class="s3">(</span><span class="s4">255</span><span class="s3">) </span><span class="s2">NOT NULL</span><span class="s3">,</span>
+  <span class="s1">`start_date_reservation` </span><span class="s2">datetime NOT NULL</span><span class="s3">,</span>
+  <span class="s1">`end_date_reservation` </span><span class="s2">datetime NOT NULL</span><span class="s3">,</span>
+  <span class="s1">`price` </span><span class="s2">decimal</span><span class="s3">(</span><span class="s4">15</span><span class="s3">,</span><span class="s4">2</span><span class="s3">) </span><span class="s2">NOT NULL</span><span class="s3">,</span>
+  <span class="s1">`tva` </span><span class="s2">decimal</span><span class="s3">(</span><span class="s4">15</span><span class="s3">,</span><span class="s4">2</span><span class="s3">) </span><span class="s2">NOT NULL</span><span class="s3">,</span>
+  <span class="s1">`statut` </span><span class="s2">enum</span><span class="s3">(</span><span class="s5">'1'</span><span class="s3">,</span><span class="s5">'2'</span><span class="s3">,</span><span class="s5">'3'</span><span class="s3">) </span><span class="s2">NOT NULL</span><span class="s3">,</span>
+  <span class="s1">`user_id` </span><span class="s2">int DEFAULT NULL</span><span class="s3">,</span>
+  <span class="s1">`sports_field_id` </span><span class="s2">int DEFAULT NULL</span><span class="s3">,</span>
+  <span class="s1">`is_active` </span><span class="s2">tinyint</span><span class="s3">(</span><span class="s4">1</span><span class="s3">) </span><span class="s2">NOT NULL DEFAULT </span><span class="s5">'1'</span><span class="s3">,</span>
+  <span class="s2">PRIMARY KEY </span><span class="s3">(</span><span class="s1">`id`</span><span class="s3">),</span>
+  <span class="s2">KEY </span><span class="s1">`user_id` </span><span class="s3">(</span><span class="s1">`user_id`</span><span class="s3">),</span>
+  <span class="s2">KEY </span><span class="s1">`sports_field_id` </span><span class="s3">(</span><span class="s1">`sports_field_id`</span><span class="s3">)</span>
+<span class="s3">) </span><span class="s2">ENGINE</span><span class="s1">=InnoDB </span><span class="s2">DEFAULT CHARSET</span><span class="s1">=latin1</span><span class="s3">;</span>
+
+<span class="s0">-- --------------------------------------------------------</span>
+
+<span class="s0">--</span>
+<span class="s0">-- Table structure for table `roles`</span>
+<span class="s0">--</span>
+
+<span class="s2">DROP TABLE IF EXISTS </span><span class="s1">`roles`</span><span class="s3">;</span>
+<span class="s2">CREATE TABLE IF NOT EXISTS </span><span class="s1">`roles` </span><span class="s3">(</span>
+  <span class="s1">`id` </span><span class="s2">int NOT NULL AUTO_INCREMENT</span><span class="s3">,</span>
+  <span class="s1">`role_name` </span><span class="s2">varchar</span><span class="s3">(</span><span class="s4">255</span><span class="s3">) </span><span class="s2">NOT NULL</span><span class="s3">,</span>
+  <span class="s1">`is_active` </span><span class="s2">tinyint</span><span class="s3">(</span><span class="s4">1</span><span class="s3">) </span><span class="s2">NOT NULL DEFAULT </span><span class="s5">'1'</span><span class="s3">,</span>
+  <span class="s2">PRIMARY KEY </span><span class="s3">(</span><span class="s1">`id`</span><span class="s3">)</span>
+<span class="s3">) </span><span class="s2">ENGINE</span><span class="s1">=InnoDB </span><span class="s2">DEFAULT CHARSET</span><span class="s1">=latin1</span><span class="s3">;</span>
+
+<span class="s0">-- --------------------------------------------------------</span>
+
+<span class="s0">--</span>
+<span class="s0">-- Table structure for table `roles_authorizations`</span>
+<span class="s0">--</span>
+
+<span class="s2">DROP TABLE IF EXISTS </span><span class="s1">`roles_authorizations`</span><span class="s3">;</span>
+<span class="s2">CREATE TABLE IF NOT EXISTS </span><span class="s1">`roles_authorizations` </span><span class="s3">(</span>
+  <span class="s1">`id` </span><span class="s2">int NOT NULL AUTO_INCREMENT</span><span class="s3">,</span>
+  <span class="s1">`created_at` </span><span class="s2">datetime NOT NULL</span><span class="s3">,</span>
+  <span class="s1">`updated_at` </span><span class="s2">datetime NOT NULL</span><span class="s3">,</span>
+  <span class="s1">`role_id` </span><span class="s2">int NOT NULL</span><span class="s3">,</span>
+  <span class="s1">`authorization_id` </span><span class="s2">int NOT NULL</span><span class="s3">,</span>
+  <span class="s1">`is_active` </span><span class="s2">tinyint</span><span class="s3">(</span><span class="s4">1</span><span class="s3">) </span><span class="s2">NOT NULL DEFAULT </span><span class="s5">'1'</span><span class="s3">,</span>
+  <span class="s2">PRIMARY KEY </span><span class="s3">(</span><span class="s1">`id`</span><span class="s3">),</span>
+  <span class="s2">KEY </span><span class="s1">`authorization_id` </span><span class="s3">(</span><span class="s1">`authorization_id`</span><span class="s3">),</span>
+  <span class="s2">KEY </span><span class="s1">`roles_authorizations_ibfk_1` </span><span class="s3">(</span><span class="s1">`role_id`</span><span class="s3">)</span>
+<span class="s3">) </span><span class="s2">ENGINE</span><span class="s1">=InnoDB </span><span class="s2">DEFAULT CHARSET</span><span class="s1">=latin1</span><span class="s3">;</span>
+
+<span class="s0">-- --------------------------------------------------------</span>
+
+<span class="s0">--</span>
+<span class="s0">-- Table structure for table `sports`</span>
+<span class="s0">--</span>
+
+<span class="s2">DROP TABLE IF EXISTS </span><span class="s1">`sports`</span><span class="s3">;</span>
+<span class="s2">CREATE TABLE IF NOT EXISTS </span><span class="s1">`sports` </span><span class="s3">(</span>
+  <span class="s1">`id` </span><span class="s2">int NOT NULL AUTO_INCREMENT</span><span class="s3">,</span>
+  <span class="s1">`sport_name` </span><span class="s2">varchar</span><span class="s3">(</span><span class="s4">255</span><span class="s3">) </span><span class="s2">NOT NULL</span><span class="s3">,</span>
+  <span class="s1">`is_active` </span><span class="s2">tinyint</span><span class="s3">(</span><span class="s4">1</span><span class="s3">) </span><span class="s2">NOT NULL DEFAULT </span><span class="s5">'1'</span><span class="s3">,</span>
+  <span class="s1">`price` </span><span class="s2">decimal</span><span class="s3">(</span><span class="s4">10</span><span class="s3">,</span><span class="s4">2</span><span class="s3">) </span><span class="s2">NOT NULL</span><span class="s3">,</span>
+  <span class="s1">`session_duration` </span><span class="s2">int NOT NULL</span><span class="s3">,</span>
+  <span class="s2">PRIMARY KEY </span><span class="s3">(</span><span class="s1">`id`</span><span class="s3">)</span>
+<span class="s3">) </span><span class="s2">ENGINE</span><span class="s1">=InnoDB </span><span class="s2">DEFAULT CHARSET</span><span class="s1">=latin1</span><span class="s3">;</span>
+
+<span class="s0">-- --------------------------------------------------------</span>
+
+<span class="s0">--</span>
+<span class="s0">-- Table structure for table `sports_fields`</span>
+<span class="s0">--</span>
+
+<span class="s2">DROP TABLE IF EXISTS </span><span class="s1">`sports_fields`</span><span class="s3">;</span>
+<span class="s2">CREATE TABLE IF NOT EXISTS </span><span class="s1">`sports_fields` </span><span class="s3">(</span>
+  <span class="s1">`id` </span><span class="s2">int NOT NULL AUTO_INCREMENT</span><span class="s3">,</span>
+  <span class="s1">`sport_id` </span><span class="s2">int DEFAULT NULL</span><span class="s3">,</span>
+  <span class="s1">`field_id` </span><span class="s2">int DEFAULT NULL</span><span class="s3">,</span>
+  <span class="s1">`start_time` </span><span class="s2">datetime NOT NULL</span><span class="s3">,</span>
+  <span class="s1">`end_time` </span><span class="s2">datetime NOT NULL</span><span class="s3">,</span>
+  <span class="s1">`date_start` </span><span class="s2">datetime NOT NULL</span><span class="s3">,</span>
+  <span class="s1">`day` </span><span class="s2">int NOT NULL</span><span class="s3">,</span>
+  <span class="s1">`is_active` </span><span class="s2">tinyint</span><span class="s3">(</span><span class="s4">1</span><span class="s3">) </span><span class="s2">NOT NULL DEFAULT </span><span class="s5">'1'</span><span class="s3">,</span>
+  <span class="s2">PRIMARY KEY </span><span class="s3">(</span><span class="s1">`id`</span><span class="s3">),</span>
+  <span class="s2">KEY </span><span class="s1">`sport_id` </span><span class="s3">(</span><span class="s1">`sport_id`</span><span class="s3">),</span>
+  <span class="s2">KEY </span><span class="s1">`field_id` </span><span class="s3">(</span><span class="s1">`field_id`</span><span class="s3">)</span>
+<span class="s3">) </span><span class="s2">ENGINE</span><span class="s1">=InnoDB </span><span class="s2">DEFAULT CHARSET</span><span class="s1">=latin1</span><span class="s3">;</span>
+
+<span class="s0">-- --------------------------------------------------------</span>
+
+<span class="s0">--</span>
+<span class="s0">-- Table structure for table `subscriptions`</span>
+<span class="s0">--</span>
+
+<span class="s2">DROP TABLE IF EXISTS </span><span class="s1">`subscriptions`</span><span class="s3">;</span>
+<span class="s2">CREATE TABLE IF NOT EXISTS </span><span class="s1">`subscriptions` </span><span class="s3">(</span>
+  <span class="s1">`id` </span><span class="s2">int NOT NULL AUTO_INCREMENT</span><span class="s3">,</span>
+  <span class="s1">`subscription_name` </span><span class="s2">varchar</span><span class="s3">(</span><span class="s4">255</span><span class="s3">) </span><span class="s2">NOT NULL</span><span class="s3">,</span>
+  <span class="s1">`token` </span><span class="s2">int NOT NULL</span><span class="s3">,</span>
+  <span class="s1">`sport_id` </span><span class="s2">int DEFAULT NULL</span><span class="s3">,</span>
+  <span class="s1">`is_active` </span><span class="s2">tinyint</span><span class="s3">(</span><span class="s4">1</span><span class="s3">) </span><span class="s2">NOT NULL DEFAULT </span><span class="s5">'1'</span><span class="s3">,</span>
+  <span class="s2">PRIMARY KEY </span><span class="s3">(</span><span class="s1">`id`</span><span class="s3">),</span>
+  <span class="s2">KEY </span><span class="s1">`sport_id` </span><span class="s3">(</span><span class="s1">`sport_id`</span><span class="s3">)</span>
+<span class="s3">) </span><span class="s2">ENGINE</span><span class="s1">=InnoDB </span><span class="s2">DEFAULT CHARSET</span><span class="s1">=latin1</span><span class="s3">;</span>
+
+<span class="s0">-- --------------------------------------------------------</span>
+
+<span class="s0">--</span>
+<span class="s0">-- Table structure for table `users`</span>
+<span class="s0">--</span>
+
+<span class="s2">DROP TABLE IF EXISTS </span><span class="s1">`users`</span><span class="s3">;</span>
+<span class="s2">CREATE TABLE IF NOT EXISTS </span><span class="s1">`users` </span><span class="s3">(</span>
+  <span class="s1">`id` </span><span class="s2">int NOT NULL AUTO_INCREMENT</span><span class="s3">,</span>
+  <span class="s1">`first_name` </span><span class="s2">varchar</span><span class="s3">(</span><span class="s4">90</span><span class="s3">) </span><span class="s2">NOT NULL</span><span class="s3">,</span>
+  <span class="s1">`last_name` </span><span class="s2">varchar</span><span class="s3">(</span><span class="s4">90</span><span class="s3">) </span><span class="s2">NOT NULL</span><span class="s3">,</span>
+  <span class="s1">`email` </span><span class="s2">varchar</span><span class="s3">(</span><span class="s4">255</span><span class="s3">) </span><span class="s2">NOT NULL</span><span class="s3">,</span>
+  <span class="s1">`birthdate` </span><span class="s2">date NOT NULL</span><span class="s3">,</span>
+  <span class="s1">`password` </span><span class="s2">varchar</span><span class="s3">(</span><span class="s4">64</span><span class="s3">) </span><span class="s2">NOT NULL</span><span class="s3">,</span>
+  <span class="s1">`phone` </span><span class="s2">varchar</span><span class="s3">(</span><span class="s4">255</span><span class="s3">) </span><span class="s2">NOT NULL</span><span class="s3">,</span>
+  <span class="s1">`gender` </span><span class="s2">enum</span><span class="s3">(</span><span class="s5">'M'</span><span class="s3">,</span><span class="s5">'F'</span><span class="s3">,</span><span class="s5">'Autre'</span><span class="s3">) </span><span class="s2">NOT NULL</span><span class="s3">,</span>
+  <span class="s1">`civilite` </span><span class="s2">enum</span><span class="s3">(</span><span class="s5">'M'</span><span class="s3">,</span><span class="s5">'Mme'</span><span class="s3">,</span><span class="s5">'Dr'</span><span class="s3">,</span><span class="s5">'Autre'</span><span class="s3">) </span><span class="s2">NOT NULL</span><span class="s3">,</span>
+  <span class="s1">`role_id` </span><span class="s2">int DEFAULT NULL</span><span class="s3">,</span>
+  <span class="s1">`address_id` </span><span class="s2">int DEFAULT NULL</span><span class="s3">,</span>
+  <span class="s1">`event_id` </span><span class="s2">int DEFAULT NULL</span><span class="s3">,</span>
+  <span class="s1">`is_active` </span><span class="s2">tinyint</span><span class="s3">(</span><span class="s4">1</span><span class="s3">) </span><span class="s2">NOT NULL DEFAULT </span><span class="s5">'1'</span><span class="s3">,</span>
+  <span class="s1">`is_blacklist` </span><span class="s2">tinyint</span><span class="s3">(</span><span class="s4">1</span><span class="s3">) </span><span class="s2">NOT NULL DEFAULT </span><span class="s5">'0'</span><span class="s3">,</span>
+  <span class="s2">PRIMARY KEY </span><span class="s3">(</span><span class="s1">`id`</span><span class="s3">),</span>
+  <span class="s2">UNIQUE KEY </span><span class="s1">`email` </span><span class="s3">(</span><span class="s1">`email`</span><span class="s3">),</span>
+  <span class="s2">KEY </span><span class="s1">`role_id` </span><span class="s3">(</span><span class="s1">`role_id`</span><span class="s3">),</span>
+  <span class="s2">KEY </span><span class="s1">`address_id` </span><span class="s3">(</span><span class="s1">`address_id`</span><span class="s3">)</span>
+<span class="s3">) </span><span class="s2">ENGINE</span><span class="s1">=InnoDB </span><span class="s2">DEFAULT CHARSET</span><span class="s1">=latin1</span><span class="s3">;</span>
+
+<span class="s0">-- --------------------------------------------------------</span>
+
+<span class="s0">--</span>
+<span class="s0">-- Table structure for table `users_subscriptions`</span>
+<span class="s0">--</span>
+
+<span class="s2">DROP TABLE IF EXISTS </span><span class="s1">`users_subscriptions`</span><span class="s3">;</span>
+<span class="s2">CREATE TABLE IF NOT EXISTS </span><span class="s1">`users_subscriptions` </span><span class="s3">(</span>
+  <span class="s1">`id` </span><span class="s2">int NOT NULL AUTO_INCREMENT</span><span class="s3">,</span>
+  <span class="s1">`user_id` </span><span class="s2">int DEFAULT NULL</span><span class="s3">,</span>
+  <span class="s1">`subscription_id` </span><span class="s2">int DEFAULT NULL</span><span class="s3">,</span>
+  <span class="s1">`start_date` </span><span class="s2">date NOT NULL</span><span class="s3">,</span>
+  <span class="s1">`end_date` </span><span class="s2">date NOT NULL</span><span class="s3">,</span>
+  <span class="s1">`quantity_max` </span><span class="s2">int NOT NULL</span><span class="s3">,</span>
+  <span class="s1">`is_active` </span><span class="s2">tinyint</span><span class="s3">(</span><span class="s4">1</span><span class="s3">) </span><span class="s2">NOT NULL DEFAULT </span><span class="s5">'1'</span><span class="s3">,</span>
+  <span class="s2">PRIMARY KEY </span><span class="s3">(</span><span class="s1">`id`</span><span class="s3">),</span>
+  <span class="s2">KEY </span><span class="s1">`user_id` </span><span class="s3">(</span><span class="s1">`user_id`</span><span class="s3">),</span>
+  <span class="s2">KEY </span><span class="s1">`subscription_id` </span><span class="s3">(</span><span class="s1">`subscription_id`</span><span class="s3">)</span>
+<span class="s3">) </span><span class="s2">ENGINE</span><span class="s1">=InnoDB </span><span class="s2">DEFAULT CHARSET</span><span class="s1">=latin1</span><span class="s3">;</span>
+
+<span class="s0">--</span>
+<span class="s0">-- Constraints for dumped tables</span>
+<span class="s0">--</span>
+
+<span class="s0">--</span>
+<span class="s0">-- Constraints for table `addresses`</span>
+<span class="s0">--</span>
+<span class="s2">ALTER TABLE </span><span class="s1">`addresses`</span>
+  <span class="s2">ADD CONSTRAINT </span><span class="s1">`addresses_ibfk_1` </span><span class="s2">FOREIGN KEY </span><span class="s3">(</span><span class="s1">`city_id`</span><span class="s3">) </span><span class="s2">REFERENCES </span><span class="s1">`cities` </span><span class="s3">(</span><span class="s1">`id`</span><span class="s3">) </span><span class="s2">ON DELETE SET NULL ON UPDATE CASCADE</span><span class="s3">;</span>
+
+<span class="s0">--</span>
+<span class="s0">-- Constraints for table `cities`</span>
+<span class="s0">--</span>
+<span class="s2">ALTER TABLE </span><span class="s1">`cities`</span>
+  <span class="s2">ADD CONSTRAINT </span><span class="s1">`cities_ibfk_1` </span><span class="s2">FOREIGN KEY </span><span class="s3">(</span><span class="s1">`country_id`</span><span class="s3">) </span><span class="s2">REFERENCES </span><span class="s1">`countries` </span><span class="s3">(</span><span class="s1">`id`</span><span class="s3">) </span><span class="s2">ON DELETE SET NULL ON UPDATE CASCADE</span><span class="s3">;</span>
+
+<span class="s0">--</span>
+<span class="s0">-- Constraints for table `closures`</span>
+<span class="s0">--</span>
+<span class="s2">ALTER TABLE </span><span class="s1">`closures`</span>
+  <span class="s2">ADD CONSTRAINT </span><span class="s1">`closures_ibfk_1` </span><span class="s2">FOREIGN KEY </span><span class="s3">(</span><span class="s1">`sports_field_id`</span><span class="s3">) </span><span class="s2">REFERENCES </span><span class="s1">`sports_fields` </span><span class="s3">(</span><span class="s1">`id`</span><span class="s3">) </span><span class="s2">ON DELETE SET NULL ON UPDATE CASCADE</span><span class="s3">;</span>
+
+<span class="s0">--</span>
+<span class="s0">-- Constraints for table `fields`</span>
+<span class="s0">--</span>
+<span class="s2">ALTER TABLE </span><span class="s1">`fields`</span>
+  <span class="s2">ADD CONSTRAINT </span><span class="s1">`fields_ibfk_1` </span><span class="s2">FOREIGN KEY </span><span class="s3">(</span><span class="s1">`hall_id`</span><span class="s3">) </span><span class="s2">REFERENCES </span><span class="s1">`halls` </span><span class="s3">(</span><span class="s1">`id`</span><span class="s3">) </span><span class="s2">ON DELETE SET NULL ON UPDATE CASCADE</span><span class="s3">;</span>
+
+<span class="s0">--</span>
+<span class="s0">-- Constraints for table `historicals_sports_prices`</span>
+<span class="s0">--</span>
+<span class="s2">ALTER TABLE </span><span class="s1">`historicals_sports_prices`</span>
+  <span class="s2">ADD CONSTRAINT </span><span class="s1">`historicals_sports_prices_ibfk_1` </span><span class="s2">FOREIGN KEY </span><span class="s3">(</span><span class="s1">`sport_id`</span><span class="s3">) </span><span class="s2">REFERENCES </span><span class="s1">`sports` </span><span class="s3">(</span><span class="s1">`id`</span><span class="s3">) </span><span class="s2">ON DELETE SET NULL ON UPDATE CASCADE</span><span class="s3">;</span>
+
+<span class="s0">--</span>
+<span class="s0">-- Constraints for table `orders`</span>
+<span class="s0">--</span>
+<span class="s2">ALTER TABLE </span><span class="s1">`orders`</span>
+  <span class="s2">ADD CONSTRAINT </span><span class="s1">`orders_ibfk_1` </span><span class="s2">FOREIGN KEY </span><span class="s3">(</span><span class="s1">`user_id`</span><span class="s3">) </span><span class="s2">REFERENCES </span><span class="s1">`users` </span><span class="s3">(</span><span class="s1">`id`</span><span class="s3">) </span><span class="s2">ON DELETE SET NULL ON UPDATE CASCADE</span><span class="s3">;</span>
+
+<span class="s0">--</span>
+<span class="s0">-- Constraints for table `orders_discounts`</span>
+<span class="s0">--</span>
+<span class="s2">ALTER TABLE </span><span class="s1">`orders_discounts`</span>
+  <span class="s2">ADD CONSTRAINT </span><span class="s1">`orders_discounts_ibfk_1` </span><span class="s2">FOREIGN KEY </span><span class="s3">(</span><span class="s1">`order_id`</span><span class="s3">) </span><span class="s2">REFERENCES </span><span class="s1">`orders` </span><span class="s3">(</span><span class="s1">`id`</span><span class="s3">) </span><span class="s2">ON DELETE CASCADE ON UPDATE CASCADE</span><span class="s3">,</span>
+  <span class="s2">ADD CONSTRAINT </span><span class="s1">`orders_discounts_ibfk_2` </span><span class="s2">FOREIGN KEY </span><span class="s3">(</span><span class="s1">`discount_id`</span><span class="s3">) </span><span class="s2">REFERENCES </span><span class="s1">`discounts` </span><span class="s3">(</span><span class="s1">`id`</span><span class="s3">) </span><span class="s2">ON DELETE CASCADE ON UPDATE CASCADE</span><span class="s3">;</span>
+
+<span class="s0">--</span>
+<span class="s0">-- Constraints for table `orders_subscriptions`</span>
+<span class="s0">--</span>
+<span class="s2">ALTER TABLE </span><span class="s1">`orders_subscriptions`</span>
+  <span class="s2">ADD CONSTRAINT </span><span class="s1">`orders_subscriptions_ibfk_1` </span><span class="s2">FOREIGN KEY </span><span class="s3">(</span><span class="s1">`subscription_id`</span><span class="s3">) </span><span class="s2">REFERENCES </span><span class="s1">`subscriptions` </span><span class="s3">(</span><span class="s1">`id`</span><span class="s3">) </span><span class="s2">ON DELETE CASCADE ON UPDATE CASCADE</span><span class="s3">,</span>
+  <span class="s2">ADD CONSTRAINT </span><span class="s1">`orders_subscriptions_ibfk_2` </span><span class="s2">FOREIGN KEY </span><span class="s3">(</span><span class="s1">`order_id`</span><span class="s3">) </span><span class="s2">REFERENCES </span><span class="s1">`orders` </span><span class="s3">(</span><span class="s1">`id`</span><span class="s3">) </span><span class="s2">ON DELETE CASCADE ON UPDATE CASCADE</span><span class="s3">;</span>
+
+<span class="s0">--</span>
+<span class="s0">-- Constraints for table `reservations`</span>
+<span class="s0">--</span>
+<span class="s2">ALTER TABLE </span><span class="s1">`reservations`</span>
+  <span class="s2">ADD CONSTRAINT </span><span class="s1">`reservations_ibfk_1` </span><span class="s2">FOREIGN KEY </span><span class="s3">(</span><span class="s1">`user_id`</span><span class="s3">) </span><span class="s2">REFERENCES </span><span class="s1">`users` </span><span class="s3">(</span><span class="s1">`id`</span><span class="s3">) </span><span class="s2">ON DELETE SET NULL ON UPDATE CASCADE</span><span class="s3">,</span>
+  <span class="s2">ADD CONSTRAINT </span><span class="s1">`reservations_ibfk_2` </span><span class="s2">FOREIGN KEY </span><span class="s3">(</span><span class="s1">`sports_field_id`</span><span class="s3">) </span><span class="s2">REFERENCES </span><span class="s1">`sports_fields` </span><span class="s3">(</span><span class="s1">`id`</span><span class="s3">) </span><span class="s2">ON DELETE SET NULL ON UPDATE CASCADE</span><span class="s3">;</span>
+
+<span class="s0">--</span>
+<span class="s0">-- Constraints for table `roles_authorizations`</span>
+<span class="s0">--</span>
+<span class="s2">ALTER TABLE </span><span class="s1">`roles_authorizations`</span>
+  <span class="s2">ADD CONSTRAINT </span><span class="s1">`roles_authorizations_ibfk_1` </span><span class="s2">FOREIGN KEY </span><span class="s3">(</span><span class="s1">`role_id`</span><span class="s3">) </span><span class="s2">REFERENCES </span><span class="s1">`roles` </span><span class="s3">(</span><span class="s1">`id`</span><span class="s3">) </span><span class="s2">ON DELETE CASCADE ON UPDATE CASCADE</span><span class="s3">,</span>
+  <span class="s2">ADD CONSTRAINT </span><span class="s1">`roles_authorizations_ibfk_2` </span><span class="s2">FOREIGN KEY </span><span class="s3">(</span><span class="s1">`authorization_id`</span><span class="s3">) </span><span class="s2">REFERENCES </span><span class="s1">`authorizations` </span><span class="s3">(</span><span class="s1">`id`</span><span class="s3">) </span><span class="s2">ON DELETE CASCADE ON UPDATE CASCADE</span><span class="s3">;</span>
+
+<span class="s0">--</span>
+<span class="s0">-- Constraints for table `sports_fields`</span>
+<span class="s0">--</span>
+<span class="s2">ALTER TABLE </span><span class="s1">`sports_fields`</span>
+  <span class="s2">ADD CONSTRAINT </span><span class="s1">`sports_fields_ibfk_1` </span><span class="s2">FOREIGN KEY </span><span class="s3">(</span><span class="s1">`sport_id`</span><span class="s3">) </span><span class="s2">REFERENCES </span><span class="s1">`sports` </span><span class="s3">(</span><span class="s1">`id`</span><span class="s3">),</span>
+  <span class="s2">ADD CONSTRAINT </span><span class="s1">`sports_fields_ibfk_2` </span><span class="s2">FOREIGN KEY </span><span class="s3">(</span><span class="s1">`field_id`</span><span class="s3">) </span><span class="s2">REFERENCES </span><span class="s1">`fields` </span><span class="s3">(</span><span class="s1">`id`</span><span class="s3">);</span>
+
+<span class="s0">--</span>
+<span class="s0">-- Constraints for table `subscriptions`</span>
+<span class="s0">--</span>
+<span class="s2">ALTER TABLE </span><span class="s1">`subscriptions`</span>
+  <span class="s2">ADD CONSTRAINT </span><span class="s1">`subscriptions_ibfk_1` </span><span class="s2">FOREIGN KEY </span><span class="s3">(</span><span class="s1">`sport_id`</span><span class="s3">) </span><span class="s2">REFERENCES </span><span class="s1">`sports` </span><span class="s3">(</span><span class="s1">`id`</span><span class="s3">) </span><span class="s2">ON DELETE SET NULL ON UPDATE CASCADE</span><span class="s3">;</span>
+
+<span class="s0">--</span>
+<span class="s0">-- Constraints for table `users`</span>
+<span class="s0">--</span>
+<span class="s2">ALTER TABLE </span><span class="s1">`users`</span>
+  <span class="s2">ADD CONSTRAINT </span><span class="s1">`users_ibfk_1` </span><span class="s2">FOREIGN KEY </span><span class="s3">(</span><span class="s1">`role_id`</span><span class="s3">) </span><span class="s2">REFERENCES </span><span class="s1">`roles` </span><span class="s3">(</span><span class="s1">`id`</span><span class="s3">) </span><span class="s2">ON DELETE SET NULL ON UPDATE CASCADE</span><span class="s3">,</span>
+  <span class="s2">ADD CONSTRAINT </span><span class="s1">`users_ibfk_2` </span><span class="s2">FOREIGN KEY </span><span class="s3">(</span><span class="s1">`address_id`</span><span class="s3">) </span><span class="s2">REFERENCES </span><span class="s1">`addresses` </span><span class="s3">(</span><span class="s1">`id`</span><span class="s3">) </span><span class="s2">ON DELETE SET NULL ON UPDATE CASCADE</span><span class="s3">;</span>
+
+<span class="s0">--</span>
+<span class="s0">-- Constraints for table `users_subscriptions`</span>
+<span class="s0">--</span>
+<span class="s2">ALTER TABLE </span><span class="s1">`users_subscriptions`</span>
+  <span class="s2">ADD CONSTRAINT </span><span class="s1">`users_subscriptions_ibfk_1` </span><span class="s2">FOREIGN KEY </span><span class="s3">(</span><span class="s1">`user_id`</span><span class="s3">) </span><span class="s2">REFERENCES </span><span class="s1">`users` </span><span class="s3">(</span><span class="s1">`id`</span><span class="s3">),</span>
+  <span class="s2">ADD CONSTRAINT </span><span class="s1">`users_subscriptions_ibfk_2` </span><span class="s2">FOREIGN KEY </span><span class="s3">(</span><span class="s1">`subscription_id`</span><span class="s3">) </span><span class="s2">REFERENCES </span><span class="s1">`subscriptions` </span><span class="s3">(</span><span class="s1">`id`</span><span class="s3">);</span>
+<span class="s2">COMMIT</span><span class="s3">;</span>
+
+<span class="s0">/*!40101 </span><span class="s2">SET </span><span class="s1">CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT </span><span class="s0">*/</span><span class="s3">;</span>
+<span class="s0">/*!40101 </span><span class="s2">SET </span><span class="s1">CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS </span><span class="s0">*/</span><span class="s3">;</span>
+<span class="s0">/*!40101 </span><span class="s2">SET </span><span class="s1">COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION </span><span class="s0">*/</span><span class="s3">;</span>
+</pre>
+</body>
+</html>

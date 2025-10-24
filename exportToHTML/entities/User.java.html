@@ -1,0 +1,192 @@
+<html>
+<head>
+<title>User.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cf8e6d;}
+.s1 { color: #bcbec4;}
+.s2 { color: #bcbec4;}
+.s3 { color: #6aab73;}
+.s4 { color: #2aacb8;}
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+User.java</font>
+</center></td></tr></table>
+<pre><span class="s0">package </span><span class="s1">entities</span><span class="s2">;</span>
+
+<span class="s0">import </span><span class="s1">enums</span><span class="s2">.</span><span class="s1">UserCivilite</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">enums</span><span class="s2">.</span><span class="s1">UserGender</span><span class="s2">;</span>
+
+<span class="s0">import </span><span class="s1">javax</span><span class="s2">.</span><span class="s1">persistence</span><span class="s2">.*;</span>
+<span class="s0">import </span><span class="s1">java</span><span class="s2">.</span><span class="s1">time</span><span class="s2">.</span><span class="s1">LocalDate</span><span class="s2">;</span>
+
+<span class="s1">@Entity</span>
+<span class="s1">@Table</span><span class="s2">(</span><span class="s1">name </span><span class="s2">= </span><span class="s3">&quot;users&quot;</span><span class="s2">)</span>
+<span class="s0">public class </span><span class="s1">User </span><span class="s2">{</span>
+    <span class="s1">@Id</span>
+    <span class="s1">@Column</span><span class="s2">(</span><span class="s1">name </span><span class="s2">= </span><span class="s3">&quot;id&quot;</span><span class="s2">, </span><span class="s1">nullable </span><span class="s2">= </span><span class="s0">false</span><span class="s2">)</span>
+    <span class="s0">private int </span><span class="s1">id</span><span class="s2">;</span>
+
+    <span class="s1">@Column</span><span class="s2">(</span><span class="s1">name </span><span class="s2">= </span><span class="s3">&quot;first_name&quot;</span><span class="s2">, </span><span class="s1">nullable </span><span class="s2">= </span><span class="s0">false</span><span class="s2">, </span><span class="s1">length </span><span class="s2">= </span><span class="s4">90</span><span class="s2">)</span>
+    <span class="s0">private </span><span class="s1">String firstName</span><span class="s2">;</span>
+
+    <span class="s1">@Column</span><span class="s2">(</span><span class="s1">name </span><span class="s2">= </span><span class="s3">&quot;last_name&quot;</span><span class="s2">, </span><span class="s1">nullable </span><span class="s2">= </span><span class="s0">false</span><span class="s2">, </span><span class="s1">length </span><span class="s2">= </span><span class="s4">90</span><span class="s2">)</span>
+    <span class="s0">private </span><span class="s1">String lastName</span><span class="s2">;</span>
+
+    <span class="s1">@Column</span><span class="s2">(</span><span class="s1">name </span><span class="s2">= </span><span class="s3">&quot;email&quot;</span><span class="s2">, </span><span class="s1">nullable </span><span class="s2">= </span><span class="s0">false</span><span class="s2">)</span>
+    <span class="s0">private </span><span class="s1">String email</span><span class="s2">;</span>
+
+
+    <span class="s1">@Column</span><span class="s2">(</span><span class="s1">name </span><span class="s2">= </span><span class="s3">&quot;birthdate&quot;</span><span class="s2">, </span><span class="s1">nullable </span><span class="s2">= </span><span class="s0">false</span><span class="s2">)</span>
+    <span class="s0">private </span><span class="s1">LocalDate birthdate</span><span class="s2">;</span>
+
+    <span class="s1">@Column</span><span class="s2">(</span><span class="s1">name </span><span class="s2">= </span><span class="s3">&quot;password&quot;</span><span class="s2">, </span><span class="s1">nullable </span><span class="s2">= </span><span class="s0">false</span><span class="s2">, </span><span class="s1">length </span><span class="s2">= </span><span class="s4">64</span><span class="s2">)</span>
+    <span class="s0">private </span><span class="s1">String password</span><span class="s2">;</span>
+
+    <span class="s1">@Column</span><span class="s2">(</span><span class="s1">name </span><span class="s2">= </span><span class="s3">&quot;phone&quot;</span><span class="s2">, </span><span class="s1">nullable </span><span class="s2">= </span><span class="s0">false</span><span class="s2">)</span>
+    <span class="s0">private </span><span class="s1">String phone</span><span class="s2">;</span>
+
+    <span class="s1">@Lob</span>
+    <span class="s1">@Column</span><span class="s2">(</span><span class="s1">name </span><span class="s2">= </span><span class="s3">&quot;gender&quot;</span><span class="s2">, </span><span class="s1">nullable </span><span class="s2">= </span><span class="s0">false</span><span class="s2">)</span>
+    <span class="s0">private </span><span class="s1">UserGender gender</span><span class="s2">;</span>
+
+    <span class="s1">@Lob</span>
+    <span class="s1">@Column</span><span class="s2">(</span><span class="s1">name </span><span class="s2">= </span><span class="s3">&quot;civilite&quot;</span><span class="s2">, </span><span class="s1">nullable </span><span class="s2">= </span><span class="s0">false</span><span class="s2">)</span>
+    <span class="s0">private </span><span class="s1">UserCivilite civilite</span><span class="s2">;</span>
+
+    <span class="s1">@ManyToOne</span>
+    <span class="s1">@JoinColumn</span><span class="s2">(</span><span class="s1">name </span><span class="s2">= </span><span class="s3">&quot;role_id&quot;</span><span class="s2">)</span>
+    <span class="s0">private </span><span class="s1">Role role</span><span class="s2">;</span>
+
+    <span class="s1">@ManyToOne</span>
+    <span class="s1">@JoinColumn</span><span class="s2">(</span><span class="s1">name </span><span class="s2">= </span><span class="s3">&quot;address_id&quot;</span><span class="s2">)</span>
+    <span class="s0">private </span><span class="s1">Address address</span><span class="s2">;</span>
+
+    <span class="s1">@Column</span><span class="s2">(</span><span class="s1">name </span><span class="s2">= </span><span class="s3">&quot;event_id&quot;</span><span class="s2">)</span>
+    <span class="s0">private int </span><span class="s1">eventId</span><span class="s2">;</span>
+
+    <span class="s1">@Column</span><span class="s2">(</span><span class="s1">name </span><span class="s2">= </span><span class="s3">&quot;is_active&quot;</span><span class="s2">, </span><span class="s1">nullable </span><span class="s2">= </span><span class="s0">false</span><span class="s2">)</span>
+    <span class="s0">private boolean </span><span class="s1">active </span><span class="s2">= </span><span class="s0">true</span><span class="s2">;</span>
+
+    <span class="s1">@Column</span><span class="s2">(</span><span class="s1">name </span><span class="s2">= </span><span class="s3">&quot;is_blacklist&quot;</span><span class="s2">, </span><span class="s1">nullable </span><span class="s2">= </span><span class="s0">false</span><span class="s2">)</span>
+    <span class="s0">private </span><span class="s1">Boolean blacklist </span><span class="s2">= </span><span class="s0">false</span><span class="s2">;</span>
+
+    <span class="s0">public </span><span class="s1">Boolean isBlacklist</span><span class="s2">() {</span>
+        <span class="s0">return </span><span class="s1">blacklist</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s0">public void </span><span class="s1">setBlacklist</span><span class="s2">(</span><span class="s1">Boolean blacklist</span><span class="s2">) {</span>
+        <span class="s0">this</span><span class="s2">.</span><span class="s1">blacklist </span><span class="s2">= </span><span class="s1">blacklist</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s0">public int </span><span class="s1">getId</span><span class="s2">() {</span>
+        <span class="s0">return </span><span class="s1">id</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s0">public void </span><span class="s1">setId</span><span class="s2">(</span><span class="s0">int </span><span class="s1">id</span><span class="s2">) {</span>
+        <span class="s0">this</span><span class="s2">.</span><span class="s1">id </span><span class="s2">= </span><span class="s1">id</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s0">public </span><span class="s1">String getFirstName</span><span class="s2">() {</span>
+        <span class="s0">return </span><span class="s1">firstName</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s0">public void </span><span class="s1">setFirstName</span><span class="s2">(</span><span class="s1">String firstName</span><span class="s2">) {</span>
+        <span class="s0">this</span><span class="s2">.</span><span class="s1">firstName </span><span class="s2">= </span><span class="s1">firstName</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s0">public </span><span class="s1">String getLastName</span><span class="s2">() {</span>
+        <span class="s0">return </span><span class="s1">lastName</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s0">public void </span><span class="s1">setLastName</span><span class="s2">(</span><span class="s1">String lastName</span><span class="s2">) {</span>
+        <span class="s0">this</span><span class="s2">.</span><span class="s1">lastName </span><span class="s2">= </span><span class="s1">lastName</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s0">public </span><span class="s1">String getEmail</span><span class="s2">() {</span>
+        <span class="s0">return </span><span class="s1">email</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s0">public void </span><span class="s1">setEmail</span><span class="s2">(</span><span class="s1">String email</span><span class="s2">) {</span>
+        <span class="s0">this</span><span class="s2">.</span><span class="s1">email </span><span class="s2">= </span><span class="s1">email</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s0">public </span><span class="s1">LocalDate getBirthdate</span><span class="s2">() {</span>
+        <span class="s0">return </span><span class="s1">birthdate</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s0">public void </span><span class="s1">setBirthdate</span><span class="s2">(</span><span class="s1">LocalDate birthdate</span><span class="s2">) {</span>
+        <span class="s0">this</span><span class="s2">.</span><span class="s1">birthdate </span><span class="s2">= </span><span class="s1">birthdate</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s0">public </span><span class="s1">String getPassword</span><span class="s2">() {</span>
+        <span class="s0">return </span><span class="s1">password</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s0">public void </span><span class="s1">setPassword</span><span class="s2">(</span><span class="s1">String password</span><span class="s2">) {</span>
+        <span class="s0">this</span><span class="s2">.</span><span class="s1">password </span><span class="s2">= </span><span class="s1">password</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s0">public </span><span class="s1">String getPhone</span><span class="s2">() {</span>
+        <span class="s0">return </span><span class="s1">phone</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s0">public void </span><span class="s1">setPhone</span><span class="s2">(</span><span class="s1">String phone</span><span class="s2">) {</span>
+        <span class="s0">this</span><span class="s2">.</span><span class="s1">phone </span><span class="s2">= </span><span class="s1">phone</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s0">public </span><span class="s1">UserGender getGender</span><span class="s2">() {</span>
+        <span class="s0">return </span><span class="s1">gender</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s0">public void </span><span class="s1">setGender</span><span class="s2">(</span><span class="s1">UserGender gender</span><span class="s2">) {</span>
+        <span class="s0">this</span><span class="s2">.</span><span class="s1">gender </span><span class="s2">= </span><span class="s1">gender</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s0">public </span><span class="s1">UserCivilite getCivilite</span><span class="s2">() {</span>
+        <span class="s0">return </span><span class="s1">civilite</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s0">public void </span><span class="s1">setCivilite</span><span class="s2">(</span><span class="s1">UserCivilite civilite</span><span class="s2">) {</span>
+        <span class="s0">this</span><span class="s2">.</span><span class="s1">civilite </span><span class="s2">= </span><span class="s1">civilite</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s0">public </span><span class="s1">Role getRole</span><span class="s2">() {</span>
+        <span class="s0">return </span><span class="s1">role</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s0">public void </span><span class="s1">setRole</span><span class="s2">(</span><span class="s1">Role role</span><span class="s2">) {</span>
+        <span class="s0">this</span><span class="s2">.</span><span class="s1">role </span><span class="s2">= </span><span class="s1">role</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s0">public </span><span class="s1">Address getAddress</span><span class="s2">() {</span>
+        <span class="s0">return </span><span class="s1">address</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s0">public void </span><span class="s1">setAddress</span><span class="s2">(</span><span class="s1">Address address</span><span class="s2">) {</span>
+        <span class="s0">this</span><span class="s2">.</span><span class="s1">address </span><span class="s2">= </span><span class="s1">address</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s0">public int </span><span class="s1">getEventId</span><span class="s2">() {</span>
+        <span class="s0">return </span><span class="s1">eventId</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s0">public void </span><span class="s1">setEventId</span><span class="s2">(</span><span class="s0">int </span><span class="s1">eventId</span><span class="s2">) {</span>
+        <span class="s0">this</span><span class="s2">.</span><span class="s1">eventId </span><span class="s2">= </span><span class="s1">eventId</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s0">public boolean </span><span class="s1">isActive</span><span class="s2">() {</span>
+        <span class="s0">return </span><span class="s1">active</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s0">public void </span><span class="s1">setActive</span><span class="s2">(</span><span class="s0">boolean </span><span class="s1">active</span><span class="s2">) {</span>
+        <span class="s0">this</span><span class="s2">.</span><span class="s1">active </span><span class="s2">= </span><span class="s1">active</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+<span class="s2">}</span></pre>
+</body>
+</html>

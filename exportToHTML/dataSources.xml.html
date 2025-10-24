@@ -1,0 +1,37 @@
+<html>
+<head>
+<title>dataSources.xml</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #d5b778;}
+.s1 { color: #bcbec4;}
+.s2 { color: #6aab73;}
+.s3 { color: #bcbec4;}
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+dataSources.xml</font>
+</center></td></tr></table>
+<pre><span class="s0">&lt;?</span><span class="s1">xml version</span><span class="s2">=&quot;1.0&quot; </span><span class="s1">encoding</span><span class="s2">=&quot;UTF-8&quot;</span><span class="s0">?&gt;</span>
+<span class="s0">&lt;project </span><span class="s1">version</span><span class="s2">=&quot;4&quot;</span><span class="s0">&gt;</span>
+  <span class="s0">&lt;component </span><span class="s1">name</span><span class="s2">=&quot;DataSourceManagerImpl&quot; </span><span class="s1">format</span><span class="s2">=&quot;xml&quot; </span><span class="s1">multifile-model</span><span class="s2">=&quot;true&quot;</span><span class="s0">&gt;</span>
+    <span class="s0">&lt;data-source </span><span class="s1">source</span><span class="s2">=&quot;LOCAL&quot; </span><span class="s1">name</span><span class="s2">=&quot;centreSportif@localhost&quot; </span><span class="s1">uuid</span><span class="s2">=&quot;36922afc-34f5-4b2f-a88e-4e21684ba383&quot;</span><span class="s0">&gt;</span>
+      <span class="s0">&lt;driver-ref&gt;</span><span class="s3">mysql.8</span><span class="s0">&lt;/driver-ref&gt;</span>
+      <span class="s0">&lt;synchronize&gt;</span><span class="s3">true</span><span class="s0">&lt;/synchronize&gt;</span>
+      <span class="s0">&lt;jdbc-driver&gt;</span><span class="s3">com.mysql.cj.jdbc.Driver</span><span class="s0">&lt;/jdbc-driver&gt;</span>
+      <span class="s0">&lt;jdbc-url&gt;</span><span class="s3">jdbc:mysql://localhost:3306/centresportif</span><span class="s0">&lt;/jdbc-url&gt;</span>
+      <span class="s0">&lt;jdbc-additional-properties&gt;</span>
+        <span class="s0">&lt;property </span><span class="s1">name</span><span class="s2">=&quot;com.intellij.clouds.kubernetes.db.host.port&quot; </span><span class="s0">/&gt;</span>
+        <span class="s0">&lt;property </span><span class="s1">name</span><span class="s2">=&quot;com.intellij.clouds.kubernetes.db.enabled&quot; </span><span class="s1">value</span><span class="s2">=&quot;false&quot; </span><span class="s0">/&gt;</span>
+        <span class="s0">&lt;property </span><span class="s1">name</span><span class="s2">=&quot;com.intellij.clouds.kubernetes.db.resource.type&quot; </span><span class="s1">value</span><span class="s2">=&quot;Deployment&quot; </span><span class="s0">/&gt;</span>
+        <span class="s0">&lt;property </span><span class="s1">name</span><span class="s2">=&quot;com.intellij.clouds.kubernetes.db.container.port&quot; </span><span class="s0">/&gt;</span>
+      <span class="s0">&lt;/jdbc-additional-properties&gt;</span>
+      <span class="s0">&lt;working-dir&gt;</span><span class="s3">$ProjectFileDir$</span><span class="s0">&lt;/working-dir&gt;</span>
+    <span class="s0">&lt;/data-source&gt;</span>
+  <span class="s0">&lt;/component&gt;</span>
+<span class="s0">&lt;/project&gt;</span></pre>
+</body>
+</html>

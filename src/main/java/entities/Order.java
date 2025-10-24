@@ -1,6 +1,6 @@
 package entities;
 
-import enums.OrderStatus;
+import enums.OrderStatus; //ONHOLD, CONFIRMED, CANCELLED
 
 import javax.persistence.*;
 import java.time.Instant;

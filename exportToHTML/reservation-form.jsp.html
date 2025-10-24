@@ -1,0 +1,212 @@
+<html>
+<head>
+<title>reservation-form.jsp</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #7a7e85;}
+.s1 { color: #bcbec4;}
+.s2 { color: #bcbec4;}
+.s3 { color: #cf8e6d; font-weight: bold;}
+.s4 { color: #bcbec4;}
+.s5 { color: #6aab73;}
+.s6 { color: #7a7e85;}
+.s7 { color: #d5b778;}
+.s8 { color: #bababa;}
+.s9 { color: #6aab73;}
+.s10 { color: #cf8e6d;}
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+reservation-form.jsp</font>
+</center></td></tr></table>
+<pre><span class="s0">&lt;%-- 
+  Created by IntelliJ IDEA. 
+  User: Asus 
+  Date: 20-09-25 
+  Time: 16:57 
+  To change this template use File | Settings | File Templates. 
+--%&gt;</span>
+<span class="s2">&lt;%@ </span><span class="s3">page </span><span class="s4">contentType</span><span class="s2">=&quot;</span><span class="s5">text/html;charset=UTF-8</span><span class="s2">&quot; </span><span class="s4">language</span><span class="s2">=&quot;</span><span class="s5">java</span><span class="s2">&quot; %&gt;</span>
+<span class="s2">&lt;%@ </span><span class="s3">taglib </span><span class="s4">prefix</span><span class="s2">=&quot;</span><span class="s5">fmt</span><span class="s2">&quot; </span><span class="s4">uri</span><span class="s2">=&quot;</span><span class="s5">http://java.sun.com/jsp/jstl/fmt</span><span class="s2">&quot; %&gt;</span>
+<span class="s2">&lt;%@ </span><span class="s3">taglib </span><span class="s4">uri</span><span class="s2">=&quot;</span><span class="s5">http://java.sun.com/jsp/jstl/core</span><span class="s2">&quot; </span><span class="s4">prefix</span><span class="s2">=&quot;</span><span class="s5">c</span><span class="s2">&quot; %&gt;</span>
+<span class="s2">&lt;%@ </span><span class="s3">taglib </span><span class="s4">prefix</span><span class="s2">=&quot;</span><span class="s5">fn</span><span class="s2">&quot; </span><span class="s4">uri</span><span class="s2">=&quot;</span><span class="s5">http://java.sun.com/jsp/jstl/functions</span><span class="s2">&quot; %&gt;</span>
+<span class="s6">&lt;!-- formulaire version David --&gt;</span>
+<span class="s7">&lt;section </span><span class="s8">class</span><span class="s9">=&quot;page-section&quot;</span><span class="s7">&gt;</span>
+    <span class="s7">&lt;h2 </span><span class="s8">class</span><span class="s9">=&quot;text-center&quot;</span><span class="s7">&gt;</span>
+        <span class="s2">&lt;</span><span class="s3">c:choose</span><span class="s2">&gt;</span>
+            <span class="s2">&lt;</span><span class="s3">c:when </span><span class="s4">test</span><span class="s5">=&quot;</span><span class="s10">${not empty </span><span class="s4">reservationId</span><span class="s10">}</span><span class="s5">&quot;</span><span class="s2">&gt;</span><span class="s1">Modifier une réservation</span><span class="s2">&lt;/</span><span class="s3">c:when</span><span class="s2">&gt;</span>
+            <span class="s2">&lt;</span><span class="s3">c:otherwise</span><span class="s2">&gt;</span><span class="s1">Ajouter une réservation</span><span class="s2">&lt;/</span><span class="s3">c:otherwise</span><span class="s2">&gt;</span>
+        <span class="s2">&lt;/</span><span class="s3">c:choose</span><span class="s2">&gt;</span>
+    <span class="s7">&lt;/h2&gt;</span>
+    <span class="s6">&lt;!-- RETOUR --&gt;</span>
+    <span class="s7">&lt;div </span><span class="s8">class</span><span class="s9">=&quot;text-start mb-3&quot;</span><span class="s7">&gt;</span>
+        <span class="s7">&lt;a </span><span class="s8">href</span><span class="s9">=&quot;</span><span class="s10">${</span><span class="s4">pageContext.request.contextPath</span><span class="s10">}</span><span class="s9">/views/template/template.jsp?content=../reservation.jsp&quot; </span><span class="s8">class</span><span class="s9">=&quot;btn btn-outline-secondary&quot;</span><span class="s7">&gt;</span>
+            <span class="s7">&lt;i </span><span class="s8">class</span><span class="s9">=&quot;bi bi-arrow-left&quot;</span><span class="s7">&gt;&lt;/i&gt; </span><span class="s1">Retour vers les réservations</span>
+        <span class="s7">&lt;/a&gt;</span>
+    <span class="s7">&lt;/div&gt;</span>
+
+    <span class="s7">&lt;div </span><span class="s8">class</span><span class="s9">=&quot;container&quot;</span><span class="s7">&gt;</span>
+        <span class="s7">&lt;div </span><span class="s8">class</span><span class="s9">=&quot;row justify-content-center&quot;</span><span class="s7">&gt;</span>
+            <span class="s7">&lt;div </span><span class="s8">class</span><span class="s9">=&quot;col-md-6&quot;</span><span class="s7">&gt; </span><span class="s0">&lt;%-- Centré et largeur moyenne --%&gt;</span>
+                <span class="s7">&lt;form </span><span class="s8">method</span><span class="s9">=&quot;post&quot; </span><span class="s8">action</span><span class="s9">=&quot;</span><span class="s10">${</span><span class="s4">pageContext.request.contextPath</span><span class="s10">}</span><span class="s9">/reservation&quot; </span><span class="s8">value</span><span class="s9">=&quot;</span><span class="s10">${not empty </span><span class="s4">reservationId </span><span class="s2">? </span><span class="s5">'edit' </span><span class="s2">: </span><span class="s5">'create'</span><span class="s10">}</span><span class="s9">&quot;</span><span class="s7">&gt;</span>
+
+                    <span class="s6">&lt;!-- ID --&gt;</span>
+                    <span class="s2">&lt;</span><span class="s3">c:if </span><span class="s4">test</span><span class="s5">=&quot;</span><span class="s10">${not empty </span><span class="s4">formReservationId</span><span class="s10">}</span><span class="s5">&quot;</span><span class="s2">&gt;</span>
+                        <span class="s6">&lt;!-- Champ caché pour envoyer l'ID --&gt;</span>
+                        <span class="s7">&lt;input </span><span class="s8">type</span><span class="s9">=&quot;hidden&quot; </span><span class="s8">name</span><span class="s9">=&quot;eventId&quot; </span><span class="s8">value</span><span class="s9">=&quot;</span><span class="s10">${</span><span class="s4">formReservationId</span><span class="s10">}</span><span class="s9">&quot; </span><span class="s7">/&gt;</span>
+
+                        <span class="s6">&lt;!-- Champ visible mais non modifiable --&gt;</span>
+                        <span class="s7">&lt;div </span><span class="s8">class</span><span class="s9">=&quot;form-floating mb-3&quot;</span><span class="s7">&gt;</span>
+                            <span class="s7">&lt;input </span><span class="s8">class</span><span class="s9">=&quot;form-control&quot; </span><span class="s8">type</span><span class="s9">=&quot;text&quot; </span><span class="s8">id</span><span class="s9">=&quot;reservationIdDisplay&quot;</span>
+                                   <span class="s8">placeholder</span><span class="s9">=&quot;ID&quot; </span><span class="s8">value</span><span class="s9">=&quot;</span><span class="s10">${</span><span class="s4">formreservationId</span><span class="s10">}</span><span class="s9">&quot; </span><span class="s8">disabled </span><span class="s7">/&gt;</span>
+                            <span class="s7">&lt;label </span><span class="s8">for</span><span class="s9">=&quot;reservationIdDisplay&quot;</span><span class="s7">&gt;</span><span class="s1">ID de la réservation</span><span class="s7">&lt;/label&gt;</span>
+                        <span class="s7">&lt;/div&gt;</span>
+                    <span class="s2">&lt;/</span><span class="s3">c:if</span><span class="s2">&gt;</span>
+                    <span class="s6">&lt;!-- Nom de la réservation mettre un select ou un enum?--&gt;</span>
+                    <span class="s7">&lt;div </span><span class="s8">class</span><span class="s9">=&quot;form-floating mb-3&quot;</span><span class="s7">&gt;</span>
+                        <span class="s7">&lt;input </span><span class="s8">class</span><span class="s9">=&quot;form-control&quot; </span><span class="s8">type</span><span class="s9">=&quot;text&quot; </span><span class="s8">name</span><span class="s9">=&quot;reservationName&quot; </span><span class="s8">id</span><span class="s9">=&quot;reservationName&quot;</span>
+                               <span class="s8">placeholder</span><span class="s9">=&quot;Nom de la réservation&quot; </span><span class="s8">required</span>
+                               <span class="s8">value</span><span class="s9">=&quot;</span><span class="s10">${</span><span class="s4">formReservationName</span><span class="s10">}</span><span class="s9">&quot;</span><span class="s7">/&gt;</span>
+                        <span class="s7">&lt;label </span><span class="s8">for</span><span class="s9">=&quot;reservationName&quot;</span><span class="s7">&gt;</span><span class="s1">Nom de la réservation</span><span class="s7">&lt;/label&gt;</span>
+                    <span class="s7">&lt;/div&gt;</span>
+                    <span class="s2">&lt;</span><span class="s3">c:if </span><span class="s4">test</span><span class="s5">=&quot;</span><span class="s10">${not empty </span><span class="s4">errorReservationName</span><span class="s10">}</span><span class="s5">&quot;</span><span class="s2">&gt;</span>
+                        <span class="s7">&lt;div </span><span class="s8">class</span><span class="s9">=&quot;text-danger mb-3&quot;</span><span class="s7">&gt;</span><span class="s10">${</span><span class="s4">errorReservationName</span><span class="s10">}</span><span class="s7">&lt;/div&gt;</span>
+                    <span class="s2">&lt;/</span><span class="s3">c:if</span><span class="s2">&gt;</span>
+                    <span class="s6">&lt;!-- Choisir un sport--&gt;</span>
+                    <span class="s7">&lt;div </span><span class="s8">class</span><span class="s9">=&quot;form-floating mb-3&quot;</span><span class="s7">&gt;</span>
+                        <span class="s7">&lt;input </span><span class="s8">class</span><span class="s9">=&quot;form-control&quot; </span><span class="s8">type</span><span class="s9">=&quot;text&quot; </span><span class="s8">name</span><span class="s9">=&quot;reservationSport&quot; </span><span class="s8">id</span><span class="s9">=&quot;reservationSport&quot;</span>
+                               <span class="s8">placeholder</span><span class="s9">=&quot;Choisissez un sport&quot; </span><span class="s8">required</span>
+                               <span class="s8">value</span><span class="s9">=&quot;</span><span class="s10">${</span><span class="s4">formReservationSport</span><span class="s10">}</span><span class="s9">&quot;</span><span class="s7">/&gt;</span>
+                        <span class="s7">&lt;label </span><span class="s8">for</span><span class="s9">=&quot;reservationSport&quot;</span><span class="s7">&gt;</span><span class="s1">Choisir un sport</span><span class="s7">&lt;/label&gt;</span>
+                    <span class="s7">&lt;/div&gt;</span>
+                    <span class="s2">&lt;</span><span class="s3">c:if </span><span class="s4">test</span><span class="s5">=&quot;</span><span class="s10">${not empty </span><span class="s4">errorReservationSport</span><span class="s10">}</span><span class="s5">&quot;</span><span class="s2">&gt;</span>
+                        <span class="s7">&lt;div </span><span class="s8">class</span><span class="s9">=&quot;text-danger mb-3&quot;</span><span class="s7">&gt;</span><span class="s10">${</span><span class="s4">errorReservationSport</span><span class="s10">}</span><span class="s7">&lt;/div&gt;</span>
+                    <span class="s2">&lt;/</span><span class="s3">c:if</span><span class="s2">&gt;</span>
+                    <span class="s6">&lt;!-- Choisir un local pour le foot il n'y en a qu'un pour les autres selon les réservations enregistrées--&gt;</span>
+                    <span class="s7">&lt;div </span><span class="s8">class</span><span class="s9">=&quot;form-floating mb-3&quot;</span><span class="s7">&gt;</span>
+                        <span class="s7">&lt;input </span><span class="s8">class</span><span class="s9">=&quot;form-control&quot; </span><span class="s8">type</span><span class="s9">=&quot;text&quot; </span><span class="s8">name</span><span class="s9">=&quot;reservationLocal&quot; </span><span class="s8">id</span><span class="s9">=&quot;reservationLocal&quot;</span>
+                               <span class="s8">placeholder</span><span class="s9">=&quot;Choisissez un local&quot; </span><span class="s8">required</span>
+                               <span class="s8">value</span><span class="s9">=&quot;</span><span class="s10">${</span><span class="s4">formReservationLocal</span><span class="s10">}</span><span class="s9">&quot;</span><span class="s7">/&gt;</span>
+                        <span class="s7">&lt;label </span><span class="s8">for</span><span class="s9">=&quot;reservationLocal&quot;</span><span class="s7">&gt;</span><span class="s1">Choisir un local</span><span class="s7">&lt;/label&gt;</span>
+                    <span class="s7">&lt;/div&gt;</span>
+                    <span class="s2">&lt;</span><span class="s3">c:if </span><span class="s4">test</span><span class="s5">=&quot;</span><span class="s10">${not empty </span><span class="s4">errorReservationLocal</span><span class="s10">}</span><span class="s5">&quot;</span><span class="s2">&gt;</span>
+                        <span class="s7">&lt;div </span><span class="s8">class</span><span class="s9">=&quot;text-danger mb-3&quot;</span><span class="s7">&gt;</span><span class="s10">${</span><span class="s4">errorReservationLocal</span><span class="s10">}</span><span class="s7">&lt;/div&gt;</span>
+                    <span class="s2">&lt;/</span><span class="s3">c:if</span><span class="s2">&gt;</span>
+
+                    <span class="s6">&lt;!-- Date de début --&gt;</span>
+                    <span class="s7">&lt;div </span><span class="s8">class</span><span class="s9">=&quot;form-floating mb-3&quot;</span><span class="s7">&gt;</span>
+                        <span class="s7">&lt;input </span><span class="s8">class</span><span class="s9">=&quot;form-control&quot; </span><span class="s8">type</span><span class="s9">=&quot;datetime-local&quot;  </span><span class="s8">name</span><span class="s9">=&quot;startDate&quot; </span><span class="s8">id</span><span class="s9">=&quot;startDate&quot;</span>
+                               <span class="s8">placeholder</span><span class="s9">=&quot;Date de début&quot; </span><span class="s8">required</span>
+                               <span class="s8">value</span><span class="s9">=&quot;</span><span class="s10">${</span><span class="s4">formStartDateHour</span><span class="s10">}</span><span class="s9">&quot;</span><span class="s7">/&gt;</span>
+                        <span class="s7">&lt;label </span><span class="s8">for</span><span class="s9">=&quot;startDate&quot;</span><span class="s7">&gt;</span><span class="s1">Date de début</span><span class="s7">&lt;/label&gt;</span>
+                    <span class="s7">&lt;/div&gt;</span>
+                    <span class="s2">&lt;</span><span class="s3">c:if </span><span class="s4">test</span><span class="s5">=&quot;</span><span class="s10">${not empty </span><span class="s4">errorStartDate</span><span class="s10">}</span><span class="s5">&quot;</span><span class="s2">&gt;</span>
+                        <span class="s7">&lt;div </span><span class="s8">class</span><span class="s9">=&quot;text-danger mb-3&quot;</span><span class="s7">&gt;</span><span class="s10">${</span><span class="s4">errorStartDate</span><span class="s10">}</span><span class="s7">&lt;/div&gt;</span>
+                    <span class="s2">&lt;/</span><span class="s3">c:if</span><span class="s2">&gt;</span>
+
+                    <span class="s6">&lt;!-- Date de fin --&gt;</span>
+                    <span class="s7">&lt;div </span><span class="s8">class</span><span class="s9">=&quot;form-floating mb-3&quot;</span><span class="s7">&gt;</span>
+                        <span class="s7">&lt;input </span><span class="s8">class</span><span class="s9">=&quot;form-control&quot; </span><span class="s8">type</span><span class="s9">=&quot;datetime-local&quot; </span><span class="s8">name</span><span class="s9">=&quot;endDate&quot; </span><span class="s8">id</span><span class="s9">=&quot;endDate&quot;</span>
+                               <span class="s8">placeholder</span><span class="s9">=&quot;Date de fin&quot; </span><span class="s8">required</span>
+                               <span class="s8">value</span><span class="s9">=&quot;</span><span class="s10">${</span><span class="s4">formEndDate</span><span class="s10">}</span><span class="s9">&quot;</span><span class="s7">/&gt;</span>
+                        <span class="s7">&lt;label </span><span class="s8">for</span><span class="s9">=&quot;endDate&quot;</span><span class="s7">&gt;</span><span class="s1">Date de fin</span><span class="s7">&lt;/label&gt;</span>
+                    <span class="s7">&lt;/div&gt;</span>
+                    <span class="s2">&lt;</span><span class="s3">c:if </span><span class="s4">test</span><span class="s5">=&quot;</span><span class="s10">${not empty </span><span class="s4">errorEndDate</span><span class="s10">}</span><span class="s5">&quot;</span><span class="s2">&gt;</span>
+                        <span class="s7">&lt;div </span><span class="s8">class</span><span class="s9">=&quot;text-danger mb-3&quot;</span><span class="s7">&gt;</span><span class="s10">${</span><span class="s4">errorEndDate</span><span class="s10">}</span><span class="s7">&lt;/div&gt;</span>
+                    <span class="s2">&lt;/</span><span class="s3">c:if</span><span class="s2">&gt;</span>
+                    <span class="s6">&lt;!-- Heure --&gt;</span>
+                    <span class="s7">&lt;div </span><span class="s8">class</span><span class="s9">=&quot;form-floating mb-3&quot;</span><span class="s7">&gt;</span>
+                        <span class="s7">&lt;input </span><span class="s8">class</span><span class="s9">=&quot;form-control&quot; </span><span class="s8">type</span><span class="s9">=&quot;datetime-local&quot; </span><span class="s8">name</span><span class="s9">=&quot;hour&quot; </span><span class="s8">id</span><span class="s9">=&quot;hour&quot;</span>
+                               <span class="s8">placeholder</span><span class="s9">=&quot;Heure&quot; </span><span class="s8">required</span>
+                               <span class="s8">value</span><span class="s9">=&quot;</span><span class="s10">${</span><span class="s4">formHour</span><span class="s10">}</span><span class="s9">&quot;</span><span class="s7">/&gt;</span>
+                        <span class="s7">&lt;label </span><span class="s8">for</span><span class="s9">=&quot;hour&quot;</span><span class="s7">&gt;</span><span class="s1">Durée de la réservation</span><span class="s7">&lt;/label&gt;</span>
+                    <span class="s7">&lt;/div&gt;</span>
+                    <span class="s2">&lt;</span><span class="s3">c:if </span><span class="s4">test</span><span class="s5">=&quot;</span><span class="s10">${not empty </span><span class="s4">errorHour</span><span class="s10">}</span><span class="s5">&quot;</span><span class="s2">&gt;</span>
+                        <span class="s7">&lt;div </span><span class="s8">class</span><span class="s9">=&quot;text-danger mb-3&quot;</span><span class="s7">&gt;</span><span class="s10">${</span><span class="s4">errorHour</span><span class="s10">}</span><span class="s7">&lt;/div&gt;</span>
+                    <span class="s2">&lt;/</span><span class="s3">c:if</span><span class="s2">&gt;</span>
+                    <span class="s6">&lt;!-- Statut --&gt;</span>
+                    <span class="s7">&lt;div </span><span class="s8">class</span><span class="s9">=&quot;form-floating mb-3&quot;</span><span class="s7">&gt;</span>
+                        <span class="s7">&lt;select </span><span class="s8">class</span><span class="s9">=&quot;form-select&quot; </span><span class="s8">id</span><span class="s9">=&quot;status&quot; </span><span class="s8">name</span><span class="s9">=&quot;status&quot; </span><span class="s8">required</span><span class="s7">&gt;</span>
+                            <span class="s7">&lt;option </span><span class="s8">value</span><span class="s9">=&quot;2&quot; </span><span class="s10">${</span><span class="s4">formStatus </span><span class="s2">== </span><span class="s5">'3' </span><span class="s2">? </span><span class="s5">'selected' </span><span class="s2">: </span><span class="s5">''</span><span class="s10">}</span><span class="s7">&gt;</span><span class="s1">Payée</span><span class="s7">&lt;/option&gt;</span>
+                            <span class="s7">&lt;option </span><span class="s8">value</span><span class="s9">=&quot;2&quot; </span><span class="s10">${</span><span class="s4">formStatus </span><span class="s2">== </span><span class="s5">'2' </span><span class="s2">? </span><span class="s5">'selected' </span><span class="s2">: </span><span class="s5">''</span><span class="s10">}</span><span class="s7">&gt;</span><span class="s1">A payer sur place</span><span class="s7">&lt;/option&gt;</span>
+                            <span class="s7">&lt;option </span><span class="s8">value</span><span class="s9">=&quot;1&quot; </span><span class="s10">${</span><span class="s4">formStatus </span><span class="s2">== </span><span class="s5">'1' </span><span class="s2">? </span><span class="s5">'selected' </span><span class="s2">: </span><span class="s5">''</span><span class="s10">}</span><span class="s7">&gt;</span><span class="s1">Annulé</span><span class="s7">&lt;/option&gt;</span>
+                            <span class="s7">&lt;option </span><span class="s8">value</span><span class="s9">=&quot;0&quot; </span><span class="s10">${</span><span class="s4">formStatus </span><span class="s2">== </span><span class="s5">'0' </span><span class="s2">? </span><span class="s5">'selected' </span><span class="s2">: </span><span class="s5">''</span><span class="s10">}</span><span class="s7">&gt;</span><span class="s1">Blacklist</span><span class="s7">&lt;/option&gt;</span>
+                        <span class="s7">&lt;/select&gt;</span>
+                        <span class="s7">&lt;label </span><span class="s8">for</span><span class="s9">=&quot;status&quot;</span><span class="s7">&gt;</span><span class="s1">Statut de l'évènement</span><span class="s7">&lt;/label&gt;</span>
+                    <span class="s7">&lt;/div&gt;</span>
+                    <span class="s2">&lt;</span><span class="s3">c:if </span><span class="s4">test</span><span class="s5">=&quot;</span><span class="s10">${not empty </span><span class="s4">errorStatus</span><span class="s10">}</span><span class="s5">&quot;</span><span class="s2">&gt;</span>
+                        <span class="s7">&lt;div </span><span class="s8">class</span><span class="s9">=&quot;text-danger mb-3&quot;</span><span class="s7">&gt;</span><span class="s10">${</span><span class="s4">errorStatus</span><span class="s10">}</span><span class="s7">&lt;/div&gt;</span>
+                    <span class="s2">&lt;/</span><span class="s3">c:if</span><span class="s2">&gt;</span>
+                    <span class="s7">&lt;div </span><span class="s8">class</span><span class="s9">=&quot;text-center&quot;</span><span class="s7">&gt;</span>
+                        <span class="s7">&lt;button </span><span class="s8">class</span><span class="s9">=&quot;btn btn-success&quot; </span><span class="s8">type</span><span class="s9">=&quot;submit&quot;</span><span class="s7">&gt;</span>
+                            <span class="s2">&lt;</span><span class="s3">c:choose</span><span class="s2">&gt;</span>
+                                <span class="s2">&lt;</span><span class="s3">c:when </span><span class="s4">test</span><span class="s5">=&quot;</span><span class="s10">${not empty </span><span class="s4">hallId</span><span class="s10">}</span><span class="s5">&quot;</span><span class="s2">&gt;</span><span class="s1">Modifier</span><span class="s2">&lt;/</span><span class="s3">c:when</span><span class="s2">&gt;</span>
+                                <span class="s2">&lt;</span><span class="s3">c:otherwise</span><span class="s2">&gt;</span><span class="s1">Ajouter</span><span class="s2">&lt;/</span><span class="s3">c:otherwise</span><span class="s2">&gt;</span>
+                            <span class="s2">&lt;/</span><span class="s3">c:choose</span><span class="s2">&gt;</span>
+                        <span class="s7">&lt;/button&gt;</span>
+                    <span class="s7">&lt;/div&gt;</span>
+                <span class="s7">&lt;/form&gt;</span>
+            <span class="s7">&lt;/div&gt;</span>
+        <span class="s7">&lt;/div&gt;</span>
+    <span class="s7">&lt;/div&gt;</span>
+<span class="s7">&lt;/section&gt;</span>
+<span class="s6">&lt;!-- formulaire version Franz --&gt;</span>
+<span class="s7">&lt;section </span><span class="s8">class</span><span class="s9">=&quot;page-section portfolio&quot; </span><span class="s8">id</span><span class="s9">=&quot;portfolio&quot;</span><span class="s7">&gt;</span>
+    <span class="s7">&lt;h2&gt;</span><span class="s1">Réserver un Terrain</span><span class="s7">&lt;/h2&gt;</span>
+
+    <span class="s7">&lt;form </span><span class="s8">action</span><span class="s9">=&quot;/reserver-terrains&quot; </span><span class="s8">method</span><span class="s9">=&quot;POST&quot;</span><span class="s7">&gt;</span>
+        <span class="s7">&lt;div&gt;</span>
+            <span class="s7">&lt;label </span><span class="s8">for</span><span class="s9">=&quot;sport_reservation&quot;</span><span class="s7">&gt;</span><span class="s1">Choisir un sport :</span><span class="s7">&lt;/label&gt;</span>
+            <span class="s7">&lt;select </span><span class="s8">id</span><span class="s9">=&quot;sport_reservation&quot; </span><span class="s8">name</span><span class="s9">=&quot;sport&quot; </span><span class="s8">required</span><span class="s7">&gt;</span>
+                <span class="s7">&lt;option </span><span class="s8">value</span><span class="s9">=&quot;&quot;</span><span class="s7">&gt;</span><span class="s1">Sélectionner un sport</span><span class="s7">&lt;/option&gt;</span>
+                <span class="s7">&lt;option </span><span class="s8">value</span><span class="s9">=&quot;football&quot;</span><span class="s7">&gt;</span><span class="s1">Football</span><span class="s7">&lt;/option&gt;</span>
+                <span class="s7">&lt;option </span><span class="s8">value</span><span class="s9">=&quot;basketball&quot;</span><span class="s7">&gt;</span><span class="s1">Basketball</span><span class="s7">&lt;/option&gt;</span>
+                <span class="s7">&lt;option </span><span class="s8">value</span><span class="s9">=&quot;tennis&quot;</span><span class="s7">&gt;</span><span class="s1">Tennis</span><span class="s7">&lt;/option&gt;</span>
+                <span class="s7">&lt;option </span><span class="s8">value</span><span class="s9">=&quot;volleyball&quot;</span><span class="s7">&gt;</span><span class="s1">Volleyball</span><span class="s7">&lt;/option&gt;</span>
+            <span class="s7">&lt;/select&gt;</span>
+        <span class="s7">&lt;/div&gt;</span>
+
+        <span class="s7">&lt;div&gt;</span>
+            <span class="s7">&lt;label </span><span class="s8">for</span><span class="s9">=&quot;local_reservation&quot;</span><span class="s7">&gt;</span><span class="s1">Choisir un local :</span><span class="s7">&lt;/label&gt;</span>
+            <span class="s7">&lt;select </span><span class="s8">id</span><span class="s9">=&quot;local_reservation&quot; </span><span class="s8">name</span><span class="s9">=&quot;local&quot; </span><span class="s8">required</span><span class="s7">&gt;</span>
+                <span class="s7">&lt;option </span><span class="s8">value</span><span class="s9">=&quot;&quot;</span><span class="s7">&gt;</span><span class="s1">Sélectionner un local</span><span class="s7">&lt;/option&gt;</span>
+                <span class="s7">&lt;option </span><span class="s8">value</span><span class="s9">=&quot;local_1&quot;</span><span class="s7">&gt;</span><span class="s1">Local 1</span><span class="s7">&lt;/option&gt;</span>
+                <span class="s7">&lt;option </span><span class="s8">value</span><span class="s9">=&quot;local_2&quot;</span><span class="s7">&gt;</span><span class="s1">Local 2</span><span class="s7">&lt;/option&gt;</span>
+                <span class="s7">&lt;option </span><span class="s8">value</span><span class="s9">=&quot;local_3&quot;</span><span class="s7">&gt;</span><span class="s1">Local 3</span><span class="s7">&lt;/option&gt;</span>
+            <span class="s7">&lt;/select&gt;</span>
+        <span class="s7">&lt;/div&gt;</span>
+
+        <span class="s7">&lt;div&gt;</span>
+            <span class="s7">&lt;label </span><span class="s8">for</span><span class="s9">=&quot;terrain_reservation&quot;</span><span class="s7">&gt;</span><span class="s1">Choisir un terrain :</span><span class="s7">&lt;/label&gt;</span>
+            <span class="s7">&lt;select </span><span class="s8">id</span><span class="s9">=&quot;terrain_reservation&quot; </span><span class="s8">name</span><span class="s9">=&quot;terrain&quot; </span><span class="s8">required</span><span class="s7">&gt;</span>
+                <span class="s7">&lt;option </span><span class="s8">value</span><span class="s9">=&quot;&quot;</span><span class="s7">&gt;</span><span class="s1">Sélectionner un terrain</span><span class="s7">&lt;/option&gt;</span>
+                <span class="s7">&lt;option </span><span class="s8">value</span><span class="s9">=&quot;terrain_1&quot;</span><span class="s7">&gt;</span><span class="s1">Terrain 1</span><span class="s7">&lt;/option&gt;</span>
+                <span class="s7">&lt;option </span><span class="s8">value</span><span class="s9">=&quot;terrain_2&quot;</span><span class="s7">&gt;</span><span class="s1">Terrain 2</span><span class="s7">&lt;/option&gt;</span>
+                <span class="s7">&lt;option </span><span class="s8">value</span><span class="s9">=&quot;terrain_3&quot;</span><span class="s7">&gt;</span><span class="s1">Terrain 3</span><span class="s7">&lt;/option&gt;</span>
+            <span class="s7">&lt;/select&gt;</span>
+        <span class="s7">&lt;/div&gt;</span>
+
+        <span class="s7">&lt;div&gt;</span>
+            <span class="s7">&lt;label </span><span class="s8">for</span><span class="s9">=&quot;date_reservation&quot;</span><span class="s7">&gt;</span><span class="s1">Date de réservation :</span><span class="s7">&lt;/label&gt;</span>
+            <span class="s7">&lt;input </span><span class="s8">type</span><span class="s9">=&quot;date&quot; </span><span class="s8">id</span><span class="s9">=&quot;date_reservation&quot; </span><span class="s8">name</span><span class="s9">=&quot;date&quot; </span><span class="s8">required</span><span class="s7">&gt;</span>
+        <span class="s7">&lt;/div&gt;</span>
+
+        <span class="s7">&lt;div&gt;</span>
+            <span class="s7">&lt;label </span><span class="s8">for</span><span class="s9">=&quot;horaire_reservation&quot;</span><span class="s7">&gt;</span><span class="s1">Horaire de réservation :</span><span class="s7">&lt;/label&gt;</span>
+            <span class="s7">&lt;input </span><span class="s8">type</span><span class="s9">=&quot;time&quot; </span><span class="s8">id</span><span class="s9">=&quot;horaire_reservation&quot; </span><span class="s8">name</span><span class="s9">=&quot;horaire&quot; </span><span class="s8">required</span><span class="s7">&gt;</span>
+        <span class="s7">&lt;/div&gt;</span>
+
+        <span class="s7">&lt;div&gt;</span>
+            <span class="s7">&lt;label </span><span class="s8">for</span><span class="s9">=&quot;duree_reservation&quot;</span><span class="s7">&gt;</span><span class="s1">Durée de la réservation (en heures) :</span><span class="s7">&lt;/label&gt;</span>
+            <span class="s7">&lt;input </span><span class="s8">type</span><span class="s9">=&quot;number&quot; </span><span class="s8">id</span><span class="s9">=&quot;duree_reservation&quot; </span><span class="s8">name</span><span class="s9">=&quot;duree&quot; </span><span class="s8">min</span><span class="s9">=&quot;1&quot; </span><span class="s8">max</span><span class="s9">=&quot;6&quot; </span><span class="s8">required</span><span class="s7">&gt;</span>
+        <span class="s7">&lt;/div&gt;</span>
+
+        <span class="s7">&lt;button </span><span class="s8">type</span><span class="s9">=&quot;submit&quot;</span><span class="s7">&gt;</span><span class="s1">Réserver le terrain</span><span class="s7">&lt;/button&gt;</span>
+    <span class="s7">&lt;/form&gt;</span>
+<span class="s7">&lt;/section&gt;</span><span class="s1">&gt;</span>
+</pre>
+</body>
+</html>

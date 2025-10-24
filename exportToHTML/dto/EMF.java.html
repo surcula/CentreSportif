@@ -1,0 +1,58 @@
+<html>
+<head>
+<title>EMF.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cf8e6d;}
+.s1 { color: #bcbec4;}
+.s2 { color: #bcbec4;}
+.s3 { color: #5f826b; font-style: italic;}
+.s4 { color: #67a37c; font-style: italic;}
+.s5 { color: #6aab73;}
+.s6 { color: #7a7e85;}
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+EMF.java</font>
+</center></td></tr></table>
+<pre><span class="s0">package </span><span class="s1">dto</span><span class="s2">;</span>
+
+<span class="s0">import </span><span class="s1">javax</span><span class="s2">.</span><span class="s1">persistence</span><span class="s2">.</span><span class="s1">EntityManager</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">javax</span><span class="s2">.</span><span class="s1">persistence</span><span class="s2">.</span><span class="s1">EntityManagerFactory</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">javax</span><span class="s2">.</span><span class="s1">persistence</span><span class="s2">.</span><span class="s1">Persistence</span><span class="s2">;</span>
+
+<span class="s3">/** </span>
+ <span class="s3">* Class to get a connection to the database</span>
+ <span class="s3">* </span>
+ <span class="s3">* </span><span class="s4">@author </span><span class="s3">Renaud DIANA</span>
+ <span class="s3">*/</span>
+<span class="s0">public final class </span><span class="s1">EMF </span><span class="s2">{</span>
+	
+	<span class="s0">private static </span><span class="s1">EntityManagerFactory emfInstance </span><span class="s2">=</span>
+	        <span class="s1">Persistence</span><span class="s2">.</span><span class="s1">createEntityManagerFactory</span><span class="s2">(</span><span class="s5">&quot;default&quot;</span><span class="s2">);</span>
+
+    <span class="s0">private </span><span class="s1">EMF</span><span class="s2">() {}</span>
+
+    <span class="s0">public static </span><span class="s1">EntityManagerFactory getEMF</span><span class="s2">() {</span>
+        <span class="s0">return </span><span class="s1">emfInstance</span><span class="s2">;</span>
+    <span class="s2">}</span>
+    
+    <span class="s0">public static </span><span class="s1">EntityManager getEM</span><span class="s2">() {</span>
+        <span class="s0">return </span><span class="s1">emfInstance</span><span class="s2">.</span><span class="s1">createEntityManager</span><span class="s2">();</span>
+    <span class="s2">}</span>
+ 
+ <span class="s6">/*  Create EntityManager in others classes 
+  * EntityManager em = EMF.get().createEntityManager(); 
+  * try { 
+  *     // ... do stuff with em ... 
+  * } finally { 
+  *     em.close(); 
+  * } 
+  */</span>
+<span class="s2">}</span>
+</pre>
+</body>
+</html>

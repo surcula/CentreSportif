@@ -1,0 +1,140 @@
+<html>
+<head>
+<title>field-form.jsp</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #7a7e85;}
+.s1 { color: #bcbec4;}
+.s2 { color: #bcbec4;}
+.s3 { color: #cf8e6d; font-weight: bold;}
+.s4 { color: #bcbec4;}
+.s5 { color: #6aab73;}
+.s6 { color: #7a7e85;}
+.s7 { color: #cf8e6d;}
+.s8 { color: #d5b778;}
+.s9 { color: #bababa;}
+.s10 { color: #6aab73;}
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+field-form.jsp</font>
+</center></td></tr></table>
+<pre><span class="s0">&lt;%-- 
+  Created by IntelliJ IDEA. 
+  User: david 
+  Date: 6/23/2025 
+  Time: 6:12 PM 
+  To change this template use File | Settings | File Templates. 
+--%&gt;</span>
+<span class="s2">&lt;%@ </span><span class="s3">page </span><span class="s4">contentType</span><span class="s2">=&quot;</span><span class="s5">text/html;charset=UTF-8</span><span class="s2">&quot; </span><span class="s4">language</span><span class="s2">=&quot;</span><span class="s5">java</span><span class="s2">&quot; %&gt;</span>
+<span class="s2">&lt;%@ </span><span class="s3">taglib </span><span class="s4">prefix</span><span class="s2">=&quot;</span><span class="s5">c</span><span class="s2">&quot; </span><span class="s4">uri</span><span class="s2">=&quot;</span><span class="s5">http://java.sun.com/jsp/jstl/core</span><span class="s2">&quot; %&gt;</span>
+<span class="s2">&lt;%@ </span><span class="s3">taglib </span><span class="s4">prefix</span><span class="s2">=&quot;</span><span class="s5">fmt</span><span class="s2">&quot; </span><span class="s4">uri</span><span class="s2">=&quot;</span><span class="s5">http://java.sun.com/jsp/jstl/fmt</span><span class="s2">&quot; %&gt;</span>
+
+<span class="s2">&lt;</span><span class="s3">fmt:setLocale </span><span class="s4">value</span><span class="s5">=&quot;en_US&quot; </span><span class="s2">/&gt; </span><span class="s6">&lt;!-- Pour forcer le point comme séparateur décimal --&gt;</span>
+
+<span class="s2">&lt;</span><span class="s3">c:set </span><span class="s4">var</span><span class="s5">=&quot;formfieldId&quot; </span><span class="s4">value</span><span class="s5">=&quot;</span><span class="s7">${not empty </span><span class="s4">param.fieldId </span><span class="s2">? </span><span class="s4">param.fieldId </span><span class="s2">: </span><span class="s4">field.id</span><span class="s7">}</span><span class="s5">&quot; </span><span class="s2">/&gt;</span>
+<span class="s2">&lt;</span><span class="s3">c:set </span><span class="s4">var</span><span class="s5">=&quot;formfieldName&quot; </span><span class="s4">value</span><span class="s5">=&quot;</span><span class="s7">${not empty </span><span class="s4">param.fieldName </span><span class="s2">? </span><span class="s4">param.fieldName </span><span class="s2">: </span><span class="s4">field.fieldName</span><span class="s7">}</span><span class="s5">&quot; </span><span class="s2">/&gt;</span>
+<span class="s2">&lt;</span><span class="s3">c:set </span><span class="s4">var</span><span class="s5">=&quot;formActive&quot; </span><span class="s4">value</span><span class="s5">=&quot;</span><span class="s7">${not empty </span><span class="s4">param.active </span><span class="s2">? </span><span class="s4">param.active </span><span class="s2">: </span><span class="s4">(field.active </span><span class="s2">? </span><span class="s5">'1' </span><span class="s2">: </span><span class="s5">'0'</span><span class="s4">)</span><span class="s7">}</span><span class="s5">&quot; </span><span class="s2">/&gt;</span>
+<span class="s2">&lt;</span><span class="s3">c:set </span><span class="s4">var</span><span class="s5">=&quot;formHallId&quot;</span>
+       <span class="s4">value</span><span class="s5">=&quot;</span><span class="s7">${not empty </span><span class="s4">param.hallId </span><span class="s2">? </span><span class="s4">param.hallId </span><span class="s2">: </span><span class="s4">(</span><span class="s7">not empty </span><span class="s4">field </span><span class="s2">? </span><span class="s4">field.hall.id </span><span class="s2">: </span><span class="s5">''</span><span class="s4">)</span><span class="s7">}</span><span class="s5">&quot; </span><span class="s2">/&gt;</span>
+
+
+<span class="s2">&lt;</span><span class="s3">c:choose</span><span class="s2">&gt;</span>
+    <span class="s2">&lt;</span><span class="s3">c:when </span><span class="s4">test</span><span class="s5">=&quot;</span><span class="s7">${</span><span class="s4">sessionScope.role </span><span class="s2">== </span><span class="s5">'ADMIN'</span>
+             <span class="s7">or </span><span class="s4">sessionScope.role </span><span class="s2">== </span><span class="s5">'BARMAN'</span>
+             <span class="s7">or </span><span class="s4">sessionScope.role </span><span class="s2">== </span><span class="s5">'SECRETARY'</span><span class="s7">}</span><span class="s5">&quot;</span><span class="s2">&gt;</span>
+        <span class="s8">&lt;section </span><span class="s9">class</span><span class="s10">=&quot;page-section&quot;</span><span class="s8">&gt;</span>
+            <span class="s8">&lt;h2 </span><span class="s9">class</span><span class="s10">=&quot;text-center&quot;</span><span class="s8">&gt;</span>
+                <span class="s2">&lt;</span><span class="s3">c:choose</span><span class="s2">&gt;</span>
+                    <span class="s2">&lt;</span><span class="s3">c:when </span><span class="s4">test</span><span class="s5">=&quot;</span><span class="s7">${not empty </span><span class="s4">formfieldId</span><span class="s7">}</span><span class="s5">&quot;</span><span class="s2">&gt;</span><span class="s1">Modifier un terrain</span><span class="s2">&lt;/</span><span class="s3">c:when</span><span class="s2">&gt;</span>
+                    <span class="s2">&lt;</span><span class="s3">c:otherwise</span><span class="s2">&gt;</span><span class="s1">Ajouter un terrain</span><span class="s2">&lt;/</span><span class="s3">c:otherwise</span><span class="s2">&gt;</span>
+                <span class="s2">&lt;/</span><span class="s3">c:choose</span><span class="s2">&gt;</span>
+            <span class="s8">&lt;/h2&gt;</span>
+
+
+            <span class="s6">&lt;!-- RETOUR --&gt;</span>
+            <span class="s8">&lt;div </span><span class="s9">class</span><span class="s10">=&quot;text-start mb-3&quot;</span><span class="s8">&gt;</span>
+                <span class="s8">&lt;a </span><span class="s9">href</span><span class="s10">=&quot;</span><span class="s7">${</span><span class="s4">pageContext.request.contextPath</span><span class="s7">}</span><span class="s10">/field&quot; </span><span class="s9">class</span><span class="s10">=&quot;btn btn-outline-secondary&quot;</span><span class="s8">&gt;</span>
+                    <span class="s8">&lt;i </span><span class="s9">class</span><span class="s10">=&quot;bi bi-arrow-left&quot;</span><span class="s8">&gt;&lt;/i&gt; </span><span class="s1">Retour vers les terrains</span>
+                <span class="s8">&lt;/a&gt;</span>
+            <span class="s8">&lt;/div&gt;</span>
+
+            <span class="s8">&lt;div </span><span class="s9">class</span><span class="s10">=&quot;container&quot;</span><span class="s8">&gt;</span>
+                <span class="s8">&lt;div </span><span class="s9">class</span><span class="s10">=&quot;row justify-content-center&quot;</span><span class="s8">&gt;</span>
+                    <span class="s8">&lt;div </span><span class="s9">class</span><span class="s10">=&quot;col-md-6&quot;</span><span class="s8">&gt; </span><span class="s0">&lt;%-- Centré et largeur moyenne --%&gt;</span>
+                        <span class="s8">&lt;form </span><span class="s9">method</span><span class="s10">=&quot;post&quot; </span><span class="s9">action</span><span class="s10">=&quot;</span><span class="s7">${</span><span class="s4">pageContext.request.contextPath</span><span class="s7">}</span><span class="s10">/field&quot; </span><span class="s9">value</span><span class="s10">=&quot;</span><span class="s7">${not empty </span><span class="s4">fieldId </span><span class="s2">? </span><span class="s5">'edit' </span><span class="s2">: </span><span class="s5">'create'</span><span class="s7">}</span><span class="s10">&quot;</span><span class="s8">&gt;</span>
+
+                            <span class="s6">&lt;!-- ID --&gt;</span>
+                            <span class="s2">&lt;</span><span class="s3">c:if </span><span class="s4">test</span><span class="s5">=&quot;</span><span class="s7">${not empty </span><span class="s4">formfieldId</span><span class="s7">}</span><span class="s5">&quot;</span><span class="s2">&gt;</span>
+                                <span class="s6">&lt;!-- Champ caché pour envoyer l'ID --&gt;</span>
+                                <span class="s8">&lt;input </span><span class="s9">type</span><span class="s10">=&quot;hidden&quot; </span><span class="s9">name</span><span class="s10">=&quot;fieldId&quot; </span><span class="s9">value</span><span class="s10">=&quot;</span><span class="s7">${</span><span class="s4">formfieldId</span><span class="s7">}</span><span class="s10">&quot; </span><span class="s8">/&gt;</span>
+
+                                <span class="s6">&lt;!-- Champ visible mais non modifiable --&gt;</span>
+                                <span class="s8">&lt;div </span><span class="s9">class</span><span class="s10">=&quot;form-floating mb-3&quot;</span><span class="s8">&gt;</span>
+                                    <span class="s8">&lt;input </span><span class="s9">class</span><span class="s10">=&quot;form-control&quot; </span><span class="s9">type</span><span class="s10">=&quot;text&quot; </span><span class="s9">id</span><span class="s10">=&quot;fieldIdDisplay&quot;</span>
+                                           <span class="s9">placeholder</span><span class="s10">=&quot;ID&quot; </span><span class="s9">value</span><span class="s10">=&quot;</span><span class="s7">${</span><span class="s4">formfieldId</span><span class="s7">}</span><span class="s10">&quot; </span><span class="s9">disabled </span><span class="s8">/&gt;</span>
+                                    <span class="s8">&lt;label </span><span class="s9">for</span><span class="s10">=&quot;fieldIdDisplay&quot;</span><span class="s8">&gt;</span><span class="s1">ID du field</span><span class="s8">&lt;/label&gt;</span>
+                                <span class="s8">&lt;/div&gt;</span>
+                            <span class="s2">&lt;/</span><span class="s3">c:if</span><span class="s2">&gt;</span>
+
+
+                            <span class="s6">&lt;!-- field Name --&gt;</span>
+                            <span class="s8">&lt;div </span><span class="s9">class</span><span class="s10">=&quot;form-floating mb-3&quot;</span><span class="s8">&gt;</span>
+                                <span class="s8">&lt;input </span><span class="s9">class</span><span class="s10">=&quot;form-control&quot; </span><span class="s9">type</span><span class="s10">=&quot;text&quot; </span><span class="s9">name</span><span class="s10">=&quot;fieldName&quot; </span><span class="s9">id</span><span class="s10">=&quot;fieldName&quot;</span>
+                                       <span class="s9">placeholder</span><span class="s10">=&quot;Nom du terrain&quot; </span><span class="s9">required</span>
+                                       <span class="s9">value</span><span class="s10">=&quot;</span><span class="s7">${</span><span class="s4">formfieldName</span><span class="s7">}</span><span class="s10">&quot;</span><span class="s8">/&gt;</span>
+                                <span class="s8">&lt;label </span><span class="s9">for</span><span class="s10">=&quot;fieldName&quot;</span><span class="s8">&gt;</span><span class="s1">Nom du terrain</span><span class="s8">&lt;/label&gt;</span>
+                            <span class="s8">&lt;/div&gt;</span>
+                            <span class="s2">&lt;</span><span class="s3">c:if </span><span class="s4">test</span><span class="s5">=&quot;</span><span class="s7">${not empty </span><span class="s4">errorfieldName</span><span class="s7">}</span><span class="s5">&quot;</span><span class="s2">&gt;</span>
+                                <span class="s8">&lt;div </span><span class="s9">class</span><span class="s10">=&quot;text-danger mb-3&quot;</span><span class="s8">&gt;</span><span class="s7">${</span><span class="s4">errorfieldName</span><span class="s7">}</span><span class="s8">&lt;/div&gt;</span>
+                            <span class="s2">&lt;/</span><span class="s3">c:if</span><span class="s2">&gt;</span>
+
+
+                            <span class="s6">&lt;!-- Hall --&gt;</span>
+                            <span class="s8">&lt;div </span><span class="s9">class</span><span class="s10">=&quot;form-floating mb-3&quot;</span><span class="s8">&gt;</span>
+                                <span class="s8">&lt;select </span><span class="s9">class</span><span class="s10">=&quot;form-select&quot; </span><span class="s9">id</span><span class="s10">=&quot;hallId&quot; </span><span class="s9">name</span><span class="s10">=&quot;hallId&quot; </span><span class="s9">required</span><span class="s8">&gt;</span>
+                                    <span class="s8">&lt;option </span><span class="s9">value</span><span class="s10">=&quot;&quot;</span><span class="s8">&gt;</span><span class="s1">-- Choisir un hall --</span><span class="s8">&lt;/option&gt;</span>
+                                    <span class="s2">&lt;</span><span class="s3">c:forEach </span><span class="s4">var</span><span class="s5">=&quot;h&quot; </span><span class="s4">items</span><span class="s5">=&quot;</span><span class="s7">${</span><span class="s4">halls</span><span class="s7">}</span><span class="s5">&quot;</span><span class="s2">&gt;</span>
+                                        <span class="s8">&lt;option </span><span class="s9">value</span><span class="s10">=&quot;</span><span class="s7">${</span><span class="s4">h.id</span><span class="s7">}</span><span class="s10">&quot; </span><span class="s7">${</span><span class="s4">formHallId </span><span class="s2">== </span><span class="s4">h.id </span><span class="s2">? </span><span class="s5">'selected' </span><span class="s2">: </span><span class="s5">''</span><span class="s7">}</span><span class="s8">&gt;</span>
+                                                <span class="s7">${</span><span class="s4">h.hallName</span><span class="s7">}</span>
+                                        <span class="s8">&lt;/option&gt;</span>
+                                    <span class="s2">&lt;/</span><span class="s3">c:forEach</span><span class="s2">&gt;</span>
+                                <span class="s8">&lt;/select&gt;</span>
+                                <span class="s8">&lt;label </span><span class="s9">for</span><span class="s10">=&quot;hallId&quot;</span><span class="s8">&gt;</span><span class="s1">Hall associé</span><span class="s8">&lt;/label&gt;</span>
+                            <span class="s8">&lt;/div&gt;</span>
+                            <span class="s2">&lt;</span><span class="s3">c:if </span><span class="s4">test</span><span class="s5">=&quot;</span><span class="s7">${not empty </span><span class="s4">errorHallId</span><span class="s7">}</span><span class="s5">&quot;</span><span class="s2">&gt;</span>
+                                <span class="s8">&lt;div </span><span class="s9">class</span><span class="s10">=&quot;text-danger mb-3&quot;</span><span class="s8">&gt;</span><span class="s7">${</span><span class="s4">errorHallId</span><span class="s7">}</span><span class="s8">&lt;/div&gt;</span>
+                            <span class="s2">&lt;/</span><span class="s3">c:if</span><span class="s2">&gt;</span>
+
+                            <span class="s6">&lt;!-- Active --&gt;</span>
+                            <span class="s8">&lt;div </span><span class="s9">class</span><span class="s10">=&quot;form-floating mb-3&quot;</span><span class="s8">&gt;</span>
+                                <span class="s8">&lt;select </span><span class="s9">class</span><span class="s10">=&quot;form-select&quot; </span><span class="s9">id</span><span class="s10">=&quot;active&quot; </span><span class="s9">name</span><span class="s10">=&quot;active&quot; </span><span class="s9">required</span><span class="s8">&gt;</span>
+                                    <span class="s8">&lt;option </span><span class="s9">value</span><span class="s10">=&quot;1&quot; </span><span class="s7">${</span><span class="s4">formActive </span><span class="s2">== </span><span class="s5">'1' </span><span class="s2">? </span><span class="s5">'selected' </span><span class="s2">: </span><span class="s5">''</span><span class="s7">}</span><span class="s8">&gt;</span><span class="s1">Actif</span><span class="s8">&lt;/option&gt;</span>
+                                    <span class="s8">&lt;option </span><span class="s9">value</span><span class="s10">=&quot;0&quot; </span><span class="s7">${</span><span class="s4">formActive </span><span class="s2">== </span><span class="s5">'0' </span><span class="s2">? </span><span class="s5">'selected' </span><span class="s2">: </span><span class="s5">''</span><span class="s7">}</span><span class="s8">&gt;</span><span class="s1">Non actif</span><span class="s8">&lt;/option&gt;</span>
+                                <span class="s8">&lt;/select&gt;</span>
+                                <span class="s8">&lt;label </span><span class="s9">for</span><span class="s10">=&quot;active&quot;</span><span class="s8">&gt;</span><span class="s1">Statut du terrain</span><span class="s8">&lt;/label&gt;</span>
+                            <span class="s8">&lt;/div&gt;</span>
+                            <span class="s2">&lt;</span><span class="s3">c:if </span><span class="s4">test</span><span class="s5">=&quot;</span><span class="s7">${not empty </span><span class="s4">errorActive</span><span class="s7">}</span><span class="s5">&quot;</span><span class="s2">&gt;</span>
+                                <span class="s8">&lt;div </span><span class="s9">class</span><span class="s10">=&quot;text-danger mb-3&quot;</span><span class="s8">&gt;</span><span class="s7">${</span><span class="s4">errorActive</span><span class="s7">}</span><span class="s8">&lt;/div&gt;</span>
+                            <span class="s2">&lt;/</span><span class="s3">c:if</span><span class="s2">&gt;</span>
+                            <span class="s8">&lt;div </span><span class="s9">class</span><span class="s10">=&quot;text-center&quot;</span><span class="s8">&gt;</span>
+                                <span class="s8">&lt;button </span><span class="s9">class</span><span class="s10">=&quot;btn btn-success&quot; </span><span class="s9">type</span><span class="s10">=&quot;submit&quot;</span><span class="s8">&gt;</span>
+                                    <span class="s2">&lt;</span><span class="s3">c:choose</span><span class="s2">&gt;</span>
+                                        <span class="s2">&lt;</span><span class="s3">c:when </span><span class="s4">test</span><span class="s5">=&quot;</span><span class="s7">${not empty </span><span class="s4">fieldId</span><span class="s7">}</span><span class="s5">&quot;</span><span class="s2">&gt;</span><span class="s1">Modifier</span><span class="s2">&lt;/</span><span class="s3">c:when</span><span class="s2">&gt;</span>
+                                        <span class="s2">&lt;</span><span class="s3">c:otherwise</span><span class="s2">&gt;</span><span class="s1">Ajouter</span><span class="s2">&lt;/</span><span class="s3">c:otherwise</span><span class="s2">&gt;</span>
+                                    <span class="s2">&lt;/</span><span class="s3">c:choose</span><span class="s2">&gt;</span>
+                                <span class="s8">&lt;/button&gt;</span>
+                            <span class="s8">&lt;/div&gt;</span>
+                        <span class="s8">&lt;/form&gt;</span>
+                    <span class="s8">&lt;/div&gt;</span>
+                <span class="s8">&lt;/div&gt;</span>
+            <span class="s8">&lt;/div&gt;</span>
+        <span class="s8">&lt;/section&gt;</span>
+    <span class="s2">&lt;/</span><span class="s3">c:when</span><span class="s2">&gt;</span>
+<span class="s2">&lt;/</span><span class="s3">c:choose</span><span class="s2">&gt;</span>
+</pre>
+</body>
+</html>

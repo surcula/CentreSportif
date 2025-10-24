@@ -13,6 +13,15 @@
         <class>entities.Event</class>
 
         <!-- ajoute ici les autres classes -->
+        <class>entities.User</class>
+        <class>entities.Reservation</class>
+        <class>entities.Order</class>
+        <class>entities.Discount</class>
+        <class>entities.Subscription</class>
+        <class>entities.UsersSubscription</class>
+        <class>entities.OrdersDiscount</class>
+        <class>entities.OrdersSubscription</class>
+
 
         <properties>
             <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver" />

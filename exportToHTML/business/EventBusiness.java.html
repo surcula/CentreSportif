@@ -1,0 +1,193 @@
+<html>
+<head>
+<title>EventBusiness.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cf8e6d;}
+.s1 { color: #bcbec4;}
+.s2 { color: #bcbec4;}
+.s3 { color: #5f826b; font-style: italic;}
+.s4 { color: #67a37c; font-style: italic;}
+.s5 { color: #7a7e85;}
+.s6 { color: #6aab73;}
+.s7 { color: #2aacb8;}
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+EventBusiness.java</font>
+</center></td></tr></table>
+<pre><span class="s0">package </span><span class="s1">business</span><span class="s2">;</span>
+
+<span class="s0">import </span><span class="s1">dto</span><span class="s2">.</span><span class="s1">Page</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">entities</span><span class="s2">.</span><span class="s1">Event</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">Tools</span><span class="s2">.</span><span class="s1">Result</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">enums</span><span class="s2">.</span><span class="s1">Scope</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">services</span><span class="s2">.</span><span class="s1">EventServiceImpl</span><span class="s2">;</span>
+
+<span class="s0">import </span><span class="s1">javax</span><span class="s2">.</span><span class="s1">persistence</span><span class="s2">.</span><span class="s1">EntityManager</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">java</span><span class="s2">.</span><span class="s1">time</span><span class="s2">.</span><span class="s1">LocalDateTime</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">java</span><span class="s2">.</span><span class="s1">time</span><span class="s2">.</span><span class="s1">format</span><span class="s2">.</span><span class="s1">DateTimeParseException</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">java</span><span class="s2">.</span><span class="s1">time</span><span class="s2">.</span><span class="s1">LocalDate</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">java</span><span class="s2">.</span><span class="s1">time</span><span class="s2">.</span><span class="s1">format</span><span class="s2">.</span><span class="s1">DateTimeFormatter</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">java</span><span class="s2">.</span><span class="s1">util</span><span class="s2">.</span><span class="s1">HashMap</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">java</span><span class="s2">.</span><span class="s1">util</span><span class="s2">.</span><span class="s1">List</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">java</span><span class="s2">.</span><span class="s1">util</span><span class="s2">.</span><span class="s1">Map</span><span class="s2">;</span>
+
+<span class="s0">import static </span><span class="s1">jdk</span><span class="s2">.</span><span class="s1">nashorn</span><span class="s2">.</span><span class="s1">internal</span><span class="s2">.</span><span class="s1">runtime</span><span class="s2">.</span><span class="s1">regexp</span><span class="s2">.</span><span class="s1">joni</span><span class="s2">.</span><span class="s1">Config</span><span class="s2">.</span><span class="s1">log</span><span class="s2">;</span>
+
+<span class="s3">/**</span>
+ <span class="s3">* Class to handle event-related validation</span>
+ <span class="s3">* and initilisation before database operations.</span>
+ <span class="s3">* So this class validate the input from the event creation form and convert it into a valid {</span><span class="s4">@link </span><span class="s3">Event}</span>
+ <span class="s3">*/</span>
+
+
+<span class="s0">public class </span><span class="s1">EventBusiness </span><span class="s2">{</span>
+    <span class="s3">/**</span>
+     <span class="s3">* Constructor</span>
+     <span class="s3">* </span><span class="s4">@param </span><span class="s3">eventService</span>
+     <span class="s3">*/</span>
+    <span class="s0">private </span><span class="s1">EntityManager em</span><span class="s2">;</span>
+    <span class="s0">public </span><span class="s1">EventBusiness</span><span class="s2">(</span><span class="s1">EventServiceImpl eventService</span><span class="s2">, </span><span class="s1">EntityManager em</span><span class="s2">) {</span>
+        <span class="s0">this</span><span class="s2">.</span><span class="s1">eventService </span><span class="s2">= </span><span class="s1">eventService</span><span class="s2">;</span>
+        <span class="s0">this</span><span class="s2">.</span><span class="s1">em </span><span class="s2">= </span><span class="s1">em</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s0">private </span><span class="s1">EventServiceImpl eventService</span><span class="s2">;</span>
+    <span class="s5">// Log4j</span>
+    <span class="s0">private static final </span><span class="s1">org</span><span class="s2">.</span><span class="s1">apache</span><span class="s2">.</span><span class="s1">log4j</span><span class="s2">.</span><span class="s1">Logger log </span><span class="s2">= </span><span class="s1">org</span><span class="s2">.</span><span class="s1">apache</span><span class="s2">.</span><span class="s1">log4j</span><span class="s2">.</span><span class="s1">Logger</span><span class="s2">.</span><span class="s1">getLogger</span><span class="s2">(</span><span class="s1">HallBusiness</span><span class="s2">.</span><span class="s0">class</span><span class="s2">);</span>
+    <span class="s3">/**</span>
+     <span class="s3">* Initialisation and validation of the data submitted via the Event creation Form</span>
+     <span class="s3">* </span><span class="s4">@param </span><span class="s3">name the name of the event</span>
+     <span class="s3">* </span><span class="s4">@param </span><span class="s3">startDateStr the start date and time in format &quot;yyyy-MM-dd'T'HH:mm&quot;</span>
+     <span class="s3">* </span><span class="s4">@param </span><span class="s3">endDateStr the end date and time in format &quot;yyyy-MM-dd'T'HH:mm&quot;</span>
+     <span class="s3">* </span><span class="s4">@param </span><span class="s3">description the description of the event (a little text)</span>
+     <span class="s3">* </span><span class="s4">@param </span><span class="s3">image the image of the Event</span>
+     <span class="s3">* </span><span class="s4">@param </span><span class="s3">status the status of the event, 1 for &quot;En cours&quot; and 0 for &quot;Terminé&quot;</span>
+     <span class="s3">* </span><span class="s4">@return </span><span class="s3">a {</span><span class="s4">@link </span><span class="s3">Result} which contains a valid {</span><span class="s4">@link </span><span class="s3">Event} instance or an errors</span>
+     <span class="s3">*/</span>
+    <span class="s0">public static </span><span class="s1">Result</span><span class="s2">&lt;</span><span class="s1">Event</span><span class="s2">&gt; </span><span class="s1">initCreateForm</span><span class="s2">(</span><span class="s1">String name</span><span class="s2">, </span><span class="s1">String startDateStr</span><span class="s2">, </span><span class="s1">String endDateStr</span><span class="s2">,</span>
+                                               <span class="s1">String description</span><span class="s2">, </span><span class="s1">String image</span><span class="s2">, </span><span class="s1">String status </span><span class="s2">){</span>
+        <span class="s5">//List&lt;String&gt; errors = new ArrayList&lt;&gt;();</span>
+        <span class="s1">Map</span><span class="s2">&lt;</span><span class="s1">String</span><span class="s2">, </span><span class="s1">String</span><span class="s2">&gt; </span><span class="s1">errors </span><span class="s2">= </span><span class="s0">new </span><span class="s1">HashMap</span><span class="s2">&lt;&gt;();</span>
+        <span class="s1">Event event </span><span class="s2">= </span><span class="s0">new </span><span class="s1">Event</span><span class="s2">();</span>
+
+        <span class="s5">//validation du nom</span>
+        <span class="s0">if</span><span class="s2">(</span><span class="s1">name </span><span class="s2">== </span><span class="s0">null </span><span class="s2">|| </span><span class="s1">name</span><span class="s2">.</span><span class="s1">trim</span><span class="s2">().</span><span class="s1">isEmpty</span><span class="s2">()) {</span>
+            <span class="s1">errors</span><span class="s2">.</span><span class="s1">put</span><span class="s2">(</span><span class="s6">&quot;name&quot;</span><span class="s2">, </span><span class="s6">&quot;Le nom est obligatoire&quot;</span><span class="s2">);</span>
+        <span class="s2">} </span><span class="s0">else </span><span class="s2">{</span>
+            <span class="s1">event</span><span class="s2">.</span><span class="s1">setEventName</span><span class="s2">(</span><span class="s1">name</span><span class="s2">.</span><span class="s1">trim</span><span class="s2">());</span>
+        <span class="s2">}</span>
+        <span class="s5">//Validation et converson des dates et heures</span>
+
+        <span class="s1">DateTimeFormatter formatter </span><span class="s2">= </span><span class="s1">DateTimeFormatter</span><span class="s2">.</span><span class="s1">ofPattern</span><span class="s2">(</span><span class="s6">&quot;yyyy-MM-dd'T'HH:mm&quot;</span><span class="s2">);</span>
+        <span class="s1">LocalDateTime startDate </span><span class="s2">= </span><span class="s0">null</span><span class="s2">;</span>
+        <span class="s1">LocalDateTime endDate </span><span class="s2">= </span><span class="s0">null</span><span class="s2">;</span>
+
+        <span class="s5">//Date de début</span>
+        <span class="s0">if</span><span class="s2">(</span><span class="s1">startDateStr </span><span class="s2">== </span><span class="s0">null </span><span class="s2">|| </span><span class="s1">startDateStr</span><span class="s2">.</span><span class="s1">trim</span><span class="s2">().</span><span class="s1">isEmpty</span><span class="s2">()) {</span>
+            <span class="s1">errors</span><span class="s2">.</span><span class="s1">put</span><span class="s2">(</span><span class="s6">&quot;startDateHour&quot;</span><span class="s2">, </span><span class="s6">&quot;Le date et heure de début sont obligatoires&quot;</span><span class="s2">);</span>
+        <span class="s2">}</span><span class="s0">else </span><span class="s2">{</span>
+            <span class="s0">try </span><span class="s2">{</span>
+                <span class="s5">//CORRECTION</span>
+                <span class="s1">startDate </span><span class="s2">= </span><span class="s1">LocalDateTime</span><span class="s2">.</span><span class="s1">parse</span><span class="s2">(</span><span class="s1">startDateStr</span><span class="s2">, </span><span class="s1">formatter</span><span class="s2">);</span>
+                <span class="s1">event</span><span class="s2">.</span><span class="s1">setBeginDateHour</span><span class="s2">(</span><span class="s1">startDate</span><span class="s2">);</span>
+            <span class="s2">} </span><span class="s0">catch </span><span class="s2">(</span><span class="s1">DateTimeParseException e</span><span class="s2">) {</span>
+                <span class="s1">errors</span><span class="s2">.</span><span class="s1">put</span><span class="s2">(</span><span class="s6">&quot;startDateHour&quot;</span><span class="s2">, </span><span class="s6">&quot;Format de date invalide (doit être yyyy-MM-ddTHH:mm).&quot;</span><span class="s2">);</span>
+            <span class="s2">}</span>
+        <span class="s2">}</span>
+        <span class="s5">//Date de fin</span>
+        <span class="s0">if</span><span class="s2">(</span><span class="s1">endDateStr </span><span class="s2">== </span><span class="s0">null </span><span class="s2">|| </span><span class="s1">endDateStr</span><span class="s2">.</span><span class="s1">trim</span><span class="s2">().</span><span class="s1">isEmpty</span><span class="s2">()) {</span>
+            <span class="s1">errors</span><span class="s2">.</span><span class="s1">put</span><span class="s2">(</span><span class="s6">&quot;endDateHour&quot;</span><span class="s2">, </span><span class="s6">&quot;Le date et heure de fin sont obligatoires&quot;</span><span class="s2">);</span>
+        <span class="s2">}</span><span class="s0">else </span><span class="s2">{</span>
+            <span class="s0">try </span><span class="s2">{</span>
+                <span class="s5">//CORRECTION</span>
+                <span class="s1">endDate </span><span class="s2">= </span><span class="s1">LocalDateTime</span><span class="s2">.</span><span class="s1">parse</span><span class="s2">(</span><span class="s1">endDateStr</span><span class="s2">, </span><span class="s1">formatter</span><span class="s2">);</span>
+                <span class="s1">event</span><span class="s2">.</span><span class="s1">setEndDateHour</span><span class="s2">(</span><span class="s1">endDate</span><span class="s2">);</span>
+            <span class="s2">} </span><span class="s0">catch </span><span class="s2">(</span><span class="s1">DateTimeParseException e</span><span class="s2">) {</span>
+                <span class="s1">errors</span><span class="s2">.</span><span class="s1">put</span><span class="s2">(</span><span class="s6">&quot;endDateHour&quot;</span><span class="s2">, </span><span class="s6">&quot;Format de date invalide (doit être yyyy-MM-ddTHH:mm).&quot;</span><span class="s2">);</span>
+            <span class="s2">}</span>
+        <span class="s2">}</span>
+        <span class="s5">//validation que la date de début est antérieure ou égale à la date de fin</span>
+        <span class="s0">if</span><span class="s2">(</span><span class="s1">startDate </span><span class="s2">!= </span><span class="s0">null </span><span class="s2">&amp;&amp; </span><span class="s1">endDate </span><span class="s2">!= </span><span class="s0">null </span><span class="s2">&amp;&amp; </span><span class="s1">startDate</span><span class="s2">.</span><span class="s1">isAfter</span><span class="s2">(</span><span class="s1">endDate</span><span class="s2">)) {</span>
+            <span class="s1">errors</span><span class="s2">.</span><span class="s1">put</span><span class="s2">(</span><span class="s6">&quot;endDateHour&quot;</span><span class="s2">, </span><span class="s6">&quot;La date de fin ne peut pas être antérieure à la date de début.&quot;</span><span class="s2">);</span>
+        <span class="s2">}</span>
+        <span class="s5">//Description</span>
+        <span class="s0">if </span><span class="s2">(</span><span class="s1">description </span><span class="s2">== </span><span class="s0">null </span><span class="s2">|| </span><span class="s1">description</span><span class="s2">.</span><span class="s1">trim</span><span class="s2">().</span><span class="s1">isEmpty</span><span class="s2">()) {</span>
+            <span class="s1">errors</span><span class="s2">.</span><span class="s1">put</span><span class="s2">(</span><span class="s6">&quot;description&quot;</span><span class="s2">, </span><span class="s6">&quot;La description est obligatoire&quot;</span><span class="s2">);</span>
+        <span class="s2">} </span><span class="s0">else </span><span class="s2">{</span>
+            <span class="s1">event</span><span class="s2">.</span><span class="s1">setInfo</span><span class="s2">(</span><span class="s1">description</span><span class="s2">.</span><span class="s1">trim</span><span class="s2">());</span>
+        <span class="s2">}</span>
+        <span class="s5">//image</span>
+        <span class="s0">if</span><span class="s2">(</span><span class="s1">image </span><span class="s2">== </span><span class="s0">null </span><span class="s2">|| </span><span class="s1">image</span><span class="s2">.</span><span class="s1">trim</span><span class="s2">().</span><span class="s1">isEmpty</span><span class="s2">()){</span>
+            <span class="s1">errors</span><span class="s2">.</span><span class="s1">put</span><span class="s2">(</span><span class="s6">&quot;image&quot;</span><span class="s2">, </span><span class="s6">&quot;L'image est obligatoire.&quot;</span><span class="s2">);</span>
+        <span class="s2">} </span><span class="s0">else </span><span class="s2">{</span>
+            <span class="s1">event</span><span class="s2">.</span><span class="s1">setPicture</span><span class="s2">(</span><span class="s1">image</span><span class="s2">);</span>
+        <span class="s2">}</span>
+        <span class="s5">//statut</span>
+        <span class="s0">boolean </span><span class="s1">isActive </span><span class="s2">= </span><span class="s6">&quot;1&quot;</span><span class="s2">.</span><span class="s1">equals</span><span class="s2">(</span><span class="s1">status</span><span class="s2">);</span>
+        <span class="s1">event</span><span class="s2">.</span><span class="s1">setActive</span><span class="s2">(</span><span class="s1">isActive</span><span class="s2">);</span>
+        <span class="s0">if</span><span class="s2">(</span><span class="s1">errors</span><span class="s2">.</span><span class="s1">isEmpty</span><span class="s2">()) {</span>
+            <span class="s0">return </span><span class="s1">Result</span><span class="s2">.</span><span class="s1">ok</span><span class="s2">(</span><span class="s1">event</span><span class="s2">);</span>
+        <span class="s2">} </span><span class="s0">else </span><span class="s2">{</span>
+            <span class="s0">return </span><span class="s1">Result</span><span class="s2">.</span><span class="s1">fail</span><span class="s2">(</span><span class="s1">errors</span><span class="s2">);</span>
+        <span class="s2">}</span>
+    <span class="s2">}</span>
+
+    <span class="s3">/**</span>
+     <span class="s3">* Method to get all the events page</span>
+     <span class="s3">* </span><span class="s4">@param </span><span class="s3">page</span>
+     <span class="s3">* </span><span class="s4">@param </span><span class="s3">size</span>
+     <span class="s3">* </span><span class="s4">@param </span><span class="s3">scope</span>
+     <span class="s3">* </span><span class="s4">@return </span><span class="s3">Result</span>
+     <span class="s3">*/</span>
+    <span class="s0">public </span><span class="s1">Result</span><span class="s2">&lt;</span><span class="s1">Page</span><span class="s2">&lt;</span><span class="s1">Event</span><span class="s2">&gt;&gt; </span><span class="s1">getAllEventsPaged</span><span class="s2">(</span><span class="s0">int </span><span class="s1">page</span><span class="s2">, </span><span class="s0">int </span><span class="s1">size</span><span class="s2">, </span><span class="s1">Scope scope</span><span class="s2">) {</span>
+
+        <span class="s0">int </span><span class="s1">pageNumber </span><span class="s2">= </span><span class="s1">Math</span><span class="s2">.</span><span class="s1">max</span><span class="s2">(</span><span class="s7">1</span><span class="s2">, </span><span class="s1">page</span><span class="s2">);</span>
+        <span class="s0">int </span><span class="s1">pageSize </span><span class="s2">= </span><span class="s1">Math</span><span class="s2">.</span><span class="s1">max</span><span class="s2">(</span><span class="s7">1</span><span class="s2">, </span><span class="s1">size</span><span class="s2">);</span>
+        <span class="s0">int </span><span class="s1">offset </span><span class="s2">= (</span><span class="s1">pageNumber </span><span class="s2">- </span><span class="s7">1</span><span class="s2">) * </span><span class="s1">pageSize</span><span class="s2">;</span>
+
+        <span class="s0">try </span><span class="s2">{</span>
+            <span class="s1">List</span><span class="s2">&lt;</span><span class="s1">Event</span><span class="s2">&gt; </span><span class="s1">events</span><span class="s2">;</span>
+
+            <span class="s0">if</span><span class="s2">(</span><span class="s1">scope </span><span class="s2">== </span><span class="s1">Scope</span><span class="s2">.</span><span class="s1">ALL</span><span class="s2">) {</span>
+                <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s6">&quot;&gt;&gt;&gt;&gt;&gt;&gt; [ADMIN] Récupération de tous les évènements (actifs + inactifs) &quot;</span><span class="s2">);</span>
+                <span class="s1">events </span><span class="s2">= </span><span class="s1">em</span><span class="s2">.</span><span class="s1">createNamedQuery</span><span class="s2">(</span><span class="s6">&quot;Event.getAll&quot;</span><span class="s2">, </span><span class="s1">Event</span><span class="s2">.</span><span class="s0">class</span><span class="s2">)</span>
+                        <span class="s2">.</span><span class="s1">setFirstResult</span><span class="s2">(</span><span class="s1">offset</span><span class="s2">)</span>
+                        <span class="s2">.</span><span class="s1">setMaxResults</span><span class="s2">(</span><span class="s1">pageSize</span><span class="s2">)</span>
+                        <span class="s2">.</span><span class="s1">getResultList</span><span class="s2">();</span>
+            <span class="s2">}</span>
+            <span class="s0">else </span><span class="s2">{</span>
+                <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s6">&quot;&gt;&gt;&gt;&gt;&gt;&gt;&gt; [USER] Récupération uniquement des évènements actifs&quot;</span><span class="s2">);</span>
+                <span class="s1">events </span><span class="s2">= </span><span class="s1">em</span><span class="s2">.</span><span class="s1">createNamedQuery</span><span class="s2">(</span><span class="s6">&quot;Event.getAllActive&quot;</span><span class="s2">, </span><span class="s1">Event</span><span class="s2">.</span><span class="s0">class</span><span class="s2">)</span>
+                        <span class="s2">.</span><span class="s1">setFirstResult</span><span class="s2">(</span><span class="s1">offset</span><span class="s2">)</span>
+                        <span class="s2">.</span><span class="s1">setMaxResults</span><span class="s2">(</span><span class="s1">pageSize</span><span class="s2">)</span>
+                        <span class="s2">.</span><span class="s1">getResultList</span><span class="s2">();</span>
+            <span class="s2">}</span>
+            <span class="s5">// Log de debug</span>
+            <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">((</span><span class="s6">&quot;&gt;&gt;&gt;&gt;&gt; Nombre d'évènement récupérés : &quot; </span><span class="s2">+ </span><span class="s1">events</span><span class="s2">.</span><span class="s1">size</span><span class="s2">()));</span>
+            <span class="s5">//Total d'éléments pour la pagination</span>
+            <span class="s1">Long totalElements </span><span class="s2">= (</span><span class="s1">scope </span><span class="s2">== </span><span class="s1">Scope</span><span class="s2">.</span><span class="s1">ALL</span><span class="s2">)</span>
+                    <span class="s2">? </span><span class="s1">em</span><span class="s2">.</span><span class="s1">createQuery</span><span class="s2">(</span><span class="s6">&quot;SELECT COUNT(e) FROM Event e&quot;</span><span class="s2">, </span><span class="s1">Long</span><span class="s2">.</span><span class="s0">class</span><span class="s2">).</span><span class="s1">getSingleResult</span><span class="s2">()</span>
+                    <span class="s2">: </span><span class="s1">em</span><span class="s2">.</span><span class="s1">createQuery</span><span class="s2">(</span><span class="s6">&quot;SELECT COUNT(e) FROM Event e WHERE E.active = true&quot;</span><span class="s2">, </span><span class="s1">Long</span><span class="s2">.</span><span class="s0">class</span><span class="s2">).</span><span class="s1">getSingleResult</span><span class="s2">();</span>
+            <span class="s5">//Création de la page</span>
+            <span class="s1">Page</span><span class="s2">&lt;</span><span class="s1">Event</span><span class="s2">&gt; </span><span class="s1">pageData </span><span class="s2">= </span><span class="s1">Page</span><span class="s2">.</span><span class="s1">of</span><span class="s2">(</span><span class="s1">events</span><span class="s2">, </span><span class="s1">pageNumber</span><span class="s2">, </span><span class="s1">pageSize</span><span class="s2">, </span><span class="s1">totalElements</span><span class="s2">);</span>
+
+            <span class="s0">return </span><span class="s1">Result</span><span class="s2">.</span><span class="s1">ok</span><span class="s2">(</span><span class="s1">pageData</span><span class="s2">);</span>
+
+        <span class="s2">} </span><span class="s0">catch </span><span class="s2">(</span><span class="s1">Exception e</span><span class="s2">) {</span>
+            <span class="s1">e</span><span class="s2">.</span><span class="s1">printStackTrace</span><span class="s2">();</span>
+            <span class="s1">Map</span><span class="s2">&lt;</span><span class="s1">String</span><span class="s2">, </span><span class="s1">String</span><span class="s2">&gt; </span><span class="s1">errors </span><span class="s2">= </span><span class="s0">new </span><span class="s1">HashMap</span><span class="s2">&lt;&gt;();</span>
+            <span class="s1">errors</span><span class="s2">.</span><span class="s1">put</span><span class="s2">(</span><span class="s6">&quot;Erreur&quot;</span><span class="s2">,</span><span class="s6">&quot;Erreur lors de la récupération des évènements : &quot; </span><span class="s2">+ </span><span class="s1">e</span><span class="s2">.</span><span class="s1">getMessage</span><span class="s2">());</span>
+            <span class="s0">return </span><span class="s1">Result</span><span class="s2">.</span><span class="s1">fail</span><span class="s2">(</span><span class="s1">errors</span><span class="s2">);</span>
+        <span class="s2">}</span>
+    <span class="s2">}</span>
+
+
+<span class="s2">}</span>
+</pre>
+</body>
+</html>

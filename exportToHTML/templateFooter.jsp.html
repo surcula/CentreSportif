@@ -1,0 +1,72 @@
+<html>
+<head>
+<title>templateFooter.jsp</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #bcbec4;}
+.s1 { color: #cf8e6d; font-weight: bold;}
+.s2 { color: #bcbec4;}
+.s3 { color: #6aab73;}
+.s4 { color: #bcbec4;}
+.s5 { color: #d5b778;}
+.s6 { color: #bababa;}
+.s7 { color: #6aab73;}
+.s8 { color: #7a7e85;}
+.s9 { color: #cf8e6d;}
+.s10 { color: #56a8f5;}
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+templateFooter.jsp</font>
+</center></td></tr></table>
+<pre><span class="s0">&lt;%@ </span><span class="s1">page </span><span class="s2">contentType</span><span class="s0">=&quot;</span><span class="s3">text/html;charset=UTF-8</span><span class="s0">&quot; </span><span class="s2">language</span><span class="s0">=&quot;</span><span class="s3">java</span><span class="s0">&quot; %&gt;</span>
+
+<span class="s5">&lt;footer </span><span class="s6">class</span><span class="s7">=&quot;site-footer&quot;</span><span class="s5">&gt;</span>
+  <span class="s5">&lt;div </span><span class="s6">class</span><span class="s7">=&quot;footer-container&quot;</span><span class="s5">&gt;</span>
+
+    <span class="s8">&lt;!-- Colonne 1 : Informations de l'entreprise --&gt;</span>
+    <span class="s5">&lt;div </span><span class="s6">class</span><span class="s7">=&quot;footer-column&quot;</span><span class="s5">&gt;</span>
+      <span class="s5">&lt;h3&gt;</span><span class="s4">Notre entreprise</span><span class="s5">&lt;/h3&gt;</span>
+      <span class="s5">&lt;p&gt;</span><span class="s4">Nom : Wolf Corp</span><span class="s5">&lt;/p&gt;</span>
+      <span class="s5">&lt;p&gt;</span><span class="s4">Adresse : 123 Rue des Loups, Paris</span><span class="s5">&lt;/p&gt;</span>
+      <span class="s5">&lt;p&gt;</span><span class="s4">Email : contact@wolfcorp.com</span><span class="s5">&lt;/p&gt;</span>
+      <span class="s5">&lt;p&gt;</span><span class="s4">Tél : +33 1 23 45 67 89</span><span class="s5">&lt;/p&gt;</span>
+    <span class="s5">&lt;/div&gt;</span>
+
+    <span class="s8">&lt;!-- Colonne 2 : Liens du site --&gt;</span>
+    <span class="s5">&lt;div </span><span class="s6">class</span><span class="s7">=&quot;footer-column&quot;</span><span class="s5">&gt;</span>
+      <span class="s5">&lt;h3&gt;</span><span class="s4">Navigation</span><span class="s5">&lt;/h3&gt;</span>
+      <span class="s5">&lt;ul&gt;</span>
+        <span class="s5">&lt;li&gt;&lt;a </span><span class="s6">href</span><span class="s7">=&quot;</span><span class="s9">${</span><span class="s2">pageContext.request.contextPath</span><span class="s9">}</span><span class="s7">/home&quot;</span><span class="s5">&gt;</span><span class="s4">Accueil</span><span class="s5">&lt;/a&gt;&lt;/li&gt;</span>
+        <span class="s5">&lt;li&gt;&lt;a </span><span class="s6">href</span><span class="s7">=&quot;</span><span class="s9">${</span><span class="s2">pageContext.request.contextPath</span><span class="s9">}</span><span class="s7">/countries&quot;</span><span class="s5">&gt;</span><span class="s4">Liste des pays</span><span class="s5">&lt;/a&gt;&lt;/li&gt;</span>
+        <span class="s5">&lt;li&gt;&lt;a </span><span class="s6">href</span><span class="s7">=&quot;#&quot;</span><span class="s5">&gt;</span><span class="s4">À propos</span><span class="s5">&lt;/a&gt;&lt;/li&gt;</span>
+        <span class="s5">&lt;li&gt;&lt;a </span><span class="s6">href</span><span class="s7">=&quot;#&quot;</span><span class="s5">&gt;</span><span class="s4">Contact</span><span class="s5">&lt;/a&gt;&lt;/li&gt;</span>
+      <span class="s5">&lt;/ul&gt;</span>
+    <span class="s5">&lt;/div&gt;</span>
+
+    <span class="s8">&lt;!-- Colonne 3 : Autres liens --&gt;</span>
+    <span class="s5">&lt;div </span><span class="s6">class</span><span class="s7">=&quot;footer-column&quot;</span><span class="s5">&gt;</span>
+      <span class="s5">&lt;h3&gt;</span><span class="s4">Ressources</span><span class="s5">&lt;/h3&gt;</span>
+      <span class="s5">&lt;ul&gt;</span>
+        <span class="s5">&lt;li&gt;&lt;a </span><span class="s6">href</span><span class="s7">=&quot;#&quot;</span><span class="s5">&gt;</span><span class="s4">Mentions légales</span><span class="s5">&lt;/a&gt;&lt;/li&gt;</span>
+        <span class="s5">&lt;li&gt;&lt;a </span><span class="s6">href</span><span class="s7">=&quot;#&quot;</span><span class="s5">&gt;</span><span class="s4">Politique de confidentialité</span><span class="s5">&lt;/a&gt;&lt;/li&gt;</span>
+        <span class="s5">&lt;li&gt;&lt;a </span><span class="s6">href</span><span class="s7">=&quot;#&quot;</span><span class="s5">&gt;</span><span class="s4">FAQ</span><span class="s5">&lt;/a&gt;&lt;/li&gt;</span>
+        <span class="s5">&lt;li&gt;&lt;a </span><span class="s6">href</span><span class="s7">=&quot;#&quot;</span><span class="s5">&gt;</span><span class="s4">Support</span><span class="s5">&lt;/a&gt;&lt;/li&gt;</span>
+      <span class="s5">&lt;/ul&gt;</span>
+    <span class="s5">&lt;/div&gt;</span>
+
+  <span class="s5">&lt;/div&gt;</span>
+
+  <span class="s5">&lt;div </span><span class="s6">class</span><span class="s7">=&quot;footer-bottom&quot;</span><span class="s5">&gt;</span>
+    <span class="s10">&amp;copy; </span><span class="s4">2025 Wolf Corp. Tous droits réservés.</span>
+  <span class="s5">&lt;/div&gt;</span>
+<span class="s5">&lt;/footer&gt;</span>
+
+<span class="s5">&lt;/body&gt;</span>
+<span class="s5">&lt;/html&gt;</span>
+</pre>
+</body>
+</html>
