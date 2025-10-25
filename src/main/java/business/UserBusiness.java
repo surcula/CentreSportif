@@ -4,12 +4,10 @@ package business;
 
 import Tools.Result;
 import entities.Address;
-import entities.City;
-import entities.Role;
 import entities.User;
 import enums.UserCivilite;
+import java.nio.charset.StandardCharsets;
 import enums.UserGender;
-import javax.persistence.EntityManager;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
@@ -23,6 +21,11 @@ import java.util.Map;
 
 
 public class UserBusiness {
+    private static final java.util.Set<String> CIVILITES =
+            new java.util.HashSet<>(java.util.Arrays.asList("M", "Mme", "Dr", "Autre"));
+    private static final java.util.Set<String> GENDERS =
+            new java.util.HashSet<>(java.util.Arrays.asList("M", "F", "Autre"));
+
     /**
      *
      * @param p Map contenant les paramètres du formulaire (ex: firstName, email, phone, etc.)
@@ -34,8 +37,9 @@ public class UserBusiness {
         // recuperation champs formulaire//
         String firstName = trim(p.get("firstName"));
         String lastName  = trim(p.get("lastName"));
-        String email     = trim(p.get("email")) == null ? null : trim(p.get("email")).toLowerCase();
-        String phone     = trim(p.get("phone"));
+        String emailRaw  = trim(p.get("email"));
+        String email     = (emailRaw == null) ? null : emailRaw.toLowerCase();        String phone     = trim(p.get("phone"));
+        String phoneDigits = phone == null ? null : phone.replaceAll("[^0-9]","");
         String birthdate = trim(p.get("birthdate"));
         String gender    = trim(p.get("gender"));
         String civilite  = trim(p.get("civilite"));
@@ -45,16 +49,34 @@ public class UserBusiness {
         // Adresse
         String street = trim(p.get("street"));
         String number = trim(p.get("number"));
-        String box    = trim(p.get("box"));
         String cityId = trim(p.get("cityId"));
 
         //validation des champs (contrainte message erreur)
         if (len(firstName) < 2) errors.put("firstName", "Prénom trop court");
         if (len(lastName)  < 2) errors.put("lastName",  "Nom trop court");
-        if (email == null || !email.contains("@")) errors.put("email", "Email invalide");
-        if (len(phone) < 8) errors.put("phone", "Téléphone invalide");
-        if (password == null || password.length() < 6) errors.put("password", "Mot de passe ≥ 6 caractères");
-        if (password2 == null || !password2.equals(password)) errors.put("password2", "Confirmation différente");
+        if (email == null || !email.matches("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$")) {
+            errors.put("email", "Email invalide (ex. nom@domaine.be)");
+        }
+        if (phoneDigits == null || phoneDigits.length() < 8) {
+            errors.put("phone", "Téléphone invalide (8 chiffres minimum)");
+        }
+        // Vérification mot de passe sécurisé
+        if (password == null || password.length() < 8) {
+            errors.put("password", "Le mot de passe doit contenir au moins 8 caractères.");
+        } else {
+            boolean hasUppercase = password.matches(".*[A-Z].*");
+            boolean hasLowercase = password.matches(".*[a-z].*");
+            boolean hasDigit = password.matches(".*[0-9].*");
+
+            if (!hasUppercase || !hasLowercase || !hasDigit) {
+                errors.put("password", "Le mot de passe doit contenir au moins une majuscule, une minuscule et un chiffre.");
+            }
+        }
+
+       // Vérification confirmation
+        if (password2 == null || !password2.equals(password)) {
+            errors.put("password2", "Les mots de passe ne correspondent pas.");
+        }
 
         // Date de naissance min 18 ans max 120 ans
         LocalDate dob = null;
@@ -79,11 +101,18 @@ public class UserBusiness {
             errors.put("birthdate", "Date invalide (format : YYYY-MM-DD)");
         }
 
-        // Civilité / Genre
-        UserGender userGender = mapGender(gender);
-        UserCivilite userCivilite = mapCivilite(civilite);
-        if (userGender == null) errors.put("gender", "Genre requis");
-        if (userCivilite == null) errors.put("civilite", "Civilité requise");
+        // Civilité / Genre : validation directe ENUM MySQL
+        if (civilite == null || civilite.trim().isEmpty()) {
+            errors.put("civilite", "Civilité requise");
+        } else if (!CIVILITES.contains(civilite)) {
+            errors.put("civilite", "Civilité invalide");
+        }
+
+        if (gender == null || gender.trim().isEmpty()) {
+            errors.put("gender", "Genre requis");
+        } else if (!GENDERS.contains(gender)) {
+            errors.put("gender", "Genre invalide");
+        }
 
         // Adresse verification
         if (len(street) == 0) errors.put("street", "Rue obligatoire");
@@ -91,35 +120,17 @@ public class UserBusiness {
         try { num = Integer.parseInt(number); }
         catch (Exception e) { errors.put("number", "Numéro invalide"); }
 
-        if (cityId == null) errors.put("cityId", "Sélectionne une ville après vérification du code postal");
+        if (cityId == null)
+            errors.put("cityId", "Sélectionne une ville après vérification du code postal");
 
         // Si erreur, on arrête ici
         if (!errors.isEmpty()) return Result.fail(errors);
 
-//        // Récupération de la ville
-//        Integer cid = Integer.parseInt(cityId);
-//        City city = em.find(City.class, cid);
-//        if (city == null) {
-//            errors.put("cityId", "Ville introuvable");
-//            return Result.fail(errors);
-//        }
-        //address.setCity(city);
 
-        // Création de l'adresse
+        // Création de l'adresse (construction des objets)
         Address address = new Address();
         address.setStreetName(street);
         address.setStreetNumber(num);
-        //verifie que la boite est vide ,sinon converti en double
-        Double boxNum = 0.0;
-        if (box != null && !box.isEmpty()){
-            try {
-                boxNum = Double.parseDouble(box);
-            } catch (NumberFormatException e) {
-                errors.put("box", "Boite : nombre décimal attendu");
-            }
-        }
-        address.setBoxNumber(boxNum);
-
         address.setActive(true);
 
         // Création de l'utilisateur
@@ -129,15 +140,13 @@ public class UserBusiness {
         u.setEmail(email);
         u.setPhone(phone);
         u.setBirthdate(dob);
-        u.setGender(userGender);
-        u.setCivilite(userCivilite);
-        u.setPassword(password); // (option : hash plus tard)
+        u.setGender(gender);
+        u.setCivilite(civilite);
+        u.setPassword(password); // (sera hashé)
         u.setActive(true);
         u.setBlacklist(false);
         u.setAddress(address);
 
-
-        // Succès
         return Result.ok(u);
     }
 
@@ -145,39 +154,31 @@ public class UserBusiness {
 
     /**
      *
-     * @param s chaine a nettoyer
+     * @param s chaine a nettoyer retirer les espaces inutile
      * @return chaine nettoyee ou null
      */
     private static String trim(String s) { return s == null ? null : s.trim(); }
 
     private static int len(String s) { return s == null ? 0 : s.length(); }
 
-    private static UserGender mapGender(String s) {
-        if (s == null) return null;
-        switch (s) {
-            case "M": return UserGender.MALE;
-            case "F": return UserGender.FEMALE;
-            case "Autre": return UserGender.OTHERS;
-            default: return null;
+
+    /**
+     * @param password Mot de passe en texte clair
+     * @return  Hash hexadécimal SHA-256
+     */
+    public static String hashPasswordSha256(String password) {
+    try {
+          MessageDigest digest = MessageDigest.getInstance("SHA-256");
+          byte[] bytes = digest.digest(password.getBytes(StandardCharsets.UTF_8));
+
+          StringBuilder sb = new StringBuilder(bytes.length * 2);
+          for (byte b : bytes) sb.append(String.format("%02x", b));
+          return sb.toString();
+
+         } catch (NoSuchAlgorithmException e) {
+        //Sha-256 existe toujours -> runtime si indisponible
+          throw new RuntimeException("SHA-256 indisponible", e);
         }
-    }
-
-    private static UserCivilite mapCivilite(String s) {
-        if (s == null) return null;
-        switch (s) {
-            case "M": return UserCivilite.MR;
-            case "Mme": return UserCivilite.MS;
-            case "Dr": return UserCivilite.MISS;
-            case "Autre": return UserCivilite.MISS;
-            default: return null;
-        }
-
-    }
-
-
-    public String HashPAssword(String password) throws NoSuchAlgorithmException {
-        MessageDigest digest = MessageDigest.getInstance("SHA-256");
-        byte[] test = digest.digest(password.getBytes());
-        return test.toString();
     }
 }
+

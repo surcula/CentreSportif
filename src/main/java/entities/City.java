@@ -2,9 +2,16 @@ package entities;
 
 import javax.persistence.*;
 
-@NamedQuery(name = "getAllActiveCities", query ="SELECT c FROM City c WHERE c.active = true ORDER BY c.cityName" )
-
-
+@NamedQueries({
+        @NamedQuery(
+                name = "getAllActiveCities",
+                query = "SELECT c FROM City c WHERE c.active = true ORDER BY c.cityName"
+        ),
+        @NamedQuery(
+                name = "getActiveCitiesByZip",
+                query = "SELECT c FROM City c WHERE c.active = true AND c.zipCode = :zip ORDER BY c.cityName"
+        )
+})
 @Entity
 @Table(name = "cities")
 public class City {

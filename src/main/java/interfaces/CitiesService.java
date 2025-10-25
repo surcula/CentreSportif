@@ -11,4 +11,5 @@ public interface CitiesService {
      * @return
      */
     Result<List<City>> getAllActiveCities();
+    Result<List<City>> getActiveByZip(int zip);
 }

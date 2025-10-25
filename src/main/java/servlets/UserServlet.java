@@ -1,5 +1,5 @@
 package servlets;
-/** Contoleur HTTP pour l'inscription des utilisateurs*/
+
 import Tools.Result;
 import business.ServletUtils;
 import business.UserBusiness;
@@ -20,50 +20,63 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import static constants.Rooting.*;
 
 
+/**
+ * HTTP gérant le formulaire d'inscription des utilisateurs.
+ * Gère l'affichage initial (GET), le filtrage des villes par code postal, et la création du compte (POST)
+ */
 @WebServlet(name = "UserServlet", value = "/user")
 public class UserServlet extends HttpServlet {
     private static final Logger log = Logger.getLogger(UserServlet.class);
 
 
+    /**
+     * @param req requete HTTP
+     * @param resp Reponse HTTP
+     * @throws ServletException  si une erreur survient dans le dispatch
+     * @throws IOException si une erreur d'entrée/sortie survient
+     */
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
         EntityManager em = EMF.getEM();
         try {
-            //Recup countries
+            //Recup countries et cities
             CountriesServiceImpl countriesService = new CountriesServiceImpl(em);
-            Result<List<Country>> countries = countriesService.getAllActiveCountries();
-            //            if(!countries.isSuccess()){
-            //                countries.getData();
-            // log.error("échecs lors de la récupération des pays");
-            //            }
-
-
-            //Recup cities
             CitiesServiceImpl citiesService = new CitiesServiceImpl(em);
-            Result<List<City>> cities = citiesService.getAllActiveCities();
-            //            if(!cities.isSuccess()){
-            //                cities.getData();
-            //            }
 
-            //Attacher à la requete pour l'affichage
-            req.setAttribute("countries", countries.getData());
-            req.setAttribute("cities", cities.getData());
+            Result<List<Country>> countries = countriesService.getAllActiveCountries();
+            Result<List<City>> cities = citiesService.getAllActiveCities();
+
+
+            // Attachement des données à la requête pour affichage JSP
+            req.setAttribute("countries", countries.isSuccess() ? countries.getData() : java.util.Collections.emptyList());
+            req.setAttribute("cities", cities.isSuccess() ? cities.getData() : java.util.Collections.emptyList());
+
         } catch (Throwable t) {
             log.error("EMF init / load countries failed", t);
-            // on n’empêche pas l’affichage de la page si EM indispo
+            req.setAttribute("formError", "Impossible de charger les données du formulaire.");
+
+            // empêche pas l’affichage de la page si EM indispo
         } finally {
             if (em != null) em.close();
         }
-        business.ServletUtils.forwardWithContent(req, resp, USER_FORM_JSP, TEMPLATE);
+       ServletUtils.forwardWithContent(req, resp, USER_FORM_JSP, TEMPLATE);
     }
 
+    /**
+     * @param req Requête HTTP contenant les champs du formulaire
+     * @param resp Réponse HTTP
+     * @throws ServletException
+     * @throws IOException
+     */
+    // POST : traitement du formulaire
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         Map<String,String> p = new HashMap<>();
@@ -71,46 +84,30 @@ public class UserServlet extends HttpServlet {
         String action = p.get("action");
 
         EntityManager em = EMF.getEM();
-        try {
-            // Sécuriser EMF.getEM() pour éviter le 500
-            try {
-                em = EMF.getEM();
-            } catch (Throwable t) {
-                log.error("Erreur lors de l'initialisation de EMF", t);
-                req.setAttribute("formError", "Impossible de se connecter à la base de données.");
-                ServletUtils.forwardWithContent(req, resp, USER_FORM_JSP, TEMPLATE);
-                return;
-            }
-
-            // ---------- A) CHECK ZIP : charger les villes ----------
+      try{
+            // CHECK ZIP : charger les villes
             if ("checkZip".equals(action)) {
-                String zipStr = p.get("zip");
-                try {
-                    int zip = Integer.parseInt(zipStr);
-                    List<City> cities = em.createQuery(
-                            "SELECT c FROM City c WHERE c.zipCode = :z AND c.active = true ORDER BY c.cityName",
-                            City.class
-                    ).setParameter("z", zip).getResultList();
+                CountriesServiceImpl countriesService = new CountriesServiceImpl(em);
+                CitiesServiceImpl citiesService = new CitiesServiceImpl(em);
 
-                    // villes -> JSP (avec alias compatibles)
-                    req.setAttribute("cities", cities);
-                    req.setAttribute("cityList", cities);
-                    req.setAttribute("allCities", cities);
-                } catch (Exception e) {
+                String zipStr = p.get("zip");
+                if (zipStr != null && zipStr.matches("\\d+")){
+                    int zip = Integer.parseInt(zipStr);
+                    Tools.Result<java.util.List<entities.City>> citiesRes = citiesService.getActiveByZip(zip);                    // villes -> JSP
+                    req.setAttribute("cities", citiesRes.isSuccess() ? citiesRes.getData() : java.util.Collections.emptyList());
+                } else {
+
                     Map<String, String> errors = new HashMap<>();
                     errors.put("zip", "Code postal invalide");
                     req.setAttribute("errors", errors);
+                    req.setAttribute("cities", java.util.Collections.emptyList());
                 }
 
-                // pays -> JSP (avec alias compatibles)
-                List<entities.Country> countries = em.createQuery(
-                        "SELECT c FROM Country c WHERE c.active = true ORDER BY c.countryName", entities.Country.class
-                ).getResultList();
-                req.setAttribute("countries", countries);
-                req.setAttribute("countryList", countries);
-                req.setAttribute("allCountries", countries);
+                // pays -> JSP
+                Tools.Result<java.util.List<entities.Country>> countriesRes = countriesService.getAllActiveCountries();
+                req.setAttribute("countries", countriesRes.isSuccess() ? countriesRes.getData() : java.util.Collections.emptyList());
 
-                // conserver les valeurs saisies
+                // conserve les valeurs saisies
                 req.setAttribute("old", p);
                 req.setAttribute("zip", p.get("zip"));
 
@@ -118,68 +115,29 @@ public class UserServlet extends HttpServlet {
                 return;
             }
 
-            // ---------- B) SUBMIT : inscription ----------
+            // SUBMIT : inscription
             if ("submit".equals(action)) {
                 UserServiceImpl userService = new UserServiceImpl(em);
 
-                // Unicité email
+                // vérif Unicité email
                 Result<Boolean> emailOK = userService.emailAvailable(p.get("email"));
                 if (!emailOK.isSuccess() || !emailOK.getData()) {
                     Map<String, String> errors = new HashMap<>();
                     errors.put("email", "Email déjà utilisé");
                     req.setAttribute("errors", errors);
                     req.setAttribute("old", p);
-
-                    // recharger pays (+ alias)
-                    List<entities.Country> countries = em.createQuery(
-                            "SELECT c FROM Country c WHERE c.active = true ORDER BY c.countryName", entities.Country.class
-                    ).getResultList();
-                    req.setAttribute("countries", countries);
-                    req.setAttribute("countryList", countries);
-                    req.setAttribute("allCountries", countries);
-
-                    // recharger villes si zip connu
-                    String oldZip = p.get("zip");
-                    if (oldZip != null && oldZip.matches("\\d+")) {
-                        List<City> cities = em.createQuery(
-                                "SELECT c FROM City c WHERE c.zipCode = :z AND c.active = true ORDER BY c.cityName",
-                                City.class
-                        ).setParameter("z", Integer.parseInt(oldZip)).getResultList();
-                        req.setAttribute("cities", cities);
-                        req.setAttribute("cityList", cities);
-                        req.setAttribute("allCities", cities);
-                    }
-
+                    reloadLists(req, em, p);
                     ServletUtils.forwardWithContent(req, resp, USER_FORM_JSP, TEMPLATE);
                     return;
                 }
 
-                // Construction + validations
+
+                // Construction + validations user
                 Result<User> built = UserBusiness.buildUserFromRequest(p);
                 if (!built.isSuccess()) {
                     req.setAttribute("errors", built.getErrors());
                     req.setAttribute("old", p);
-
-                    // recharger pays (+ alias)
-                    List<entities.Country> countries = em.createQuery(
-                            "SELECT c FROM Country c WHERE c.active = true ORDER BY c.countryName", entities.Country.class
-                    ).getResultList();
-                    req.setAttribute("countries", countries);
-                    req.setAttribute("countryList", countries);
-                    req.setAttribute("allCountries", countries);
-
-                    // recharger villes si zip connu
-                    String oldZip = p.get("zip");
-                    if (oldZip != null && oldZip.matches("\\d+")) {
-                        List<City> cities = em.createQuery(
-                                "SELECT c FROM City c WHERE c.zipCode = :z AND c.active = true ORDER BY c.cityName",
-                                City.class
-                        ).setParameter("z", Integer.parseInt(oldZip)).getResultList();
-                        req.setAttribute("cities", cities);
-                        req.setAttribute("cityList", cities);
-                        req.setAttribute("allCities", cities);
-                    }
-
+                    reloadLists(req, em, p);
                     ServletUtils.forwardWithContent(req, resp, USER_FORM_JSP, TEMPLATE);
                     return;
                 }
@@ -189,40 +147,59 @@ public class UserServlet extends HttpServlet {
                 Address address = user.getAddress();
 
 
+               // Lier la ville choisie
+                String cityIdStr = p.get("cityId");
+                if (cityIdStr == null || !cityIdStr.matches("\\d+")) {
+                    Map<String,String> errors = new HashMap<>();
+                    errors.put("cityId", "Sélectionne une ville");
+                    req.setAttribute("errors", errors);
+                    req.setAttribute("old", p);
+                    reloadLists(req, em, p);
+                    ServletUtils.forwardWithContent(req, resp, USER_FORM_JSP, TEMPLATE);
+                    return;
+                }
+                int cityId = Integer.parseInt(cityIdStr);
+                City chosen = em.find(City.class, cityId);
+                if (chosen == null || !chosen.isActive()) {
+                    Map<String,String> errors = new HashMap<>();
+                    errors.put("cityId", "Ville introuvable/inactive");
+                    req.setAttribute("errors", errors);
+                    req.setAttribute("old", p);
+                    reloadLists(req, em, p);
+                    ServletUtils.forwardWithContent(req, resp, USER_FORM_JSP, TEMPLATE);
+                    return;
+                }
+                address.setCity(chosen);
+                // Rôle par défaut = utilisateur (id = 4)
+                entities.Role defaultRole = em.find(entities.Role.class, 4);
+                if (defaultRole == null || !defaultRole.isActive()) {
+                    Map<String,String> errors = new HashMap<>();
+                    errors.put("role", "Rôle par défaut introuvable (id=4).");
+                    req.setAttribute("errors", errors);
+                    req.setAttribute("old", p);
+                    reloadLists(req, em, p);
+                    ServletUtils.forwardWithContent(req, resp, USER_FORM_JSP, TEMPLATE);
+                    return;
+                }
+                user.setRole(defaultRole);
+                //Hash MDP
+                user.setPassword(UserBusiness.hashPasswordSha256(user.getPassword()));
+
+                //transaction
                 em.getTransaction().begin();
                 em.persist(address);
                 em.persist(user);
                 em.getTransaction().commit();
 
                 log.info("Inscription OK : " + user.getEmail());
-                ServletUtils.redirectToURL(resp, req.getContextPath() + "/login2?registered=1");
+                ServletUtils.redirectToURL(resp, req.getContextPath() + "/login?msg=Inscription+reussie.+Veuillez+vous+connecter.&type=success");
                 return;
             }
 
-            // ---------- C) Fallback ----------
+            //  cas par defaut
             req.setAttribute("old", p);
-
-            // recharger pays (+ alias)
-            List<entities.Country> countries = em.createQuery(
-                    "SELECT c FROM Country c WHERE c.active = true ORDER BY c.countryName", entities.Country.class
-            ).getResultList();
-            req.setAttribute("countries", countries);
-            req.setAttribute("countryList", countries);
-            req.setAttribute("allCountries", countries);
-
-            // recharger villes si zip connu
-            String oldZip = p.get("zip");
-            if (oldZip != null && oldZip.matches("\\d+")) {
-                List<City> cities = em.createQuery(
-                        "SELECT c FROM City c WHERE c.zipCode = :z AND c.active = true ORDER BY c.cityName",
-                        City.class
-                ).setParameter("z", Integer.parseInt(oldZip)).getResultList();
-                req.setAttribute("cities", cities);
-                req.setAttribute("cityList", cities);
-                req.setAttribute("allCities", cities);
-            }
-
-            ServletUtils.forwardWithContent(req, resp, USER_FORM_JSP, TEMPLATE);
+          reloadLists(req, em, p);
+          ServletUtils.forwardWithContent(req, resp, USER_FORM_JSP, TEMPLATE);
 
         } catch (Exception e) {
             log.error("Erreur inscription", e);
@@ -233,4 +210,36 @@ public class UserServlet extends HttpServlet {
         }
     }
 
+    /**
+     * @param req requete HTTP Recharge les listes des pays et des villes après une erreur
+     * @param em EntityManager pour exécuter les requêtes via les services
+     * @param p Map des champs saisis dans le formulaire
+     */
+    // Méthode utilitaire : recharger pays / villes
+    private void reloadLists(HttpServletRequest req, EntityManager em, Map<String, String> p) {
+        CountriesServiceImpl countriesService = new CountriesServiceImpl(em);
+        CitiesServiceImpl    citiesService    = new CitiesServiceImpl(em);
+
+        // Pays
+        Tools.Result<java.util.List<entities.Country>> countriesRes = countriesService.getAllActiveCountries();
+        if (countriesRes.isSuccess()) {
+            req.setAttribute("countries", countriesRes.getData());
+        } else {
+            req.setAttribute("countries", java.util.Collections.emptyList());
+        }
+
+        // Villes (selon le zip saisi)
+        String oldZip = p.get("zip");
+        if (oldZip != null && oldZip.matches("\\d+")) {
+            int zip = Integer.parseInt(oldZip);
+            Tools.Result<java.util.List<entities.City>> citiesRes = citiesService.getActiveByZip(zip);
+            if (citiesRes.isSuccess()) {
+                req.setAttribute("cities", citiesRes.getData());
+            } else {
+                req.setAttribute("cities", java.util.Collections.emptyList());
+            }
+        } else {
+            req.setAttribute("cities", java.util.Collections.emptyList());
+        }
+    }
 }

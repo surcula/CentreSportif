@@ -1,11 +1,7 @@
 package entities;
 
-import enums.UserCivilite;
-import enums.UserGender;
 
 import javax.persistence.Column;
-import javax.persistence.Convert;
-
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 
@@ -13,9 +9,11 @@ import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
-@NamedQueries({
+@NamedQueries({ //pour l'inscription ,connexion
         @NamedQuery(name = "User.findByEmail", query = "SELECT u FROM User u WHERE u.email = :email"),
         @NamedQuery(name = "User.countByEmail", query = "SELECT COUNT(u) FROM User u WHERE u.email = :email"),
+        @NamedQuery(name = "User.findByEmailWithRole", query = "SELECT u FROM User u LEFT JOIN FETCH u.role WHERE u.email = :email")
+
 })
 
 
@@ -45,13 +43,13 @@ public class User {
     @Column(name = "phone", nullable = false)
     private String phone;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "gender", nullable = false)
-    private UserGender gender;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "civilite", nullable = false)
-    private UserCivilite civilite;
+    @Column(name = "gender", length = 10, nullable = false)
+    private String gender;
+
+
+    @Column(name = "civilite", length = 10 ,nullable = false)
+    private String civilite;
 
     @ManyToOne
     @JoinColumn(name = "role_id")
@@ -134,19 +132,19 @@ public class User {
         this.phone = phone;
     }
 
-    public UserGender getGender() {
+    public String getGender() {
         return gender;
     }
 
-    public void setGender(UserGender gender) {
+    public void setGender(String gender) {
         this.gender = gender;
     }
 
-    public UserCivilite getCivilite() {
+    public String getCivilite() {
         return civilite;
     }
 
-    public void setCivilite(UserCivilite civilite) {
+    public void setCivilite(String civilite) {
         this.civilite = civilite;
     }
 

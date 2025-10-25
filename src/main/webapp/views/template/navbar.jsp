@@ -29,36 +29,45 @@
                 </li>
                 <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="#">Abonnements</a>
                 </li>
-                <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded"
-                                                     href="${pageContext.request.contextPath}/views/template/template.jsp?content=../infosPratique.jsp">Infos
-                    pratiques</a></li>
+                <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="${pageContext.request.contextPath}/views/template/template.jsp?content=../infosPratique.jsp">Infos pratiques</a>
+                </li>
                 <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="#">Sponsors</a>
                 </li>
 
-                <c:if test="${sessionScope.role == 'ADMIN'
-             or sessionScope.role == 'BARMAN'
-             or sessionScope.role == 'SECRETARY'}">
+                <!-- Lien admin -->
+                <c:if test="${sessionScope.role == 'admin' || sessionScope.role == 'secretaire' || sessionScope.role == 'barman'}">
                     <li class="nav-item">
-                        <a class="nav-link fw-bold text-warning" href="${pageContext.request.contextPath}/admin">
-                            ADMIN
-                        </a>
+                        <a class="nav-link fw-bold text-warning" href="${pageContext.request.contextPath}/users">Gestion utilisateurs</a>
                     </li>
                 </c:if>
 
+                <!-- Mon profil  -->
+                <c:if test="${not empty sessionScope.userId}">
+                    <li class="nav-item">
+                        <a class="nav-link fw-bold text-warning" href="${pageContext.request.contextPath}/profile">Mon profil</a>
+                    </li>
+                </c:if>
+
+                <!-- Badge rôle -->
+                <c:if test="${not empty sessionScope.role}">
+                    <li class="nav-item mx-1">
+                        <span class="badge bg-light text-dark text-uppercase">${sessionScope.role}</span>
+                    </li>
+                </c:if>
+
+                <!-- Connexion / Déconnexion -->
                 <c:choose>
-                    <c:when test="${not empty sessionScope.role}">
-                        <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded"
-                                                             href="${pageContext.request.contextPath}/login?action=logout">Se
-                            déconnecter</a></li>
+                    <c:when test="${not empty sessionScope.userId}">
+                        <li class="nav-item mx-0 mx-lg-1">
+                            <a class="nav-link py-3 px-0 px-lg-3 rounded" href="${pageContext.request.contextPath}/login?action=logout">Se déconnecter</a>
+                        </li>
                     </c:when>
                     <c:otherwise>
                         <li class="nav-item mx-0 mx-lg-1">
-                            <a class="nav-link py-3 px-0 px-lg-3 rounded"
-                               href="${pageContext.request.contextPath}/login">Se connecter</a>
+                            <a class="nav-link py-3 px-0 px-lg-3 rounded" href="${pageContext.request.contextPath}/login">Se connecter</a>
                         </li>
                         <li class="nav-item mx-0 mx-lg-1">
-                            <a class="nav-link py-3 px-0 px-lg-3 rounded"
-                               href="${pageContext.request.contextPath}/user">S’inscrire</a>
+                            <a class="nav-link py-3 px-0 px-lg-3 rounded" href="${pageContext.request.contextPath}/user">S’inscrire</a>
                         </li>
                     </c:otherwise>
                 </c:choose>

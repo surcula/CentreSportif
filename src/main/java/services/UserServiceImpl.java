@@ -1,5 +1,4 @@
 package services;
-/** jpa de UserService + EntityManager */
 
 import Tools.Result;
 import entities.User;
@@ -10,6 +9,9 @@ import javax.persistence.NoResultException;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * jpa de UserService + EntityManager
+ */
 public class UserServiceImpl implements UserService {
     private static final Logger log = Logger.getLogger(UserService.class);
     private final EntityManager em;
@@ -23,7 +25,7 @@ public class UserServiceImpl implements UserService {
                 .getSingleResult();
         return Result.ok(count ==0);
     }
-    @Override
+    @Override //creation un utilisateur
     public Result<User> create(User user){
         try{
             em.persist(user);
