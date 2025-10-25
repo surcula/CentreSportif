@@ -13,6 +13,7 @@
 .s7 { color: #bababa;}
 .s8 { color: #6aab73;}
 .s9 { color: #cf8e6d;}
+.s10 { color: #7a7e85;}
 </style>
 </head>
 <body bgcolor="#1e1f22">
@@ -34,12 +35,26 @@ templateHeader.jsp</font>
 <span class="s6">&lt;!DOCTYPE </span><span class="s7">html</span><span class="s6">&gt;</span>
 <span class="s6">&lt;html&gt;</span>
 <span class="s6">&lt;head&gt;</span>
-  <span class="s6">&lt;meta </span><span class="s7">charset</span><span class="s8">=&quot;UTF-8&quot;</span><span class="s6">&gt;</span>
-  <span class="s6">&lt;title&gt;</span><span class="s1">JSP - Demo1</span><span class="s6">&lt;/title&gt;</span>
-  <span class="s6">&lt;link </span><span class="s7">rel</span><span class="s8">=&quot;stylesheet&quot; </span><span class="s7">type</span><span class="s8">=&quot;text/css&quot; </span><span class="s7">href</span><span class="s8">=&quot;</span><span class="s9">${</span><span class="s4">pageContext.request.contextPath</span><span class="s9">}</span><span class="s8">/Css/Css.css&quot;</span><span class="s6">&gt;</span>
-  <span class="s6">&lt;script </span><span class="s7">src</span><span class="s8">=&quot;</span><span class="s9">${</span><span class="s4">pageContext.request.contextPath</span><span class="s9">}</span><span class="s8">/Javascript/Js.js&quot;</span><span class="s6">&gt;&lt;/script&gt;</span>
+    <span class="s6">&lt;meta </span><span class="s7">charset</span><span class="s8">=&quot;UTF-8&quot;</span><span class="s6">&gt;</span>
+    <span class="s6">&lt;title&gt;</span><span class="s1">FSSD</span><span class="s6">&lt;/title&gt;</span>
+    <span class="s6">&lt;link </span><span class="s7">rel</span><span class="s8">=&quot;stylesheet&quot; </span><span class="s7">type</span><span class="s8">=&quot;text/css&quot; </span><span class="s7">href</span><span class="s8">=&quot;</span><span class="s9">${</span><span class="s4">pageContext.request.contextPath</span><span class="s9">}</span><span class="s8">/css/Css.css&quot;</span><span class="s6">&gt;</span>
+    <span class="s10">&lt;!-- Ceci a été testé afin de scinder les fichiers css par auteur mais l'idéal est par page pour ne pas avoir 20000 lignes--&gt;</span>
+    <span class="s2">&lt;</span><span class="s3">c:if </span><span class="s4">test</span><span class="s5">=&quot;</span><span class="s9">${not empty </span><span class="s4">pageCss</span><span class="s9">}</span><span class="s5">&quot;</span><span class="s2">&gt;</span>
+        <span class="s6">&lt;link </span><span class="s7">rel</span><span class="s8">=&quot;stylesheet&quot; </span><span class="s7">href</span><span class="s8">=&quot;</span><span class="s9">${</span><span class="s4">pageContext.request.contextPath</span><span class="s9">}</span><span class="s8">/css/</span><span class="s9">${</span><span class="s4">pageCss</span><span class="s9">}</span><span class="s8">&quot;</span><span class="s6">&gt;</span>
+    <span class="s2">&lt;/</span><span class="s3">c:if</span><span class="s2">&gt;</span>
+    <span class="s6">&lt;script </span><span class="s7">src</span><span class="s8">=&quot;</span><span class="s9">${</span><span class="s4">pageContext.request.contextPath</span><span class="s9">}</span><span class="s8">/javascript/Js.js&quot;</span><span class="s6">&gt;&lt;/script&gt;</span>
+    <span class="s10">&lt;!-- Font Awesome icons (free version)--&gt;</span>
+    <span class="s6">&lt;script </span><span class="s7">src</span><span class="s8">=&quot;https://use.fontawesome.com/releases/v6.3.0/js/all.js&quot; </span><span class="s7">crossorigin</span><span class="s8">=&quot;anonymous&quot;</span><span class="s6">&gt;&lt;/script&gt;</span>
+    <span class="s10">&lt;!-- Google fonts--&gt;</span>
+    <span class="s6">&lt;link </span><span class="s7">href</span><span class="s8">=&quot;https://fonts.googleapis.com/css?family=Montserrat:400,700&quot; </span><span class="s7">rel</span><span class="s8">=&quot;stylesheet&quot; </span><span class="s7">type</span><span class="s8">=&quot;text/css&quot;</span><span class="s6">/&gt;</span>
+    <span class="s6">&lt;link </span><span class="s7">href</span><span class="s8">=&quot;https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic&quot; </span><span class="s7">rel</span><span class="s8">=&quot;stylesheet&quot;</span>
+          <span class="s7">type</span><span class="s8">=&quot;text/css&quot;</span><span class="s6">/&gt;</span>
+    <span class="s6">&lt;link </span><span class="s7">rel</span><span class="s8">=&quot;stylesheet&quot; </span><span class="s7">href</span><span class="s8">=&quot;https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css&quot;</span><span class="s6">&gt;</span>
+
 <span class="s6">&lt;/head&gt;</span>
-<span class="s6">&lt;body&gt;</span>
+<span class="s6">&lt;body </span><span class="s7">id</span><span class="s8">=&quot;page-top&quot;</span><span class="s6">&gt;</span>
+<span class="s10">&lt;!-- Navbar --&gt;</span>
+<span class="s2">&lt;</span><span class="s3">jsp:include </span><span class="s4">page</span><span class="s5">=&quot;/views/template/navbar.jsp&quot;</span><span class="s2">/&gt;</span>
 
 
 </pre>

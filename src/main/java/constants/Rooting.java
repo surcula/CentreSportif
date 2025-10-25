@@ -12,4 +12,9 @@ public class Rooting {
     public static final String RESERVATION_FORM_JSP = "/views/reservation-form.jsp";
     public static final String SPORT_JSP = "/views/sport.jsp";
     public static final String SPORT_FORM_JSP = "/views/sport-form.jsp";
+    public static final String ORDER_JSP = "/views/order.jsp";
+    public static final String ORDER_FORM_JSP = "/views/order-form.jsp";
+    public static final String SUBSCRIPTION_JSP = "/views/subscription.jsp";
+    public static final String SUBSCRIPTION_FORM_JSP = "/views/subscription-form.jsp"; // (optionnel si tu veux un form d’assignation back-office)
+
 }
