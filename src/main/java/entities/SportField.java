@@ -52,10 +52,12 @@ public class SportField {
     @Column(name = "day", nullable = false)
     private int day;
 
-    @Column(name = "price", nullable = false, precision = 10, scale = 2)
+    //@Column(name = "price", nullable = false, precision = 10, scale = 2)
+    @Transient
     private double price;
 
-    @Column(name = "session_duration", nullable = false)
+    //@Column(name = "session_duration", nullable = false)
+    @Transient
     private int sessionDuration;
 
     @Column(name = "is_active", nullable = false)

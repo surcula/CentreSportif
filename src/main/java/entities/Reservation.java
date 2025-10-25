@@ -4,6 +4,30 @@ import enums.ReservationStatus;
 
 import javax.persistence.*;
 import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
+/**
+ * Named Query
+ */
+@NamedQueries({
+        @NamedQuery(
+                name = "getAllActiveReservations",
+                query = "SELECT r FROM Reservation r WHERE r.active = true ORDER BY r.id asc"
+        ),
+        @NamedQuery(
+                name = "getAllReservations",
+                query = "SELECT r FROM Reservation r ORDER BY r.id desc"
+        ),
+        @NamedQuery(
+                name = "countAllActiveReservations",
+                query = "SELECT COUNT(r) FROM Reservation r WHERE r.active = true ORDER BY r.id asc"
+        ),
+        @NamedQuery(
+                name = "countAllReservations",
+                query = "SELECT COUNT(r) FROM Reservation r ORDER BY r.id asc"
+        )
+})
 
 /**
  * Reservation entity to save the information of the reservation
@@ -30,13 +54,13 @@ public class Reservation {
      * @param startDateReservation
      */
     @Column(name = "start_date_reservation", nullable = false)
-    private Instant startDateReservation;
+    private LocalDateTime startDateReservation;
     /**
      * The end date of the reservation
      * @param endDateReservation
      */
     @Column(name = "end_date_reservation", nullable = false)
-    private Instant endDateReservation;
+    private LocalDateTime endDateReservation;
     /**
      * the price of the reservation
      * @param price
@@ -67,8 +91,9 @@ public class Reservation {
      * the name of the sportField based on the entity SportField
      * @param sportField
      */
-    @ManyToOne
-    @JoinColumn(name = "sports_field_id")
+    //@ManyToOne
+    //@JoinColumn(name = "sports_field_id")
+    @Transient
     private SportField sportField;
     /**
      * The status of the sportField based on the entity SportField
@@ -113,7 +138,7 @@ public class Reservation {
      * The method to get the starting date of the reservation
      * @return startDateReservation
      */
-    public Instant getStartDateReservation() {
+    public LocalDateTime getStartDateReservation() {
         return startDateReservation;
     }
 
@@ -121,7 +146,7 @@ public class Reservation {
      * the method to set the starting date of the reservation
      * @param startDateReservation
      */
-    public void setStartDateReservation(Instant startDateReservation) {
+    public void setStartDateReservation(LocalDateTime startDateReservation) {
         this.startDateReservation = startDateReservation;
     }
 
@@ -129,7 +154,7 @@ public class Reservation {
      * the method to get the end date of the reservation
      * @return endDateReservation
      */
-    public Instant getEndDateReservation() {
+    public LocalDateTime getEndDateReservation() {
         return endDateReservation;
     }
 
@@ -137,7 +162,7 @@ public class Reservation {
      * The method to set the end date of the reservation
      * @param endDateReservation
      */
-    public void setEndDateReservation(Instant endDateReservation) {
+    public void setEndDateReservation(LocalDateTime endDateReservation) {
         this.endDateReservation = endDateReservation;
     }
 

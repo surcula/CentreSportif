@@ -25,19 +25,22 @@ import static jdk.nashorn.internal.runtime.regexp.joni.Config.log;
 
 
 public class EventBusiness {
+
+    private EntityManager em;
+    private EventServiceImpl eventService;
+
     /**
      * Constructor
      * @param eventService
      */
-    private EntityManager em;
     public EventBusiness(EventServiceImpl eventService, EntityManager em) {
         this.eventService = eventService;
         this.em = em;
     }
 
-    private EventServiceImpl eventService;
+
     // Log4j
-    private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(HallBusiness.class);
+    private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(EventBusiness.class);
     /**
      * Initialisation and validation of the data submitted via the Event creation Form
      * @param name the name of the event

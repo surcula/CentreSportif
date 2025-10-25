@@ -11,6 +11,13 @@
         <class>entities.SportField</class>
         <class>entities.HistoricalSportPrice</class>
         <class>entities.Event</class>
+        <class>entities.User</class>
+        <class>entities.Reservation</class>
+        <class>entities.Role</class>
+        <class>entities.Address</class>
+        <class>entities.City</class>
+        <class>entities.Country</class>
+
 
         <!-- ajoute ici les autres classes -->
 

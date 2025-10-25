@@ -2,6 +2,7 @@ package Tools;
 
 import java.util.HashMap;
 import java.util.Map;
+import Tools.Result;
 
 public class ParamUtils {
 
