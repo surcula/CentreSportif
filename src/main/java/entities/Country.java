@@ -1,9 +1,8 @@
 package entities;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+
+@NamedQuery(name = "getAllActiveCountries", query ="SELECT c FROM Country c WHERE c.active = true ORDER BY c.countryName" )
 
 @Entity
 @Table(name = "countries")

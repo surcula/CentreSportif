@@ -1,0 +1,39 @@
+
+body {
+    height: 100%;
+}
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+/* L’élément "principal" de la page prendra toute la hauteur disponible */
+#main {
+    flex: 1 0 auto;     /* pousse le footer vers le bas quand le contenu est court */
+}
+
+/* Section de connexion : centrage confortable */
+.page-section {
+    min-height: 60vh;   /* donne de la verticalité sans écraser les petits écrans */
+    display: flex;
+    align-items: center;     /* centre verticalement le bloc .container */
+    justify-content: center; /* centre horizontalement */
+}
+
+/* Limite la largeur du formulaire pour une meilleure lisibilité */
+.page-section .container {
+    width: 100%;
+    max-width: 560px;
+}
+
+/* Titre un peu aéré */
+.page-section .page-section-heading {
+    margin-bottom: 2rem;
+}
+/* Laisse de l’espace sous la navbar fixed-top */
+body { padding-top: 90px; }
+
+/* la page prend toute la hauteur */
+html, body { height: 100%; }
+/* Décalage sous la navbar  */
+#main.with-navbar { padding-top: 90px; }
