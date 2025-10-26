@@ -23,13 +23,13 @@
                 <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded"
                                                      href="${pageContext.request.contextPath}/home">Accueil</a>
                 </li>
-                <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="${pageContext.request.contextPath}/views/template/template.jsp?content=../reservation.jsp">Réservation</a>
+                <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="${pageContext.request.contextPath}/reservation">Réservation</a>
                 </li>
                 <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="${pageContext.request.contextPath}/event">Evènements</a>
                 </li>
                 <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="${pageContext.request.contextPath}/subscription">Abonnements</a>
                 </li>
-                <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="${pageContext.request.contextPath}/views/template/template.jsp?content=../infosPratique.jsp">Infos pratiques</a>
+                <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="${pageContext.request.contextPath}/infos">Infos pratiques</a>
                 </li>
                 <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="#">Sponsors</a>
                 </li>
@@ -40,7 +40,7 @@
              or sessionScope.role == 'BARMAN'
              or sessionScope.role == 'SECRETARY'}">
                     <li class="nav-item">
-                        <a class="nav-link fw-bold text-warning" href="${pageContext.request.contextPath}/admin">
+                        <a class="nav-link fw-bold text-warning" href="${pageContext.request.contextPath}/infos">
                             ADMIN
                         </a>
                     </li>

@@ -194,7 +194,7 @@ public class SubscriptionServlet extends HttpServlet {
 
                 em.getTransaction().begin();
                 UsersSubscriptionAssignForm f = formRes.getData();
-                // ⚠️ ordre attendu par ton service: (subscriptionId, userId, ...)
+                //ordre attendu par ton service: (subscriptionId, userId, ...)
                 Result<UsersSubscription> created = service.assignToUser(
                         f.getSubscriptionId(), f.getUserId(), f.getStartDate(), f.getEndDate(), f.getQuantity()
                 );

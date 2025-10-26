@@ -13,23 +13,19 @@ public interface EntityFinder<T> {
 	/**	 
 	 * Interface method to find an entity from the database
 	 * 	 
-	 * @param <T>
-	 *          Generic backing bean
-	 * @param Object
-	 *          Backing bean's id to find
+	 * @param t Generic backing bean
+	 *
+	 * @param id Backing bean's id to find
 	 *                   
-	 * @return 
-	 * 			Generic backing bean
+	 * @return Generic backing bean
 	 */	
 	public T findOne(T t, int id);
 	
 	/**	 
 	 * Interface method to find a result of entities based on a NamedQuery from the database
 	 * 	 
-	 * @param String
-	 *          The NamedQuery          
-	 * @param <T>
-	 *          Generic backing bean
+	 * @param namedQuery The NamedQuery
+	 * @param t Generic backing bean
 	 * @param param
 	 *          Query parameters
 	 *          For Date params, key must contains the word(ci) 'date'
@@ -42,12 +38,9 @@ public interface EntityFinder<T> {
 	/**	 
 	 * Interface method to find a result of entities based on a customQuery from the database
 	 * 	 
-	 * @param String
-	 *          The customQuery          
-	 * @param <T>
-	 *          Generic backing bean
-	 * @param param
-	 *          Query parameters
+	 * @param customQuery The customQuery
+	 * @param t Generic backing bean
+	 * @param param Query parameters
 	 *          For Date params, key must contains the word(ci) 'date'
 	 *          
 	 * @return 

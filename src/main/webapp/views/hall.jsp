@@ -69,6 +69,11 @@
             </tr>
             </thead>
             <tbody>
+            <c:if test="${empty halls}">
+                <tr> <td>Aucunes données trouvées.</td> </tr>
+            </c:if>
+
+
             <c:forEach var="hall" items="${halls}" varStatus="status">
                 <tr>
                     <td>${(page - 1) * size + status.index + 1}</td>
@@ -84,7 +89,7 @@
                     <c:if test="${sessionScope.role == 'ADMIN'
              or sessionScope.role == 'BARMAN'
              or sessionScope.role == 'SECRETARY'}">
-                        <td>${hall.active}</td>
+                        <td>${hall.active ? 'Actif' : 'Non actif'}</td>
                         <td>
                             <div class="btn-group" role="group" aria-label="Actions Hall">
                                 <!-- Bouton Modifier -->
