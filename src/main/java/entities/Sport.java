@@ -1,33 +1,30 @@
 package entities;
 
-import javax.persistence.*;
+import javax.persistence.*; // <-- important pour @Entity, @Table, @Id, @Column, @NamedQuery(s)
+import java.io.Serializable;
 
-
-/**
- * Named Query
- */
 @NamedQueries({
         @NamedQuery(
-                name = "getAllActiveSports",
-                query = "SELECT s FROM Sport s WHERE s.active = true order by s.id asc"
+                name = "Sport.getAllSports",
+                query = "SELECT s FROM Sport s ORDER BY s.id ASC"
         ),
         @NamedQuery(
-                name = "getAllSports",
-                query = "SELECT s FROM Sport s order by s.id asc"
-        ),
-        @NamedQuery(
-                name = "countAllActiveSports",
+                name = "Sport.countAllActiveSports",
                 query = "SELECT COUNT(s) FROM Sport s WHERE s.active = true"
         ),
         @NamedQuery(
-                name = "countAllSports",
+                name = "Sport.countAllSports",
                 query = "SELECT COUNT(s) FROM Sport s"
+        ),
+        @NamedQuery(
+                name = "Sport.getUnitPriceById",
+                query = "SELECT s.price FROM Sport s WHERE s.id = :sid"
         )
 })
-
 @Entity
-@Table(name = "sports")
-public class Sport {
+@Table(name = "sports") // si ta table s'appelle autrement, adapte
+public class Sport implements Serializable {
+
     @Id
     @Column(name = "id", nullable = false)
     private int id;
@@ -38,29 +35,22 @@ public class Sport {
     @Column(name = "is_active", nullable = false)
     private boolean active = true;
 
-    public int getId() {
-        return id;
-    }
+    // ⚠️ nécessaire si tu utilises Sport.getUnitPriceById
+    @Column(name = "price", nullable = false)
+    private Double price;
 
-    public void setId(int id) {
-        this.id = id;
-    }
+    public Sport() {}
 
-    public String getSportName() {
-        return sportName;
-    }
+    // getters/setters
+    public int getId() { return id; }
+    public void setId(int id) { this.id = id; }
 
-    public void setSportName(String sportName) {
-        this.sportName = sportName;
-    }
+    public String getSportName() { return sportName; }
+    public void setSportName(String sportName) { this.sportName = sportName; }
 
-    public boolean isActive() {
-        return active;
-    }
+    public boolean isActive() { return active; }
+    public void setActive(boolean active) { this.active = active; }
 
-    public void setActive(boolean active) {
-        this.active = active;
-    }
-
-
+    public Double getPrice() { return price; }
+    public void setPrice(Double price) { this.price = price; }
 }

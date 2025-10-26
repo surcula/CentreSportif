@@ -3,6 +3,13 @@ package entities;
 import javax.persistence.*;
 import java.time.Instant;
 
+@NamedQueries({
+        @NamedQuery(
+                name = "OrdersDiscount.findActiveByOrder",
+                query = "SELECT x FROM OrdersDiscount x WHERE x.order.id = :oid AND x.active = true"
+        )
+})
+
 @Entity
 @Table(name = "orders_discounts")
 public class OrdersDiscount {

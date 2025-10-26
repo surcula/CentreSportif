@@ -3,6 +3,17 @@ package entities;
 import javax.persistence.*;
 import java.time.Instant;
 
+@NamedQueries({
+        @NamedQuery(
+                name = "OrdersSubscription.countActiveByOrder",
+                query = "SELECT COUNT(os) FROM OrdersSubscription os WHERE os.order = :o AND os.active = true"
+        ),
+        @NamedQuery(
+                name = "OrdersSubscription.findActiveSubscriptionByOrder",
+                query = "SELECT os.subscription FROM OrdersSubscription os WHERE os.order.id = :oid AND os.active = true"
+        )
+})
+
 @Entity
 @Table(name = "orders_subscriptions")
 public class OrdersSubscription {

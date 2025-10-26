@@ -14,7 +14,10 @@ import services.SubscriptionServiceImpl;
 import javax.persistence.EntityManager;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.*;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.List;
 
@@ -41,14 +44,14 @@ public class SubscriptionServlet extends HttpServlet {
                 ? session.getAttribute("role").toString() : null;
         boolean fullAccess = ServletUtils.isFullAuthorized(role);
 
-        // --- Affichage formulaire d’assignation (staff) ---
+        // --- Form assignation (staff) ---
         if (form != null) {
             if (!fullAccess) { ServletUtils.redirectNoAuthorized(request, response); return; }
             SubscriptionControllerHelper.handleForm(request, response);
             return;
         }
 
-        // --- Affichage formulaire d’édition (staff) ---
+        // --- Form édition (staff) ---
         if (editForm != null) {
             if (!fullAccess) { ServletUtils.redirectNoAuthorized(request, response); return; }
 
@@ -77,7 +80,7 @@ public class SubscriptionServlet extends HttpServlet {
             return;
         }
 
-        // --- Liste « Mes abonnements » (membre) ---
+        // --- Liste abonnements (RBAC) ---
         if (session == null || session.getAttribute("userId") == null) {
             ServletUtils.redirectWithMessage(request, response,
                     "Veuillez vous connecter pour voir vos abonnements.",
@@ -90,14 +93,27 @@ public class SubscriptionServlet extends HttpServlet {
         try {
             em = EMF.getEM();
             SubscriptionServiceImpl service = new SubscriptionServiceImpl(em);
-            Result<List<UsersSubscription>> res = service.findByUser(userId);
 
-            if (res.isSuccess()) {
-                request.setAttribute("fullAccess", fullAccess);
-                SubscriptionControllerHelper.handleList(request, response, res.getData());
+            List<UsersSubscription> data;
+            if (fullAccess) {
+                // staff : tous (tri sur id)
+                data = em.createQuery(
+                        "SELECT us FROM UsersSubscription us ORDER BY us.id DESC",
+                        UsersSubscription.class
+                ).getResultList();
             } else {
-                ServletUtils.forwardWithErrors(request, response, res.getErrors(), SUBSCRIPTION_JSP, TEMPLATE);
+                // user : les siens
+                Result<List<UsersSubscription>> res = service.findByUser(userId);
+                if (!res.isSuccess()) {
+                    ServletUtils.forwardWithErrors(request, response, res.getErrors(), SUBSCRIPTION_JSP, TEMPLATE);
+                    return;
+                }
+                data = res.getData();
             }
+
+            request.setAttribute("fullAccess", fullAccess);
+            SubscriptionControllerHelper.handleList(request, response, data);
+
         } catch (Exception e) {
             log.error("Erreur chargement abonnements (liste)", e);
             ServletUtils.forwardWithError(request, response, e.getMessage(), SUBSCRIPTION_JSP, TEMPLATE);
@@ -112,13 +128,18 @@ public class SubscriptionServlet extends HttpServlet {
             throws ServletException, IOException {
 
         HttpSession session = request.getSession(false);
-        if (!(session != null && ServletUtils.isFullAuthorized(String.valueOf(session.getAttribute("role"))))) {
+        String action = request.getParameter("action");
+        String idParam = request.getParameter("usersSubscriptionId");
+
+        String role = (session != null && session.getAttribute("role") != null)
+                ? String.valueOf(session.getAttribute("role")) : null;
+        boolean fullAccess = ServletUtils.isFullAuthorized(role);
+
+        // A partir de maintenant : actions STAFF uniquement
+        if (!(session != null && fullAccess)) {
             ServletUtils.redirectNoAuthorized(request, response);
             return;
         }
-
-        String action = request.getParameter("action");
-        String idParam = request.getParameter("usersSubscriptionId");
 
         // --- (De)activation rapide ---
         if ("activer".equals(action) || "delete".equals(action)) {
@@ -153,6 +174,10 @@ public class SubscriptionServlet extends HttpServlet {
                 log.error("Erreur (de)activation abonnement", e);
                 ServletUtils.forwardWithError(request, response, e.getMessage(), SUBSCRIPTION_JSP, TEMPLATE);
             } finally {
+                // rollback si nécessaire
+                // et close
+                // (sécurité en cas d'exception)
+                //noinspection ConstantConditions
                 if (em != null) {
                     if (em.getTransaction().isActive()) em.getTransaction().rollback();
                     em.close();
@@ -165,7 +190,6 @@ public class SubscriptionServlet extends HttpServlet {
         if ("assign".equals(action) && idParam == null) {
             EntityManager em = null;
             try {
-                // validation minimale (l'utilisateur a pu taper sans cliquer)
                 String userIdRaw = request.getParameter("userId");
                 String subIdRaw  = request.getParameter("subscriptionId");
                 if (userIdRaw == null || userIdRaw.isEmpty() || subIdRaw == null || subIdRaw.isEmpty()) {
@@ -175,7 +199,6 @@ public class SubscriptionServlet extends HttpServlet {
                     return;
                 }
 
-                // form builder existant (gère parse/erreurs métier)
                 Result<UsersSubscriptionAssignForm> formRes = SubscriptionBusiness.initAssignForm(
                         userIdRaw,
                         subIdRaw,
@@ -194,7 +217,6 @@ public class SubscriptionServlet extends HttpServlet {
 
                 em.getTransaction().begin();
                 UsersSubscriptionAssignForm f = formRes.getData();
-                // ⚠️ ordre attendu par ton service: (subscriptionId, userId, ...)
                 Result<UsersSubscription> created = service.assignToUser(
                         f.getSubscriptionId(), f.getUserId(), f.getStartDate(), f.getEndDate(), f.getQuantity()
                 );

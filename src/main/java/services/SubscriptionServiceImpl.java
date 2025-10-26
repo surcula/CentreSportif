@@ -55,7 +55,7 @@ public class SubscriptionServiceImpl implements SubscriptionService {
     /** Calcule le prochain id pour UsersSubscription (si pas @GeneratedValue). */
     private Integer getNextUsersSubscriptionId() {
         try {
-            Integer max = em.createQuery("SELECT COALESCE(MAX(us.id), 0) FROM UsersSubscription us", Integer.class)
+            Integer max = em.createNamedQuery("UsersSubscription.maxId", Integer.class)
                     .getSingleResult();
             return max + 1;
         } catch (Exception e) {
@@ -76,15 +76,7 @@ public class SubscriptionServiceImpl implements SubscriptionService {
 
     @Override
     public Result<List<UsersSubscription>> findByUser(int userId) {
-        // Si NamedQuery présente sur l'entité :
-        // List<UsersSubscription> list = em.createNamedQuery("UsersSubscription.byUser", UsersSubscription.class)
-        //         .setParameter("uid", userId).getResultList();
-
-        // Version JPQL inline (ok également)
-        List<UsersSubscription> list = em.createQuery(
-                        "SELECT us FROM UsersSubscription us " +
-                                "WHERE us.user.id = :uid ORDER BY us.startDate DESC",
-                        UsersSubscription.class)
+        List<UsersSubscription> list = em.createNamedQuery("UsersSubscription.byUser", UsersSubscription.class)
                 .setParameter("uid", userId)
                 .getResultList();
 
@@ -165,18 +157,12 @@ public class SubscriptionServiceImpl implements SubscriptionService {
     /** Retourne l’US actif du user pour un subscriptionId donné, sinon null. */
     public UsersSubscription findActiveForUserAndSub(int userId, int subscriptionId, LocalDate now) {
         try {
-            TypedQuery<UsersSubscription> q = em.createQuery(
-                    "SELECT us FROM UsersSubscription us " +
-                            "WHERE us.user.id = :uid AND us.subscription.id = :sid " +
-                            "AND us.active = true " +
-                            "AND :today >= us.startDate AND :today <= us.endDate " +
-                            "ORDER BY us.endDate DESC",
-                    UsersSubscription.class);
-            q.setParameter("uid", userId);
-            q.setParameter("sid", subscriptionId);
-            q.setParameter("today", now);
-            q.setMaxResults(1);
-            return q.getSingleResult();
+            return em.createNamedQuery("UsersSubscription.findActiveByUserAndSubscriptionAtDate", UsersSubscription.class)
+                    .setParameter("uid", userId)
+                    .setParameter("sid", subscriptionId)
+                    .setParameter("today", now)
+                    .setMaxResults(1)
+                    .getSingleResult();
         } catch (NoResultException e) {
             return null;
         }

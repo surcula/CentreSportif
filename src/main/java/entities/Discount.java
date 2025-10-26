@@ -1,10 +1,26 @@
 package entities;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
+
+@NamedQueries({
+        @NamedQuery(
+                name = "Discount.findByName",
+                query = "SELECT d FROM Discount d WHERE d.discountName = :n"
+        ),
+        @NamedQuery(
+                name = "Discount.findActiveByName",
+                query = "SELECT d FROM Discount d WHERE d.discountName = :n AND d.active = true"
+        ),
+        @NamedQuery(
+                name = "Discount.findAllActive",
+                query = "SELECT d FROM Discount d WHERE d.active = true"
+        ),
+        @NamedQuery(
+                name = "Discount.findActiveIdByName",
+                query = "SELECT d.id FROM Discount d WHERE d.discountName = :n AND d.active = true"
+        )
+})
 @Entity
 @Table(name = "discounts")
 public class Discount {

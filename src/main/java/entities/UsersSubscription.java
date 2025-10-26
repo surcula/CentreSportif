@@ -3,19 +3,44 @@ package entities;
 import javax.persistence.*;
 import java.time.LocalDate;
 @NamedQueries({
+        // Liste des US d’un user (ordre récent d’abord)
         @NamedQuery(
                 name = "UsersSubscription.byUser",
                 query = "SELECT us FROM UsersSubscription us " +
                         "WHERE us.user.id = :uid " +
                         "ORDER BY us.startDate DESC"
         ),
+        // Trouver un US actif pour un user + sub à une date donnée
         @NamedQuery(
-                name = "UsersSubscription.byUserAndSubscriptionActive",
+                name = "UsersSubscription.findActiveByUserAndSubscriptionAtDate",
                 query = "SELECT us FROM UsersSubscription us " +
                         "WHERE us.user.id = :uid " +
                         "AND us.subscription.id = :sid " +
                         "AND us.active = true " +
-                        "ORDER BY us.startDate DESC"
+                        "AND :today >= us.startDate " +
+                        "AND :today <= us.endDate " +
+                        "ORDER BY us.endDate DESC"
+        ),
+        // Version sans contrainte date (utile côté OrderService)
+        @NamedQuery(
+                name = "UsersSubscription.findActiveByUserAndSubscription",
+                query = "SELECT us FROM UsersSubscription us " +
+                        "WHERE us.user.id = :uid " +
+                        "AND us.subscription.id = :sid " +
+                        "AND us.active = true"
+        ),
+        // Charger US + user + subscription (pour créer l’order)
+        @NamedQuery(
+                name = "UsersSubscription.findByIdWithUserAndSubscription",
+                query = "SELECT us FROM UsersSubscription us " +
+                        "JOIN FETCH us.user u " +
+                        "JOIN FETCH us.subscription s " +
+                        "WHERE us.id = :id"
+        ),
+        // Récup du max(id) (si pas @GeneratedValue)
+        @NamedQuery(
+                name = "UsersSubscription.maxId",
+                query = "SELECT COALESCE(MAX(us.id), 0) FROM UsersSubscription us"
         )
 })
 

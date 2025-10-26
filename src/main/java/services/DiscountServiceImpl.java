@@ -34,8 +34,7 @@ public class DiscountServiceImpl implements DiscountService {
 
     @Override
     public Result<Discount> findByName(String name) {
-        List<Discount> res = em.createQuery(
-                        "SELECT d FROM Discount d WHERE d.discountName = :n", Discount.class)
+        List<Discount> res = em.createNamedQuery("Discount.findByName", Discount.class)
                 .setParameter("n", name)
                 .setMaxResults(1)
                 .getResultList();
@@ -45,8 +44,7 @@ public class DiscountServiceImpl implements DiscountService {
 
     @Override
     public Result<List<Discount>> findAllActives(Instant now) {
-        List<Discount> list = em.createQuery(
-                        "SELECT d FROM Discount d WHERE d.active = true", Discount.class)
+        List<Discount> list = em.createNamedQuery("Discount.findAllActive", Discount.class)
                 .getResultList();
         log.info("Discount.findAllActives size=" + list.size());
         return Result.ok(list);
