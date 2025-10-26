@@ -1,0 +1,89 @@
+<html>
+<head>
+<title>HallService.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cf8e6d;}
+.s1 { color: #bcbec4;}
+.s2 { color: #bcbec4;}
+.s3 { color: #5f826b; font-style: italic;}
+.s4 { color: #67a37c; font-style: italic;}
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+HallService.java</font>
+</center></td></tr></table>
+<pre><span class="s0">package </span><span class="s1">interfaces</span><span class="s2">;</span>
+
+<span class="s0">import </span><span class="s1">Tools</span><span class="s2">.</span><span class="s1">Result</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">entities</span><span class="s2">.</span><span class="s1">Hall</span><span class="s2">;</span>
+
+<span class="s0">import </span><span class="s1">java</span><span class="s2">.</span><span class="s1">util</span><span class="s2">.</span><span class="s1">List</span><span class="s2">;</span>
+
+<span class="s0">public interface </span><span class="s1">HallService </span><span class="s2">{</span>
+
+    <span class="s3">/**</span>
+     <span class="s3">* Create a new hall</span>
+     <span class="s3">* </span><span class="s4">@param </span><span class="s3">hallCreateForm</span>
+     <span class="s3">*/</span>
+
+    <span class="s1">Result create</span><span class="s2">(</span><span class="s1">Hall hallCreateForm</span><span class="s2">) ;</span>
+
+    <span class="s3">/**</span>
+     <span class="s3">* Update an existing hall</span>
+     <span class="s3">* </span><span class="s4">@param </span><span class="s3">hall</span>
+     <span class="s3">*/</span>
+    <span class="s1">Result update</span><span class="s2">(</span><span class="s1">Hall hall</span><span class="s2">) ;</span>
+
+    <span class="s3">/**</span>
+     <span class="s3">* soft-delete a hall by setting its isActive flag to false</span>
+     <span class="s3">* </span><span class="s4">@param </span><span class="s3">hall</span>
+     <span class="s3">*/</span>
+    <span class="s1">Result softDelete</span><span class="s2">(</span><span class="s1">Hall hall</span><span class="s2">) ;</span>
+
+    <span class="s3">/**</span>
+     <span class="s3">* retrieves a hall by its id</span>
+     <span class="s3">* </span><span class="s4">@param </span><span class="s3">id</span>
+     <span class="s3">* </span><span class="s4">@return </span><span class="s3">Hall</span>
+     <span class="s3">*/</span>
+    <span class="s1">Result</span><span class="s2">&lt;</span><span class="s1">Hall</span><span class="s2">&gt; </span><span class="s1">getOneById</span><span class="s2">(</span><span class="s0">int </span><span class="s1">id</span><span class="s2">);</span>
+
+    <span class="s3">/**</span>
+     <span class="s3">* Retrieves all active Halls with optional pagination.</span>
+     <span class="s3">*</span>
+     <span class="s3">* </span><span class="s4">@param </span><span class="s3">offset page number starting at 1 (values &lt;= 0 are treated as 1)</span>
+     <span class="s3">* </span><span class="s4">@param </span><span class="s3">size number of elements per page.</span>
+     <span class="s3">*             If size &lt;= 0, all active halls are returned without pagination.</span>
+     <span class="s3">* </span><span class="s4">@return </span><span class="s3">Result containing a list of active Halls (never null).</span>
+     <span class="s3">*/</span>
+    <span class="s1">Result</span><span class="s2">&lt;</span><span class="s1">List</span><span class="s2">&lt;</span><span class="s1">Hall</span><span class="s2">&gt;&gt; </span><span class="s1">getAllActiveHalls</span><span class="s2">(</span><span class="s0">int </span><span class="s1">offset</span><span class="s2">, </span><span class="s0">int </span><span class="s1">size</span><span class="s2">) ;</span>
+
+    <span class="s3">/**</span>
+     <span class="s3">* Retrieves all Halls with optional pagination.</span>
+     <span class="s3">*</span>
+     <span class="s3">* </span><span class="s4">@param </span><span class="s3">offset page number starting at 1 (values &lt;= 0 are treated as 1)</span>
+     <span class="s3">* </span><span class="s4">@param </span><span class="s3">size number of elements per page.</span>
+     <span class="s3">*             If size &lt;= 0, all active halls are returned without pagination.</span>
+     <span class="s3">* </span><span class="s4">@return </span><span class="s3">Result containing a list of Halls (never null).</span>
+     <span class="s3">*/</span>
+    <span class="s1">Result</span><span class="s2">&lt;</span><span class="s1">List</span><span class="s2">&lt;</span><span class="s1">Hall</span><span class="s2">&gt;&gt; </span><span class="s1">getAllHalls</span><span class="s2">(</span><span class="s0">int </span><span class="s1">offset</span><span class="s2">, </span><span class="s0">int </span><span class="s1">size</span><span class="s2">) ;</span>
+
+    <span class="s3">/**</span>
+     <span class="s3">* count all active halls</span>
+     <span class="s3">* </span><span class="s4">@return </span><span class="s3">a number</span>
+     <span class="s3">*/</span>
+    <span class="s1">Result</span><span class="s2">&lt;</span><span class="s1">Long</span><span class="s2">&gt; </span><span class="s1">countActiveHalls</span><span class="s2">() ;</span>
+
+    <span class="s3">/**</span>
+     <span class="s3">* count all halls</span>
+     <span class="s3">* </span><span class="s4">@return </span><span class="s3">a number</span>
+     <span class="s3">*/</span>
+    <span class="s1">Result</span><span class="s2">&lt;</span><span class="s1">Long</span><span class="s2">&gt; </span><span class="s1">countAllHalls</span><span class="s2">() ;</span>
+
+<span class="s2">}</span>
+</pre>
+</body>
+</html>

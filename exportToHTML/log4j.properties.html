@@ -1,0 +1,29 @@
+<html>
+<head>
+<title>log4j.properties</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cf8e6d;}
+.s1 { color: #808080;}
+.s2 { color: #6aab73;}
+.s3 { color: #bcbec4;}
+.s4 { color: #7a7e85;}
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+log4j.properties</font>
+</center></td></tr></table>
+<pre><span class="s0">log4j.rootLogger</span><span class="s1">=</span><span class="s2">INFO, stdout</span>
+
+<span class="s0">log4j.appender.stdout</span><span class="s1">=</span><span class="s2">org.apache.log4j.ConsoleAppender</span>
+<span class="s0">log4j.appender.stdout.layout</span><span class="s1">=</span><span class="s2">org.apache.log4j.PatternLayout</span>
+<span class="s0">log4j.appender.stdout.layout.ConversionPattern</span><span class="s1">=</span><span class="s2">%d{yyyy-MM-dd HH:mm:ss} %-5p %c - %m%n</span>
+
+<span class="s4"># Optionnel : affiner tes packages</span>
+<span class="s0">log4j.logger.servlets</span><span class="s1">=</span><span class="s2">DEBUG</span>
+<span class="s0">log4j.logger.services</span><span class="s1">=</span><span class="s2">DEBUG</span></pre>
+</body>
+</html>

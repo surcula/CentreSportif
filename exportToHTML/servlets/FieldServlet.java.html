@@ -1,0 +1,280 @@
+<html>
+<head>
+<title>FieldServlet.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #bcbec4;}
+.s1 { color: #cf8e6d;}
+.s2 { color: #bcbec4;}
+.s3 { color: #6aab73;}
+.s4 { color: #7a7e85;}
+.s5 { color: #2aacb8;}
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+FieldServlet.java</font>
+</center></td></tr></table>
+<pre>
+<span class="s1">package </span><span class="s0">servlets</span><span class="s2">;</span>
+
+<span class="s1">import </span><span class="s0">Tools</span><span class="s2">.</span><span class="s0">ParamUtils</span><span class="s2">;</span>
+<span class="s1">import </span><span class="s0">Tools</span><span class="s2">.</span><span class="s0">Result</span><span class="s2">;</span>
+<span class="s1">import </span><span class="s0">business</span><span class="s2">.</span><span class="s0">FieldBusiness</span><span class="s2">;</span>
+<span class="s1">import </span><span class="s0">business</span><span class="s2">.</span><span class="s0">ServletUtils</span><span class="s2">;</span>
+<span class="s1">import </span><span class="s0">controllers</span><span class="s2">.</span><span class="s0">helpers</span><span class="s2">.</span><span class="s0">FieldControllerHelper</span><span class="s2">;</span>
+<span class="s1">import </span><span class="s0">dto</span><span class="s2">.</span><span class="s0">EMF</span><span class="s2">;</span>
+<span class="s1">import </span><span class="s0">dto</span><span class="s2">.</span><span class="s0">FieldUpdateForm</span><span class="s2">;</span>
+<span class="s1">import </span><span class="s0">dto</span><span class="s2">.</span><span class="s0">Page</span><span class="s2">;</span>
+<span class="s1">import </span><span class="s0">entities</span><span class="s2">.</span><span class="s0">Field</span><span class="s2">;</span>
+<span class="s1">import </span><span class="s0">entities</span><span class="s2">.</span><span class="s0">Hall</span><span class="s2">;</span>
+<span class="s1">import </span><span class="s0">enums</span><span class="s2">.</span><span class="s0">Scope</span><span class="s2">;</span>
+<span class="s1">import </span><span class="s0">mappers</span><span class="s2">.</span><span class="s0">FieldMapper</span><span class="s2">;</span>
+<span class="s1">import </span><span class="s0">services</span><span class="s2">.</span><span class="s0">FieldServiceImpl</span><span class="s2">;</span>
+<span class="s1">import </span><span class="s0">services</span><span class="s2">.</span><span class="s0">HallServiceImpl</span><span class="s2">;</span>
+<span class="s1">import </span><span class="s0">javax</span><span class="s2">.</span><span class="s0">persistence</span><span class="s2">.</span><span class="s0">EntityManager</span><span class="s2">;</span>
+<span class="s1">import </span><span class="s0">javax</span><span class="s2">.</span><span class="s0">servlet</span><span class="s2">.*;</span>
+<span class="s1">import </span><span class="s0">javax</span><span class="s2">.</span><span class="s0">servlet</span><span class="s2">.</span><span class="s0">http</span><span class="s2">.*;</span>
+<span class="s1">import </span><span class="s0">javax</span><span class="s2">.</span><span class="s0">servlet</span><span class="s2">.</span><span class="s0">annotation</span><span class="s2">.*;</span>
+<span class="s1">import </span><span class="s0">java</span><span class="s2">.</span><span class="s0">io</span><span class="s2">.</span><span class="s0">IOException</span><span class="s2">;</span>
+
+<span class="s1">import static </span><span class="s0">constants</span><span class="s2">.</span><span class="s0">Rooting</span><span class="s2">.*;</span>
+
+<span class="s0">@WebServlet</span><span class="s2">(</span><span class="s0">name </span><span class="s2">= </span><span class="s3">&quot;Field&quot;</span><span class="s2">, </span><span class="s0">value </span><span class="s2">= </span><span class="s3">&quot;/field&quot;</span><span class="s2">)</span>
+<span class="s1">public class </span><span class="s0">FieldServlet </span><span class="s1">extends </span><span class="s0">HttpServlet </span><span class="s2">{</span>
+
+    <span class="s4">// Log4j</span>
+    <span class="s1">private static final </span><span class="s0">org</span><span class="s2">.</span><span class="s0">apache</span><span class="s2">.</span><span class="s0">log4j</span><span class="s2">.</span><span class="s0">Logger log </span><span class="s2">= </span><span class="s0">org</span><span class="s2">.</span><span class="s0">apache</span><span class="s2">.</span><span class="s0">log4j</span><span class="s2">.</span><span class="s0">Logger</span><span class="s2">.</span><span class="s0">getLogger</span><span class="s2">(</span><span class="s0">FieldServlet</span><span class="s2">.</span><span class="s1">class</span><span class="s2">);</span>
+
+    <span class="s0">@Override</span>
+    <span class="s1">protected void </span><span class="s0">doGet</span><span class="s2">(</span><span class="s0">HttpServletRequest request</span><span class="s2">, </span><span class="s0">HttpServletResponse response</span><span class="s2">) </span><span class="s1">throws </span><span class="s0">ServletException</span><span class="s2">, </span><span class="s0">IOException </span><span class="s2">{</span>
+
+        <span class="s0">HttpSession session </span><span class="s2">= </span><span class="s0">request</span><span class="s2">.</span><span class="s0">getSession</span><span class="s2">(</span><span class="s1">false</span><span class="s2">);</span>
+        <span class="s0">String form </span><span class="s2">= </span><span class="s0">request</span><span class="s2">.</span><span class="s0">getParameter</span><span class="s2">(</span><span class="s3">&quot;form&quot;</span><span class="s2">);</span>
+        <span class="s0">String editForm </span><span class="s2">= </span><span class="s0">request</span><span class="s2">.</span><span class="s0">getParameter</span><span class="s2">(</span><span class="s3">&quot;editForm&quot;</span><span class="s2">);</span>
+        <span class="s0">String role </span><span class="s2">= (</span><span class="s0">session </span><span class="s2">!= </span><span class="s1">null </span><span class="s2">&amp;&amp; </span><span class="s0">session</span><span class="s2">.</span><span class="s0">getAttribute</span><span class="s2">(</span><span class="s3">&quot;role&quot;</span><span class="s2">) != </span><span class="s1">null</span><span class="s2">)</span>
+                <span class="s2">? </span><span class="s0">session</span><span class="s2">.</span><span class="s0">getAttribute</span><span class="s2">(</span><span class="s3">&quot;role&quot;</span><span class="s2">).</span><span class="s0">toString</span><span class="s2">()</span>
+                <span class="s2">: </span><span class="s1">null</span><span class="s2">;</span>
+        <span class="s1">boolean </span><span class="s0">fullAccess </span><span class="s2">= </span><span class="s0">ServletUtils</span><span class="s2">.</span><span class="s0">isFullAuthorized</span><span class="s2">(</span><span class="s0">role</span><span class="s2">);</span>
+
+        <span class="s4">// --- Formulaire de création ---</span>
+        <span class="s1">if </span><span class="s2">(</span><span class="s0">form </span><span class="s2">!= </span><span class="s1">null</span><span class="s2">) {</span>
+            <span class="s1">if </span><span class="s2">(!</span><span class="s0">fullAccess</span><span class="s2">) {</span>
+                <span class="s0">ServletUtils</span><span class="s2">.</span><span class="s0">redirectNoAuthorized</span><span class="s2">(</span><span class="s0">request</span><span class="s2">, </span><span class="s0">response</span><span class="s2">);</span>
+                <span class="s1">return</span><span class="s2">;</span>
+            <span class="s2">}</span>
+            <span class="s0">EntityManager em </span><span class="s2">= </span><span class="s0">EMF</span><span class="s2">.</span><span class="s0">getEM</span><span class="s2">();</span>
+            <span class="s1">try </span><span class="s2">{</span>
+                <span class="s0">FieldControllerHelper</span><span class="s2">.</span><span class="s0">handleFormDisplay</span><span class="s2">(</span><span class="s0">request</span><span class="s2">, </span><span class="s0">response</span><span class="s2">, </span><span class="s0">em</span><span class="s2">);</span>
+            <span class="s2">} </span><span class="s1">catch </span><span class="s2">(</span><span class="s0">Exception e</span><span class="s2">) {</span>
+                <span class="s0">log</span><span class="s2">.</span><span class="s0">error</span><span class="s2">(</span><span class="s0">e</span><span class="s2">.</span><span class="s0">getMessage</span><span class="s2">());</span>
+                <span class="s0">ServletUtils</span><span class="s2">.</span><span class="s0">forwardWithError</span><span class="s2">(</span><span class="s0">request</span><span class="s2">, </span><span class="s0">response</span><span class="s2">, </span><span class="s3">&quot;Erreur lors du chargement du formulaire de terrain&quot;</span><span class="s2">, </span><span class="s0">HOME_JSP</span><span class="s2">, </span><span class="s0">TEMPLATE</span><span class="s2">);</span>
+                <span class="s1">return</span><span class="s2">;</span>
+            <span class="s2">} </span><span class="s1">finally </span><span class="s2">{</span>
+                <span class="s1">if </span><span class="s2">(</span><span class="s0">em </span><span class="s2">!= </span><span class="s1">null</span><span class="s2">) </span><span class="s0">em</span><span class="s2">.</span><span class="s0">close</span><span class="s2">();</span>
+            <span class="s2">}</span>
+            <span class="s4">// --- Formulaire d'édition ---</span>
+        <span class="s2">} </span><span class="s1">else if </span><span class="s2">(</span><span class="s0">editForm </span><span class="s2">!= </span><span class="s1">null</span><span class="s2">) {</span>
+            <span class="s1">if </span><span class="s2">(!</span><span class="s0">fullAccess</span><span class="s2">) {</span>
+                <span class="s0">ServletUtils</span><span class="s2">.</span><span class="s0">redirectNoAuthorized</span><span class="s2">(</span><span class="s0">request</span><span class="s2">, </span><span class="s0">response</span><span class="s2">);</span>
+                <span class="s1">return</span><span class="s2">;</span>
+            <span class="s2">}</span>
+            <span class="s0">Result</span><span class="s2">&lt;</span><span class="s0">Integer</span><span class="s2">&gt; </span><span class="s0">fieldUpdateId </span><span class="s2">= </span><span class="s0">ParamUtils</span><span class="s2">.</span><span class="s0">verifyId</span><span class="s2">(</span><span class="s0">editForm</span><span class="s2">);</span>
+            <span class="s1">if </span><span class="s2">(!</span><span class="s0">fieldUpdateId</span><span class="s2">.</span><span class="s0">isSuccess</span><span class="s2">()) {</span>
+                <span class="s0">log</span><span class="s2">.</span><span class="s0">error</span><span class="s2">(</span><span class="s3">&quot;Erreur lors de la conversion de l'id du field&quot;</span><span class="s2">);</span>
+                <span class="s0">ServletUtils</span><span class="s2">.</span><span class="s0">forwardWithError</span><span class="s2">(</span><span class="s0">request</span><span class="s2">, </span><span class="s0">response</span><span class="s2">, </span><span class="s3">&quot;Erreur lors de la conversion de l'id du field&quot;</span><span class="s2">, </span><span class="s0">FIELD_JSP</span><span class="s2">, </span><span class="s0">TEMPLATE</span><span class="s2">);</span>
+                <span class="s1">return</span><span class="s2">;</span>
+            <span class="s2">}</span>
+            <span class="s0">EntityManager em </span><span class="s2">= </span><span class="s0">EMF</span><span class="s2">.</span><span class="s0">getEM</span><span class="s2">();</span>
+            <span class="s1">try </span><span class="s2">{</span>
+                <span class="s0">FieldServiceImpl fieldService </span><span class="s2">= </span><span class="s1">new </span><span class="s0">FieldServiceImpl</span><span class="s2">(</span><span class="s0">em</span><span class="s2">);</span>
+                <span class="s0">Result</span><span class="s2">&lt;</span><span class="s0">Field</span><span class="s2">&gt; </span><span class="s0">result </span><span class="s2">= </span><span class="s0">fieldService</span><span class="s2">.</span><span class="s0">getOneById</span><span class="s2">(</span><span class="s0">fieldUpdateId</span><span class="s2">.</span><span class="s0">getData</span><span class="s2">());</span>
+                <span class="s1">if </span><span class="s2">(</span><span class="s0">result</span><span class="s2">.</span><span class="s0">isSuccess</span><span class="s2">()) {</span>
+                    <span class="s0">FieldControllerHelper</span><span class="s2">.</span><span class="s0">handleEditForm</span><span class="s2">(</span><span class="s0">request</span><span class="s2">, </span><span class="s0">response</span><span class="s2">, </span><span class="s0">result</span><span class="s2">.</span><span class="s0">getData</span><span class="s2">(), </span><span class="s0">em</span><span class="s2">);</span>
+                <span class="s2">} </span><span class="s1">else </span><span class="s2">{</span>
+                    <span class="s0">ServletUtils</span><span class="s2">.</span><span class="s0">forwardWithErrors</span><span class="s2">(</span><span class="s0">request</span><span class="s2">, </span><span class="s0">response</span><span class="s2">, </span><span class="s0">result</span><span class="s2">.</span><span class="s0">getErrors</span><span class="s2">(), </span><span class="s0">FIELD_FORM_JSP</span><span class="s2">, </span><span class="s0">TEMPLATE</span><span class="s2">);</span>
+                    <span class="s1">return</span><span class="s2">;</span>
+                <span class="s2">}</span>
+            <span class="s2">} </span><span class="s1">catch </span><span class="s2">(</span><span class="s0">Exception e</span><span class="s2">) {</span>
+                <span class="s0">log</span><span class="s2">.</span><span class="s0">error</span><span class="s2">(</span><span class="s3">&quot;Erreur lors du chargement du terrain en édition&quot;</span><span class="s2">, </span><span class="s0">e</span><span class="s2">);</span>
+                <span class="s0">ServletUtils</span><span class="s2">.</span><span class="s0">forwardWithError</span><span class="s2">(</span><span class="s0">request</span><span class="s2">, </span><span class="s0">response</span><span class="s2">, </span><span class="s0">e</span><span class="s2">.</span><span class="s0">getMessage</span><span class="s2">(), </span><span class="s0">FIELD_JSP</span><span class="s2">, </span><span class="s0">TEMPLATE</span><span class="s2">);</span>
+                <span class="s1">return</span><span class="s2">;</span>
+            <span class="s2">} </span><span class="s1">finally </span><span class="s2">{</span>
+                <span class="s1">if </span><span class="s2">(</span><span class="s0">em </span><span class="s2">!= </span><span class="s1">null</span><span class="s2">) </span><span class="s0">em</span><span class="s2">.</span><span class="s0">close</span><span class="s2">();</span>
+            <span class="s2">}</span>
+        <span class="s2">} </span><span class="s1">else </span><span class="s2">{</span>
+            <span class="s0">EntityManager em </span><span class="s2">= </span><span class="s0">EMF</span><span class="s2">.</span><span class="s0">getEM</span><span class="s2">();</span>
+            <span class="s1">try </span><span class="s2">{</span>
+                <span class="s0">FieldServiceImpl fieldService </span><span class="s2">= </span><span class="s1">new </span><span class="s0">FieldServiceImpl</span><span class="s2">(</span><span class="s0">em</span><span class="s2">);</span>
+                <span class="s0">FieldBusiness fieldBusiness </span><span class="s2">= </span><span class="s1">new </span><span class="s0">FieldBusiness</span><span class="s2">(</span><span class="s0">fieldService</span><span class="s2">);</span>
+
+                <span class="s0">Result</span><span class="s2">&lt;</span><span class="s0">Integer</span><span class="s2">&gt; </span><span class="s0">pageRes </span><span class="s2">= </span><span class="s0">ParamUtils</span><span class="s2">.</span><span class="s0">stringToInteger</span><span class="s2">(</span><span class="s0">request</span><span class="s2">.</span><span class="s0">getParameter</span><span class="s2">(</span><span class="s3">&quot;page&quot;</span><span class="s2">));</span>
+                <span class="s1">int </span><span class="s0">page </span><span class="s2">= </span><span class="s0">pageRes</span><span class="s2">.</span><span class="s0">isSuccess</span><span class="s2">() ? </span><span class="s0">Math</span><span class="s2">.</span><span class="s0">max</span><span class="s2">(</span><span class="s5">1</span><span class="s2">, </span><span class="s0">pageRes</span><span class="s2">.</span><span class="s0">getData</span><span class="s2">()) : </span><span class="s5">1</span><span class="s2">;</span>
+
+                <span class="s0">Result</span><span class="s2">&lt;</span><span class="s0">Integer</span><span class="s2">&gt; </span><span class="s0">sizeRes </span><span class="s2">= </span><span class="s0">ParamUtils</span><span class="s2">.</span><span class="s0">stringToInteger</span><span class="s2">(</span><span class="s0">request</span><span class="s2">.</span><span class="s0">getParameter</span><span class="s2">(</span><span class="s3">&quot;size&quot;</span><span class="s2">));</span>
+                <span class="s1">int </span><span class="s0">size </span><span class="s2">= </span><span class="s0">sizeRes</span><span class="s2">.</span><span class="s0">isSuccess</span><span class="s2">() ? </span><span class="s0">Math</span><span class="s2">.</span><span class="s0">min</span><span class="s2">(</span><span class="s5">20</span><span class="s2">, </span><span class="s0">Math</span><span class="s2">.</span><span class="s0">max</span><span class="s2">(</span><span class="s5">1</span><span class="s2">, </span><span class="s0">sizeRes</span><span class="s2">.</span><span class="s0">getData</span><span class="s2">())) : </span><span class="s5">10</span><span class="s2">;</span>
+
+                <span class="s0">Result</span><span class="s2">&lt;</span><span class="s0">Page</span><span class="s2">&lt;</span><span class="s0">Field</span><span class="s2">&gt;&gt; </span><span class="s0">result </span><span class="s2">= </span><span class="s0">fullAccess</span>
+                        <span class="s2">? </span><span class="s0">fieldBusiness</span><span class="s2">.</span><span class="s0">getAllFieldsPaged</span><span class="s2">(</span><span class="s0">page</span><span class="s2">, </span><span class="s0">size</span><span class="s2">, </span><span class="s0">Scope</span><span class="s2">.</span><span class="s0">ALL</span><span class="s2">)</span>
+                        <span class="s2">: </span><span class="s0">fieldBusiness</span><span class="s2">.</span><span class="s0">getAllFieldsPaged</span><span class="s2">(</span><span class="s0">page</span><span class="s2">, </span><span class="s0">size</span><span class="s2">, </span><span class="s0">Scope</span><span class="s2">.</span><span class="s0">ACTIVE</span><span class="s2">);</span>
+
+                <span class="s1">if </span><span class="s2">(</span><span class="s0">result</span><span class="s2">.</span><span class="s0">isSuccess</span><span class="s2">()) {</span>
+                    <span class="s0">Page</span><span class="s2">&lt;</span><span class="s0">Field</span><span class="s2">&gt; </span><span class="s0">p </span><span class="s2">= </span><span class="s0">result</span><span class="s2">.</span><span class="s0">getData</span><span class="s2">();</span>
+                    <span class="s0">request</span><span class="s2">.</span><span class="s0">setAttribute</span><span class="s2">(</span><span class="s3">&quot;fields&quot;</span><span class="s2">, </span><span class="s0">p</span><span class="s2">.</span><span class="s0">getContent</span><span class="s2">());</span>
+                    <span class="s0">request</span><span class="s2">.</span><span class="s0">setAttribute</span><span class="s2">(</span><span class="s3">&quot;page&quot;</span><span class="s2">, </span><span class="s0">p</span><span class="s2">.</span><span class="s0">getPage</span><span class="s2">());</span>
+                    <span class="s0">request</span><span class="s2">.</span><span class="s0">setAttribute</span><span class="s2">(</span><span class="s3">&quot;size&quot;</span><span class="s2">, </span><span class="s0">p</span><span class="s2">.</span><span class="s0">getSize</span><span class="s2">());</span>
+                    <span class="s0">request</span><span class="s2">.</span><span class="s0">setAttribute</span><span class="s2">(</span><span class="s3">&quot;totalPages&quot;</span><span class="s2">, </span><span class="s0">p</span><span class="s2">.</span><span class="s0">getTotalPages</span><span class="s2">());</span>
+                    <span class="s0">request</span><span class="s2">.</span><span class="s0">setAttribute</span><span class="s2">(</span><span class="s3">&quot;totalElements&quot;</span><span class="s2">, </span><span class="s0">p</span><span class="s2">.</span><span class="s0">getTotalElements</span><span class="s2">());</span>
+                    <span class="s0">request</span><span class="s2">.</span><span class="s0">setAttribute</span><span class="s2">(</span><span class="s3">&quot;fullAccess&quot;</span><span class="s2">, </span><span class="s0">fullAccess</span><span class="s2">);</span>
+
+                    <span class="s0">FieldControllerHelper</span><span class="s2">.</span><span class="s0">handleList</span><span class="s2">(</span><span class="s0">request</span><span class="s2">, </span><span class="s0">response</span><span class="s2">, </span><span class="s0">p</span><span class="s2">.</span><span class="s0">getContent</span><span class="s2">());</span>
+                <span class="s2">} </span><span class="s1">else </span><span class="s2">{</span>
+                    <span class="s0">ServletUtils</span><span class="s2">.</span><span class="s0">forwardWithErrors</span><span class="s2">(</span><span class="s0">request</span><span class="s2">, </span><span class="s0">response</span><span class="s2">, </span><span class="s0">result</span><span class="s2">.</span><span class="s0">getErrors</span><span class="s2">(), </span><span class="s0">FIELD_JSP</span><span class="s2">, </span><span class="s0">TEMPLATE</span><span class="s2">);</span>
+                    <span class="s1">return</span><span class="s2">;</span>
+                <span class="s2">}</span>
+            <span class="s2">} </span><span class="s1">catch </span><span class="s2">(</span><span class="s0">Exception e</span><span class="s2">) {</span>
+                <span class="s0">log</span><span class="s2">.</span><span class="s0">error</span><span class="s2">(</span><span class="s3">&quot;Erreur doGet fields&quot;</span><span class="s2">, </span><span class="s0">e</span><span class="s2">);</span>
+                <span class="s0">ServletUtils</span><span class="s2">.</span><span class="s0">forwardWithError</span><span class="s2">(</span><span class="s0">request</span><span class="s2">, </span><span class="s0">response</span><span class="s2">, </span><span class="s0">e</span><span class="s2">.</span><span class="s0">getMessage</span><span class="s2">(), </span><span class="s0">FIELD_JSP</span><span class="s2">, </span><span class="s0">TEMPLATE</span><span class="s2">);</span>
+                <span class="s1">return</span><span class="s2">;</span>
+            <span class="s2">} </span><span class="s1">finally </span><span class="s2">{</span>
+                <span class="s1">if </span><span class="s2">(</span><span class="s0">em </span><span class="s2">!= </span><span class="s1">null</span><span class="s2">) </span><span class="s0">em</span><span class="s2">.</span><span class="s0">close</span><span class="s2">();</span>
+            <span class="s2">}</span>
+        <span class="s2">}</span>
+    <span class="s2">}</span>
+
+    <span class="s0">@Override</span>
+    <span class="s1">protected void </span><span class="s0">doPost</span><span class="s2">(</span><span class="s0">HttpServletRequest request</span><span class="s2">, </span><span class="s0">HttpServletResponse response</span><span class="s2">) </span><span class="s1">throws </span><span class="s0">ServletException</span><span class="s2">, </span><span class="s0">IOException </span><span class="s2">{</span>
+        <span class="s4">//Vérifier les droits</span>
+        <span class="s0">HttpSession session </span><span class="s2">= </span><span class="s0">request</span><span class="s2">.</span><span class="s0">getSession</span><span class="s2">(</span><span class="s1">false</span><span class="s2">);</span>
+        <span class="s1">if </span><span class="s2">(!(</span><span class="s0">session </span><span class="s2">!= </span><span class="s1">null </span><span class="s2">&amp;&amp; </span><span class="s0">ServletUtils</span><span class="s2">.</span><span class="s0">isFullAuthorized</span><span class="s2">(</span><span class="s0">session</span><span class="s2">.</span><span class="s0">getAttribute</span><span class="s2">(</span><span class="s3">&quot;role&quot;</span><span class="s2">).</span><span class="s0">toString</span><span class="s2">()))) {</span>
+            <span class="s0">ServletUtils</span><span class="s2">.</span><span class="s0">redirectNoAuthorized</span><span class="s2">(</span><span class="s0">request</span><span class="s2">, </span><span class="s0">response</span><span class="s2">);</span>
+            <span class="s1">return</span><span class="s2">;</span>
+        <span class="s2">}</span>
+        <span class="s0">String action </span><span class="s2">= </span><span class="s0">request</span><span class="s2">.</span><span class="s0">getParameter</span><span class="s2">(</span><span class="s3">&quot;action&quot;</span><span class="s2">);</span>
+        <span class="s0">String idParam </span><span class="s2">= </span><span class="s0">request</span><span class="s2">.</span><span class="s0">getParameter</span><span class="s2">(</span><span class="s3">&quot;fieldId&quot;</span><span class="s2">);</span>
+
+        <span class="s4">//On vérifie l'id si c'est possible ou non.</span>
+        <span class="s0">Result</span><span class="s2">&lt;</span><span class="s0">Integer</span><span class="s2">&gt; </span><span class="s0">idResult </span><span class="s2">= </span><span class="s0">ParamUtils</span><span class="s2">.</span><span class="s0">verifyId</span><span class="s2">(</span><span class="s0">idParam</span><span class="s2">);</span>
+        <span class="s1">if </span><span class="s2">(</span><span class="s0">idParam </span><span class="s2">!= </span><span class="s1">null</span><span class="s2">) {</span>
+
+            <span class="s1">if </span><span class="s2">(!</span><span class="s0">idResult</span><span class="s2">.</span><span class="s0">isSuccess</span><span class="s2">()) {</span>
+                <span class="s0">ServletUtils</span><span class="s2">.</span><span class="s0">forwardWithErrors</span><span class="s2">(</span><span class="s0">request</span><span class="s2">, </span><span class="s0">response</span><span class="s2">, </span><span class="s0">idResult</span><span class="s2">.</span><span class="s0">getErrors</span><span class="s2">(), </span><span class="s0">FIELD_JSP</span><span class="s2">, </span><span class="s0">TEMPLATE</span><span class="s2">);</span>
+                <span class="s1">return</span><span class="s2">;</span>
+            <span class="s2">}</span>
+        <span class="s2">}</span>
+
+        <span class="s4">//Activer ou softDelete un field</span>
+        <span class="s1">if </span><span class="s2">(</span><span class="s3">&quot;activer&quot;</span><span class="s2">.</span><span class="s0">equals</span><span class="s2">(</span><span class="s0">action</span><span class="s2">) || </span><span class="s3">&quot;delete&quot;</span><span class="s2">.</span><span class="s0">equals</span><span class="s2">(</span><span class="s0">action</span><span class="s2">)) {</span>
+            <span class="s0">EntityManager em </span><span class="s2">= </span><span class="s0">EMF</span><span class="s2">.</span><span class="s0">getEM</span><span class="s2">();</span>
+            <span class="s1">try </span><span class="s2">{</span>
+                <span class="s0">FieldServiceImpl fieldService </span><span class="s2">= </span><span class="s1">new </span><span class="s0">FieldServiceImpl</span><span class="s2">(</span><span class="s0">em</span><span class="s2">);</span>
+                <span class="s0">em</span><span class="s2">.</span><span class="s0">getTransaction</span><span class="s2">().</span><span class="s0">begin</span><span class="s2">();</span>
+                <span class="s0">Result</span><span class="s2">&lt;</span><span class="s0">Field</span><span class="s2">&gt; </span><span class="s0">fieldResult </span><span class="s2">= </span><span class="s0">fieldService</span><span class="s2">.</span><span class="s0">getOneById</span><span class="s2">(</span><span class="s0">idResult</span><span class="s2">.</span><span class="s0">getData</span><span class="s2">());</span>
+                <span class="s1">if </span><span class="s2">(!</span><span class="s0">fieldResult</span><span class="s2">.</span><span class="s0">isSuccess</span><span class="s2">()) {</span>
+                    <span class="s0">log</span><span class="s2">.</span><span class="s0">error</span><span class="s2">(</span><span class="s3">&quot;Erreur field non trouvé &quot;</span><span class="s2">);</span>
+                    <span class="s0">ServletUtils</span><span class="s2">.</span><span class="s0">forwardWithError</span><span class="s2">(</span><span class="s0">request</span><span class="s2">, </span><span class="s0">response</span><span class="s2">, </span><span class="s3">&quot;erreur field non trouvé.&quot;</span><span class="s2">, </span><span class="s0">FIELD_JSP</span><span class="s2">, </span><span class="s0">TEMPLATE</span><span class="s2">);</span>
+                    <span class="s1">return</span><span class="s2">;</span>
+                <span class="s2">}</span>
+                <span class="s0">fieldResult</span><span class="s2">.</span><span class="s0">getData</span><span class="s2">().</span><span class="s0">setActive</span><span class="s2">(</span><span class="s0">ServletUtils</span><span class="s2">.</span><span class="s0">changeActive</span><span class="s2">(</span><span class="s0">fieldResult</span><span class="s2">.</span><span class="s0">getData</span><span class="s2">().</span><span class="s0">isActive</span><span class="s2">()));</span>
+                <span class="s0">fieldService</span><span class="s2">.</span><span class="s0">update</span><span class="s2">(</span><span class="s0">fieldResult</span><span class="s2">.</span><span class="s0">getData</span><span class="s2">());</span>
+                <span class="s0">em</span><span class="s2">.</span><span class="s0">getTransaction</span><span class="s2">().</span><span class="s0">commit</span><span class="s2">();</span>
+                <span class="s0">log</span><span class="s2">.</span><span class="s0">info</span><span class="s2">(</span><span class="s3">&quot;field &quot; </span><span class="s2">+ </span><span class="s0">fieldResult</span><span class="s2">.</span><span class="s0">getData</span><span class="s2">().</span><span class="s0">getId</span><span class="s2">() + </span><span class="s3">&quot; activé/softDelete avec succès&quot;</span><span class="s2">);</span>
+                <span class="s0">ServletUtils</span><span class="s2">.</span><span class="s0">redirectWithMessage</span><span class="s2">(</span><span class="s0">request</span><span class="s2">, </span><span class="s0">response</span><span class="s2">, </span><span class="s3">&quot;field activé/softDelete avec succès&quot;</span><span class="s2">, </span><span class="s3">&quot;success&quot;</span><span class="s2">, </span><span class="s3">&quot;/field&quot;</span><span class="s2">);</span>
+                <span class="s1">return</span><span class="s2">;</span>
+            <span class="s2">} </span><span class="s1">catch </span><span class="s2">(</span><span class="s0">Exception e</span><span class="s2">) {</span>
+                <span class="s0">log</span><span class="s2">.</span><span class="s0">error</span><span class="s2">(</span><span class="s3">&quot;Erreur d'activation/softDelete : &quot; </span><span class="s2">+ </span><span class="s0">e</span><span class="s2">.</span><span class="s0">getMessage</span><span class="s2">());</span>
+                <span class="s0">ServletUtils</span><span class="s2">.</span><span class="s0">forwardWithError</span><span class="s2">(</span><span class="s0">request</span><span class="s2">, </span><span class="s0">response</span><span class="s2">, </span><span class="s0">e</span><span class="s2">.</span><span class="s0">getMessage</span><span class="s2">(), </span><span class="s0">FIELD_JSP</span><span class="s2">, </span><span class="s0">TEMPLATE</span><span class="s2">);</span>
+            <span class="s2">} </span><span class="s1">finally </span><span class="s2">{</span>
+                <span class="s1">if </span><span class="s2">(</span><span class="s0">em </span><span class="s2">!= </span><span class="s1">null </span><span class="s2">&amp;&amp; </span><span class="s0">em</span><span class="s2">.</span><span class="s0">getTransaction</span><span class="s2">().</span><span class="s0">isActive</span><span class="s2">()) </span><span class="s0">em</span><span class="s2">.</span><span class="s0">getTransaction</span><span class="s2">().</span><span class="s0">rollback</span><span class="s2">();</span>
+                <span class="s1">if </span><span class="s2">(</span><span class="s0">em </span><span class="s2">!= </span><span class="s1">null</span><span class="s2">) </span><span class="s0">em</span><span class="s2">.</span><span class="s0">close</span><span class="s2">();</span>
+            <span class="s2">}</span>
+            <span class="s1">return</span><span class="s2">;</span>
+        <span class="s2">} </span><span class="s1">else </span><span class="s2">{</span>
+            <span class="s4">//Create</span>
+            <span class="s4">//Verification des champs</span>
+            <span class="s1">if </span><span class="s2">(</span><span class="s0">idParam </span><span class="s2">== </span><span class="s1">null</span><span class="s2">) {</span>
+                <span class="s0">Result</span><span class="s2">&lt;</span><span class="s0">Field</span><span class="s2">&gt; </span><span class="s0">fieldCreateResult </span><span class="s2">= </span><span class="s0">FieldBusiness</span><span class="s2">.</span><span class="s0">initCreateForm</span><span class="s2">(</span>
+                        <span class="s0">request</span><span class="s2">.</span><span class="s0">getParameter</span><span class="s2">(</span><span class="s3">&quot;fieldName&quot;</span><span class="s2">),</span>
+                        <span class="s0">request</span><span class="s2">.</span><span class="s0">getParameter</span><span class="s2">(</span><span class="s3">&quot;hallId&quot;</span><span class="s2">),</span>
+                        <span class="s0">request</span><span class="s2">.</span><span class="s0">getParameter</span><span class="s2">(</span><span class="s3">&quot;active&quot;</span><span class="s2">)</span>
+                <span class="s2">);</span>
+                <span class="s1">if </span><span class="s2">(!</span><span class="s0">fieldCreateResult</span><span class="s2">.</span><span class="s0">isSuccess</span><span class="s2">()) {</span>
+                    <span class="s0">log</span><span class="s2">.</span><span class="s0">error</span><span class="s2">(</span><span class="s3">&quot;Erreur lors de la &quot; </span><span class="s2">+ (</span><span class="s0">idParam </span><span class="s2">== </span><span class="s1">null </span><span class="s2">? </span><span class="s3">&quot;création&quot; </span><span class="s2">: </span><span class="s3">&quot;édition&quot;</span><span class="s2">) + </span><span class="s3">&quot;du field : &quot; </span><span class="s2">+ </span><span class="s0">fieldCreateResult</span><span class="s2">.</span><span class="s0">getErrors</span><span class="s2">());</span>
+                    <span class="s0">ServletUtils</span><span class="s2">.</span><span class="s0">forwardWithErrors</span><span class="s2">(</span><span class="s0">request</span><span class="s2">, </span><span class="s0">response</span><span class="s2">, </span><span class="s0">fieldCreateResult</span><span class="s2">.</span><span class="s0">getErrors</span><span class="s2">(), </span><span class="s0">FIELD_FORM_JSP</span><span class="s2">, </span><span class="s0">TEMPLATE</span><span class="s2">);</span>
+                    <span class="s1">return</span><span class="s2">;</span>
+                <span class="s2">} </span><span class="s1">else </span><span class="s2">{</span>
+                    <span class="s0">Result</span><span class="s2">&lt;</span><span class="s0">Integer</span><span class="s2">&gt; </span><span class="s0">hallId </span><span class="s2">= </span><span class="s0">ParamUtils</span><span class="s2">.</span><span class="s0">verifyId</span><span class="s2">(</span><span class="s0">request</span><span class="s2">.</span><span class="s0">getParameter</span><span class="s2">(</span><span class="s3">&quot;hallId&quot;</span><span class="s2">));</span>
+                    <span class="s1">if </span><span class="s2">(!</span><span class="s0">hallId</span><span class="s2">.</span><span class="s0">isSuccess</span><span class="s2">() || </span><span class="s0">hallId</span><span class="s2">.</span><span class="s0">getData</span><span class="s2">() == </span><span class="s1">null</span><span class="s2">) {</span>
+                        <span class="s0">log</span><span class="s2">.</span><span class="s0">error</span><span class="s2">(</span><span class="s3">&quot;Erreur id du hall incorrect &quot;</span><span class="s2">);</span>
+                        <span class="s0">ServletUtils</span><span class="s2">.</span><span class="s0">forwardWithError</span><span class="s2">(</span><span class="s0">request</span><span class="s2">, </span><span class="s0">response</span><span class="s2">, </span><span class="s3">&quot;erreur id du hall incorrect&quot;</span><span class="s2">, </span><span class="s0">FIELD_FORM_JSP</span><span class="s2">, </span><span class="s0">TEMPLATE</span><span class="s2">);</span>
+                        <span class="s1">return</span><span class="s2">;</span>
+                    <span class="s2">}</span>
+                    <span class="s0">EntityManager em </span><span class="s2">= </span><span class="s0">EMF</span><span class="s2">.</span><span class="s0">getEM</span><span class="s2">();</span>
+                    <span class="s1">try </span><span class="s2">{</span>
+                        <span class="s0">HallServiceImpl hallService </span><span class="s2">= </span><span class="s1">new </span><span class="s0">HallServiceImpl</span><span class="s2">(</span><span class="s0">em</span><span class="s2">);</span>
+                        <span class="s0">FieldServiceImpl fieldService </span><span class="s2">= </span><span class="s1">new </span><span class="s0">FieldServiceImpl</span><span class="s2">(</span><span class="s0">em</span><span class="s2">);</span>
+                        <span class="s0">em</span><span class="s2">.</span><span class="s0">getTransaction</span><span class="s2">().</span><span class="s0">begin</span><span class="s2">();</span>
+                        <span class="s0">Result</span><span class="s2">&lt;</span><span class="s0">Hall</span><span class="s2">&gt; </span><span class="s0">hall </span><span class="s2">= </span><span class="s0">hallService</span><span class="s2">.</span><span class="s0">getOneById</span><span class="s2">(</span><span class="s0">hallId</span><span class="s2">.</span><span class="s0">getData</span><span class="s2">());</span>
+                        <span class="s0">fieldCreateResult</span><span class="s2">.</span><span class="s0">getData</span><span class="s2">().</span><span class="s0">setHall</span><span class="s2">(</span><span class="s0">hall</span><span class="s2">.</span><span class="s0">getData</span><span class="s2">());</span>
+                        <span class="s0">fieldService</span><span class="s2">.</span><span class="s0">create</span><span class="s2">(</span><span class="s0">fieldCreateResult</span><span class="s2">.</span><span class="s0">getData</span><span class="s2">());</span>
+                        <span class="s0">em</span><span class="s2">.</span><span class="s0">getTransaction</span><span class="s2">().</span><span class="s0">commit</span><span class="s2">();</span>
+                        <span class="s0">log</span><span class="s2">.</span><span class="s0">info</span><span class="s2">(</span><span class="s3">&quot;Field créé avec success.&quot;</span><span class="s2">);</span>
+                        <span class="s0">ServletUtils</span><span class="s2">.</span><span class="s0">redirectWithMessage</span><span class="s2">(</span><span class="s0">request</span><span class="s2">, </span><span class="s0">response</span><span class="s2">, </span><span class="s3">&quot;field avec success.&quot;</span><span class="s2">, </span><span class="s3">&quot;success&quot;</span><span class="s2">, </span><span class="s3">&quot;/field&quot;</span><span class="s2">);</span>
+                        <span class="s1">return</span><span class="s2">;</span>
+                    <span class="s2">} </span><span class="s1">catch </span><span class="s2">(</span><span class="s0">Exception e</span><span class="s2">) {</span>
+                        <span class="s0">log</span><span class="s2">.</span><span class="s0">error</span><span class="s2">(</span><span class="s3">&quot;Une erreur est survenue lors de la création du field. &quot; </span><span class="s2">+ </span><span class="s0">e</span><span class="s2">.</span><span class="s0">getMessage</span><span class="s2">());</span>
+                        <span class="s0">ServletUtils</span><span class="s2">.</span><span class="s0">forwardWithError</span><span class="s2">(</span><span class="s0">request</span><span class="s2">, </span><span class="s0">response</span><span class="s2">, </span><span class="s3">&quot;Une erreur est survenue lors de la création du field. &quot;</span><span class="s2">, </span><span class="s0">FIELD_FORM_JSP</span><span class="s2">, </span><span class="s0">TEMPLATE</span><span class="s2">);</span>
+                        <span class="s1">return</span><span class="s2">;</span>
+                    <span class="s2">} </span><span class="s1">finally </span><span class="s2">{</span>
+                        <span class="s1">if </span><span class="s2">(</span><span class="s0">em</span><span class="s2">.</span><span class="s0">getTransaction</span><span class="s2">().</span><span class="s0">isActive</span><span class="s2">()) {</span>
+                            <span class="s0">em</span><span class="s2">.</span><span class="s0">getTransaction</span><span class="s2">().</span><span class="s0">rollback</span><span class="s2">();</span>
+                        <span class="s2">}</span>
+                        <span class="s1">if </span><span class="s2">(</span><span class="s0">em </span><span class="s2">!= </span><span class="s1">null</span><span class="s2">) </span><span class="s0">em</span><span class="s2">.</span><span class="s0">close</span><span class="s2">();</span>
+                    <span class="s2">}</span>
+                <span class="s2">}</span>
+                <span class="s4">//Edit</span>
+            <span class="s2">} </span><span class="s1">else </span><span class="s2">{</span>
+                <span class="s0">Result</span><span class="s2">&lt;</span><span class="s0">FieldUpdateForm</span><span class="s2">&gt; </span><span class="s0">fieldUpdateFormResult </span><span class="s2">= </span><span class="s0">FieldBusiness</span><span class="s2">.</span><span class="s0">initUpdateForm</span><span class="s2">(</span>
+                        <span class="s0">request</span><span class="s2">.</span><span class="s0">getParameter</span><span class="s2">(</span><span class="s3">&quot;fieldName&quot;</span><span class="s2">),</span>
+                        <span class="s0">request</span><span class="s2">.</span><span class="s0">getParameter</span><span class="s2">(</span><span class="s3">&quot;hallId&quot;</span><span class="s2">),</span>
+                        <span class="s0">request</span><span class="s2">.</span><span class="s0">getParameter</span><span class="s2">(</span><span class="s3">&quot;active&quot;</span><span class="s2">)</span>
+                <span class="s2">);</span>
+                <span class="s0">EntityManager em </span><span class="s2">= </span><span class="s0">EMF</span><span class="s2">.</span><span class="s0">getEM</span><span class="s2">();</span>
+                <span class="s1">try </span><span class="s2">{</span>
+                    <span class="s0">FieldServiceImpl fieldService </span><span class="s2">= </span><span class="s1">new </span><span class="s0">FieldServiceImpl</span><span class="s2">(</span><span class="s0">em</span><span class="s2">);</span>
+                    <span class="s0">em</span><span class="s2">.</span><span class="s0">getTransaction</span><span class="s2">().</span><span class="s0">begin</span><span class="s2">();</span>
+                    <span class="s0">HallServiceImpl hallService </span><span class="s2">= </span><span class="s1">new </span><span class="s0">HallServiceImpl</span><span class="s2">(</span><span class="s0">em</span><span class="s2">);</span>
+                    <span class="s0">Result</span><span class="s2">&lt;</span><span class="s0">Hall</span><span class="s2">&gt; </span><span class="s0">hall </span><span class="s2">= </span><span class="s0">hallService</span><span class="s2">.</span><span class="s0">getOneById</span><span class="s2">(</span><span class="s0">fieldUpdateFormResult</span><span class="s2">.</span><span class="s0">getData</span><span class="s2">().</span><span class="s0">getHallId</span><span class="s2">());</span>
+                    <span class="s1">if </span><span class="s2">(!</span><span class="s0">hall</span><span class="s2">.</span><span class="s0">isSuccess</span><span class="s2">()) {</span>
+                        <span class="s0">log</span><span class="s2">.</span><span class="s0">error</span><span class="s2">(</span><span class="s3">&quot;Hall :&quot; </span><span class="s2">+ </span><span class="s0">idResult</span><span class="s2">.</span><span class="s0">getData</span><span class="s2">() + </span><span class="s3">&quot; n'existe pas&quot;</span><span class="s2">);</span>
+                        <span class="s0">ServletUtils</span><span class="s2">.</span><span class="s0">forwardWithError</span><span class="s2">(</span><span class="s0">request</span><span class="s2">, </span><span class="s0">response</span><span class="s2">, </span><span class="s3">&quot;Le hall n'existe pas&quot;</span><span class="s2">, </span><span class="s0">FIELD_FORM_JSP</span><span class="s2">, </span><span class="s0">TEMPLATE</span><span class="s2">);</span>
+                        <span class="s1">return</span><span class="s2">;</span>
+                    <span class="s2">}</span>
+                    <span class="s0">Result</span><span class="s2">&lt;</span><span class="s0">Field</span><span class="s2">&gt; </span><span class="s0">field </span><span class="s2">= </span><span class="s0">fieldService</span><span class="s2">.</span><span class="s0">getOneById</span><span class="s2">(</span><span class="s0">idResult</span><span class="s2">.</span><span class="s0">getData</span><span class="s2">());</span>
+                    <span class="s0">FieldMapper</span><span class="s2">.</span><span class="s0">fromUpdateForm</span><span class="s2">(</span><span class="s0">fieldUpdateFormResult</span><span class="s2">.</span><span class="s0">getData</span><span class="s2">(), </span><span class="s0">hall</span><span class="s2">.</span><span class="s0">getData</span><span class="s2">(), </span><span class="s0">field</span><span class="s2">.</span><span class="s0">getData</span><span class="s2">());</span>
+                    <span class="s0">fieldService</span><span class="s2">.</span><span class="s0">update</span><span class="s2">(</span><span class="s0">field</span><span class="s2">.</span><span class="s0">getData</span><span class="s2">());</span>
+                    <span class="s0">em</span><span class="s2">.</span><span class="s0">getTransaction</span><span class="s2">().</span><span class="s0">commit</span><span class="s2">();</span>
+                    <span class="s0">log</span><span class="s2">.</span><span class="s0">info</span><span class="s2">(</span><span class="s3">&quot;Field modifié avec success.&quot;</span><span class="s2">);</span>
+                    <span class="s0">ServletUtils</span><span class="s2">.</span><span class="s0">redirectWithMessage</span><span class="s2">(</span><span class="s0">request</span><span class="s2">, </span><span class="s0">response</span><span class="s2">, </span><span class="s3">&quot;field modifié avec success.&quot;</span><span class="s2">, </span><span class="s3">&quot;success&quot;</span><span class="s2">, </span><span class="s3">&quot;/field&quot;</span><span class="s2">);</span>
+                    <span class="s1">return</span><span class="s2">;</span>
+                <span class="s2">} </span><span class="s1">catch </span><span class="s2">(</span><span class="s0">Exception e</span><span class="s2">) {</span>
+                    <span class="s0">log</span><span class="s2">.</span><span class="s0">error</span><span class="s2">(</span><span class="s3">&quot;Erreur lors de l'update du field&quot;</span><span class="s2">, </span><span class="s0">e</span><span class="s2">);</span>
+                    <span class="s0">ServletUtils</span><span class="s2">.</span><span class="s0">forwardWithError</span><span class="s2">(</span><span class="s0">request</span><span class="s2">, </span><span class="s0">response</span><span class="s2">, </span><span class="s3">&quot;Erreur lors de l'update du field&quot;</span><span class="s2">, </span><span class="s0">FIELD_FORM_JSP</span><span class="s2">, </span><span class="s0">TEMPLATE</span><span class="s2">);</span>
+                    <span class="s1">return</span><span class="s2">;</span>
+                <span class="s2">} </span><span class="s1">finally </span><span class="s2">{</span>
+                    <span class="s1">if </span><span class="s2">(</span><span class="s0">em</span><span class="s2">.</span><span class="s0">getTransaction</span><span class="s2">().</span><span class="s0">isActive</span><span class="s2">()) {</span>
+                        <span class="s0">em</span><span class="s2">.</span><span class="s0">getTransaction</span><span class="s2">().</span><span class="s0">rollback</span><span class="s2">();</span>
+                    <span class="s2">}</span>
+                    <span class="s1">if </span><span class="s2">(</span><span class="s0">em </span><span class="s2">!= </span><span class="s1">null</span><span class="s2">) </span><span class="s0">em</span><span class="s2">.</span><span class="s0">close</span><span class="s2">();</span>
+                <span class="s2">}</span>
+            <span class="s2">}</span>
+        <span class="s2">}</span>
+
+    <span class="s2">}</span>
+<span class="s2">}</span>
+
+</pre>
+</body>
+</html>

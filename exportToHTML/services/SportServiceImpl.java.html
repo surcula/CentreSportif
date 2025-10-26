@@ -1,0 +1,107 @@
+<html>
+<head>
+<title>SportServiceImpl.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cf8e6d;}
+.s1 { color: #bcbec4;}
+.s2 { color: #bcbec4;}
+.s3 { color: #7a7e85;}
+.s4 { color: #6aab73;}
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+SportServiceImpl.java</font>
+</center></td></tr></table>
+<pre><span class="s0">package </span><span class="s1">services</span><span class="s2">;</span>
+
+<span class="s0">import </span><span class="s1">Tools</span><span class="s2">.</span><span class="s1">Result</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">entities</span><span class="s2">.</span><span class="s1">Sport</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">interfaces</span><span class="s2">.</span><span class="s1">SportService</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">org</span><span class="s2">.</span><span class="s1">apache</span><span class="s2">.</span><span class="s1">log4j</span><span class="s2">.</span><span class="s1">Logger</span><span class="s2">;</span>
+
+<span class="s0">import </span><span class="s1">javax</span><span class="s2">.</span><span class="s1">persistence</span><span class="s2">.</span><span class="s1">EntityManager</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">java</span><span class="s2">.</span><span class="s1">util</span><span class="s2">.</span><span class="s1">List</span><span class="s2">;</span>
+
+<span class="s0">public class </span><span class="s1">SportServiceImpl </span><span class="s0">implements </span><span class="s1">SportService </span><span class="s2">{</span>
+    <span class="s0">private final </span><span class="s1">EntityManager em</span><span class="s2">;</span>
+    <span class="s3">// Log4j</span>
+    <span class="s0">private static </span><span class="s1">Logger log </span><span class="s2">= </span><span class="s1">Logger</span><span class="s2">.</span><span class="s1">getLogger</span><span class="s2">(</span><span class="s1">SportServiceImpl</span><span class="s2">.</span><span class="s0">class</span><span class="s2">);</span>
+
+    <span class="s0">public </span><span class="s1">SportServiceImpl</span><span class="s2">(</span><span class="s1">EntityManager em</span><span class="s2">) {</span>
+        <span class="s0">this</span><span class="s2">.</span><span class="s1">em </span><span class="s2">= </span><span class="s1">em</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s1">@Override</span>
+    <span class="s0">public </span><span class="s1">Result create</span><span class="s2">(</span><span class="s1">Sport sportCreateForm</span><span class="s2">) {</span>
+
+        <span class="s1">em</span><span class="s2">.</span><span class="s1">persist</span><span class="s2">(</span><span class="s1">sportCreateForm</span><span class="s2">);</span>
+        <span class="s0">return </span><span class="s1">Result</span><span class="s2">.</span><span class="s1">ok</span><span class="s2">();</span>
+    <span class="s2">}</span>
+
+    <span class="s1">@Override</span>
+    <span class="s0">public </span><span class="s1">Result update</span><span class="s2">(</span><span class="s1">Sport sport</span><span class="s2">) {</span>
+
+        <span class="s1">em</span><span class="s2">.</span><span class="s1">merge</span><span class="s2">(</span><span class="s1">sport</span><span class="s2">);</span>
+        <span class="s0">return </span><span class="s1">Result</span><span class="s2">.</span><span class="s1">ok</span><span class="s2">();</span>
+    <span class="s2">}</span>
+
+    <span class="s1">@Override</span>
+    <span class="s0">public </span><span class="s1">Result softDelete</span><span class="s2">(</span><span class="s1">Sport sport</span><span class="s2">) {</span>
+
+        <span class="s1">em</span><span class="s2">.</span><span class="s1">merge</span><span class="s2">(</span><span class="s1">sport</span><span class="s2">);</span>
+        <span class="s0">return </span><span class="s1">Result</span><span class="s2">.</span><span class="s1">ok</span><span class="s2">();</span>
+    <span class="s2">}</span>
+
+    <span class="s1">@Override</span>
+    <span class="s0">public </span><span class="s1">Result</span><span class="s2">&lt;</span><span class="s1">Sport</span><span class="s2">&gt; </span><span class="s1">getOneById</span><span class="s2">(</span><span class="s0">int </span><span class="s1">id</span><span class="s2">) {</span>
+
+        <span class="s0">return </span><span class="s1">Result</span><span class="s2">.</span><span class="s1">ok</span><span class="s2">(</span><span class="s1">em</span><span class="s2">.</span><span class="s1">find</span><span class="s2">(</span><span class="s1">Sport</span><span class="s2">.</span><span class="s0">class</span><span class="s2">, </span><span class="s1">id</span><span class="s2">));</span>
+    <span class="s2">}</span>
+
+    <span class="s1">@Override</span>
+    <span class="s0">public </span><span class="s1">Result</span><span class="s2">&lt;</span><span class="s1">List</span><span class="s2">&lt;</span><span class="s1">Sport</span><span class="s2">&gt;&gt; </span><span class="s1">getAllActiveSports</span><span class="s2">(</span><span class="s0">int </span><span class="s1">offset</span><span class="s2">, </span><span class="s0">int </span><span class="s1">size</span><span class="s2">) {</span>
+
+        <span class="s1">List</span><span class="s2">&lt;</span><span class="s1">Sport</span><span class="s2">&gt; </span><span class="s1">sports </span><span class="s2">= </span><span class="s1">em</span><span class="s2">.</span><span class="s1">createNamedQuery</span><span class="s2">(</span><span class="s4">&quot;getAllActiveSports&quot;</span><span class="s2">, </span><span class="s1">Sport</span><span class="s2">.</span><span class="s0">class</span><span class="s2">)</span>
+                <span class="s2">.</span><span class="s1">setFirstResult</span><span class="s2">(</span><span class="s1">offset</span><span class="s2">)</span>
+                <span class="s2">.</span><span class="s1">setMaxResults</span><span class="s2">(</span><span class="s1">size</span><span class="s2">)</span>
+                <span class="s2">.</span><span class="s1">getResultList</span><span class="s2">();</span>
+        <span class="s1">log</span><span class="s2">.</span><span class="s1">info</span><span class="s2">(</span><span class="s4">&quot;getAllActiveHalls : &quot; </span><span class="s2">+ </span><span class="s1">sports</span><span class="s2">.</span><span class="s1">size</span><span class="s2">());</span>
+        <span class="s0">return </span><span class="s1">Result</span><span class="s2">.</span><span class="s1">ok</span><span class="s2">(</span><span class="s1">sports</span><span class="s2">);</span>
+    <span class="s2">}</span>
+
+    <span class="s1">@Override</span>
+    <span class="s0">public </span><span class="s1">Result</span><span class="s2">&lt;</span><span class="s1">List</span><span class="s2">&lt;</span><span class="s1">Sport</span><span class="s2">&gt;&gt; </span><span class="s1">getAllSports</span><span class="s2">(</span><span class="s0">int </span><span class="s1">offset</span><span class="s2">, </span><span class="s0">int </span><span class="s1">size</span><span class="s2">) {</span>
+        <span class="s1">List</span><span class="s2">&lt;</span><span class="s1">Sport</span><span class="s2">&gt; </span><span class="s1">sports </span><span class="s2">= </span><span class="s1">em</span><span class="s2">.</span><span class="s1">createNamedQuery</span><span class="s2">(</span><span class="s4">&quot;getAllSports&quot;</span><span class="s2">, </span><span class="s1">Sport</span><span class="s2">.</span><span class="s0">class</span><span class="s2">)</span>
+                <span class="s2">.</span><span class="s1">setFirstResult</span><span class="s2">(</span><span class="s1">offset</span><span class="s2">)</span>
+                <span class="s2">.</span><span class="s1">setMaxResults</span><span class="s2">(</span><span class="s1">size</span><span class="s2">)</span>
+                <span class="s2">.</span><span class="s1">getResultList</span><span class="s2">();</span>
+        <span class="s1">log</span><span class="s2">.</span><span class="s1">info</span><span class="s2">(</span><span class="s4">&quot;getAllActiveHalls : &quot; </span><span class="s2">+ </span><span class="s1">sports</span><span class="s2">.</span><span class="s1">size</span><span class="s2">());</span>
+        <span class="s0">return </span><span class="s1">Result</span><span class="s2">.</span><span class="s1">ok</span><span class="s2">(</span><span class="s1">sports</span><span class="s2">);</span>
+    <span class="s2">}</span>
+
+    <span class="s1">@Override</span>
+    <span class="s0">public </span><span class="s1">Result</span><span class="s2">&lt;</span><span class="s1">Long</span><span class="s2">&gt; </span><span class="s1">countActiveSports</span><span class="s2">() {</span>
+        <span class="s1">Long countAllActiveSports </span><span class="s2">= </span><span class="s1">em</span><span class="s2">.</span><span class="s1">createNamedQuery</span><span class="s2">(</span><span class="s4">&quot;countAllActiveSports&quot;</span><span class="s2">, </span><span class="s1">Long</span><span class="s2">.</span><span class="s0">class</span><span class="s2">)</span>
+                <span class="s2">.</span><span class="s1">getSingleResult</span><span class="s2">();</span>
+        <span class="s1">log</span><span class="s2">.</span><span class="s1">info</span><span class="s2">(</span><span class="s4">&quot;getAllActiveHalls : &quot; </span><span class="s2">+ </span><span class="s1">countAllActiveSports</span><span class="s2">);</span>
+        <span class="s0">return </span><span class="s1">Result</span><span class="s2">.</span><span class="s1">ok</span><span class="s2">(</span><span class="s1">countAllActiveSports</span><span class="s2">);</span>
+    <span class="s2">}</span>
+
+    <span class="s1">@Override</span>
+    <span class="s0">public </span><span class="s1">Result</span><span class="s2">&lt;</span><span class="s1">Long</span><span class="s2">&gt; </span><span class="s1">countAllSports</span><span class="s2">() {</span>
+
+        <span class="s1">Long countAllSports </span><span class="s2">= </span><span class="s1">em</span><span class="s2">.</span><span class="s1">createNamedQuery</span><span class="s2">(</span><span class="s4">&quot;countAllSports&quot;</span><span class="s2">, </span><span class="s1">Long</span><span class="s2">.</span><span class="s0">class</span><span class="s2">)</span>
+                <span class="s2">.</span><span class="s1">getSingleResult</span><span class="s2">();</span>
+        <span class="s1">log</span><span class="s2">.</span><span class="s1">info</span><span class="s2">(</span><span class="s4">&quot;getAllActiveHalls : &quot; </span><span class="s2">+ </span><span class="s1">countAllSports</span><span class="s2">);</span>
+        <span class="s0">return </span><span class="s1">Result</span><span class="s2">.</span><span class="s1">ok</span><span class="s2">(</span><span class="s1">countAllSports</span><span class="s2">);</span>
+    <span class="s2">}</span>
+
+
+<span class="s2">}</span>
+</pre>
+</body>
+</html>

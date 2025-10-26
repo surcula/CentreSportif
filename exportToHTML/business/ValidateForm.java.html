@@ -1,0 +1,122 @@
+<html>
+<head>
+<title>ValidateForm.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cf8e6d;}
+.s1 { color: #bcbec4;}
+.s2 { color: #bcbec4;}
+.s3 { color: #5f826b; font-style: italic;}
+.s4 { color: #67a37c; font-style: italic;}
+.s5 { color: #6aab73;}
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+ValidateForm.java</font>
+</center></td></tr></table>
+<pre><span class="s0">package </span><span class="s1">business</span><span class="s2">;</span>
+
+<span class="s0">import </span><span class="s1">Tools</span><span class="s2">.</span><span class="s1">Result</span><span class="s2">;</span>
+
+<span class="s0">import </span><span class="s1">java</span><span class="s2">.</span><span class="s1">util</span><span class="s2">.</span><span class="s1">HashMap</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">java</span><span class="s2">.</span><span class="s1">util</span><span class="s2">.</span><span class="s1">Map</span><span class="s2">;</span>
+
+<span class="s0">public class </span><span class="s1">ValidateForm </span><span class="s2">{</span>
+
+    <span class="s3">/**</span>
+     <span class="s3">* String to Double with errors</span>
+     <span class="s3">* </span><span class="s4">@param </span><span class="s3">input data form</span>
+     <span class="s3">* </span><span class="s4">@param </span><span class="s3">fieldKey error name</span>
+     <span class="s3">* </span><span class="s4">@param </span><span class="s3">fieldLabel label name</span>
+     <span class="s3">* </span><span class="s4">@param </span><span class="s3">errors</span>
+     <span class="s3">* </span><span class="s4">@return</span>
+     <span class="s3">*/</span>
+    <span class="s0">public static </span><span class="s1">Result</span><span class="s2">&lt;</span><span class="s1">Double</span><span class="s2">&gt; </span><span class="s1">parseDouble</span><span class="s2">(</span><span class="s1">String input</span><span class="s2">, </span><span class="s1">String fieldKey</span><span class="s2">, </span><span class="s1">String fieldLabel</span><span class="s2">, </span><span class="s1">Map</span><span class="s2">&lt;</span><span class="s1">String</span><span class="s2">,</span><span class="s1">String</span><span class="s2">&gt; </span><span class="s1">errors</span><span class="s2">) {</span>
+
+        <span class="s0">try</span><span class="s2">{</span>
+            <span class="s0">return </span><span class="s1">Result</span><span class="s2">.</span><span class="s1">ok</span><span class="s2">(</span><span class="s1">Double</span><span class="s2">.</span><span class="s1">parseDouble</span><span class="s2">(</span><span class="s1">input</span><span class="s2">));</span>
+        <span class="s2">}</span>
+        <span class="s0">catch </span><span class="s2">(</span><span class="s1">NumberFormatException e</span><span class="s2">){</span>
+            <span class="s1">errors</span><span class="s2">.</span><span class="s1">put</span><span class="s2">(</span><span class="s1">fieldKey</span><span class="s2">, </span><span class="s1">fieldLabel </span><span class="s2">+ </span><span class="s5">&quot; is invalid&quot;</span><span class="s2">);</span>
+            <span class="s0">return </span><span class="s1">Result</span><span class="s2">.</span><span class="s1">fail</span><span class="s2">(</span><span class="s1">errors</span><span class="s2">);</span>
+        <span class="s2">}</span>
+    <span class="s2">}</span>
+
+    <span class="s3">/**</span>
+     <span class="s3">* verify string is empty</span>
+     <span class="s3">* </span><span class="s4">@param </span><span class="s3">input</span>
+     <span class="s3">* </span><span class="s4">@param </span><span class="s3">fieldKey</span>
+     <span class="s3">* </span><span class="s4">@param </span><span class="s3">fieldLabel</span>
+     <span class="s3">* </span><span class="s4">@param </span><span class="s3">errors</span>
+     <span class="s3">* </span><span class="s4">@return</span>
+     <span class="s3">*/</span>
+    <span class="s0">public static </span><span class="s1">Result</span><span class="s2">&lt;</span><span class="s1">String</span><span class="s2">&gt; </span><span class="s1">stringIsEmpty</span><span class="s2">(</span><span class="s1">String input</span><span class="s2">, </span><span class="s1">String fieldKey</span><span class="s2">, </span><span class="s1">String fieldLabel</span><span class="s2">, </span><span class="s1">Map</span><span class="s2">&lt;</span><span class="s1">String</span><span class="s2">,</span><span class="s1">String</span><span class="s2">&gt; </span><span class="s1">errors</span><span class="s2">) {</span>
+        <span class="s0">if </span><span class="s2">(</span><span class="s1">input </span><span class="s2">== </span><span class="s0">null </span><span class="s2">|| </span><span class="s1">input</span><span class="s2">.</span><span class="s1">trim</span><span class="s2">().</span><span class="s1">isEmpty</span><span class="s2">()) {</span>
+            <span class="s1">errors</span><span class="s2">.</span><span class="s1">put</span><span class="s2">(</span><span class="s1">fieldKey</span><span class="s2">,</span><span class="s1">fieldLabel </span><span class="s2">+ </span><span class="s5">&quot; is required.&quot;</span><span class="s2">);</span>
+            <span class="s0">return </span><span class="s1">Result</span><span class="s2">.</span><span class="s1">fail</span><span class="s2">(</span><span class="s1">errors</span><span class="s2">);</span>
+        <span class="s2">}</span><span class="s0">else </span><span class="s2">{</span>
+            <span class="s0">return  </span><span class="s1">Result</span><span class="s2">.</span><span class="s1">ok</span><span class="s2">(</span><span class="s1">input</span><span class="s2">);</span>
+        <span class="s2">}</span>
+    <span class="s2">}</span>
+
+    <span class="s3">/**</span>
+     <span class="s3">* Parses a string input into a Boolean (&quot;1&quot; = true, &quot;0&quot; = false).</span>
+     <span class="s3">* </span><span class="s4">@param </span><span class="s3">input</span>
+     <span class="s3">* </span><span class="s4">@param </span><span class="s3">fieldKey</span>
+     <span class="s3">* </span><span class="s4">@param </span><span class="s3">fieldLabel</span>
+     <span class="s3">* </span><span class="s4">@param </span><span class="s3">errors</span>
+     <span class="s3">* </span><span class="s4">@return</span>
+     <span class="s3">*/</span>
+    <span class="s0">public static </span><span class="s1">Result</span><span class="s2">&lt;</span><span class="s1">Boolean</span><span class="s2">&gt; </span><span class="s1">parseBoolean</span><span class="s2">(</span><span class="s1">String input</span><span class="s2">, </span><span class="s1">String fieldKey</span><span class="s2">, </span><span class="s1">String fieldLabel</span><span class="s2">, </span><span class="s1">Map</span><span class="s2">&lt;</span><span class="s1">String</span><span class="s2">,</span><span class="s1">String</span><span class="s2">&gt; </span><span class="s1">errors</span><span class="s2">) {</span>
+        <span class="s0">if </span><span class="s2">(</span><span class="s1">input </span><span class="s2">== </span><span class="s0">null </span><span class="s2">|| (!</span><span class="s1">input</span><span class="s2">.</span><span class="s1">equals</span><span class="s2">(</span><span class="s5">&quot;1&quot;</span><span class="s2">) &amp;&amp; !</span><span class="s1">input</span><span class="s2">.</span><span class="s1">equals</span><span class="s2">(</span><span class="s5">&quot;0&quot;</span><span class="s2">))) {</span>
+            <span class="s1">errors</span><span class="s2">.</span><span class="s1">put</span><span class="s2">(</span><span class="s1">fieldKey</span><span class="s2">, </span><span class="s1">fieldLabel </span><span class="s2">+ </span><span class="s5">&quot; is required.&quot;</span><span class="s2">);</span>
+            <span class="s0">return </span><span class="s1">Result</span><span class="s2">.</span><span class="s1">fail</span><span class="s2">(</span><span class="s1">errors</span><span class="s2">);</span>
+        <span class="s2">}</span><span class="s0">else </span><span class="s2">{</span>
+            <span class="s0">return  </span><span class="s1">Result</span><span class="s2">.</span><span class="s1">ok</span><span class="s2">(</span><span class="s5">&quot;1&quot;</span><span class="s2">.</span><span class="s1">equals</span><span class="s2">(</span><span class="s1">input</span><span class="s2">));</span>
+        <span class="s2">}</span>
+    <span class="s2">}</span>
+
+    <span class="s3">/**</span>
+     <span class="s3">* verify maxLength and minLength</span>
+     <span class="s3">* </span><span class="s4">@param </span><span class="s3">input</span>
+     <span class="s3">* </span><span class="s4">@param </span><span class="s3">maxLength</span>
+     <span class="s3">* </span><span class="s4">@param </span><span class="s3">minLength</span>
+     <span class="s3">* </span><span class="s4">@return</span>
+     <span class="s3">*/</span>
+    <span class="s0">public static </span><span class="s1">Result</span><span class="s2">&lt;</span><span class="s1">String</span><span class="s2">&gt; </span><span class="s1">stringLength</span><span class="s2">(</span><span class="s1">String input</span><span class="s2">,</span><span class="s0">int </span><span class="s1">minLength</span><span class="s2">, </span><span class="s0">int </span><span class="s1">maxLength</span><span class="s2">) {</span>
+        <span class="s0">if </span><span class="s2">(</span><span class="s1">input </span><span class="s2">!= </span><span class="s0">null </span><span class="s2">&amp;&amp; </span><span class="s1">input</span><span class="s2">.</span><span class="s1">length</span><span class="s2">() &lt;= </span><span class="s1">maxLength </span><span class="s2">&amp;&amp; </span><span class="s1">input</span><span class="s2">.</span><span class="s1">length</span><span class="s2">() &gt; </span><span class="s1">minLength</span><span class="s2">) {</span>
+            <span class="s0">return </span><span class="s1">Result</span><span class="s2">.</span><span class="s1">ok</span><span class="s2">(</span><span class="s1">input</span><span class="s2">);</span>
+        <span class="s2">}</span><span class="s0">else</span><span class="s2">{</span>
+            <span class="s1">HashMap</span><span class="s2">&lt;</span><span class="s1">String</span><span class="s2">, </span><span class="s1">String</span><span class="s2">&gt; </span><span class="s1">errors </span><span class="s2">= </span><span class="s0">new </span><span class="s1">HashMap</span><span class="s2">&lt;&gt;();</span>
+            <span class="s1">errors</span><span class="s2">.</span><span class="s1">put</span><span class="s2">(</span><span class="s5">&quot;length&quot;</span><span class="s2">, </span><span class="s5">&quot;la taille doit être comprise entre : &quot; </span><span class="s2">+ </span><span class="s1">minLength </span><span class="s2">+  </span><span class="s5">&quot; et &quot; </span><span class="s2">+ </span><span class="s1">maxLength</span><span class="s2">);</span>
+            <span class="s0">return  </span><span class="s1">Result</span><span class="s2">.</span><span class="s1">fail</span><span class="s2">(</span><span class="s1">errors</span><span class="s2">);</span>
+        <span class="s2">}</span>
+    <span class="s2">}</span>
+
+    <span class="s3">/**</span>
+     <span class="s3">* String to Double with errors</span>
+     <span class="s3">* </span><span class="s4">@param </span><span class="s3">input data form</span>
+     <span class="s3">* </span><span class="s4">@param </span><span class="s3">fieldKey error name</span>
+     <span class="s3">* </span><span class="s4">@param </span><span class="s3">fieldLabel label name</span>
+     <span class="s3">* </span><span class="s4">@param </span><span class="s3">errors</span>
+     <span class="s3">* </span><span class="s4">@return</span>
+     <span class="s3">*/</span>
+    <span class="s0">public static </span><span class="s1">Result</span><span class="s2">&lt;</span><span class="s1">Integer</span><span class="s2">&gt; </span><span class="s1">stringToInteger</span><span class="s2">(</span><span class="s1">String input</span><span class="s2">, </span><span class="s1">String fieldKey</span><span class="s2">, </span><span class="s1">String fieldLabel</span><span class="s2">, </span><span class="s1">Map</span><span class="s2">&lt;</span><span class="s1">String</span><span class="s2">,</span><span class="s1">String</span><span class="s2">&gt; </span><span class="s1">errors</span><span class="s2">) {</span>
+
+        <span class="s0">try</span><span class="s2">{</span>
+            <span class="s0">return </span><span class="s1">Result</span><span class="s2">.</span><span class="s1">ok</span><span class="s2">(</span><span class="s1">Integer</span><span class="s2">.</span><span class="s1">parseInt</span><span class="s2">(</span><span class="s1">input</span><span class="s2">));</span>
+        <span class="s2">}</span>
+        <span class="s0">catch </span><span class="s2">(</span><span class="s1">NumberFormatException e</span><span class="s2">){</span>
+            <span class="s1">errors</span><span class="s2">.</span><span class="s1">put</span><span class="s2">(</span><span class="s1">fieldKey</span><span class="s2">, </span><span class="s1">fieldLabel </span><span class="s2">+ </span><span class="s5">&quot; is invalid&quot;</span><span class="s2">);</span>
+            <span class="s0">return </span><span class="s1">Result</span><span class="s2">.</span><span class="s1">fail</span><span class="s2">(</span><span class="s1">errors</span><span class="s2">);</span>
+        <span class="s2">}</span>
+    <span class="s2">}</span>
+
+
+<span class="s2">}</span>
+</pre>
+</body>
+</html>

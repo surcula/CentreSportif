@@ -1,0 +1,60 @@
+<html>
+<head>
+<title>persistence.xml</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #d5b778;}
+.s1 { color: #bcbec4;}
+.s2 { color: #6aab73;}
+.s3 { color: #bcbec4;}
+.s4 { color: #7a7e85;}
+.s5 { color: #56a8f5;}
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+persistence.xml</font>
+</center></td></tr></table>
+<pre><span class="s0">&lt;?</span><span class="s1">xml version</span><span class="s2">=&quot;1.0&quot; </span><span class="s1">encoding</span><span class="s2">=&quot;UTF-8&quot;</span><span class="s0">?&gt;</span>
+<span class="s0">&lt;persistence </span><span class="s1">xmlns</span><span class="s2">=&quot;http://java.sun.com/xml/ns/persistence&quot; </span><span class="s1">version</span><span class="s2">=&quot;2.0&quot;</span><span class="s0">&gt;</span>
+    <span class="s0">&lt;persistence-unit </span><span class="s1">name</span><span class="s2">=&quot;default&quot; </span><span class="s1">transaction-type</span><span class="s2">=&quot;RESOURCE_LOCAL&quot;</span><span class="s0">&gt;</span>
+
+        <span class="s0">&lt;provider&gt;</span><span class="s3">org.eclipse.persistence.jpa.PersistenceProvider</span><span class="s0">&lt;/provider&gt;</span>
+
+        <span class="s0">&lt;class&gt;</span><span class="s3">entities.Hall</span><span class="s0">&lt;/class&gt;</span>
+        <span class="s0">&lt;class&gt;</span><span class="s3">entities.Closure</span><span class="s0">&lt;/class&gt;</span>
+        <span class="s0">&lt;class&gt;</span><span class="s3">entities.Field</span><span class="s0">&lt;/class&gt;</span>
+        <span class="s0">&lt;class&gt;</span><span class="s3">entities.Sport</span><span class="s0">&lt;/class&gt;</span>
+        <span class="s0">&lt;class&gt;</span><span class="s3">entities.SportField</span><span class="s0">&lt;/class&gt;</span>
+        <span class="s0">&lt;class&gt;</span><span class="s3">entities.HistoricalSportPrice</span><span class="s0">&lt;/class&gt;</span>
+        <span class="s0">&lt;class&gt;</span><span class="s3">entities.Event</span><span class="s0">&lt;/class&gt;</span>
+
+        <span class="s4">&lt;!-- ajoute ici les autres classes --&gt;</span>
+        <span class="s0">&lt;class&gt;</span><span class="s3">entities.User</span><span class="s0">&lt;/class&gt;</span>
+        <span class="s0">&lt;class&gt;</span><span class="s3">entities.Reservation</span><span class="s0">&lt;/class&gt;</span>
+        <span class="s0">&lt;class&gt;</span><span class="s3">entities.Order</span><span class="s0">&lt;/class&gt;</span>
+        <span class="s0">&lt;class&gt;</span><span class="s3">entities.Discount</span><span class="s0">&lt;/class&gt;</span>
+        <span class="s0">&lt;class&gt;</span><span class="s3">entities.Subscription</span><span class="s0">&lt;/class&gt;</span>
+        <span class="s0">&lt;class&gt;</span><span class="s3">entities.UsersSubscription</span><span class="s0">&lt;/class&gt;</span>
+        <span class="s0">&lt;class&gt;</span><span class="s3">entities.OrdersDiscount</span><span class="s0">&lt;/class&gt;</span>
+        <span class="s0">&lt;class&gt;</span><span class="s3">entities.OrdersSubscription</span><span class="s0">&lt;/class&gt;</span>
+
+
+        <span class="s0">&lt;properties&gt;</span>
+            <span class="s0">&lt;property </span><span class="s1">name</span><span class="s2">=&quot;javax.persistence.jdbc.driver&quot; </span><span class="s1">value</span><span class="s2">=&quot;com.mysql.cj.jdbc.Driver&quot; </span><span class="s0">/&gt;</span>
+            <span class="s0">&lt;property </span><span class="s1">name</span><span class="s2">=&quot;javax.persistence.jdbc.url&quot; </span><span class="s1">value</span><span class="s2">=&quot;jdbc:mysql://localhost:3306/centresportif?useSSL=false</span><span class="s5">&amp;amp;</span><span class="s2">serverTimezone=UTC&quot; </span><span class="s0">/&gt;</span>
+            <span class="s0">&lt;property </span><span class="s1">name</span><span class="s2">=&quot;javax.persistence.jdbc.user&quot; </span><span class="s1">value</span><span class="s2">=&quot;root&quot; </span><span class="s0">/&gt;</span>
+            <span class="s0">&lt;property </span><span class="s1">name</span><span class="s2">=&quot;javax.persistence.jdbc.password&quot; </span><span class="s1">value</span><span class="s2">=&quot;&quot; </span><span class="s0">/&gt;</span>
+
+            <span class="s4">&lt;!-- EclipseLink specific properties --&gt;</span>
+            <span class="s0">&lt;property </span><span class="s1">name</span><span class="s2">=&quot;eclipselink.logging.level&quot; </span><span class="s1">value</span><span class="s2">=&quot;FINE&quot; </span><span class="s0">/&gt;</span>
+            <span class="s0">&lt;property </span><span class="s1">name</span><span class="s2">=&quot;eclipselink.ddl-generation&quot; </span><span class="s1">value</span><span class="s2">=&quot;none&quot; </span><span class="s0">/&gt;</span>
+            <span class="s0">&lt;property </span><span class="s1">name</span><span class="s2">=&quot;eclipselink.deploy-on-startup&quot; </span><span class="s1">value</span><span class="s2">=&quot;true&quot; </span><span class="s0">/&gt;</span>
+        <span class="s0">&lt;/properties&gt;</span>
+    <span class="s0">&lt;/persistence-unit&gt;</span>
+<span class="s0">&lt;/persistence&gt;</span>
+</pre>
+</body>
+</html>

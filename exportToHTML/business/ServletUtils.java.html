@@ -1,0 +1,182 @@
+<html>
+<head>
+<title>ServletUtils.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cf8e6d;}
+.s1 { color: #bcbec4;}
+.s2 { color: #bcbec4;}
+.s3 { color: #7a7e85;}
+.s4 { color: #5f826b; font-style: italic;}
+.s5 { color: #67a37c; font-style: italic;}
+.s6 { color: #6aab73;}
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+ServletUtils.java</font>
+</center></td></tr></table>
+<pre><span class="s0">package </span><span class="s1">business</span><span class="s2">;</span>
+
+<span class="s0">import </span><span class="s1">Tools</span><span class="s2">.</span><span class="s1">Result</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">javax</span><span class="s2">.</span><span class="s1">servlet</span><span class="s2">.</span><span class="s1">RequestDispatcher</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">javax</span><span class="s2">.</span><span class="s1">servlet</span><span class="s2">.</span><span class="s1">ServletException</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">javax</span><span class="s2">.</span><span class="s1">servlet</span><span class="s2">.</span><span class="s1">http</span><span class="s2">.</span><span class="s1">HttpServletRequest</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">javax</span><span class="s2">.</span><span class="s1">servlet</span><span class="s2">.</span><span class="s1">http</span><span class="s2">.</span><span class="s1">HttpServletResponse</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">java</span><span class="s2">.</span><span class="s1">io</span><span class="s2">.</span><span class="s1">IOException</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">java</span><span class="s2">.</span><span class="s1">util</span><span class="s2">.</span><span class="s1">HashMap</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">java</span><span class="s2">.</span><span class="s1">util</span><span class="s2">.</span><span class="s1">Map</span><span class="s2">;</span>
+
+<span class="s0">public class </span><span class="s1">ServletUtils </span><span class="s2">{</span>
+    <span class="s3">// Log4j</span>
+    <span class="s0">private static final </span><span class="s1">org</span><span class="s2">.</span><span class="s1">apache</span><span class="s2">.</span><span class="s1">log4j</span><span class="s2">.</span><span class="s1">Logger log </span><span class="s2">= </span><span class="s1">org</span><span class="s2">.</span><span class="s1">apache</span><span class="s2">.</span><span class="s1">log4j</span><span class="s2">.</span><span class="s1">Logger</span><span class="s2">.</span><span class="s1">getLogger</span><span class="s2">(</span><span class="s1">ServletUtils</span><span class="s2">.</span><span class="s0">class</span><span class="s2">);</span>
+
+    <span class="s4">/**</span>
+     <span class="s4">* Forward the request to a jsp page</span>
+     <span class="s4">* </span><span class="s5">@param </span><span class="s4">request</span>
+     <span class="s4">* </span><span class="s5">@param </span><span class="s4">response</span>
+     <span class="s4">* </span><span class="s5">@param </span><span class="s4">contentPath</span>
+     <span class="s4">* </span><span class="s5">@param </span><span class="s4">dispatcherJSP</span>
+     <span class="s4">* </span><span class="s5">@throws </span><span class="s4">ServletException</span>
+     <span class="s4">* </span><span class="s5">@throws </span><span class="s4">IOException if an I/O error occurs</span>
+     <span class="s4">*/</span>
+    <span class="s0">public static void </span><span class="s1">forwardWithContent</span><span class="s2">(</span><span class="s1">HttpServletRequest request</span><span class="s2">, </span><span class="s1">HttpServletResponse response</span><span class="s2">,</span><span class="s1">String contentPath</span><span class="s2">, </span><span class="s1">String dispatcherJSP</span><span class="s2">)</span>
+            <span class="s0">throws </span><span class="s1">ServletException</span><span class="s2">, </span><span class="s1">IOException </span><span class="s2">{</span>
+        <span class="s1">request</span><span class="s2">.</span><span class="s1">setAttribute</span><span class="s2">(</span><span class="s6">&quot;content&quot;</span><span class="s2">, </span><span class="s1">contentPath</span><span class="s2">);</span>
+        <span class="s1">RequestDispatcher dispatcher </span><span class="s2">= </span><span class="s1">request</span><span class="s2">.</span><span class="s1">getRequestDispatcher</span><span class="s2">(</span><span class="s1">dispatcherJSP</span><span class="s2">);</span>
+        <span class="s1">dispatcher</span><span class="s2">.</span><span class="s1">forward</span><span class="s2">(</span><span class="s1">request</span><span class="s2">, </span><span class="s1">response</span><span class="s2">);</span>
+    <span class="s2">}</span>
+
+    <span class="s4">/**</span>
+     <span class="s4">* redirect url</span>
+     <span class="s4">* </span><span class="s5">@param </span><span class="s4">response</span>
+     <span class="s4">* </span><span class="s5">@param </span><span class="s4">url</span>
+     <span class="s4">* </span><span class="s5">@throws </span><span class="s4">IOException if an I/O error occurs</span>
+     <span class="s4">*/</span>
+    <span class="s0">public static void </span><span class="s1">redirectToURL</span><span class="s2">(</span><span class="s1">HttpServletResponse response</span><span class="s2">, </span><span class="s1">String url</span><span class="s2">) </span><span class="s0">throws </span><span class="s1">IOException </span><span class="s2">{</span>
+        <span class="s1">response</span><span class="s2">.</span><span class="s1">sendRedirect</span><span class="s2">(</span><span class="s1">url</span><span class="s2">);</span>
+    <span class="s2">}</span>
+
+
+    <span class="s4">/**</span>
+     <span class="s4">* Forwards the request to the given JSP template with both an error message and a content page.</span>
+     <span class="s4">*</span>
+     <span class="s4">* </span><span class="s5">@param </span><span class="s4">request the HTTP servlet request</span>
+     <span class="s4">* </span><span class="s5">@param </span><span class="s4">response the HTTP servlet response</span>
+     <span class="s4">* </span><span class="s5">@param </span><span class="s4">errorMessage the error message to display</span>
+     <span class="s4">* </span><span class="s5">@param </span><span class="s4">contentPath the relative path to the content JSP</span>
+     <span class="s4">* </span><span class="s5">@param </span><span class="s4">dispatcherJSP the JSP template to use for forwarding</span>
+     <span class="s4">* </span><span class="s5">@throws </span><span class="s4">ServletException if a servlet error occurs</span>
+     <span class="s4">* </span><span class="s5">@throws </span><span class="s4">IOException if an I/O error occurs</span>
+     <span class="s4">*/</span>
+    <span class="s0">public static void </span><span class="s1">forwardWithError</span><span class="s2">(</span><span class="s1">HttpServletRequest request</span><span class="s2">, </span><span class="s1">HttpServletResponse response</span><span class="s2">,</span>
+                                        <span class="s1">String errorMessage</span><span class="s2">, </span><span class="s1">String contentPath</span><span class="s2">, </span><span class="s1">String dispatcherJSP</span><span class="s2">)</span>
+            <span class="s0">throws </span><span class="s1">ServletException</span><span class="s2">, </span><span class="s1">IOException </span><span class="s2">{</span>
+        <span class="s1">log</span><span class="s2">.</span><span class="s1">warn</span><span class="s2">(</span><span class="s1">errorMessage</span><span class="s2">);</span>
+        <span class="s1">request</span><span class="s2">.</span><span class="s1">setAttribute</span><span class="s2">(</span><span class="s6">&quot;errorMessage&quot;</span><span class="s2">, </span><span class="s1">errorMessage</span><span class="s2">);</span>
+        <span class="s1">forwardWithContent</span><span class="s2">(</span><span class="s1">request</span><span class="s2">, </span><span class="s1">response</span><span class="s2">, </span><span class="s1">contentPath</span><span class="s2">, </span><span class="s1">dispatcherJSP</span><span class="s2">);</span>
+    <span class="s2">}</span>
+
+    <span class="s4">/**</span>
+     <span class="s4">* Forwards the request to the given JSP template with both errorS message and a content page.</span>
+     <span class="s4">*</span>
+     <span class="s4">* </span><span class="s5">@param </span><span class="s4">request the HTTP servlet request</span>
+     <span class="s4">* </span><span class="s5">@param </span><span class="s4">response the HTTP servlet response</span>
+     <span class="s4">* </span><span class="s5">@param </span><span class="s4">errorsMessages the error message to display</span>
+     <span class="s4">* </span><span class="s5">@param </span><span class="s4">contentPath the relative path to the content JSP</span>
+     <span class="s4">* </span><span class="s5">@param </span><span class="s4">dispatcherJSP the JSP template to use for forwarding</span>
+     <span class="s4">* </span><span class="s5">@throws </span><span class="s4">ServletException if a servlet error occurs</span>
+     <span class="s4">* </span><span class="s5">@throws </span><span class="s4">IOException if an I/O error occurs</span>
+     <span class="s4">*/</span>
+    <span class="s0">public static void </span><span class="s1">forwardWithErrors</span><span class="s2">(</span><span class="s1">HttpServletRequest request</span><span class="s2">, </span><span class="s1">HttpServletResponse response</span><span class="s2">,</span>
+                                         <span class="s1">Map</span><span class="s2">&lt;</span><span class="s1">String</span><span class="s2">,</span><span class="s1">String</span><span class="s2">&gt; </span><span class="s1">errorsMessages</span><span class="s2">, </span><span class="s1">String contentPath</span><span class="s2">, </span><span class="s1">String dispatcherJSP</span><span class="s2">)</span>
+            <span class="s0">throws </span><span class="s1">ServletException</span><span class="s2">, </span><span class="s1">IOException </span><span class="s2">{</span>
+        <span class="s1">request</span><span class="s2">.</span><span class="s1">setAttribute</span><span class="s2">(</span><span class="s6">&quot;successMessage&quot;</span><span class="s2">, </span><span class="s0">null</span><span class="s2">);</span>
+
+        <span class="s0">for</span><span class="s2">(</span><span class="s1">Map</span><span class="s2">.</span><span class="s1">Entry</span><span class="s2">&lt;</span><span class="s1">String</span><span class="s2">, </span><span class="s1">String</span><span class="s2">&gt; </span><span class="s1">entry </span><span class="s2">: </span><span class="s1">errorsMessages</span><span class="s2">.</span><span class="s1">entrySet</span><span class="s2">()) {</span>
+            <span class="s1">request</span><span class="s2">.</span><span class="s1">setAttribute</span><span class="s2">(</span><span class="s1">entry</span><span class="s2">.</span><span class="s1">getKey</span><span class="s2">(), </span><span class="s1">entry</span><span class="s2">.</span><span class="s1">getValue</span><span class="s2">());</span>
+        <span class="s2">}</span>
+        <span class="s1">forwardWithContent</span><span class="s2">(</span><span class="s1">request</span><span class="s2">, </span><span class="s1">response</span><span class="s2">, </span><span class="s1">contentPath</span><span class="s2">, </span><span class="s1">dispatcherJSP</span><span class="s2">);</span>
+    <span class="s2">}</span>
+
+    <span class="s4">/**</span>
+     <span class="s4">* Forwards the request to the given JSP template with both success message and a content page.</span>
+     <span class="s4">*</span>
+     <span class="s4">* </span><span class="s5">@param </span><span class="s4">request the HTTP servlet request</span>
+     <span class="s4">* </span><span class="s5">@param </span><span class="s4">response the HTTP servlet response</span>
+     <span class="s4">* </span><span class="s5">@param </span><span class="s4">successMessage the error message to display</span>
+     <span class="s4">* </span><span class="s5">@param </span><span class="s4">contentPath the relative path to the content JSP</span>
+     <span class="s4">* </span><span class="s5">@param </span><span class="s4">dispatcherJSP the JSP template to use for forwarding</span>
+     <span class="s4">* </span><span class="s5">@throws </span><span class="s4">ServletException if a servlet error occurs</span>
+     <span class="s4">* </span><span class="s5">@throws </span><span class="s4">IOException if an I/O error occurs</span>
+     <span class="s4">*/</span>
+    <span class="s0">public static void </span><span class="s1">forwardWithSucces</span><span class="s2">(</span><span class="s1">HttpServletRequest request</span><span class="s2">, </span><span class="s1">HttpServletResponse response</span><span class="s2">,</span>
+                                         <span class="s1">String successMessage</span><span class="s2">, </span><span class="s1">String contentPath</span><span class="s2">, </span><span class="s1">String dispatcherJSP</span><span class="s2">)</span>
+            <span class="s0">throws </span><span class="s1">ServletException</span><span class="s2">, </span><span class="s1">IOException </span><span class="s2">{</span>
+        <span class="s1">request</span><span class="s2">.</span><span class="s1">setAttribute</span><span class="s2">(</span><span class="s6">&quot;successMessage&quot;</span><span class="s2">, </span><span class="s1">successMessage</span><span class="s2">);</span>
+        <span class="s1">forwardWithContent</span><span class="s2">(</span><span class="s1">request</span><span class="s2">, </span><span class="s1">response</span><span class="s2">, </span><span class="s1">contentPath</span><span class="s2">, </span><span class="s1">dispatcherJSP</span><span class="s2">);</span>
+    <span class="s2">}</span>
+
+    <span class="s4">/**</span>
+     <span class="s4">* verify the role</span>
+     <span class="s4">* </span><span class="s5">@param </span><span class="s4">role</span>
+     <span class="s4">* </span><span class="s5">@return</span>
+     <span class="s4">*/</span>
+    <span class="s0">public static boolean </span><span class="s1">isFullAuthorized</span><span class="s2">(</span><span class="s1">String role</span><span class="s2">){</span>
+        <span class="s0">if </span><span class="s2">(</span><span class="s1">role </span><span class="s2">== </span><span class="s0">null</span><span class="s2">) </span><span class="s0">return false</span><span class="s2">;</span>
+
+        <span class="s0">switch </span><span class="s2">(</span><span class="s1">role</span><span class="s2">.</span><span class="s1">toUpperCase</span><span class="s2">()) {</span>
+            <span class="s0">case </span><span class="s6">&quot;ADMIN&quot;</span><span class="s2">:</span>
+            <span class="s0">case </span><span class="s6">&quot;SECRETARY&quot;</span><span class="s2">:</span>
+            <span class="s0">case </span><span class="s6">&quot;BARMAN&quot;</span><span class="s2">:</span>
+                <span class="s0">return true</span><span class="s2">;</span>
+            <span class="s0">default</span><span class="s2">:</span>
+                <span class="s0">return false</span><span class="s2">;</span>
+        <span class="s2">}</span>
+    <span class="s2">}</span>
+
+    <span class="s4">/**</span>
+     <span class="s4">* Redirect with message error or success</span>
+     <span class="s4">* </span><span class="s5">@param </span><span class="s4">request</span>
+     <span class="s4">* </span><span class="s5">@param </span><span class="s4">response</span>
+     <span class="s4">* </span><span class="s5">@param </span><span class="s4">message</span>
+     <span class="s4">* </span><span class="s5">@param </span><span class="s4">type success or error</span>
+     <span class="s4">* </span><span class="s5">@param </span><span class="s4">targetPath url/path</span>
+     <span class="s4">* </span><span class="s5">@throws </span><span class="s4">IOException</span>
+     <span class="s4">*/</span>
+    <span class="s0">public static void </span><span class="s1">redirectWithMessage</span><span class="s2">(</span><span class="s1">HttpServletRequest request</span><span class="s2">, </span><span class="s1">HttpServletResponse response</span><span class="s2">,</span>
+                                           <span class="s1">String message</span><span class="s2">, </span><span class="s1">String type</span><span class="s2">, </span><span class="s1">String targetPath</span><span class="s2">) </span><span class="s0">throws </span><span class="s1">IOException </span><span class="s2">{</span>
+        <span class="s1">request</span><span class="s2">.</span><span class="s1">getSession</span><span class="s2">().</span><span class="s1">setAttribute</span><span class="s2">(</span><span class="s6">&quot;toastMessage&quot;</span><span class="s2">, </span><span class="s1">message</span><span class="s2">);</span>
+        <span class="s1">request</span><span class="s2">.</span><span class="s1">getSession</span><span class="s2">().</span><span class="s1">setAttribute</span><span class="s2">(</span><span class="s6">&quot;toastType&quot;</span><span class="s2">, </span><span class="s1">type</span><span class="s2">); </span><span class="s3">// &quot;success&quot; ou &quot;error&quot;</span>
+        <span class="s1">response</span><span class="s2">.</span><span class="s1">sendRedirect</span><span class="s2">(</span><span class="s1">request</span><span class="s2">.</span><span class="s1">getContextPath</span><span class="s2">() + </span><span class="s1">targetPath</span><span class="s2">);</span>
+    <span class="s2">}</span>
+
+    <span class="s4">/**</span>
+     <span class="s4">* Redirect NoAuhtorized</span>
+     <span class="s4">* </span><span class="s5">@param </span><span class="s4">request</span>
+     <span class="s4">* </span><span class="s5">@param </span><span class="s4">response</span>
+     <span class="s4">* </span><span class="s5">@throws </span><span class="s4">IOException</span>
+     <span class="s4">*/</span>
+    <span class="s0">public static void </span><span class="s1">redirectNoAuthorized</span><span class="s2">(</span><span class="s1">HttpServletRequest request</span><span class="s2">, </span><span class="s1">HttpServletResponse response</span><span class="s2">) </span><span class="s0">throws </span><span class="s1">IOException </span><span class="s2">{</span>
+        <span class="s1">redirectWithMessage</span><span class="s2">(</span><span class="s1">request</span><span class="s2">,</span>
+                <span class="s1">response</span><span class="s2">,</span>
+                <span class="s6">&quot;Vous n'avez pas l'autorisation&quot;</span><span class="s2">,</span>
+                <span class="s6">&quot;error&quot;</span><span class="s2">,</span>
+                <span class="s6">&quot;/home&quot;</span><span class="s2">);</span>
+    <span class="s2">}</span>
+
+    <span class="s4">/**</span>
+     <span class="s4">* change le active</span>
+     <span class="s4">* </span><span class="s5">@param </span><span class="s4">active</span>
+     <span class="s4">* </span><span class="s5">@return </span><span class="s4">!active</span>
+     <span class="s4">*/</span>
+    <span class="s0">public static boolean </span><span class="s1">changeActive</span><span class="s2">(</span><span class="s0">boolean </span><span class="s1">active</span><span class="s2">){</span>
+
+        <span class="s0">return </span><span class="s2">!</span><span class="s1">active</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+<span class="s2">}</span></pre>
+</body>
+</html>

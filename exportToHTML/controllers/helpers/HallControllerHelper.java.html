@@ -1,0 +1,76 @@
+<html>
+<head>
+<title>HallControllerHelper.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cf8e6d;}
+.s1 { color: #bcbec4;}
+.s2 { color: #bcbec4;}
+.s3 { color: #5f826b; font-style: italic;}
+.s4 { color: #67a37c; font-style: italic;}
+.s5 { color: #6aab73;}
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+HallControllerHelper.java</font>
+</center></td></tr></table>
+<pre><span class="s0">package </span><span class="s1">controllers</span><span class="s2">.</span><span class="s1">helpers</span><span class="s2">;</span>
+
+<span class="s0">import </span><span class="s1">business</span><span class="s2">.</span><span class="s1">ServletUtils</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">entities</span><span class="s2">.</span><span class="s1">Hall</span><span class="s2">;</span>
+<span class="s0">import static </span><span class="s1">constants</span><span class="s2">.</span><span class="s1">Rooting</span><span class="s2">.*;</span>
+
+<span class="s0">import </span><span class="s1">javax</span><span class="s2">.</span><span class="s1">servlet</span><span class="s2">.</span><span class="s1">ServletException</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">javax</span><span class="s2">.</span><span class="s1">servlet</span><span class="s2">.</span><span class="s1">http</span><span class="s2">.</span><span class="s1">HttpServletRequest</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">javax</span><span class="s2">.</span><span class="s1">servlet</span><span class="s2">.</span><span class="s1">http</span><span class="s2">.</span><span class="s1">HttpServletResponse</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">java</span><span class="s2">.</span><span class="s1">io</span><span class="s2">.</span><span class="s1">IOException</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">java</span><span class="s2">.</span><span class="s1">util</span><span class="s2">.</span><span class="s1">List</span><span class="s2">;</span>
+
+<span class="s0">public class </span><span class="s1">HallControllerHelper </span><span class="s2">{</span>
+
+    <span class="s3">/**</span>
+     <span class="s3">* Load HAll FORM CREATE</span>
+     <span class="s3">* </span><span class="s4">@param </span><span class="s3">request</span>
+     <span class="s3">* </span><span class="s4">@param </span><span class="s3">response</span>
+     <span class="s3">* </span><span class="s4">@throws </span><span class="s3">ServletException</span>
+     <span class="s3">* </span><span class="s4">@throws </span><span class="s3">IOException</span>
+     <span class="s3">*/</span>
+    <span class="s0">public static void </span><span class="s1">handleFormDisplay</span><span class="s2">(</span><span class="s1">HttpServletRequest request</span><span class="s2">, </span><span class="s1">HttpServletResponse response</span><span class="s2">) </span><span class="s0">throws </span><span class="s1">ServletException</span><span class="s2">, </span><span class="s1">IOException </span><span class="s2">{</span>
+        <span class="s1">ServletUtils</span><span class="s2">.</span><span class="s1">forwardWithContent</span><span class="s2">(</span><span class="s1">request</span><span class="s2">, </span><span class="s1">response</span><span class="s2">, </span><span class="s1">HALL_FORM_JSP</span><span class="s2">, </span><span class="s1">TEMPLATE</span><span class="s2">);</span>
+        <span class="s0">return</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s3">/**</span>
+     <span class="s3">* Load Hall Form EDIT</span>
+     <span class="s3">* </span><span class="s4">@param </span><span class="s3">request</span>
+     <span class="s3">* </span><span class="s4">@param </span><span class="s3">response</span>
+     <span class="s3">* </span><span class="s4">@param </span><span class="s3">hall</span>
+     <span class="s3">* </span><span class="s4">@throws </span><span class="s3">ServletException</span>
+     <span class="s3">* </span><span class="s4">@throws </span><span class="s3">IOException</span>
+     <span class="s3">*/</span>
+    <span class="s0">public static void </span><span class="s1">handleEditForm</span><span class="s2">(</span><span class="s1">HttpServletRequest request</span><span class="s2">, </span><span class="s1">HttpServletResponse response</span><span class="s2">, </span><span class="s1">Hall hall</span><span class="s2">) </span><span class="s0">throws </span><span class="s1">ServletException</span><span class="s2">, </span><span class="s1">IOException </span><span class="s2">{</span>
+        <span class="s1">request</span><span class="s2">.</span><span class="s1">setAttribute</span><span class="s2">(</span><span class="s5">&quot;hall&quot;</span><span class="s2">, </span><span class="s1">hall</span><span class="s2">);</span>
+        <span class="s1">ServletUtils</span><span class="s2">.</span><span class="s1">forwardWithContent</span><span class="s2">(</span><span class="s1">request</span><span class="s2">, </span><span class="s1">response</span><span class="s2">, </span><span class="s1">HALL_FORM_JSP</span><span class="s2">, </span><span class="s1">TEMPLATE</span><span class="s2">);</span>
+        <span class="s0">return</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s3">/**</span>
+     <span class="s3">* Load Hall Page</span>
+     <span class="s3">* </span><span class="s4">@param </span><span class="s3">request</span>
+     <span class="s3">* </span><span class="s4">@param </span><span class="s3">response</span>
+     <span class="s3">* </span><span class="s4">@param </span><span class="s3">halls</span>
+     <span class="s3">* </span><span class="s4">@throws </span><span class="s3">ServletException</span>
+     <span class="s3">* </span><span class="s4">@throws </span><span class="s3">IOException</span>
+     <span class="s3">*/</span>
+    <span class="s0">public static void </span><span class="s1">handleList</span><span class="s2">(</span><span class="s1">HttpServletRequest request</span><span class="s2">, </span><span class="s1">HttpServletResponse response</span><span class="s2">, </span><span class="s1">List</span><span class="s2">&lt;</span><span class="s1">Hall</span><span class="s2">&gt; </span><span class="s1">halls</span><span class="s2">) </span><span class="s0">throws </span><span class="s1">ServletException</span><span class="s2">, </span><span class="s1">IOException </span><span class="s2">{</span>
+        <span class="s1">request</span><span class="s2">.</span><span class="s1">setAttribute</span><span class="s2">(</span><span class="s5">&quot;halls&quot;</span><span class="s2">, </span><span class="s1">halls</span><span class="s2">);</span>
+        <span class="s1">ServletUtils</span><span class="s2">.</span><span class="s1">forwardWithContent</span><span class="s2">(</span><span class="s1">request</span><span class="s2">, </span><span class="s1">response</span><span class="s2">, </span><span class="s1">HALL_JSP</span><span class="s2">, </span><span class="s1">TEMPLATE</span><span class="s2">);</span>
+        <span class="s0">return</span><span class="s2">;</span>
+    <span class="s2">}</span>
+<span class="s2">}</span>
+</pre>
+</body>
+</html>

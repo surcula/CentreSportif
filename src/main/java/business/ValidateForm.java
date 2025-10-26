@@ -95,6 +95,11 @@ public class ValidateForm {
             return Result.fail(errors);
         }
     }
-
+    public static Result<Integer> parseInteger(String input,
+                                               String fieldKey,
+                                               String fieldLabel,
+                                               Map<String,String> errors) {
+        return stringToInteger(input, fieldKey, fieldLabel, errors);
+    }
 
 }

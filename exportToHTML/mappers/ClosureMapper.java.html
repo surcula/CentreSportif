@@ -1,0 +1,43 @@
+<html>
+<head>
+<title>ClosureMapper.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cf8e6d;}
+.s1 { color: #bcbec4;}
+.s2 { color: #bcbec4;}
+.s3 { color: #5f826b; font-style: italic;}
+.s4 { color: #67a37c; font-style: italic;}
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+ClosureMapper.java</font>
+</center></td></tr></table>
+<pre><span class="s0">package </span><span class="s1">mappers</span><span class="s2">;</span>
+
+<span class="s0">import </span><span class="s1">dto</span><span class="s2">.</span><span class="s1">ClosureUpdateForm</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">entities</span><span class="s2">.</span><span class="s1">Closure</span><span class="s2">;</span>
+
+<span class="s0">public class </span><span class="s1">ClosureMapper </span><span class="s2">{</span>
+
+    <span class="s3">/**</span>
+     <span class="s3">* Mapping ClosureUpdateForm to Closure</span>
+     <span class="s3">* </span><span class="s4">@param </span><span class="s3">closureUpdateForm</span>
+     <span class="s3">* </span><span class="s4">@return</span>
+     <span class="s3">*/</span>
+    <span class="s0">public static </span><span class="s1">Closure fromUpdateForm</span><span class="s2">(</span><span class="s1">ClosureUpdateForm closureUpdateForm</span><span class="s2">){</span>
+        <span class="s1">Closure closure </span><span class="s2">= </span><span class="s0">new </span><span class="s1">Closure</span><span class="s2">();</span>
+        <span class="s1">closure</span><span class="s2">.</span><span class="s1">setId</span><span class="s2">(</span><span class="s1">closureUpdateForm</span><span class="s2">.</span><span class="s1">getId</span><span class="s2">());</span>
+        <span class="s1">closure</span><span class="s2">.</span><span class="s1">setEndDate</span><span class="s2">(</span><span class="s1">closureUpdateForm</span><span class="s2">.</span><span class="s1">getEndDate</span><span class="s2">());</span>
+        <span class="s1">closure</span><span class="s2">.</span><span class="s1">setStartDate</span><span class="s2">(</span><span class="s1">closureUpdateForm</span><span class="s2">.</span><span class="s1">getStartDate</span><span class="s2">());</span>
+        <span class="s1">closure</span><span class="s2">.</span><span class="s1">setActive</span><span class="s2">(</span><span class="s1">closureUpdateForm</span><span class="s2">.</span><span class="s1">isActive</span><span class="s2">());</span>
+        <span class="s1">closure</span><span class="s2">.</span><span class="s1">setSportsField</span><span class="s2">(</span><span class="s1">closureUpdateForm</span><span class="s2">.</span><span class="s1">getSportField</span><span class="s2">());</span>
+        <span class="s0">return  </span><span class="s1">closure</span><span class="s2">;</span>
+    <span class="s2">}</span>
+<span class="s2">}</span>
+</pre>
+</body>
+</html>

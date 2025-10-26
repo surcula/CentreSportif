@@ -1,0 +1,78 @@
+<html>
+<head>
+<title>EntityFinder.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cf8e6d;}
+.s1 { color: #bcbec4;}
+.s2 { color: #bcbec4;}
+.s3 { color: #5f826b; font-style: italic;}
+.s4 { color: #67a37c; font-style: italic;}
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+EntityFinder.java</font>
+</center></td></tr></table>
+<pre><span class="s0">package </span><span class="s1">interfaces</span><span class="s2">;</span>
+
+<span class="s0">import </span><span class="s1">java</span><span class="s2">.</span><span class="s1">util</span><span class="s2">.</span><span class="s1">List</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">java</span><span class="s2">.</span><span class="s1">util</span><span class="s2">.</span><span class="s1">Map</span><span class="s2">;</span>
+
+<span class="s3">/**</span>
+ <span class="s3">* </span>
+ <span class="s3">* </span><span class="s4">@author </span><span class="s3">Renaud DIANA</span>
+ <span class="s3">* </span>
+ <span class="s3">*/</span>
+<span class="s0">public interface </span><span class="s1">EntityFinder</span><span class="s2">&lt;</span><span class="s1">T</span><span class="s2">&gt; {</span>
+	
+	<span class="s3">/**	 </span>
+	 <span class="s3">* Interface method to find an entity from the database</span>
+	 <span class="s3">* 	 </span>
+	 <span class="s3">* </span><span class="s4">@param </span><span class="s1">&lt;</span><span class="s3">T</span><span class="s1">&gt;</span>
+	 <span class="s3">*          Generic backing bean</span>
+	 <span class="s3">* </span><span class="s4">@param </span><span class="s3">Object</span>
+	 <span class="s3">*          Backing bean's id to find</span>
+	 <span class="s3">*                   </span>
+	 <span class="s3">* </span><span class="s4">@return </span>
+	 <span class="s3">* 			Generic backing bean</span>
+	 <span class="s3">*/	</span>
+	<span class="s0">public </span><span class="s1">T findOne</span><span class="s2">(</span><span class="s1">T t</span><span class="s2">, </span><span class="s0">int </span><span class="s1">id</span><span class="s2">);</span>
+	
+	<span class="s3">/**	 </span>
+	 <span class="s3">* Interface method to find a result of entities based on a NamedQuery from the database</span>
+	 <span class="s3">* 	 </span>
+	 <span class="s3">* </span><span class="s4">@param </span><span class="s3">String</span>
+	 <span class="s3">*          The NamedQuery          </span>
+	 <span class="s3">* </span><span class="s4">@param </span><span class="s1">&lt;</span><span class="s3">T</span><span class="s1">&gt;</span>
+	 <span class="s3">*          Generic backing bean</span>
+	 <span class="s3">* </span><span class="s4">@param </span><span class="s3">param</span>
+	 <span class="s3">*          Query parameters</span>
+	 <span class="s3">*          For Date params, key must contains the word(ci) 'date'</span>
+	 <span class="s3">*</span>
+	 <span class="s3">* </span><span class="s4">@return </span>
+	 <span class="s3">* 			List of generic backing beans</span>
+	 <span class="s3">*/	</span>
+	<span class="s0">public </span><span class="s2">&lt;</span><span class="s1">K</span><span class="s2">, </span><span class="s1">V</span><span class="s2">&gt; </span><span class="s1">List</span><span class="s2">&lt;</span><span class="s1">T</span><span class="s2">&gt; </span><span class="s1">findByNamedQuery</span><span class="s2">(</span><span class="s1">String namedQuery</span><span class="s2">, </span><span class="s1">T t</span><span class="s2">, </span><span class="s1">Map</span><span class="s2">&lt;</span><span class="s1">K</span><span class="s2">, </span><span class="s1">V</span><span class="s2">&gt; </span><span class="s1">param</span><span class="s2">);</span>
+	
+	<span class="s3">/**	 </span>
+	 <span class="s3">* Interface method to find a result of entities based on a customQuery from the database</span>
+	 <span class="s3">* 	 </span>
+	 <span class="s3">* </span><span class="s4">@param </span><span class="s3">String</span>
+	 <span class="s3">*          The customQuery          </span>
+	 <span class="s3">* </span><span class="s4">@param </span><span class="s1">&lt;</span><span class="s3">T</span><span class="s1">&gt;</span>
+	 <span class="s3">*          Generic backing bean</span>
+	 <span class="s3">* </span><span class="s4">@param </span><span class="s3">param</span>
+	 <span class="s3">*          Query parameters</span>
+	 <span class="s3">*          For Date params, key must contains the word(ci) 'date'</span>
+	 <span class="s3">*          </span>
+	 <span class="s3">* </span><span class="s4">@return </span>
+	 <span class="s3">* 			List of generic backing beans</span>
+	 <span class="s3">*/	</span>
+	<span class="s0">public </span><span class="s2">&lt;</span><span class="s1">K</span><span class="s2">, </span><span class="s1">V</span><span class="s2">&gt; </span><span class="s1">List</span><span class="s2">&lt;</span><span class="s1">T</span><span class="s2">&gt; </span><span class="s1">findByCustomQuery</span><span class="s2">(</span><span class="s1">String customQuery</span><span class="s2">, </span><span class="s1">T t</span><span class="s2">, </span><span class="s1">Map</span><span class="s2">&lt;</span><span class="s1">K</span><span class="s2">, </span><span class="s1">V</span><span class="s2">&gt; </span><span class="s1">param</span><span class="s2">);	</span>
+<span class="s2">}</span>
+</pre>
+</body>
+</html>

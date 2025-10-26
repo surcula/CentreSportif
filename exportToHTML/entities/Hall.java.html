@@ -1,0 +1,128 @@
+<html>
+<head>
+<title>Hall.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cf8e6d;}
+.s1 { color: #bcbec4;}
+.s2 { color: #bcbec4;}
+.s3 { color: #5f826b; font-style: italic;}
+.s4 { color: #6aab73;}
+.s5 { color: #2aacb8;}
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+Hall.java</font>
+</center></td></tr></table>
+<pre><span class="s0">package </span><span class="s1">entities</span><span class="s2">;</span>
+
+<span class="s0">import </span><span class="s1">javax</span><span class="s2">.</span><span class="s1">persistence</span><span class="s2">.*;</span>
+
+<span class="s3">/**</span>
+ <span class="s3">* Named Query</span>
+ <span class="s3">*/</span>
+<span class="s1">@NamedQueries</span><span class="s2">({</span>
+        <span class="s1">@NamedQuery</span><span class="s2">(</span>
+                <span class="s1">name </span><span class="s2">= </span><span class="s4">&quot;getAllActiveHalls&quot;</span><span class="s2">,</span>
+                <span class="s1">query </span><span class="s2">= </span><span class="s4">&quot;SELECT h FROM Hall h WHERE h.active = true ORDER BY h.id asc&quot;</span>
+        <span class="s2">),</span>
+        <span class="s1">@NamedQuery</span><span class="s2">(</span>
+                <span class="s1">name </span><span class="s2">= </span><span class="s4">&quot;getAllHalls&quot;</span><span class="s2">,</span>
+                <span class="s1">query </span><span class="s2">= </span><span class="s4">&quot;SELECT h FROM Hall h ORDER BY h.id asc&quot;</span>
+        <span class="s2">),</span>
+        <span class="s1">@NamedQuery</span><span class="s2">(</span>
+                <span class="s1">name </span><span class="s2">= </span><span class="s4">&quot;countAllActiveHalls&quot;</span><span class="s2">,</span>
+                <span class="s1">query </span><span class="s2">= </span><span class="s4">&quot;SELECT COUNT(h) FROM Hall h WHERE h.active = true&quot;</span>
+        <span class="s2">),</span>
+        <span class="s1">@NamedQuery</span><span class="s2">(</span>
+                <span class="s1">name </span><span class="s2">= </span><span class="s4">&quot;countAllHalls&quot;</span><span class="s2">,</span>
+                <span class="s1">query </span><span class="s2">= </span><span class="s4">&quot;SELECT COUNT(h) FROM Hall h&quot;</span>
+        <span class="s2">)</span>
+<span class="s2">})</span>
+
+
+<span class="s1">@Entity</span>
+<span class="s1">@Table</span><span class="s2">(</span><span class="s1">name </span><span class="s2">= </span><span class="s4">&quot;halls&quot;</span><span class="s2">)</span>
+<span class="s0">public class </span><span class="s1">Hall </span><span class="s2">{</span>
+    <span class="s1">@Id</span>
+    <span class="s1">@Column</span><span class="s2">(</span><span class="s1">name </span><span class="s2">= </span><span class="s4">&quot;id&quot;</span><span class="s2">, </span><span class="s1">nullable </span><span class="s2">= </span><span class="s0">false</span><span class="s2">)</span>
+    <span class="s0">private int </span><span class="s1">id</span><span class="s2">;</span>
+
+    <span class="s1">@Column</span><span class="s2">(</span><span class="s1">name </span><span class="s2">= </span><span class="s4">&quot;hall_name&quot;</span><span class="s2">, </span><span class="s1">nullable </span><span class="s2">= </span><span class="s0">false</span><span class="s2">)</span>
+    <span class="s0">private </span><span class="s1">String hallName</span><span class="s2">;</span>
+
+    <span class="s1">@Column</span><span class="s2">(</span><span class="s1">name </span><span class="s2">= </span><span class="s4">&quot;width&quot;</span><span class="s2">, </span><span class="s1">nullable </span><span class="s2">= </span><span class="s0">false</span><span class="s2">, </span><span class="s1">precision </span><span class="s2">= </span><span class="s5">5</span><span class="s2">, </span><span class="s1">scale </span><span class="s2">= </span><span class="s5">2</span><span class="s2">)</span>
+    <span class="s0">private double </span><span class="s1">width</span><span class="s2">;</span>
+
+    <span class="s1">@Column</span><span class="s2">(</span><span class="s1">name </span><span class="s2">= </span><span class="s4">&quot;length&quot;</span><span class="s2">, </span><span class="s1">nullable </span><span class="s2">= </span><span class="s0">false</span><span class="s2">, </span><span class="s1">precision </span><span class="s2">= </span><span class="s5">5</span><span class="s2">, </span><span class="s1">scale </span><span class="s2">= </span><span class="s5">2</span><span class="s2">)</span>
+    <span class="s0">private double </span><span class="s1">length</span><span class="s2">;</span>
+
+    <span class="s1">@Column</span><span class="s2">(</span><span class="s1">name </span><span class="s2">= </span><span class="s4">&quot;height&quot;</span><span class="s2">, </span><span class="s1">nullable </span><span class="s2">= </span><span class="s0">false</span><span class="s2">, </span><span class="s1">precision </span><span class="s2">= </span><span class="s5">5</span><span class="s2">, </span><span class="s1">scale </span><span class="s2">= </span><span class="s5">2</span><span class="s2">)</span>
+    <span class="s0">private double </span><span class="s1">height</span><span class="s2">;</span>
+
+    <span class="s1">@Column</span><span class="s2">(</span><span class="s1">name </span><span class="s2">= </span><span class="s4">&quot;is_active&quot;</span><span class="s2">, </span><span class="s1">nullable </span><span class="s2">= </span><span class="s0">false</span><span class="s2">)</span>
+    <span class="s0">private boolean </span><span class="s1">active </span><span class="s2">= </span><span class="s0">true</span><span class="s2">;</span>
+
+    <span class="s0">public int </span><span class="s1">getId</span><span class="s2">() {</span>
+        <span class="s0">return </span><span class="s1">id</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s0">public void </span><span class="s1">setId</span><span class="s2">(</span><span class="s0">int </span><span class="s1">id</span><span class="s2">) {</span>
+        <span class="s0">this</span><span class="s2">.</span><span class="s1">id </span><span class="s2">= </span><span class="s1">id</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s0">public </span><span class="s1">String getHallName</span><span class="s2">() {</span>
+        <span class="s0">return </span><span class="s1">hallName</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s0">public void </span><span class="s1">setHallName</span><span class="s2">(</span><span class="s1">String hallName</span><span class="s2">) {</span>
+        <span class="s0">this</span><span class="s2">.</span><span class="s1">hallName </span><span class="s2">= </span><span class="s1">hallName</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s0">public double </span><span class="s1">getWidth</span><span class="s2">() {</span>
+        <span class="s0">return </span><span class="s1">width</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s0">public void </span><span class="s1">setWidth</span><span class="s2">(</span><span class="s0">double </span><span class="s1">width</span><span class="s2">) {</span>
+        <span class="s0">this</span><span class="s2">.</span><span class="s1">width </span><span class="s2">= </span><span class="s1">width</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s0">public double </span><span class="s1">getLength</span><span class="s2">() {</span>
+        <span class="s0">return </span><span class="s1">length</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s0">public void </span><span class="s1">setLength</span><span class="s2">(</span><span class="s0">double </span><span class="s1">length</span><span class="s2">) {</span>
+        <span class="s0">this</span><span class="s2">.</span><span class="s1">length </span><span class="s2">= </span><span class="s1">length</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s0">public double </span><span class="s1">getHeight</span><span class="s2">() {</span>
+        <span class="s0">return </span><span class="s1">height</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s0">public void </span><span class="s1">setHeight</span><span class="s2">(</span><span class="s0">double </span><span class="s1">height</span><span class="s2">) {</span>
+        <span class="s0">this</span><span class="s2">.</span><span class="s1">height </span><span class="s2">= </span><span class="s1">height</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s0">public boolean </span><span class="s1">isActive</span><span class="s2">() {</span>
+        <span class="s0">return </span><span class="s1">active</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s0">public void </span><span class="s1">setActive</span><span class="s2">(</span><span class="s0">boolean </span><span class="s1">active</span><span class="s2">) {</span>
+        <span class="s0">this</span><span class="s2">.</span><span class="s1">active </span><span class="s2">= </span><span class="s1">active</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s0">public </span><span class="s1">Hall</span><span class="s2">(</span><span class="s1">String hallName</span><span class="s2">, </span><span class="s0">boolean </span><span class="s1">active</span><span class="s2">, </span><span class="s1">Double width</span><span class="s2">, </span><span class="s1">Double length</span><span class="s2">, </span><span class="s1">Double height</span><span class="s2">) {</span>
+        <span class="s0">this</span><span class="s2">.</span><span class="s1">hallName </span><span class="s2">= </span><span class="s1">hallName</span><span class="s2">;</span>
+        <span class="s0">this</span><span class="s2">.</span><span class="s1">active </span><span class="s2">= </span><span class="s1">active</span><span class="s2">;</span>
+        <span class="s0">this</span><span class="s2">.</span><span class="s1">width </span><span class="s2">= </span><span class="s1">width</span><span class="s2">;</span>
+        <span class="s0">this</span><span class="s2">.</span><span class="s1">length </span><span class="s2">= </span><span class="s1">length</span><span class="s2">;</span>
+        <span class="s0">this</span><span class="s2">.</span><span class="s1">height </span><span class="s2">= </span><span class="s1">height</span><span class="s2">;</span>
+    <span class="s2">}</span>
+    <span class="s0">public </span><span class="s1">Hall</span><span class="s2">() {}</span>
+
+<span class="s2">}</span></pre>
+</body>
+</html>

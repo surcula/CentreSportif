@@ -1,0 +1,77 @@
+<html>
+<head>
+<title>Js.js</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #7a7e85;}
+.s1 { color: #bcbec4;}
+.s2 { color: #bcbec4;}
+.s3 { color: #6aab73;}
+.s4 { color: #cf8e6d;}
+.s5 { color: #2aacb8;}
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+Js.js</font>
+</center></td></tr></table>
+<pre><span class="s0">/*! 
+* Start Bootstrap - Freelancer v7.0.7 (https://startbootstrap.com/theme/freelancer) 
+* Copyright 2013-2023 Start Bootstrap 
+* Licensed under MIT (https://github.com/StartBootstrap/startbootstrap-freelancer/blob/master/LICENSE) 
+*/</span>
+<span class="s0">//</span>
+<span class="s0">// Scripts</span>
+<span class="s0">//</span>
+
+
+
+<span class="s1">window</span><span class="s2">.</span><span class="s1">addEventListener</span><span class="s2">(</span><span class="s3">'DOMContentLoaded'</span><span class="s2">, </span><span class="s1">event </span><span class="s2">=&gt; {</span>
+
+    <span class="s0">// Navbar shrink function</span>
+    <span class="s4">var </span><span class="s1">navbarShrink </span><span class="s2">= </span><span class="s4">function </span><span class="s2">() {</span>
+        <span class="s4">const </span><span class="s1">navbarCollapsible </span><span class="s2">= </span><span class="s1">document</span><span class="s2">.</span><span class="s1">body</span><span class="s2">.</span><span class="s1">querySelector</span><span class="s2">(</span><span class="s3">'#mainNav'</span><span class="s2">);</span>
+        <span class="s4">if </span><span class="s2">(!</span><span class="s1">navbarCollapsible</span><span class="s2">) {</span>
+            <span class="s4">return</span><span class="s2">;</span>
+        <span class="s2">}</span>
+        <span class="s4">if </span><span class="s2">(</span><span class="s1">window</span><span class="s2">.</span><span class="s1">scrollY </span><span class="s2">=== </span><span class="s5">0</span><span class="s2">) {</span>
+            <span class="s1">navbarCollapsible</span><span class="s2">.</span><span class="s1">classList</span><span class="s2">.</span><span class="s1">remove</span><span class="s2">(</span><span class="s3">'navbar-shrink'</span><span class="s2">)</span>
+        <span class="s2">} </span><span class="s4">else </span><span class="s2">{</span>
+            <span class="s1">navbarCollapsible</span><span class="s2">.</span><span class="s1">classList</span><span class="s2">.</span><span class="s1">add</span><span class="s2">(</span><span class="s3">'navbar-shrink'</span><span class="s2">)</span>
+        <span class="s2">}</span>
+
+    <span class="s2">};</span>
+
+    <span class="s0">// Shrink the navbar</span>
+    <span class="s1">navbarShrink</span><span class="s2">();</span>
+
+    <span class="s0">// Shrink the navbar when page is scrolled</span>
+    <span class="s1">document</span><span class="s2">.</span><span class="s1">addEventListener</span><span class="s2">(</span><span class="s3">'scroll'</span><span class="s2">, </span><span class="s1">navbarShrink</span><span class="s2">);</span>
+
+    <span class="s0">// Activate Bootstrap scrollspy on the main nav element</span>
+    <span class="s4">const </span><span class="s1">mainNav </span><span class="s2">= </span><span class="s1">document</span><span class="s2">.</span><span class="s1">body</span><span class="s2">.</span><span class="s1">querySelector</span><span class="s2">(</span><span class="s3">'#mainNav'</span><span class="s2">);</span>
+    <span class="s4">if </span><span class="s2">(</span><span class="s1">mainNav</span><span class="s2">) {</span>
+        <span class="s4">new </span><span class="s1">bootstrap</span><span class="s2">.</span><span class="s1">ScrollSpy</span><span class="s2">(</span><span class="s1">document</span><span class="s2">.</span><span class="s1">body</span><span class="s2">, {</span>
+            <span class="s1">target</span><span class="s2">: </span><span class="s3">'#mainNav'</span><span class="s2">,</span>
+            <span class="s1">rootMargin</span><span class="s2">: </span><span class="s3">'0px 0px -40%'</span><span class="s2">,</span>
+        <span class="s2">});</span>
+    <span class="s2">};</span>
+
+    <span class="s0">// Collapse responsive navbar when toggler is visible</span>
+    <span class="s4">const </span><span class="s1">navbarToggler </span><span class="s2">= </span><span class="s1">document</span><span class="s2">.</span><span class="s1">body</span><span class="s2">.</span><span class="s1">querySelector</span><span class="s2">(</span><span class="s3">'.navbar-toggler'</span><span class="s2">);</span>
+    <span class="s4">const </span><span class="s1">responsiveNavItems </span><span class="s2">= [].</span><span class="s1">slice</span><span class="s2">.</span><span class="s1">call</span><span class="s2">(</span>
+        <span class="s1">document</span><span class="s2">.</span><span class="s1">querySelectorAll</span><span class="s2">(</span><span class="s3">'#navbarResponsive .nav-link'</span><span class="s2">)</span>
+    <span class="s2">);</span>
+    <span class="s1">responsiveNavItems</span><span class="s2">.</span><span class="s1">map</span><span class="s2">(</span><span class="s4">function </span><span class="s2">(</span><span class="s1">responsiveNavItem</span><span class="s2">) {</span>
+        <span class="s1">responsiveNavItem</span><span class="s2">.</span><span class="s1">addEventListener</span><span class="s2">(</span><span class="s3">'click'</span><span class="s2">, () =&gt; {</span>
+            <span class="s4">if </span><span class="s2">(</span><span class="s1">window</span><span class="s2">.</span><span class="s1">getComputedStyle</span><span class="s2">(</span><span class="s1">navbarToggler</span><span class="s2">).</span><span class="s1">display </span><span class="s2">!== </span><span class="s3">'none'</span><span class="s2">) {</span>
+                <span class="s1">navbarToggler</span><span class="s2">.</span><span class="s1">click</span><span class="s2">();</span>
+            <span class="s2">}</span>
+        <span class="s2">});</span>
+    <span class="s2">});</span>
+
+<span class="s2">});</span></pre>
+</body>
+</html>

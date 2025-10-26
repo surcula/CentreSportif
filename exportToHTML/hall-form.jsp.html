@@ -1,0 +1,155 @@
+<html>
+<head>
+<title>hall-form.jsp</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #7a7e85;}
+.s1 { color: #bcbec4;}
+.s2 { color: #bcbec4;}
+.s3 { color: #cf8e6d; font-weight: bold;}
+.s4 { color: #bcbec4;}
+.s5 { color: #6aab73;}
+.s6 { color: #cf8e6d;}
+.s7 { color: #d5b778;}
+.s8 { color: #bababa;}
+.s9 { color: #6aab73;}
+.s10 { color: #7a7e85;}
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+hall-form.jsp</font>
+</center></td></tr></table>
+<pre><span class="s0">&lt;%-- 
+  Created by IntelliJ IDEA. 
+  User: david 
+  Date: 6/23/2025 
+  Time: 6:12 PM 
+  To change this template use File | Settings | File Templates. 
+--%&gt;</span>
+<span class="s2">&lt;%@ </span><span class="s3">taglib </span><span class="s4">prefix</span><span class="s2">=&quot;</span><span class="s5">c</span><span class="s2">&quot; </span><span class="s4">uri</span><span class="s2">=&quot;</span><span class="s5">http://java.sun.com/jsp/jstl/core</span><span class="s2">&quot; %&gt;</span>
+<span class="s2">&lt;%@ </span><span class="s3">taglib </span><span class="s4">prefix</span><span class="s2">=&quot;</span><span class="s5">fmt</span><span class="s2">&quot; </span><span class="s4">uri</span><span class="s2">=&quot;</span><span class="s5">http://java.sun.com/jsp/jstl/fmt</span><span class="s2">&quot; %&gt;</span>
+<span class="s2">&lt;%@ </span><span class="s3">page </span><span class="s4">contentType</span><span class="s2">=&quot;</span><span class="s5">text/html;charset=UTF-8</span><span class="s2">&quot; </span><span class="s4">language</span><span class="s2">=&quot;</span><span class="s5">java</span><span class="s2">&quot; %&gt;</span>
+
+<span class="s2">&lt;</span><span class="s3">c:set </span><span class="s4">var</span><span class="s5">=&quot;formHallId&quot; </span><span class="s4">value</span><span class="s5">=&quot;</span><span class="s6">${not empty </span><span class="s4">param.hallId </span><span class="s2">? </span><span class="s4">param.hallId </span><span class="s2">: </span><span class="s4">hall.id</span><span class="s6">}</span><span class="s5">&quot; </span><span class="s2">/&gt;</span>
+<span class="s2">&lt;</span><span class="s3">c:set </span><span class="s4">var</span><span class="s5">=&quot;formHallName&quot; </span><span class="s4">value</span><span class="s5">=&quot;</span><span class="s6">${not empty </span><span class="s4">param.hallName </span><span class="s2">? </span><span class="s4">param.hallName </span><span class="s2">: </span><span class="s4">hall.hallName</span><span class="s6">}</span><span class="s5">&quot; </span><span class="s2">/&gt;</span>
+<span class="s2">&lt;</span><span class="s3">c:set </span><span class="s4">var</span><span class="s5">=&quot;formLengthRaw&quot; </span><span class="s4">value</span><span class="s5">=&quot;</span><span class="s6">${not empty </span><span class="s4">param.length </span><span class="s2">? </span><span class="s4">param.length </span><span class="s2">: </span><span class="s4">hall.length</span><span class="s6">}</span><span class="s5">&quot; </span><span class="s2">/&gt;</span>
+<span class="s2">&lt;</span><span class="s3">c:set </span><span class="s4">var</span><span class="s5">=&quot;formWidthRaw&quot; </span><span class="s4">value</span><span class="s5">=&quot;</span><span class="s6">${not empty </span><span class="s4">param.width </span><span class="s2">? </span><span class="s4">param.width </span><span class="s2">: </span><span class="s4">hall.width</span><span class="s6">}</span><span class="s5">&quot; </span><span class="s2">/&gt;</span>
+<span class="s2">&lt;</span><span class="s3">c:set </span><span class="s4">var</span><span class="s5">=&quot;formHeightRaw&quot; </span><span class="s4">value</span><span class="s5">=&quot;</span><span class="s6">${not empty </span><span class="s4">param.height </span><span class="s2">? </span><span class="s4">param.height </span><span class="s2">: </span><span class="s4">hall.height</span><span class="s6">}</span><span class="s5">&quot; </span><span class="s2">/&gt;</span>
+<span class="s2">&lt;</span><span class="s3">c:set </span><span class="s4">var</span><span class="s5">=&quot;formActive&quot; </span><span class="s4">value</span><span class="s5">=&quot;</span><span class="s6">${not empty </span><span class="s4">param.active </span><span class="s2">? </span><span class="s4">param.active </span><span class="s2">: </span><span class="s4">(hall.active </span><span class="s2">? </span><span class="s5">'1' </span><span class="s2">: </span><span class="s5">'0'</span><span class="s4">)</span><span class="s6">}</span><span class="s5">&quot; </span><span class="s2">/&gt;</span>
+
+<span class="s2">&lt;</span><span class="s3">fmt:formatNumber </span><span class="s4">var</span><span class="s5">=&quot;formLength&quot; </span><span class="s4">value</span><span class="s5">=&quot;</span><span class="s6">${</span><span class="s4">formLengthRaw</span><span class="s6">}</span><span class="s5">&quot; </span><span class="s4">type</span><span class="s5">=&quot;number&quot; </span><span class="s4">minFractionDigits</span><span class="s5">=&quot;2&quot; </span><span class="s4">maxFractionDigits</span><span class="s5">=&quot;2&quot;</span><span class="s2">/&gt;</span>
+<span class="s2">&lt;</span><span class="s3">fmt:formatNumber </span><span class="s4">var</span><span class="s5">=&quot;formWidth&quot; </span><span class="s4">value</span><span class="s5">=&quot;</span><span class="s6">${</span><span class="s4">formWidthRaw</span><span class="s6">}</span><span class="s5">&quot; </span><span class="s4">type</span><span class="s5">=&quot;number&quot; </span><span class="s4">minFractionDigits</span><span class="s5">=&quot;2&quot; </span><span class="s4">maxFractionDigits</span><span class="s5">=&quot;2&quot;</span><span class="s2">/&gt;</span>
+<span class="s2">&lt;</span><span class="s3">fmt:formatNumber </span><span class="s4">var</span><span class="s5">=&quot;formHeight&quot; </span><span class="s4">value</span><span class="s5">=&quot;</span><span class="s6">${</span><span class="s4">formHeightRaw</span><span class="s6">}</span><span class="s5">&quot; </span><span class="s4">type</span><span class="s5">=&quot;number&quot; </span><span class="s4">minFractionDigits</span><span class="s5">=&quot;2&quot; </span><span class="s4">maxFractionDigits</span><span class="s5">=&quot;2&quot;</span><span class="s2">/&gt;</span>
+
+
+<span class="s2">&lt;</span><span class="s3">c:choose</span><span class="s2">&gt;</span>
+    <span class="s2">&lt;</span><span class="s3">c:when </span><span class="s4">test</span><span class="s5">=&quot;</span><span class="s6">${</span><span class="s4">sessionScope.role </span><span class="s2">== </span><span class="s5">'ADMIN'</span>
+             <span class="s6">or </span><span class="s4">sessionScope.role </span><span class="s2">== </span><span class="s5">'BARMAN'</span>
+             <span class="s6">or </span><span class="s4">sessionScope.role </span><span class="s2">== </span><span class="s5">'SECRETARY'</span><span class="s6">}</span><span class="s5">&quot;</span><span class="s2">&gt;</span>
+        <span class="s7">&lt;section </span><span class="s8">class</span><span class="s9">=&quot;page-section&quot;</span><span class="s7">&gt;</span>
+            <span class="s7">&lt;h2 </span><span class="s8">class</span><span class="s9">=&quot;text-center&quot;</span><span class="s7">&gt;</span>
+                <span class="s2">&lt;</span><span class="s3">c:choose</span><span class="s2">&gt;</span>
+                    <span class="s2">&lt;</span><span class="s3">c:when </span><span class="s4">test</span><span class="s5">=&quot;</span><span class="s6">${not empty </span><span class="s4">formHallId</span><span class="s6">}</span><span class="s5">&quot;</span><span class="s2">&gt;</span><span class="s1">Modifier un hall</span><span class="s2">&lt;/</span><span class="s3">c:when</span><span class="s2">&gt;</span>
+                    <span class="s2">&lt;</span><span class="s3">c:otherwise</span><span class="s2">&gt;</span><span class="s1">Ajouter un hall</span><span class="s2">&lt;/</span><span class="s3">c:otherwise</span><span class="s2">&gt;</span>
+                <span class="s2">&lt;/</span><span class="s3">c:choose</span><span class="s2">&gt;</span>
+            <span class="s7">&lt;/h2&gt;</span>
+            <span class="s10">&lt;!-- RETOUR --&gt;</span>
+            <span class="s7">&lt;div </span><span class="s8">class</span><span class="s9">=&quot;text-start mb-3&quot;</span><span class="s7">&gt;</span>
+                <span class="s7">&lt;a </span><span class="s8">href</span><span class="s9">=&quot;</span><span class="s6">${</span><span class="s4">pageContext.request.contextPath</span><span class="s6">}</span><span class="s9">/hall&quot; </span><span class="s8">class</span><span class="s9">=&quot;btn btn-outline-secondary&quot;</span><span class="s7">&gt;</span>
+                    <span class="s7">&lt;i </span><span class="s8">class</span><span class="s9">=&quot;bi bi-arrow-left&quot;</span><span class="s7">&gt;&lt;/i&gt; </span><span class="s1">Retour vers les halls</span>
+                <span class="s7">&lt;/a&gt;</span>
+            <span class="s7">&lt;/div&gt;</span>
+
+            <span class="s7">&lt;div </span><span class="s8">class</span><span class="s9">=&quot;container&quot;</span><span class="s7">&gt;</span>
+                <span class="s7">&lt;div </span><span class="s8">class</span><span class="s9">=&quot;row justify-content-center&quot;</span><span class="s7">&gt;</span>
+                    <span class="s7">&lt;div </span><span class="s8">class</span><span class="s9">=&quot;col-md-6&quot;</span><span class="s7">&gt; </span><span class="s0">&lt;%-- Centré et largeur moyenne --%&gt;</span>
+                        <span class="s7">&lt;form </span><span class="s8">method</span><span class="s9">=&quot;post&quot; </span><span class="s8">action</span><span class="s9">=&quot;</span><span class="s6">${</span><span class="s4">pageContext.request.contextPath</span><span class="s6">}</span><span class="s9">/hall&quot; </span><span class="s8">value</span><span class="s9">=&quot;</span><span class="s6">${not empty </span><span class="s4">formHallId </span><span class="s2">? </span><span class="s5">'edit' </span><span class="s2">: </span><span class="s5">'create'</span><span class="s6">}</span><span class="s9">&quot;</span><span class="s7">&gt;</span>
+
+                            <span class="s10">&lt;!-- ID --&gt;</span>
+                            <span class="s2">&lt;</span><span class="s3">c:if </span><span class="s4">test</span><span class="s5">=&quot;</span><span class="s6">${not empty </span><span class="s4">formHallId</span><span class="s6">}</span><span class="s5">&quot;</span><span class="s2">&gt;</span>
+                                <span class="s10">&lt;!-- Champ caché pour envoyer l'ID --&gt;</span>
+                                <span class="s7">&lt;input </span><span class="s8">type</span><span class="s9">=&quot;hidden&quot; </span><span class="s8">name</span><span class="s9">=&quot;hallId&quot; </span><span class="s8">value</span><span class="s9">=&quot;</span><span class="s6">${</span><span class="s4">formHallId</span><span class="s6">}</span><span class="s9">&quot; </span><span class="s7">/&gt;</span>
+
+                                <span class="s10">&lt;!-- Champ visible mais non modifiable --&gt;</span>
+                                <span class="s7">&lt;div </span><span class="s8">class</span><span class="s9">=&quot;form-floating mb-3&quot;</span><span class="s7">&gt;</span>
+                                    <span class="s7">&lt;input </span><span class="s8">class</span><span class="s9">=&quot;form-control&quot; </span><span class="s8">type</span><span class="s9">=&quot;text&quot; </span><span class="s8">id</span><span class="s9">=&quot;hallIdDisplay&quot;</span>
+                                           <span class="s8">placeholder</span><span class="s9">=&quot;ID&quot; </span><span class="s8">value</span><span class="s9">=&quot;</span><span class="s6">${</span><span class="s4">formHallId</span><span class="s6">}</span><span class="s9">&quot; </span><span class="s8">disabled </span><span class="s7">/&gt;</span>
+                                    <span class="s7">&lt;label </span><span class="s8">for</span><span class="s9">=&quot;hallIdDisplay&quot;</span><span class="s7">&gt;</span><span class="s1">Id du hall</span><span class="s7">&lt;/label&gt;</span>
+                                <span class="s7">&lt;/div&gt;</span>
+                            <span class="s2">&lt;/</span><span class="s3">c:if</span><span class="s2">&gt;</span>
+
+
+                            <span class="s10">&lt;!-- Hall Name --&gt;</span>
+                            <span class="s7">&lt;div </span><span class="s8">class</span><span class="s9">=&quot;form-floating mb-3&quot;</span><span class="s7">&gt;</span>
+                                <span class="s7">&lt;input </span><span class="s8">class</span><span class="s9">=&quot;form-control&quot; </span><span class="s8">type</span><span class="s9">=&quot;text&quot; </span><span class="s8">name</span><span class="s9">=&quot;hallName&quot; </span><span class="s8">id</span><span class="s9">=&quot;hallName&quot;</span>
+                                       <span class="s8">placeholder</span><span class="s9">=&quot;Nom du hall&quot; </span><span class="s8">required</span>
+                                       <span class="s8">value</span><span class="s9">=&quot;</span><span class="s6">${</span><span class="s4">formHallName</span><span class="s6">}</span><span class="s9">&quot;</span><span class="s7">/&gt;</span>
+                                <span class="s7">&lt;label </span><span class="s8">for</span><span class="s9">=&quot;hallName&quot;</span><span class="s7">&gt;</span><span class="s1">Nom du hall</span><span class="s7">&lt;/label&gt;</span>
+                            <span class="s7">&lt;/div&gt;</span>
+                            <span class="s2">&lt;</span><span class="s3">c:if </span><span class="s4">test</span><span class="s5">=&quot;</span><span class="s6">${not empty </span><span class="s4">errorHallName</span><span class="s6">}</span><span class="s5">&quot;</span><span class="s2">&gt;</span>
+                                <span class="s7">&lt;div </span><span class="s8">class</span><span class="s9">=&quot;text-danger mb-3&quot;</span><span class="s7">&gt;</span><span class="s6">${</span><span class="s4">errorHallName</span><span class="s6">}</span><span class="s7">&lt;/div&gt;</span>
+                            <span class="s2">&lt;/</span><span class="s3">c:if</span><span class="s2">&gt;</span>
+
+                            <span class="s10">&lt;!-- Length --&gt;</span>
+                            <span class="s7">&lt;div </span><span class="s8">class</span><span class="s9">=&quot;form-floating mb-3&quot;</span><span class="s7">&gt;</span>
+                                <span class="s7">&lt;input </span><span class="s8">class</span><span class="s9">=&quot;form-control&quot; </span><span class="s8">type</span><span class="s9">=&quot;number&quot; </span><span class="s8">step</span><span class="s9">=&quot;0.01&quot; </span><span class="s8">min</span><span class="s9">=&quot;0.01&quot; </span><span class="s8">name</span><span class="s9">=&quot;length&quot; </span><span class="s8">id</span><span class="s9">=&quot;length&quot;</span>
+                                       <span class="s8">placeholder</span><span class="s9">=&quot;Longueur&quot; </span><span class="s8">required</span>
+                                       <span class="s8">value</span><span class="s9">=&quot;</span><span class="s6">${</span><span class="s4">formLength</span><span class="s6">}</span><span class="s9">&quot;</span><span class="s7">/&gt;</span>
+                                <span class="s7">&lt;label </span><span class="s8">for</span><span class="s9">=&quot;length&quot;</span><span class="s7">&gt;</span><span class="s1">Longueur (m)</span><span class="s7">&lt;/label&gt;</span>
+                            <span class="s7">&lt;/div&gt;</span>
+                            <span class="s2">&lt;</span><span class="s3">c:if </span><span class="s4">test</span><span class="s5">=&quot;</span><span class="s6">${not empty </span><span class="s4">errorLength</span><span class="s6">}</span><span class="s5">&quot;</span><span class="s2">&gt;</span>
+                                <span class="s7">&lt;div </span><span class="s8">class</span><span class="s9">=&quot;text-danger mb-3&quot;</span><span class="s7">&gt;</span><span class="s6">${</span><span class="s4">errorLength</span><span class="s6">}</span><span class="s7">&lt;/div&gt;</span>
+                            <span class="s2">&lt;/</span><span class="s3">c:if</span><span class="s2">&gt;</span>
+
+                            <span class="s10">&lt;!-- Width --&gt;</span>
+                            <span class="s7">&lt;div </span><span class="s8">class</span><span class="s9">=&quot;form-floating mb-3&quot;</span><span class="s7">&gt;</span>
+                                <span class="s7">&lt;input </span><span class="s8">class</span><span class="s9">=&quot;form-control&quot; </span><span class="s8">type</span><span class="s9">=&quot;number&quot; </span><span class="s8">step</span><span class="s9">=&quot;0.01&quot; </span><span class="s8">min</span><span class="s9">=&quot;0.01&quot; </span><span class="s8">name</span><span class="s9">=&quot;width&quot; </span><span class="s8">id</span><span class="s9">=&quot;width&quot;</span>
+                                       <span class="s8">placeholder</span><span class="s9">=&quot;Largeur&quot; </span><span class="s8">required</span>
+                                       <span class="s8">value</span><span class="s9">=&quot;</span><span class="s6">${</span><span class="s4">formWidth</span><span class="s6">}</span><span class="s9">&quot;</span><span class="s7">/&gt;</span>
+                                <span class="s7">&lt;label </span><span class="s8">for</span><span class="s9">=&quot;width&quot;</span><span class="s7">&gt;</span><span class="s1">Largeur (m)</span><span class="s7">&lt;/label&gt;</span>
+                            <span class="s7">&lt;/div&gt;</span>
+                            <span class="s2">&lt;</span><span class="s3">c:if </span><span class="s4">test</span><span class="s5">=&quot;</span><span class="s6">${not empty </span><span class="s4">errorWidth</span><span class="s6">}</span><span class="s5">&quot;</span><span class="s2">&gt;</span>
+                                <span class="s7">&lt;div </span><span class="s8">class</span><span class="s9">=&quot;text-danger mb-3&quot;</span><span class="s7">&gt;</span><span class="s6">${</span><span class="s4">errorWidth</span><span class="s6">}</span><span class="s7">&lt;/div&gt;</span>
+                            <span class="s2">&lt;/</span><span class="s3">c:if</span><span class="s2">&gt;</span>
+
+                            <span class="s10">&lt;!-- Height --&gt;</span>
+                            <span class="s7">&lt;div </span><span class="s8">class</span><span class="s9">=&quot;form-floating mb-3&quot;</span><span class="s7">&gt;</span>
+                                <span class="s7">&lt;input </span><span class="s8">class</span><span class="s9">=&quot;form-control&quot; </span><span class="s8">type</span><span class="s9">=&quot;number&quot; </span><span class="s8">step</span><span class="s9">=&quot;0.01&quot; </span><span class="s8">min</span><span class="s9">=&quot;0.01&quot; </span><span class="s8">name</span><span class="s9">=&quot;height&quot; </span><span class="s8">id</span><span class="s9">=&quot;height&quot;</span>
+                                       <span class="s8">placeholder</span><span class="s9">=&quot;Hauteur&quot; </span><span class="s8">required</span>
+                                       <span class="s8">value</span><span class="s9">=&quot;</span><span class="s6">${</span><span class="s4">formHeight</span><span class="s6">}</span><span class="s9">&quot;</span><span class="s7">/&gt;</span>
+                                <span class="s7">&lt;label </span><span class="s8">for</span><span class="s9">=&quot;height&quot;</span><span class="s7">&gt;</span><span class="s1">Hauteur (m)</span><span class="s7">&lt;/label&gt;</span>
+                            <span class="s7">&lt;/div&gt;</span>
+                            <span class="s2">&lt;</span><span class="s3">c:if </span><span class="s4">test</span><span class="s5">=&quot;</span><span class="s6">${not empty </span><span class="s4">errorHeight</span><span class="s6">}</span><span class="s5">&quot;</span><span class="s2">&gt;</span>
+                                <span class="s7">&lt;div </span><span class="s8">class</span><span class="s9">=&quot;text-danger mb-3&quot;</span><span class="s7">&gt;</span><span class="s6">${</span><span class="s4">errorHeight</span><span class="s6">}</span><span class="s7">&lt;/div&gt;</span>
+                            <span class="s2">&lt;/</span><span class="s3">c:if</span><span class="s2">&gt;</span>
+                            <span class="s10">&lt;!-- Active --&gt;</span>
+                            <span class="s7">&lt;div </span><span class="s8">class</span><span class="s9">=&quot;form-floating mb-3&quot;</span><span class="s7">&gt;</span>
+                                <span class="s7">&lt;select </span><span class="s8">class</span><span class="s9">=&quot;form-select&quot; </span><span class="s8">id</span><span class="s9">=&quot;active&quot; </span><span class="s8">name</span><span class="s9">=&quot;active&quot; </span><span class="s8">required</span><span class="s7">&gt;</span>
+                                    <span class="s7">&lt;option </span><span class="s8">value</span><span class="s9">=&quot;1&quot; </span><span class="s6">${</span><span class="s4">formActive </span><span class="s2">== </span><span class="s5">'1' </span><span class="s2">? </span><span class="s5">'selected' </span><span class="s2">: </span><span class="s5">''</span><span class="s6">}</span><span class="s7">&gt;</span><span class="s1">Actif</span><span class="s7">&lt;/option&gt;</span>
+                                    <span class="s7">&lt;option </span><span class="s8">value</span><span class="s9">=&quot;0&quot; </span><span class="s6">${</span><span class="s4">formActive </span><span class="s2">== </span><span class="s5">'0' </span><span class="s2">? </span><span class="s5">'selected' </span><span class="s2">: </span><span class="s5">''</span><span class="s6">}</span><span class="s7">&gt;</span><span class="s1">Non actif</span><span class="s7">&lt;/option&gt;</span>
+                                <span class="s7">&lt;/select&gt;</span>
+                                <span class="s7">&lt;label </span><span class="s8">for</span><span class="s9">=&quot;active&quot;</span><span class="s7">&gt;</span><span class="s1">Statut du hall</span><span class="s7">&lt;/label&gt;</span>
+                            <span class="s7">&lt;/div&gt;</span>
+                            <span class="s2">&lt;</span><span class="s3">c:if </span><span class="s4">test</span><span class="s5">=&quot;</span><span class="s6">${not empty </span><span class="s4">errorActive</span><span class="s6">}</span><span class="s5">&quot;</span><span class="s2">&gt;</span>
+                                <span class="s7">&lt;div </span><span class="s8">class</span><span class="s9">=&quot;text-danger mb-3&quot;</span><span class="s7">&gt;</span><span class="s6">${</span><span class="s4">errorActive</span><span class="s6">}</span><span class="s7">&lt;/div&gt;</span>
+                            <span class="s2">&lt;/</span><span class="s3">c:if</span><span class="s2">&gt;</span>
+                            <span class="s7">&lt;div </span><span class="s8">class</span><span class="s9">=&quot;text-center&quot;</span><span class="s7">&gt;</span>
+                                <span class="s7">&lt;button </span><span class="s8">class</span><span class="s9">=&quot;btn btn-success&quot; </span><span class="s8">type</span><span class="s9">=&quot;submit&quot;</span><span class="s7">&gt;</span>
+                                    <span class="s2">&lt;</span><span class="s3">c:choose</span><span class="s2">&gt;</span>
+                                        <span class="s2">&lt;</span><span class="s3">c:when </span><span class="s4">test</span><span class="s5">=&quot;</span><span class="s6">${not empty </span><span class="s4">hallId</span><span class="s6">}</span><span class="s5">&quot;</span><span class="s2">&gt;</span><span class="s1">Modifier</span><span class="s2">&lt;/</span><span class="s3">c:when</span><span class="s2">&gt;</span>
+                                        <span class="s2">&lt;</span><span class="s3">c:otherwise</span><span class="s2">&gt;</span><span class="s1">Ajouter</span><span class="s2">&lt;/</span><span class="s3">c:otherwise</span><span class="s2">&gt;</span>
+                                    <span class="s2">&lt;/</span><span class="s3">c:choose</span><span class="s2">&gt;</span>
+                                <span class="s7">&lt;/button&gt;</span>
+                            <span class="s7">&lt;/div&gt;</span>
+                        <span class="s7">&lt;/form&gt;</span>
+                    <span class="s7">&lt;/div&gt;</span>
+                <span class="s7">&lt;/div&gt;</span>
+            <span class="s7">&lt;/div&gt;</span>
+        <span class="s7">&lt;/section&gt;</span>
+    <span class="s2">&lt;/</span><span class="s3">c:when</span><span class="s2">&gt;</span>
+<span class="s2">&lt;/</span><span class="s3">c:choose</span><span class="s2">&gt;</span></pre>
+</body>
+</html>

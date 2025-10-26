@@ -1,0 +1,203 @@
+<html>
+<head>
+<title>sport.jsp</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #7a7e85;}
+.s1 { color: #bcbec4;}
+.s2 { color: #bcbec4;}
+.s3 { color: #cf8e6d; font-weight: bold;}
+.s4 { color: #bcbec4;}
+.s5 { color: #6aab73;}
+.s6 { color: #cf8e6d;}
+.s7 { color: #2aacb8;}
+.s8 { color: #d5b778;}
+.s9 { color: #bababa;}
+.s10 { color: #6aab73;}
+.s11 { color: #7a7e85;}
+.s12 { color: #cf8e6d;}
+.s13 { color: #56a8f5;}
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+sport.jsp</font>
+</center></td></tr></table>
+<pre><span class="s0">&lt;%-- 
+  Created by IntelliJ IDEA. 
+  User: david 
+  Date: 10/2/2025 
+  Time: 3:49 AM 
+  To change this template use File | Settings | File Templates. 
+--%&gt;</span>
+<span class="s2">&lt;%@ </span><span class="s3">page </span><span class="s4">contentType</span><span class="s2">=&quot;</span><span class="s5">text/html;charset=UTF-8</span><span class="s2">&quot; </span><span class="s4">language</span><span class="s2">=&quot;</span><span class="s5">java</span><span class="s2">&quot; %&gt;</span>
+<span class="s2">&lt;%@ </span><span class="s3">taglib </span><span class="s4">prefix</span><span class="s2">=&quot;</span><span class="s5">fmt</span><span class="s2">&quot; </span><span class="s4">uri</span><span class="s2">=&quot;</span><span class="s5">http://java.sun.com/jsp/jstl/fmt</span><span class="s2">&quot; %&gt;</span>
+<span class="s2">&lt;%@ </span><span class="s3">taglib </span><span class="s4">uri</span><span class="s2">=&quot;</span><span class="s5">http://java.sun.com/jsp/jstl/core</span><span class="s2">&quot; </span><span class="s4">prefix</span><span class="s2">=&quot;</span><span class="s5">c</span><span class="s2">&quot; %&gt;</span>
+<span class="s2">&lt;%@ </span><span class="s3">taglib </span><span class="s4">prefix</span><span class="s2">=&quot;</span><span class="s5">fn</span><span class="s2">&quot; </span><span class="s4">uri</span><span class="s2">=&quot;</span><span class="s5">http://java.sun.com/jsp/jstl/functions</span><span class="s2">&quot; %&gt;</span>
+
+<span class="s2">&lt;</span><span class="s3">c:set </span><span class="s4">var</span><span class="s5">=&quot;currentPage&quot; </span><span class="s4">value</span><span class="s5">=&quot;</span><span class="s6">${empty </span><span class="s4">page </span><span class="s2">? </span><span class="s7">1 </span><span class="s2">: </span><span class="s4">page</span><span class="s6">}</span><span class="s5">&quot;</span><span class="s2">/&gt;</span>
+<span class="s2">&lt;</span><span class="s3">c:set </span><span class="s4">var</span><span class="s5">=&quot;pageSize&quot; </span><span class="s4">value</span><span class="s5">=&quot;</span><span class="s6">${empty </span><span class="s4">size </span><span class="s2">? </span><span class="s7">10 </span><span class="s2">: </span><span class="s4">size</span><span class="s6">}</span><span class="s5">&quot;</span><span class="s2">/&gt;</span>
+<span class="s2">&lt;</span><span class="s3">c:set </span><span class="s4">var</span><span class="s5">=&quot;pages&quot; </span><span class="s4">value</span><span class="s5">=&quot;</span><span class="s6">${empty </span><span class="s4">totalPages </span><span class="s2">? </span><span class="s7">1 </span><span class="s2">: </span><span class="s4">totalPages</span><span class="s6">}</span><span class="s5">&quot;</span><span class="s2">/&gt;</span>
+<span class="s2">&lt;</span><span class="s3">c:set </span><span class="s4">var</span><span class="s5">=&quot;total&quot; </span><span class="s4">value</span><span class="s5">=&quot;</span><span class="s6">${empty </span><span class="s4">totalElements </span><span class="s2">? </span><span class="s4">fn</span><span class="s2">:</span><span class="s4">length(sports) </span><span class="s2">: </span><span class="s4">totalElements</span><span class="s6">}</span><span class="s5">&quot;</span><span class="s2">/&gt;</span>
+
+
+<span class="s8">&lt;section </span><span class="s9">class</span><span class="s10">=&quot;page-section&quot;</span><span class="s8">&gt;</span>
+    <span class="s8">&lt;h2 </span><span class="s9">class</span><span class="s10">=&quot;page-section-heading text-center text-uppercase text-secondary mb-0&quot;</span><span class="s8">&gt;</span><span class="s1">Les sports</span><span class="s8">&lt;/h2&gt;</span>
+
+    <span class="s2">&lt;</span><span class="s3">c:if </span><span class="s4">test</span><span class="s5">=&quot;</span><span class="s6">${not empty </span><span class="s4">error</span><span class="s6">}</span><span class="s5">&quot;</span><span class="s2">&gt;</span>
+        <span class="s8">&lt;div </span><span class="s9">class</span><span class="s10">=&quot;alert alert-danger text-center&quot;</span><span class="s8">&gt;</span><span class="s6">${</span><span class="s4">error</span><span class="s6">}</span><span class="s8">&lt;/div&gt;</span>
+        <span class="s8">&lt;div </span><span class="s9">class</span><span class="s10">=&quot;text-center mt-3&quot;</span><span class="s8">&gt;</span>
+            <span class="s8">&lt;a </span><span class="s9">class</span><span class="s10">=&quot;btn btn-success&quot;</span>
+               <span class="s9">href</span><span class="s10">=&quot;</span><span class="s6">${</span><span class="s4">pageContext.request.contextPath</span><span class="s6">}</span><span class="s10">/sport&quot;</span><span class="s8">&gt;</span><span class="s1">Retry</span><span class="s8">&lt;/a&gt;</span>
+        <span class="s8">&lt;/div&gt;</span>
+
+    <span class="s2">&lt;/</span><span class="s3">c:if</span><span class="s2">&gt;</span>
+    <span class="s2">&lt;</span><span class="s3">c:if </span><span class="s4">test</span><span class="s5">=&quot;</span><span class="s6">${empty </span><span class="s4">error</span><span class="s6">}</span><span class="s5">&quot;</span><span class="s2">&gt;</span>
+        <span class="s2">&lt;</span><span class="s3">c:if </span><span class="s4">test</span><span class="s5">=&quot;</span><span class="s6">${</span><span class="s4">sessionScope.role </span><span class="s2">== </span><span class="s5">'ADMIN'</span>
+             <span class="s6">or </span><span class="s4">sessionScope.role </span><span class="s2">== </span><span class="s5">'BARMAN'</span>
+             <span class="s6">or </span><span class="s4">sessionScope.role </span><span class="s2">== </span><span class="s5">'SECRETARY'</span><span class="s6">}</span><span class="s5">&quot;</span><span class="s2">&gt;</span>
+            <span class="s8">&lt;a </span><span class="s9">class</span><span class="s10">=&quot;btn btn-primary my-3&quot; </span><span class="s9">href</span><span class="s10">=&quot;</span><span class="s6">${</span><span class="s4">pageContext.request.contextPath</span><span class="s6">}</span><span class="s10">/sport?form=true&quot;</span><span class="s8">&gt;</span><span class="s1">Ajouter un nouveau</span>
+                <span class="s1">sport</span><span class="s8">&lt;/a&gt;</span>
+        <span class="s2">&lt;/</span><span class="s3">c:if</span><span class="s2">&gt;</span>
+
+        <span class="s11">&lt;!-- Nb résultat + choix affichage --&gt;</span>
+        <span class="s8">&lt;div </span><span class="s9">class</span><span class="s10">=&quot;d-flex justify-content-end align-items-center mb-2&quot;</span><span class="s8">&gt;</span>
+            <span class="s8">&lt;div </span><span class="s9">class</span><span class="s10">=&quot;me-3 text-muted small&quot;</span><span class="s8">&gt;</span>
+                    <span class="s6">${</span><span class="s4">total</span><span class="s6">} </span><span class="s1">résultat</span><span class="s2">&lt;</span><span class="s3">c:if </span><span class="s4">test</span><span class="s5">=&quot;</span><span class="s6">${</span><span class="s4">total </span><span class="s2">&gt; </span><span class="s7">1</span><span class="s6">}</span><span class="s5">&quot;</span><span class="s2">&gt;</span><span class="s1">s</span><span class="s2">&lt;/</span><span class="s3">c:if</span><span class="s2">&gt;</span>
+                <span class="s1">— Page </span><span class="s6">${</span><span class="s4">pages</span><span class="s6">} </span><span class="s1">/ </span><span class="s6">${</span><span class="s4">total</span><span class="s6">}</span>
+            <span class="s8">&lt;/div&gt;</span>
+            <span class="s8">&lt;form </span><span class="s9">method</span><span class="s10">=&quot;get&quot; </span><span class="s9">action</span><span class="s10">=&quot;</span><span class="s6">${</span><span class="s4">pageContext.request.contextPath</span><span class="s6">}</span><span class="s10">/sport&quot; </span><span class="s9">class</span><span class="s10">=&quot;d-flex align-items-center&quot;</span><span class="s8">&gt;</span>
+                <span class="s8">&lt;label </span><span class="s9">for</span><span class="s10">=&quot;size&quot; </span><span class="s9">class</span><span class="s10">=&quot;me-2 small&quot;</span><span class="s8">&gt;</span><span class="s1">Taille page</span><span class="s8">&lt;/label&gt;</span>
+                <span class="s8">&lt;select </span><span class="s9">id</span><span class="s10">=&quot;size&quot; </span><span class="s9">name</span><span class="s10">=&quot;size&quot; </span><span class="s9">class</span><span class="s10">=&quot;form-select form-select-sm&quot;</span>
+                        <span class="s9">onchange</span><span class="s10">=&quot;</span><span class="s12">this</span><span class="s1">.form.submit()</span><span class="s10">&quot;</span><span class="s8">&gt;</span>
+                    <span class="s8">&lt;option </span><span class="s9">value</span><span class="s10">=&quot;5&quot; </span><span class="s6">${</span><span class="s4">pageSize </span><span class="s2">== </span><span class="s7">5 </span><span class="s2">? </span><span class="s5">'selected' </span><span class="s2">: </span><span class="s5">''</span><span class="s6">}</span><span class="s8">&gt;</span><span class="s1">5</span><span class="s8">&lt;/option&gt;</span>
+                    <span class="s8">&lt;option </span><span class="s9">value</span><span class="s10">=&quot;10&quot; </span><span class="s6">${</span><span class="s4">pageSize </span><span class="s2">== </span><span class="s7">10 </span><span class="s2">? </span><span class="s5">'selected' </span><span class="s2">: </span><span class="s5">''</span><span class="s6">}</span><span class="s8">&gt;</span><span class="s1">10</span><span class="s8">&lt;/option&gt;</span>
+                    <span class="s8">&lt;option </span><span class="s9">value</span><span class="s10">=&quot;20&quot; </span><span class="s6">${</span><span class="s4">pageSize </span><span class="s2">== </span><span class="s7">20 </span><span class="s2">? </span><span class="s5">'selected' </span><span class="s2">: </span><span class="s5">''</span><span class="s6">}</span><span class="s8">&gt;</span><span class="s1">20</span><span class="s8">&lt;/option&gt;</span>
+                <span class="s8">&lt;/select&gt;</span>
+                <span class="s8">&lt;input </span><span class="s9">type</span><span class="s10">=&quot;hidden&quot; </span><span class="s9">name</span><span class="s10">=&quot;page&quot; </span><span class="s9">value</span><span class="s10">=&quot;</span><span class="s6">${</span><span class="s4">page</span><span class="s6">}</span><span class="s10">&quot;</span><span class="s8">/&gt;</span>
+            <span class="s8">&lt;/form&gt;</span>
+        <span class="s8">&lt;/div&gt;</span>
+
+
+        <span class="s8">&lt;table </span><span class="s9">class</span><span class="s10">=&quot;table&quot;</span><span class="s8">&gt;</span>
+            <span class="s8">&lt;thead&gt;</span>
+            <span class="s8">&lt;tr&gt;</span>
+                <span class="s8">&lt;th </span><span class="s9">scope</span><span class="s10">=&quot;col&quot;</span><span class="s8">&gt;</span><span class="s1">#</span><span class="s8">&lt;/th&gt;</span>
+                <span class="s8">&lt;th </span><span class="s9">scope</span><span class="s10">=&quot;col&quot;</span><span class="s8">&gt;</span><span class="s1">Nom du sport</span><span class="s8">&lt;/th&gt;</span>
+                <span class="s2">&lt;</span><span class="s3">c:if </span><span class="s4">test</span><span class="s5">=&quot;</span><span class="s6">${</span><span class="s4">sessionScope.role </span><span class="s2">== </span><span class="s5">'ADMIN'</span>
+             <span class="s6">or </span><span class="s4">sessionScope.role </span><span class="s2">== </span><span class="s5">'BARMAN'</span>
+             <span class="s6">or </span><span class="s4">sessionScope.role </span><span class="s2">== </span><span class="s5">'SECRETARY'</span><span class="s6">}</span><span class="s5">&quot;</span><span class="s2">&gt;</span>
+                    <span class="s8">&lt;th </span><span class="s9">scope</span><span class="s10">=&quot;col&quot;</span><span class="s8">&gt;</span><span class="s1">Actif</span><span class="s8">&lt;/th&gt;</span>
+                    <span class="s8">&lt;th&gt; </span><span class="s1">Détails</span><span class="s8">&lt;/th&gt;</span>
+                <span class="s2">&lt;/</span><span class="s3">c:if</span><span class="s2">&gt;</span>
+            <span class="s8">&lt;/tr&gt;</span>
+            <span class="s8">&lt;/thead&gt;</span>
+            <span class="s8">&lt;tbody&gt;</span>
+            <span class="s2">&lt;</span><span class="s3">c:forEach </span><span class="s4">var</span><span class="s5">=&quot;sport&quot; </span><span class="s4">items</span><span class="s5">=&quot;</span><span class="s6">${</span><span class="s4">sports</span><span class="s6">}</span><span class="s5">&quot; </span><span class="s4">varStatus</span><span class="s5">=&quot;status&quot;</span><span class="s2">&gt;</span>
+                <span class="s8">&lt;tr&gt;</span>
+                    <span class="s8">&lt;td&gt;</span><span class="s6">${</span><span class="s4">(pages </span><span class="s2">- </span><span class="s7">1</span><span class="s4">) </span><span class="s2">* </span><span class="s4">pageSize </span><span class="s2">+ </span><span class="s4">status.index </span><span class="s2">+ </span><span class="s7">1</span><span class="s6">}</span><span class="s8">&lt;/td&gt;</span>
+                    <span class="s8">&lt;td&gt;</span><span class="s6">${</span><span class="s4">sport.sportName</span><span class="s6">}</span><span class="s8">&lt;/td&gt;</span>
+                    <span class="s2">&lt;</span><span class="s3">c:if </span><span class="s4">test</span><span class="s5">=&quot;</span><span class="s6">${</span><span class="s4">sessionScope.role </span><span class="s2">== </span><span class="s5">'ADMIN'</span>
+             <span class="s6">or </span><span class="s4">sessionScope.role </span><span class="s2">== </span><span class="s5">'BARMAN'</span>
+             <span class="s6">or </span><span class="s4">sessionScope.role </span><span class="s2">== </span><span class="s5">'SECRETARY'</span><span class="s6">}</span><span class="s5">&quot;</span><span class="s2">&gt;</span>
+                        <span class="s8">&lt;td&gt;</span><span class="s6">${</span><span class="s4">sport.active</span><span class="s6">}</span><span class="s8">&lt;/td&gt;</span>
+                        <span class="s8">&lt;td&gt;</span>
+                            <span class="s8">&lt;div </span><span class="s9">class</span><span class="s10">=&quot;btn-group&quot; </span><span class="s9">role</span><span class="s10">=&quot;group&quot; </span><span class="s9">aria-label</span><span class="s10">=&quot;Actions sport&quot;</span><span class="s8">&gt;</span>
+                                <span class="s11">&lt;!-- Bouton Modifier --&gt;</span>
+                                <span class="s8">&lt;a </span><span class="s9">href</span><span class="s10">=&quot;</span><span class="s6">${</span><span class="s4">pageContext.request.contextPath</span><span class="s6">}</span><span class="s10">/sport?editForm=</span><span class="s6">${</span><span class="s4">sport.id</span><span class="s6">}</span><span class="s10">&quot;</span>
+                                   <span class="s9">class</span><span class="s10">=&quot;btn btn-outline-primary btn-sm&quot;</span><span class="s8">&gt;</span>
+                                    <span class="s8">&lt;i </span><span class="s9">class</span><span class="s10">=&quot;bi bi-pencil-square&quot;</span><span class="s8">&gt;&lt;/i&gt; </span><span class="s1">Modifier</span>
+                                <span class="s8">&lt;/a&gt;</span>
+
+                                <span class="s11">&lt;!-- Bouton Supprimer ou Activer --&gt;</span>
+                                <span class="s2">&lt;</span><span class="s3">c:choose</span><span class="s2">&gt;</span>
+                                    <span class="s2">&lt;</span><span class="s3">c:when </span><span class="s4">test</span><span class="s5">=&quot;</span><span class="s6">${</span><span class="s4">sport.active</span><span class="s6">}</span><span class="s5">&quot;</span><span class="s2">&gt;</span>
+                                        <span class="s11">&lt;!-- Formulaire Supprimer --&gt;</span>
+                                        <span class="s8">&lt;form </span><span class="s9">method</span><span class="s10">=&quot;post&quot; </span><span class="s9">action</span><span class="s10">=&quot;</span><span class="s6">${</span><span class="s4">pageContext.request.contextPath</span><span class="s6">}</span><span class="s10">/sport&quot;</span>
+                                              <span class="s9">onsubmit</span><span class="s10">=&quot;</span><span class="s12">return </span><span class="s1">confirm(</span><span class="s10">'Supprimer ce sport ?'</span><span class="s1">)</span><span class="s10">&quot; </span><span class="s9">style</span><span class="s10">=&quot;</span><span class="s9">display</span><span class="s1">: </span><span class="s10">inline</span><span class="s1">;</span><span class="s10">&quot;</span><span class="s8">&gt;</span>
+                                            <span class="s8">&lt;input </span><span class="s9">type</span><span class="s10">=&quot;hidden&quot; </span><span class="s9">name</span><span class="s10">=&quot;sportId&quot; </span><span class="s9">value</span><span class="s10">=&quot;</span><span class="s6">${</span><span class="s4">sport.id</span><span class="s6">}</span><span class="s10">&quot;</span><span class="s8">/&gt;</span>
+                                            <span class="s8">&lt;input </span><span class="s9">type</span><span class="s10">=&quot;hidden&quot; </span><span class="s9">name</span><span class="s10">=&quot;action&quot; </span><span class="s9">value</span><span class="s10">=&quot;delete&quot;</span><span class="s8">/&gt;</span>
+                                            <span class="s8">&lt;button </span><span class="s9">type</span><span class="s10">=&quot;submit&quot; </span><span class="s9">class</span><span class="s10">=&quot;btn btn-outline-danger btn-sm&quot;</span><span class="s8">&gt;</span>
+                                                <span class="s8">&lt;i </span><span class="s9">class</span><span class="s10">=&quot;bi bi-trash&quot;</span><span class="s8">&gt;&lt;/i&gt; </span><span class="s1">Supprimer</span>
+                                            <span class="s8">&lt;/button&gt;</span>
+                                        <span class="s8">&lt;/form&gt;</span>
+                                    <span class="s2">&lt;/</span><span class="s3">c:when</span><span class="s2">&gt;</span>
+                                    <span class="s2">&lt;</span><span class="s3">c:otherwise</span><span class="s2">&gt;</span>
+                                        <span class="s11">&lt;!-- Formulaire Activer --&gt;</span>
+                                        <span class="s8">&lt;form </span><span class="s9">method</span><span class="s10">=&quot;post&quot; </span><span class="s9">action</span><span class="s10">=&quot;</span><span class="s6">${</span><span class="s4">pageContext.request.contextPath</span><span class="s6">}</span><span class="s10">/sport&quot;</span>
+                                              <span class="s9">onsubmit</span><span class="s10">=&quot;</span><span class="s12">return </span><span class="s1">confirm(</span><span class="s10">'Activer ce sport ?'</span><span class="s1">)</span><span class="s10">&quot; </span><span class="s9">style</span><span class="s10">=&quot;</span><span class="s9">display</span><span class="s1">: </span><span class="s10">inline</span><span class="s1">;</span><span class="s10">&quot;</span><span class="s8">&gt;</span>
+                                            <span class="s8">&lt;input </span><span class="s9">type</span><span class="s10">=&quot;hidden&quot; </span><span class="s9">name</span><span class="s10">=&quot;sportId&quot; </span><span class="s9">value</span><span class="s10">=&quot;</span><span class="s6">${</span><span class="s4">sport.id</span><span class="s6">}</span><span class="s10">&quot;</span><span class="s8">/&gt;</span>
+                                            <span class="s8">&lt;input </span><span class="s9">type</span><span class="s10">=&quot;hidden&quot; </span><span class="s9">name</span><span class="s10">=&quot;action&quot; </span><span class="s9">value</span><span class="s10">=&quot;activer&quot;</span><span class="s8">/&gt;</span>
+                                            <span class="s8">&lt;button </span><span class="s9">type</span><span class="s10">=&quot;submit&quot; </span><span class="s9">class</span><span class="s10">=&quot;btn btn-outline-warning btn-sm&quot;</span><span class="s8">&gt;</span>
+                                                <span class="s8">&lt;i </span><span class="s9">class</span><span class="s10">=&quot;bi bi-trash&quot;</span><span class="s8">&gt;&lt;/i&gt; </span><span class="s1">Activer</span>
+                                            <span class="s8">&lt;/button&gt;</span>
+                                        <span class="s8">&lt;/form&gt;</span>
+                                    <span class="s2">&lt;/</span><span class="s3">c:otherwise</span><span class="s2">&gt;</span>
+                                <span class="s2">&lt;/</span><span class="s3">c:choose</span><span class="s2">&gt;</span>
+                            <span class="s8">&lt;/div&gt;</span>
+                        <span class="s8">&lt;/td&gt;</span>
+                    <span class="s2">&lt;/</span><span class="s3">c:if</span><span class="s2">&gt;</span>
+                <span class="s8">&lt;/tr&gt;</span>
+            <span class="s2">&lt;/</span><span class="s3">c:forEach</span><span class="s2">&gt;</span>
+            <span class="s8">&lt;/tbody&gt;</span>
+        <span class="s8">&lt;/table&gt;</span>
+    <span class="s2">&lt;/</span><span class="s3">c:if</span><span class="s2">&gt;</span>
+
+    <span class="s11">&lt;!-- pagination --&gt;</span>
+    <span class="s2">&lt;</span><span class="s3">c:if </span><span class="s4">test</span><span class="s5">=&quot;</span><span class="s6">${</span><span class="s4">pages </span><span class="s2">&gt; </span><span class="s7">1</span><span class="s6">}</span><span class="s5">&quot;</span><span class="s2">&gt;</span>
+        <span class="s8">&lt;nav </span><span class="s9">aria-label</span><span class="s10">=&quot;Pagination&quot;</span><span class="s8">&gt;</span>
+            <span class="s8">&lt;ul </span><span class="s9">class</span><span class="s10">=&quot;pagination justify-content-center&quot;</span><span class="s8">&gt;</span>
+
+                <span class="s11">&lt;!-- URLs avec conservation du size --&gt;</span>
+                <span class="s2">&lt;</span><span class="s3">c:url </span><span class="s4">var</span><span class="s5">=&quot;firstUrl&quot; </span><span class="s4">value</span><span class="s5">=&quot;/sport&quot;</span><span class="s2">&gt;</span>
+                    <span class="s2">&lt;</span><span class="s3">c:param </span><span class="s4">name</span><span class="s5">=&quot;page&quot; </span><span class="s4">value</span><span class="s5">=&quot;1&quot;</span><span class="s2">/&gt;</span>
+                    <span class="s2">&lt;</span><span class="s3">c:param </span><span class="s4">name</span><span class="s5">=&quot;size&quot; </span><span class="s4">value</span><span class="s5">=&quot;</span><span class="s6">${</span><span class="s4">pageSize</span><span class="s6">}</span><span class="s5">&quot;</span><span class="s2">/&gt;</span>
+                <span class="s2">&lt;/</span><span class="s3">c:url</span><span class="s2">&gt;</span>
+                <span class="s2">&lt;</span><span class="s3">c:url </span><span class="s4">var</span><span class="s5">=&quot;prevUrl&quot; </span><span class="s4">value</span><span class="s5">=&quot;/sport&quot;</span><span class="s2">&gt;</span>
+                    <span class="s2">&lt;</span><span class="s3">c:param </span><span class="s4">name</span><span class="s5">=&quot;page&quot; </span><span class="s4">value</span><span class="s5">=&quot;</span><span class="s6">${</span><span class="s4">currentPage </span><span class="s2">- </span><span class="s7">1</span><span class="s6">}</span><span class="s5">&quot;</span><span class="s2">/&gt;</span>
+                    <span class="s2">&lt;</span><span class="s3">c:param </span><span class="s4">name</span><span class="s5">=&quot;size&quot; </span><span class="s4">value</span><span class="s5">=&quot;</span><span class="s6">${</span><span class="s4">pageSize</span><span class="s6">}</span><span class="s5">&quot;</span><span class="s2">/&gt;</span>
+                <span class="s2">&lt;/</span><span class="s3">c:url</span><span class="s2">&gt;</span>
+                <span class="s2">&lt;</span><span class="s3">c:url </span><span class="s4">var</span><span class="s5">=&quot;nextUrl&quot; </span><span class="s4">value</span><span class="s5">=&quot;/sport&quot;</span><span class="s2">&gt;</span>
+                    <span class="s2">&lt;</span><span class="s3">c:param </span><span class="s4">name</span><span class="s5">=&quot;page&quot; </span><span class="s4">value</span><span class="s5">=&quot;</span><span class="s6">${</span><span class="s4">currentPage </span><span class="s2">+ </span><span class="s7">1</span><span class="s6">}</span><span class="s5">&quot;</span><span class="s2">/&gt;</span>
+                    <span class="s2">&lt;</span><span class="s3">c:param </span><span class="s4">name</span><span class="s5">=&quot;size&quot; </span><span class="s4">value</span><span class="s5">=&quot;</span><span class="s6">${</span><span class="s4">pageSize</span><span class="s6">}</span><span class="s5">&quot;</span><span class="s2">/&gt;</span>
+                <span class="s2">&lt;/</span><span class="s3">c:url</span><span class="s2">&gt;</span>
+                <span class="s2">&lt;</span><span class="s3">c:url </span><span class="s4">var</span><span class="s5">=&quot;lastUrl&quot; </span><span class="s4">value</span><span class="s5">=&quot;/sport&quot;</span><span class="s2">&gt;</span>
+                    <span class="s2">&lt;</span><span class="s3">c:param </span><span class="s4">name</span><span class="s5">=&quot;page&quot; </span><span class="s4">value</span><span class="s5">=&quot;</span><span class="s6">${</span><span class="s4">pages</span><span class="s6">}</span><span class="s5">&quot;</span><span class="s2">/&gt;</span>
+                    <span class="s2">&lt;</span><span class="s3">c:param </span><span class="s4">name</span><span class="s5">=&quot;size&quot; </span><span class="s4">value</span><span class="s5">=&quot;</span><span class="s6">${</span><span class="s4">pageSize</span><span class="s6">}</span><span class="s5">&quot;</span><span class="s2">/&gt;</span>
+                <span class="s2">&lt;/</span><span class="s3">c:url</span><span class="s2">&gt;</span>
+
+                <span class="s11">&lt;!-- First --&gt;</span>
+                <span class="s8">&lt;li </span><span class="s9">class</span><span class="s10">=&quot;page-item </span><span class="s2">&lt;</span><span class="s3">c:if </span><span class="s4">test</span><span class="s5">='</span><span class="s6">${</span><span class="s4">currentPage </span><span class="s2">== </span><span class="s7">1</span><span class="s6">}</span><span class="s5">'</span><span class="s2">&gt;</span><span class="s10">disabled</span><span class="s2">&lt;/</span><span class="s3">c:if</span><span class="s2">&gt;</span><span class="s10">&quot;</span><span class="s8">&gt;</span>
+                    <span class="s8">&lt;a </span><span class="s9">class</span><span class="s10">=&quot;page-link&quot; </span><span class="s9">href</span><span class="s10">=&quot;</span><span class="s6">${</span><span class="s4">firstUrl</span><span class="s6">}</span><span class="s10">&quot;</span><span class="s8">&gt;</span><span class="s13">&amp;laquo; </span><span class="s1">Première</span><span class="s8">&lt;/a&gt;</span>
+                <span class="s8">&lt;/li&gt;</span>
+
+                <span class="s11">&lt;!-- Prev --&gt;</span>
+                <span class="s8">&lt;li </span><span class="s9">class</span><span class="s10">=&quot;page-item </span><span class="s2">&lt;</span><span class="s3">c:if </span><span class="s4">test</span><span class="s5">='</span><span class="s6">${</span><span class="s4">currentPage </span><span class="s2">== </span><span class="s7">1</span><span class="s6">}</span><span class="s5">'</span><span class="s2">&gt;</span><span class="s10">disabled</span><span class="s2">&lt;/</span><span class="s3">c:if</span><span class="s2">&gt;</span><span class="s10">&quot;</span><span class="s8">&gt;</span>
+                    <span class="s8">&lt;a </span><span class="s9">class</span><span class="s10">=&quot;page-link&quot; </span><span class="s9">href</span><span class="s10">=&quot;</span><span class="s6">${</span><span class="s4">prevUrl</span><span class="s6">}</span><span class="s10">&quot;</span><span class="s8">&gt;</span><span class="s1">Précédent</span><span class="s8">&lt;/a&gt;</span>
+                <span class="s8">&lt;/li&gt;</span>
+
+
+                <span class="s8">&lt;li </span><span class="s9">class</span><span class="s10">=&quot;page-item disabled&quot;</span><span class="s8">&gt;</span>
+                    <span class="s8">&lt;span </span><span class="s9">class</span><span class="s10">=&quot;page-link&quot;</span><span class="s8">&gt;</span><span class="s1">Page </span><span class="s6">${</span><span class="s4">currentPage</span><span class="s6">} </span><span class="s1">/ </span><span class="s6">${</span><span class="s4">pages</span><span class="s6">}</span><span class="s8">&lt;/span&gt;</span>
+                <span class="s8">&lt;/li&gt;</span>
+
+                <span class="s11">&lt;!-- Next --&gt;</span>
+                <span class="s8">&lt;li </span><span class="s9">class</span><span class="s10">=&quot;page-item </span><span class="s2">&lt;</span><span class="s3">c:if </span><span class="s4">test</span><span class="s5">='</span><span class="s6">${</span><span class="s4">currentPage </span><span class="s2">&gt;= </span><span class="s4">pages</span><span class="s6">}</span><span class="s5">'</span><span class="s2">&gt;</span><span class="s10">disabled</span><span class="s2">&lt;/</span><span class="s3">c:if</span><span class="s2">&gt;</span><span class="s10">&quot;</span><span class="s8">&gt;</span>
+                    <span class="s8">&lt;a </span><span class="s9">class</span><span class="s10">=&quot;page-link&quot; </span><span class="s9">href</span><span class="s10">=&quot;</span><span class="s6">${</span><span class="s4">nextUrl</span><span class="s6">}</span><span class="s10">&quot;</span><span class="s8">&gt;</span><span class="s1">Suivant</span><span class="s8">&lt;/a&gt;</span>
+                <span class="s8">&lt;/li&gt;</span>
+
+                <span class="s11">&lt;!-- Last --&gt;</span>
+                <span class="s8">&lt;li </span><span class="s9">class</span><span class="s10">=&quot;page-item </span><span class="s2">&lt;</span><span class="s3">c:if </span><span class="s4">test</span><span class="s5">='</span><span class="s6">${</span><span class="s4">currentPage </span><span class="s2">&gt;= </span><span class="s4">pages</span><span class="s6">}</span><span class="s5">'</span><span class="s2">&gt;</span><span class="s10">disabled</span><span class="s2">&lt;/</span><span class="s3">c:if</span><span class="s2">&gt;</span><span class="s10">&quot;</span><span class="s8">&gt;</span>
+                    <span class="s8">&lt;a </span><span class="s9">class</span><span class="s10">=&quot;page-link&quot; </span><span class="s9">href</span><span class="s10">=&quot;</span><span class="s6">${</span><span class="s4">lastUrl</span><span class="s6">}</span><span class="s10">&quot;</span><span class="s8">&gt;</span><span class="s1">Dernière </span><span class="s13">&amp;raquo;</span><span class="s8">&lt;/a&gt;</span>
+                <span class="s8">&lt;/li&gt;</span>
+            <span class="s8">&lt;/ul&gt;</span>
+        <span class="s8">&lt;/nav&gt;</span>
+    <span class="s2">&lt;/</span><span class="s3">c:if</span><span class="s2">&gt;</span>
+
+<span class="s8">&lt;/section&gt;</span>
+
+</pre>
+</body>
+</html>

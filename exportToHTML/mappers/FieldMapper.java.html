@@ -1,0 +1,40 @@
+<html>
+<head>
+<title>FieldMapper.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cf8e6d;}
+.s1 { color: #bcbec4;}
+.s2 { color: #bcbec4;}
+.s3 { color: #5f826b; font-style: italic;}
+.s4 { color: #67a37c; font-style: italic;}
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+FieldMapper.java</font>
+</center></td></tr></table>
+<pre><span class="s0">package </span><span class="s1">mappers</span><span class="s2">;</span>
+
+<span class="s0">import </span><span class="s1">dto</span><span class="s2">.</span><span class="s1">FieldUpdateForm</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">entities</span><span class="s2">.</span><span class="s1">Field</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">entities</span><span class="s2">.</span><span class="s1">Hall</span><span class="s2">;</span>
+
+<span class="s0">public class </span><span class="s1">FieldMapper </span><span class="s2">{</span>
+
+    <span class="s3">/**</span>
+     <span class="s3">* Update field</span>
+     <span class="s3">* </span><span class="s4">@param </span><span class="s3">fieldUpdateForm</span>
+     <span class="s3">*/</span>
+    <span class="s0">public static void </span><span class="s1">fromUpdateForm</span><span class="s2">(</span><span class="s1">FieldUpdateForm fieldUpdateForm</span><span class="s2">, </span><span class="s1">Hall hall</span><span class="s2">, </span><span class="s1">Field field</span><span class="s2">) {</span>
+        <span class="s1">field</span><span class="s2">.</span><span class="s1">setFieldName</span><span class="s2">(</span><span class="s1">fieldUpdateForm</span><span class="s2">.</span><span class="s1">getFieldName</span><span class="s2">());</span>
+        <span class="s1">field</span><span class="s2">.</span><span class="s1">setHall</span><span class="s2">(</span><span class="s1">hall</span><span class="s2">);</span>
+        <span class="s1">field</span><span class="s2">.</span><span class="s1">setActive</span><span class="s2">(</span><span class="s1">fieldUpdateForm</span><span class="s2">.</span><span class="s1">isActive</span><span class="s2">());</span>
+    <span class="s2">}</span>
+
+<span class="s2">}</span>
+</pre>
+</body>
+</html>

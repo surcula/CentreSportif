@@ -9,9 +9,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <!-- Navigation-->
-<nav class="navbar navbar-expand-lg bg-secondary text-uppercase fixed-top" id="mainNav">
+<nav class="navbar navbar-expand-lg bg-secondary text-uppercase sticky-top" id="mainNav">
     <div class="container">
-        <a class="navbar-brand" href="#page-top">FSSD</a>
+        <a class="navbar-brand" href="#page-top">FSSS</a>
         <button class="navbar-toggler text-uppercase font-weight-bold bg-primary text-white rounded" type="button"
                 data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive"
                 aria-expanded="false" aria-label="Toggle navigation">
@@ -27,7 +27,7 @@
                 </li>
                 <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="${pageContext.request.contextPath}/event">Evènements</a>
                 </li>
-                <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="#">Abonnements</a>
+                <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="${pageContext.request.contextPath}/subscription">Abonnements</a>
                 </li>
                 <li class="nav-item mx-0 mx-lg-1"><a class="nav-link py-3 px-0 px-lg-3 rounded" href="${pageContext.request.contextPath}/views/template/template.jsp?content=../infosPratique.jsp">Infos pratiques</a>
                 </li>
