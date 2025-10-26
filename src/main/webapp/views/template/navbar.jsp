@@ -11,7 +11,7 @@
 <!-- Navigation-->
 <nav class="navbar navbar-expand-lg bg-secondary text-uppercase sticky-top" id="mainNav">
     <div class="container">
-        <a class="navbar-brand" href="#page-top">FSSD</a>
+        <a class="navbar-brand" href="#page-top">FSSS</a>
         <button class="navbar-toggler text-uppercase font-weight-bold bg-primary text-white rounded" type="button"
                 data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive"
                 aria-expanded="false" aria-label="Toggle navigation">

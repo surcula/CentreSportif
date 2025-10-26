@@ -12,7 +12,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>FSSD</title>
+    <title>FSSS</title>
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/Css.css">
     <!-- Ceci a été testé afin de scinder les fichiers css par auteur mais l'idéal est par page pour ne pas avoir 20000 lignes-->
     <c:if test="${not empty pageCss}">

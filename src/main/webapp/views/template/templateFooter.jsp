@@ -23,7 +23,7 @@
             </div>
             <!-- Footer About Text-->
             <div class="col-lg-4">
-                <h4 class="text-uppercase mb-4">About FSSD</h4>
+                <h4 class="text-uppercase mb-4">About FSSS</h4>
                 <p class="lead mb-0">
                     Le Centre Sportif vous accueille tous les jours dans un cadre moderne pour pratiquer
                     vos sports préférés. Des installations de qualité et des activités pour
@@ -35,7 +35,7 @@
 </footer>
 <!-- Copyright Section-->
 <div class="copyright py-1 text-center text-white">
-    <div class="container"><small>Copyright &copy; FSSD 2025</small></div>
+    <div class="container"><small>Copyright &copy; FSSS 2025</small></div>
 </div>
 
 <c:if test="${not empty sessionScope.toastMessage}">
