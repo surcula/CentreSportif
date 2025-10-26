@@ -4,6 +4,7 @@ import entities.Field;
 import entities.Sport;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
 
 public class SportFieldUpdateForm {
 
@@ -13,11 +14,11 @@ public class SportFieldUpdateForm {
 
     private Field field;
 
-    private Instant startTime;
+    private LocalDateTime startTime;
 
-    private Instant endTime;
+    private LocalDateTime endTime;
 
-    private Instant dateStart;
+    private LocalDateTime dateStart;
 
     private int day;
 
@@ -47,27 +48,27 @@ public class SportFieldUpdateForm {
         this.field = field;
     }
 
-    public Instant getStartTime() {
+    public LocalDateTime getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(Instant startTime) {
+    public void setStartTime(LocalDateTime startTime) {
         this.startTime = startTime;
     }
 
-    public Instant getEndTime() {
+    public LocalDateTime getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(Instant endTime) {
+    public void setEndTime(LocalDateTime endTime) {
         this.endTime = endTime;
     }
 
-    public Instant getDateStart() {
+    public LocalDateTime getDateStart() {
         return dateStart;
     }
 
-    public void setDateStart(Instant dateStart) {
+    public void setDateStart(LocalDateTime dateStart) {
         this.dateStart = dateStart;
     }
 

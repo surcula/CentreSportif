@@ -68,6 +68,11 @@
             </tr>
             </thead>
             <tbody>
+
+            <c:if test="${empty sports}">
+                <tr> <td>Aucunes données trouvées.</td> </tr>
+            </c:if>
+
             <c:forEach var="sport" items="${sports}" varStatus="status">
                 <tr>
                     <td>${(pages - 1) * pageSize + status.index + 1}</td>
@@ -75,7 +80,7 @@
                     <c:if test="${sessionScope.role == 'ADMIN'
              or sessionScope.role == 'BARMAN'
              or sessionScope.role == 'SECRETARY'}">
-                        <td>${sport.active}</td>
+                        <td>${sport.active ? 'Actif' : 'Non actif'}</td>
                         <td>
                             <div class="btn-group" role="group" aria-label="Actions sport">
                                 <!-- Bouton Modifier -->

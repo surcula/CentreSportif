@@ -41,7 +41,7 @@ public interface EventService {
      * Search all the events which are active with pagination
      * @param page the page number (starting at 1)
      * @param size the number of events per page
-     * @ return a {@link Result} containing the list of active events
+     * @return a {@link Result} containing the list of active events
      */
     Result<List<Event>> getAllActiveEvents(int page, int size);
 

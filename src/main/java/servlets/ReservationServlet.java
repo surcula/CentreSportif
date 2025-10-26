@@ -186,7 +186,7 @@ public class ReservationServlet extends HttpServlet {
                 //Validation des changements
                 em.getTransaction().commit();
                 //Succès => page reservation
-                ServletUtils.redirectWithMessage(request, response, successMessage, "/reservation", TEMPLATE);
+                ServletUtils.redirectWithMessage(request, response, successMessage, RESERVATION_JSP, TEMPLATE);
                 return;
             }
 

@@ -38,7 +38,7 @@ public interface HallService {
      *
      * @param offset page number starting at 1 (values <= 0 are treated as 1)
      * @param size number of elements per page.
-     *             If size <= 0, all active halls are returned without pagination.
+     *             If size smaller or equal to 0, all active halls are returned without pagination.
      * @return Result containing a list of active Halls (never null).
      */
     Result<List<Hall>> getAllActiveHalls(int offset, int size) ;
@@ -46,9 +46,9 @@ public interface HallService {
     /**
      * Retrieves all Halls with optional pagination.
      *
-     * @param offset page number starting at 1 (values <= 0 are treated as 1)
+     * @param offset page number starting at 1 (values smaller or equal to 0 are treated as 1)
      * @param size number of elements per page.
-     *             If size <= 0, all active halls are returned without pagination.
+     *             If size smaller or equal to 0, all active halls are returned without pagination.
      * @return Result containing a list of Halls (never null).
      */
     Result<List<Hall>> getAllHalls(int offset, int size) ;

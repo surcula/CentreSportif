@@ -140,7 +140,7 @@ public class SubscriptionBusiness {
         form.setUsersSubscriptionId(usId.getData());
         form.setStartDate(start);
         form.setEndDate(end);
-        form.setQuantity(qty);      // nullable → “ne pas modifier” si null
+        form.setQuantity(qty);      //nullable ne pas modifier si null
         form.setActive(active.getData());
 
         log.info("initUpdateForm OK → usId=" + form.getUsersSubscriptionId());
