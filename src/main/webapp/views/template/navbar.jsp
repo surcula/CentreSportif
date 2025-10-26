@@ -9,7 +9,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <!-- Navigation-->
-<nav class="navbar navbar-expand-lg bg-secondary text-uppercase fixed-top" id="mainNav">
+<nav class="navbar navbar-expand-lg bg-secondary text-uppercase sticky-top" id="mainNav">
     <div class="container">
         <a class="navbar-brand" href="#page-top">FSSD</a>
         <button class="navbar-toggler text-uppercase font-weight-bold bg-primary text-white rounded" type="button"
@@ -35,6 +35,17 @@
                 </li>
 
                 <!-- Lien admin -->
+
+                <c:if test="${sessionScope.role == 'ADMIN'
+             or sessionScope.role == 'BARMAN'
+             or sessionScope.role == 'SECRETARY'}">
+                    <li class="nav-item">
+                        <a class="nav-link fw-bold text-warning" href="${pageContext.request.contextPath}/admin">
+                            ADMIN
+                        </a>
+                    </li>
+                </c:if>
+
                 <c:if test="${sessionScope.role == 'admin' || sessionScope.role == 'secretaire' || sessionScope.role == 'barman'}">
                     <li class="nav-item">
                         <a class="nav-link fw-bold text-warning" href="${pageContext.request.contextPath}/users">Gestion utilisateurs</a>
