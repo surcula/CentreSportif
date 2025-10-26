@@ -1,6 +1,11 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%
+    Object dbg = request.getAttribute("linkedUsersSubscription");
+    out.print("<!-- DBG: has linkedUS=" + (dbg != null) +
+            " | has list=" + (request.getAttribute("ordersSubscriptions") != null) + " -->");
+%>
 
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
 

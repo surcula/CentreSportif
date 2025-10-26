@@ -55,10 +55,12 @@ public class OrderServlet extends HttpServlet {
         // ===== Formulaire PRÉ-REMPLI depuis un abonnement (user OU staff) =====
         if ("fromSubscription".equals(form)) {
             if (session == null || session.getAttribute("userId") == null) {
+                // même staff: on exige une session ouverte
                 ServletUtils.redirectNoAuthorized(request, response);
                 return;
             }
 
+            // id de UsersSubscription en param: ?subscriptionId=XXXX
             Result<Integer> usIdRes = ParamUtils.verifyId(request.getParameter("subscriptionId"));
             if (!usIdRes.isSuccess()) {
                 ServletUtils.forwardWithErrors(request, response, usIdRes.getErrors(), ORDER_JSP, TEMPLATE);
@@ -86,7 +88,7 @@ public class OrderServlet extends HttpServlet {
 
                 // Devis pour pré-remplir
                 int sportId = us.getSubscription().getSport().getId();
-                Integer qBoxed = us.getQuantityMax(); // Integer ou int selon ton entité
+                Integer qBoxed = us.getQuantityMax(); // peut être null
                 int qty = (qBoxed != null && qBoxed > 0) ? qBoxed : 1;
 
                 Result<Map<String, Double>> quote = orderService.quoteFromSport(sportId, qty, LocalDate.now());
@@ -95,9 +97,12 @@ public class OrderServlet extends HttpServlet {
                     return;
                 }
 
-                // Attributs attendus par order-form.jsp
+                // ====== ATTRIBUTS ATTENDUS PAR order-form.jsp ======
                 request.setAttribute("fromSubscription", true);
-                request.setAttribute("usersSubscription", us);
+
+                // ✅ clé corrigée: le JSP attend "linkedUsersSubscription"
+                request.setAttribute("linkedUsersSubscription", us);
+
                 request.setAttribute("prefillUser", us.getUser());
                 request.setAttribute("prefillSport", us.getSubscription().getSport());
                 request.setAttribute("unitPrice", quote.getData().get("unit"));
@@ -214,7 +219,7 @@ public class OrderServlet extends HttpServlet {
 
         /* ========= One-click pay depuis l’abonnement (user + staff) ========= */
         if ("quickPayFromSubscription".equals(action)) {
-            Result<Integer> subIdRes = ParamUtils.verifyId(request.getParameter("subscriptionId"));
+            Result<Integer> subIdRes = ParamUtils.verifyId(request.getParameter("subscriptionId")); // UsersSubscription.id attendu
             if (!subIdRes.isSuccess()) {
                 ServletUtils.forwardWithErrors(request, response, subIdRes.getErrors(), ORDER_JSP, TEMPLATE);
                 return;
@@ -260,7 +265,8 @@ public class OrderServlet extends HttpServlet {
                 o.setStatus(OrderStatus.ONHOLD);
                 em.persist(o);
 
-                Result<Order> linkRes = orderService.linkUserSubscription(o.getId(), us.getSubscription().getId());
+                // ✅ CORRECTION: lier avec l'ID du UsersSubscription, pas Subscription
+                Result<Order> linkRes = orderService.linkUserSubscription(o.getId(), us.getId());
                 if (!linkRes.isSuccess()) {
                     em.getTransaction().rollback();
                     ServletUtils.forwardWithErrors(request, response, linkRes.getErrors(), ORDER_JSP, TEMPLATE);
