@@ -10,13 +10,13 @@ public class Rooting {
     public static final String EVENT_FORM_JSP = "/views/event-form.jsp";
     public static final String EVENT_JSP = "/views/event.jsp";
     public static final String RESERVATION_FORM_JSP = "/views/reservation-form.jsp";
+    public static final String RESERVATION_JSP = "/views/reservation.jsp";
     public static final String SPORT_JSP = "/views/sport.jsp";
     public static final String SPORT_FORM_JSP = "/views/sport-form.jsp";
     public static final String ORDER_JSP = "/views/order.jsp";
     public static final String ORDER_FORM_JSP = "/views/order-form.jsp";
     public static final String SUBSCRIPTION_JSP = "/views/subscription.jsp";
     public static final String SUBSCRIPTION_FORM_JSP = "/views/subscription-form.jsp";
-    public static final String RESERVATION_JSP = "/views/reservation.jsp";
 
     public static final String SPORT_FIELD_FORM_JSP = "/views/sportField-form.jsp";
     public static final String USER_FORM_JSP = "/views/user-form.jsp";
