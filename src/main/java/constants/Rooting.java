@@ -17,4 +17,7 @@ public class Rooting {
     public static final String SUBSCRIPTION_JSP = "/views/subscription.jsp";
     public static final String SUBSCRIPTION_FORM_JSP = "/views/subscription-form.jsp";
 
+    public static final String SPORT_FIELD_FORM_JSP = "/views/sportField-form.jsp";
+    public static final String USER_FORM_JSP = "/views/user-form.jsp";
+
 }

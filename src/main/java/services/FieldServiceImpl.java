@@ -63,7 +63,7 @@ public class FieldServiceImpl implements FieldService {
                 .setFirstResult(offset)
                 .setMaxResults(size)
                 .getResultList();
-        log.info("getAllHalls : " + fields.size());
+        log.info("getAllFieldss : " + fields.size());
         return Result.ok(fields);
     }
 

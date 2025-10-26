@@ -1,51 +1,64 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: david
-  Date: 6/22/2025
-  Time: 2:12 AM
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<section class="page-section">
 
+<style>
+    .page-section { padding-top: 10rem; padding-bottom: 6rem; }
+    .page-section .container { min-height: 60vh; }
+    .page-section-heading {text-align: center;margin-bottom: 10rem;}
+</style>
+<!-- SECTION : Page de connexion -->
+<section class="page-section">
+    <div class="container mt-5 pt-4">
+    <!-- Titre principal -->
     <h2 class="page-section-heading text-center text-uppercase text-secondary mb-0">Connexion</h2>
+
+        <!-- Message de confirmation ou d'erreur -->
+        <c:if test="${not empty param.msg}">
+        <div class="alert ${param.type=='success'?'alert-success':'alert-danger'} mt-3 text-center">
+                ${param.msg}
+        </div>
+        </c:if>
 
     <div class="row justify-content-center">
         <div class="col-lg-8 col-xl-7">
+
+            <!-- FORMULAIRE DE CONNEXION -->
             <form method="post" action="${pageContext.request.contextPath}/login">
-                <!-- User ID input -->
+
+                <!-- Champ : Adresse e-mail -->
                 <div class="form-floating mb-3">
-                    <input class="form-control" id="userId" name="userId" type="text"
-                           placeholder="Entrez votre identifiant..." required/>
-                    <label for="userId">ID Utilisateur</label>
+                    <input class="form-control"
+                           id="email"
+                           name="email"
+                           type="email"
+                           placeholder="ex: moi@mail.com"
+                           required/>
+                    <label for="email">Adresse e-mail</label>
                 </div>
 
-                <!-- Role select -->
+                <!-- Champ : Mot de passe -->
                 <div class="form-floating mb-3">
-                    <select class="form-select" id="role" name="role" required>
-                        <option value="" disabled selected>Choisissez un rôle</option>
-                        <option value="ADMIN">ADMIN</option>
-                        <option value="USER">USER</option>
-                    </select>
-                    <label for="role">Rôle</label>
+                    <input class="form-control"
+                           id="password"
+                           name="password"
+                           type="password"
+                           placeholder="Votre mot de passe"
+                           required/>
+                    <label for="password">Mot de passe</label>
                 </div>
 
-                <!-- Error message -->
-                <c:if test="${not empty error}">
-                    <div class="alert alert-danger text-center">
-                            ${error}
-                    </div>
+                <!-- Affichage du message d'erreur -->
+                <c:if test="${not empty errorMessage}">
+                    <div class="alert alert-danger text-center">${errorMessage}</div>
                 </c:if>
 
-                <!-- Submit Button -->
+                <!-- Bouton de soumission -->
                 <div class="text-center">
-                    <button class="btn btn-primary btn-xl" type="submit">Se connecter</button>
+                    <button class="btn btn-primary btn-xl" type="submit">
+                        Se connecter
+                    </button>
                 </div>
             </form>
         </div>
     </div>
-    <c:if test="${not empty error}">
-        <p style="color:red;">${error}</p>
-    </c:if>
 </section>

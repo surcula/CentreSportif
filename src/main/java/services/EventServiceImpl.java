@@ -22,7 +22,7 @@ public class EventServiceImpl implements interfaces.EventService {
 
     /**
      * Constructor for an EventServiceImpl with the specified EntityManager
-     * @param em the EntityManager to use for database operatons
+     * @param em the EntityManager to use for database operations
      */
     public EventServiceImpl(EntityManager em){
         this.em = em;
@@ -98,7 +98,7 @@ public class EventServiceImpl implements interfaces.EventService {
      * Method to get the list of all events
      * @param page the page number (starting at 1)
      * @param size the number of events per page
-     * @return Result.okj method
+     * @return Result.ok method
      */
     @Override
     public Result<Page<Event>> getAllEvents(int page, int size) {
@@ -134,6 +134,13 @@ public class EventServiceImpl implements interfaces.EventService {
             return Result.fail(errors);
         }
     }
+
+    /**
+     * Second method to get the list of all events
+     * @param page the number of the page
+     * @param size the size of the items
+     * @return
+     */
     public Result<List<Event>> getAllEvents2(int page, int size){
         em = EMF.getEM();
         //EventService eventService = new EventServiceImpl(em);

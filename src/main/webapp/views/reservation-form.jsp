@@ -53,9 +53,15 @@
                     </c:if>
                     <!-- Choisir un sport-->
                     <div class="form-floating mb-3">
-                        <input class="form-control" type="text" name="reservationSport" id="reservationSport"
-                               placeholder="Choisissez un sport" required
-                               value="${formReservationSport}"/>
+                        <select class="form-select" id="reservationsport" name="reservationsport" required>
+                            <option value="6" ${formStatus == '6' ? 'selected' : ''}>Badminton</option>
+                            <option value="5" ${formStatus == '5' ? 'selected' : ''}>Basketball</option>
+                            <option value="4" ${formStatus == '4' ? 'selected' : ''}>Football</option>
+                            <option value="3" ${formStatus == '3' ? 'selected' : ''}>Handball</option>
+                            <option value="2" ${formStatus == '2' ? 'selected' : ''}>Squash</option>
+                            <option value="1" ${formStatus == '1' ? 'selected' : ''}>Tennis</option>
+                            <option value="0" ${formStatus == '0' ? 'selected' : ''}>Volleyball</option>
+                        </select>
                         <label for="reservationSport">Choisir un sport</label>
                     </div>
                     <c:if test="${not empty errorReservationSport}">
@@ -63,20 +69,62 @@
                     </c:if>
                     <!-- Choisir un local pour le foot il n'y en a qu'un pour les autres selon les réservations enregistrées-->
                     <div class="form-floating mb-3">
-                        <input class="form-control" type="text" name="reservationLocal" id="reservationLocal"
-                               placeholder="Choisissez un local" required
-                               value="${formReservationLocal}"/>
-                        <label for="reservationLocal">Choisir un local</label>
+                        <select class="form-select" id="reservationhall" name="reservationhall" required>
+                            <option value="4" ${formStatus == '4' ? 'selected' : ''}>Hall 1</option>
+                            <option value="3" ${formStatus == '3' ? 'selected' : ''}>Hall 2</option>
+                            <option value="2" ${formStatus == '2' ? 'selected' : ''}>Hall 3</option>
+                            <option value="1" ${formStatus == '1' ? 'selected' : ''}>Squash</option>
+                            <option value="0" ${formStatus == '0' ? 'selected' : ''}>Tennis</option>
+                        </select>
+                        <label for="reservationhall">Choisir un hall</label>
                     </div>
                     <c:if test="${not empty errorReservationLocal}">
                         <div class="text-danger mb-3">${errorReservationLocal}</div>
                     </c:if>
-
+                    <!-- Choisir un un terrain selon les réservations enregistrées dans l'ordre hall 1 si complet hall 2 ...-->
+                    <div class="form-floating mb-3">
+                        <select class="form-select" id="reservationfield" name="reservationfield" required>
+                            <option value="3" ${formStatus == '3' ? 'selected' : ''}>Terrain 1</option>
+                            <option value="2" ${formStatus == '2' ? 'selected' : ''}>Terrain 2</option>
+                            <option value="1" ${formStatus == '1' ? 'selected' : ''}>Terrain 3</option>
+                            <option value="0" ${formStatus == '0' ? 'selected' : ''}>Terrain 4</option>
+                        </select>
+                        <label for="reservationfield">Choisir un terrain</label>
+                    </div>
+                    <c:if test="${not empty errorReservationLocal}">
+                        <div class="text-danger mb-3">${errorReservationLocal}</div>
+                    </c:if>
                     <!-- Date de début -->
                     <div class="form-floating mb-3">
-                        <input class="form-control" type="datetime-local"  name="startDate" id="startDate"
+                        <input class="form-control" type="date"  name="startDate" id="startDate"
                                placeholder="Date de début" required
                                value="${formStartDateHour}"/>
+                        <select class="form-select" id="startHour2" name="startHour2" required >
+                            <option value="10:00">10:00</option>
+                            <option value="10:30">10:30</option>
+                            <option value="11:00">11:00</option>
+                            <option value="11:30">11:30</option>
+                            <option value="12:00">12:00</option>
+                            <option value="12:30">12:30</option>
+                            <option value="13:00">13:00</option>
+                            <option value="13:30">13:30</option>
+                            <option value="14:00">14:00</option>
+                            <option value="14:30">14:30</option>
+                            <option value="15:00">15:00</option>
+                            <option value="15:30">15:30</option>
+                            <option value="16:00">16:00</option>
+                            <option value="16:30">16:30</option>
+                            <option value="17:00">17:00</option>
+                            <option value="17:30">17:30</option>
+                            <option value="18:00">18:00</option>
+                            <option value="18:30">18:30</option>
+                            <option value="19:00">19:00</option>
+                            <option value="19:30">19:30</option>
+                            <option value="20:00">20:00</option>
+                            <option value="20:30">20:30</option>
+                            <option value="21:00">21:00</option>
+                            <option value="21:30">21:30</option>
+                        </select>
                         <label for="startDate">Date de début</label>
                     </div>
                     <c:if test="${not empty errorStartDate}">
@@ -85,9 +133,35 @@
 
                     <!-- Date de fin -->
                     <div class="form-floating mb-3">
-                        <input class="form-control" type="datetime-local" name="endDate" id="endDate"
+                        <input class="form-control" type="date" name="endDate" id="endDate"
                                placeholder="Date de fin" required
                                value="${formEndDate}"/>
+                        <select class="form-select" id="endHour2" name="endHour2" required >
+                            <option value="10:00">10:00</option>
+                            <option value="10:30">10:30</option>
+                            <option value="11:00">11:00</option>
+                            option value="11:30">11:30</option>
+                            <option value="12:00">12:00</option>
+                            <option value="12:30">12:30</option>
+                            <option value="13:00">13:00</option>
+                            <option value="13:30">13:30</option>
+                            <option value="14:00">14:00</option>
+                            <option value="14:30">14:30</option>
+                            <option value="15:00">15:00</option>
+                            <option value="15:30">15:30</option>
+                            <option value="16:00">16:00</option>
+                            <option value="16:30">16:30</option>
+                            <option value="17:00">17:00</option>
+                            <option value="17:30">17:30</option>
+                            <option value="18:00">18:00</option>
+                            <option value="18:30">18:30</option>
+                            <option value="19:00">19:00</option>
+                            <option value="19:30">19:30</option>
+                            <option value="20:00">20:00</option>
+                            <option value="20:30">20:30</option>
+                            <option value="21:00">21:00</option>
+                            <option value="21:30">21:30</option>
+                        </select>
                         <label for="endDate">Date de fin</label>
                     </div>
                     <c:if test="${not empty errorEndDate}">
@@ -106,12 +180,12 @@
                     <!-- Statut -->
                     <div class="form-floating mb-3">
                         <select class="form-select" id="status" name="status" required>
-                            <option value="2" ${formStatus == '3' ? 'selected' : ''}>Payée</option>
-                            <option value="2" ${formStatus == '2' ? 'selected' : ''}>A payer sur place</option>
-                            <option value="1" ${formStatus == '1' ? 'selected' : ''}>Annulé</option>
-                            <option value="0" ${formStatus == '0' ? 'selected' : ''}>Blacklist</option>
+                            <option value="2" ${formStatus == '3' ? 'selected' : ''}>Maintenue</option>
+                            <option value="2" ${formStatus == '2' ? 'selected' : ''}>Confirmée</option>
+                            <option value="1" ${formStatus == '1' ? 'selected' : ''}>Payée</option>
+                            <option value="0" ${formStatus == '0' ? 'selected' : ''}>Remboursé</option>
                         </select>
-                        <label for="status">Statut de l'évènement</label>
+                        <label for="status">Statut de la réservation</label>
                     </div>
                     <c:if test="${not empty errorStatus}">
                         <div class="text-danger mb-3">${errorStatus}</div>
@@ -119,7 +193,7 @@
                     <div class="text-center">
                         <button class="btn btn-success" type="submit">
                             <c:choose>
-                                <c:when test="${not empty hallId}">Modifier</c:when>
+                                <c:when test="${not empty reservationId}">Modifier</c:when>
                                 <c:otherwise>Ajouter</c:otherwise>
                             </c:choose>
                         </button>
@@ -129,57 +203,3 @@
         </div>
     </div>
 </section>
-<!-- formulaire version Franz -->
-<section class="page-section portfolio" id="portfolio">
-    <h2>Réserver un Terrain</h2>
-
-    <form action="/reserver-terrains" method="POST">
-        <div>
-            <label for="sport_reservation">Choisir un sport :</label>
-            <select id="sport_reservation" name="sport" required>
-                <option value="">Sélectionner un sport</option>
-                <option value="football">Football</option>
-                <option value="basketball">Basketball</option>
-                <option value="tennis">Tennis</option>
-                <option value="volleyball">Volleyball</option>
-            </select>
-        </div>
-
-        <div>
-            <label for="local_reservation">Choisir un local :</label>
-            <select id="local_reservation" name="local" required>
-                <option value="">Sélectionner un local</option>
-                <option value="local_1">Local 1</option>
-                <option value="local_2">Local 2</option>
-                <option value="local_3">Local 3</option>
-            </select>
-        </div>
-
-        <div>
-            <label for="terrain_reservation">Choisir un terrain :</label>
-            <select id="terrain_reservation" name="terrain" required>
-                <option value="">Sélectionner un terrain</option>
-                <option value="terrain_1">Terrain 1</option>
-                <option value="terrain_2">Terrain 2</option>
-                <option value="terrain_3">Terrain 3</option>
-            </select>
-        </div>
-
-        <div>
-            <label for="date_reservation">Date de réservation :</label>
-            <input type="date" id="date_reservation" name="date" required>
-        </div>
-
-        <div>
-            <label for="horaire_reservation">Horaire de réservation :</label>
-            <input type="time" id="horaire_reservation" name="horaire" required>
-        </div>
-
-        <div>
-            <label for="duree_reservation">Durée de la réservation (en heures) :</label>
-            <input type="number" id="duree_reservation" name="duree" min="1" max="6" required>
-        </div>
-
-        <button type="submit">Réserver le terrain</button>
-    </form>
-</section>>
