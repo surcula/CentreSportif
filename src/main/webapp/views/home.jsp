@@ -21,11 +21,6 @@
         </div>
         <!-- Masthead Subheading-->
         <p class="masthead-subheading font-weight-light mb-0">Franz - Sophie - Soukaïna - Sarah</p>
-        <c:if test="${not empty sessionScope.role}">
-            <p class="text-center text-light mt-2">
-                Connecté en tant que <strong>${sessionScope.role}</strong>
-            </p>
-        </c:if>
     </div>
 </header>
 
