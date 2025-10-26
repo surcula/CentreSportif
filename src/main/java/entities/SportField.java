@@ -2,6 +2,7 @@ package entities;
 
 import javax.persistence.*;
 import java.time.Instant;
+import java.time.LocalDateTime;
 
 /**
  * Named Query
@@ -9,11 +10,11 @@ import java.time.Instant;
 @NamedQueries({
         @NamedQuery(
                 name = "getAllActiveSportFields",
-                query = "SELECT sp FROM SportField sp WHERE sp.active = true order by sp.id asc"
+                query = "SELECT sp FROM SportField sp WHERE sp.active = true order by sp.field.fieldName,sp.sport.sportName, sp.day asc"
         ),
         @NamedQuery(
                 name = "getAllSportFields",
-                query = "SELECT sp FROM SportField sp order by sp.id asc"
+                query = "SELECT sp FROM SportField sp order by sp.field.fieldName,sp.sport.sportName, sp.day asc"
         ),
         @NamedQuery(
                 name = "countAllActiveSportFields",
@@ -41,23 +42,21 @@ public class SportField {
     private Field field;
 
     @Column(name = "start_time", nullable = false)
-    private Instant startTime;
+    private LocalDateTime startTime;
 
     @Column(name = "end_time", nullable = false)
-    private Instant endTime;
+    private LocalDateTime endTime;
 
     @Column(name = "date_start", nullable = false)
-    private Instant dateStart;
+    private LocalDateTime dateStart;
 
     @Column(name = "day", nullable = false)
     private int day;
 
-    //@Column(name = "price", nullable = false, precision = 10, scale = 2)
-    @Transient
+    @Column(name = "price", nullable = false, precision = 10, scale = 2)
     private double price;
 
-    //@Column(name = "session_duration", nullable = false)
-    @Transient
+    @Column(name = "session_duration", nullable = false)
     private int sessionDuration;
 
     @Column(name = "is_active", nullable = false)
@@ -87,27 +86,27 @@ public class SportField {
         this.field = field;
     }
 
-    public Instant getStartTime() {
+    public LocalDateTime getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(Instant startTime) {
+    public void setStartTime(LocalDateTime startTime) {
         this.startTime = startTime;
     }
 
-    public Instant getEndTime() {
+    public LocalDateTime getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(Instant endTime) {
+    public void setEndTime(LocalDateTime endTime) {
         this.endTime = endTime;
     }
 
-    public Instant getDateStart() {
+    public LocalDateTime getDateStart() {
         return dateStart;
     }
 
-    public void setDateStart(Instant dateStart) {
+    public void setDateStart(LocalDateTime dateStart) {
         this.dateStart = dateStart;
     }
 
@@ -141,5 +140,24 @@ public class SportField {
     public void setActive(boolean active) {
         this.active = active;
     }
+
+    /**
+     * Return label for day
+     * @return
+     */
+    @Transient
+    public String getDayLabel() {
+        switch (this.day) {
+            case 1: return "Lundi";
+            case 2: return "Mardi";
+            case 3: return "Mercredi";
+            case 4: return "Jeudi";
+            case 5: return "Vendredi";
+            case 6: return "Samedi";
+            case 7: return "Dimanche";
+            default: return "Inconnu";
+        }
+    }
+
 
 }
