@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 @NamedQueries({
         @NamedQuery(
                 name = "Event.getAllActive",
-                query = "SELECT e FROM Event e WHERE e.active = true ORDER BY e.beginDateHour ASC"
+                query = "SELECT e FROM Event e WHERE e.active = true ORDER BY e.id ASC"
         ),
         @NamedQuery(
                 name = "Event.count",
@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
         ),
         @NamedQuery(
                 name = "Event.getAll",
-                query = "SELECT e FROM Event e ORDER BY e.beginDateHour DESC"
+                query = "SELECT e FROM Event e ORDER BY e.id DESC"
         )
 })
 

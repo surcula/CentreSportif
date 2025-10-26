@@ -13,23 +13,27 @@
 <c:set var="currentPage" value="${empty page ? 1 : page}"/>
 <c:set var="pageSize" value="${empty size ? 10 : size}"/>
 <c:set var="pages" value="${empty totalPages ? 1 : totalPages}"/>
-<c:set var="total" value="${empty totalElements ? fn:length(halls) : totalElements}"/>
+<c:set var="total" value="${empty totalElements ? fn:length(reservations) : totalElements}"/>
 <!-- formulaire version David -->
 <section class="page-section">
+    <!--<h1>Debug JSP: ${reservations != null ? fn:length(reservations) : 'null'}</h1>-->
+    <!--<p>Reservations list: ${not empty reservations ? reservations.size() : "vide ou null"}</p>-->
     <h2 class="page-section-heading text-center text-uppercase text-secondary mb-0">Les réservations</h2>
-    <!--<div class="alert alert-danger text-center">${error}</div>
+    <c:if test="${not empty error}">
+    <div class="alert alert-danger text-center">${error}</div>
     <div class="text-center mt-3">
         <a class="btn btn-success"
            href="${pageContext.request.contextPath}/reservation">Retry</a>
-    </div>-->
+    </div>
+    </c:if>
     <a class="btn btn-primary my-3" href="${pageContext.request.contextPath}/reservation?form=true">Ajouter une nouvelle
         réservation</a>
     <div class="d-flex justify-content-end align-items-center mb-2">
         <div class="me-3 text-muted small">
-            ${totalElements} résultat
+            ${totalElements} résultat<c:if test="${totalElements >1}">s</c:if>
             — Page ${page} / ${totalPages}
         </div>
-        <form method="get" action="" class="d-flex align-items-center">
+        <form method="get" action="${pageContext.request.contextPath}/reservation" class="d-flex align-items-center">
             <label for="size" class="me-2 small">Taille page</label>
             <select id="size" name="size" class="form-select form-select-sm"
                     onchange="this.form.submit()">
@@ -52,53 +56,72 @@
                 <th scope="col">Statut</th>
                 <th scope="col">Identifiant client</th>
                 <th scope="col">Identifiant terrain</th>
+                <th scope="col">Etat</th>
                 <th> Détails</th>
             </tr>
         </thead>
         <tbody>
+        <c:forEach var = "reservation" items ="${reservations}" varStatus = "status">
         <tr>
             <td>${(page - 1) * size + status.index + 1}</td>
             <td>${reservation.reservationName}</td>
-            <td>${reservation.reservationStartDate}</td>
-            <td>${reservation.reservationEndDate}</td>
-            <td>${reservation.reservationPrice}</td>
+            <td>${reservation.startDateReservation}</td>
+            <td>${reservation.endDateReservation}</td>
+            <td>${reservation.price}</td>
             <td>${reservation.tva}</td>
-            <td>${reservation.status}</td>
-            <td>${reservation.userId}</td>
-            <td>${reservation.sportsFieldId}</td>
+            <td>${reservation.statut}</td>
+            <td>Voir table User</td>
+            <td>Voir table SportField</td>
+            <td>
+                <c:choose>
+                    <c:when test = "${reservation.active}">
+                        <span class = "badge bg-success">En cours</span>
+                    </c:when>
+                    <c:otherwise>
+                        <span class = "badge bg-secondary">Terminée</span>
+                    </c:otherwise>
+                </c:choose>
+            </td>
             <td>
                 <div class="btn-group" role="group" aria-label="Actions Reservation">
                     <!-- Bouton Modifier -->
-                    <a href="${pageContext.request.contextPath}/reservation?editForm=${125}"
+                    <a href="${pageContext.request.contextPath}/reservation?editForm=${reservation.id}"
                        class="btn btn-outline-primary btn-sm">
                         <i class="bi bi-pencil-square"></i> Modifier
                     </a>
 
-                    <!-- Bouton Supprimer ou Activer -->
-
-                    <!-- Formulaire Supprimer -->
-                    <form method="post" action=""
-                          onsubmit="return confirm('Supprimer cette réservation ?')" style="display: inline;">
-                        <input type="hidden" name="reservationId" value="${reservation.id}"/>
-                        <input type="hidden" name="action" value="delete"/>
-                        <button type="submit" class="btn btn-outline-danger btn-sm">
-                            <i class="bi bi-trash"></i> Supprimer
-                        </button>
-                    </form>
-                    <!-- Formulaire Activer -->
-                    <form method="post" action="${pageContext.request.contextPath}/reservation"
-                          onsubmit="return confirm('Activer cette réservation ?')" style="display: inline;">
-                        <input type="hidden" name="reservationId" value="${reservation.id}"/>
-                        <input type="hidden" name="action" value="activer"/>
-                        <button type="submit" class="btn btn-outline-warning btn-sm">
-                            <i class="bi bi-trash"></i> Activer
-                        </button>
-                    </form>
+                    <!-- Choix entre le bouton activer ou supprimer en fonction du statut -->
+                    <c:choose>
+                        <c:when test = "${reservation.active}">
+                            <!-- Formulaire Supprimer -->
+                            <form method="post" action="${pageContext.request.contextPath}/reservation"
+                                  onsubmit="return confirm('Supprimer cette réservation ?')" style="display: inline;">
+                                <input type="hidden" name="reservationId" value="${reservation.id}"/>
+                                <input type="hidden" name="action" value="delete"/>
+                                <button type="submit" class="btn btn-outline-danger btn-sm">
+                                    <i class="bi bi-trash"></i> Supprimer
+                                </button>
+                            </form>
+                        </c:when>
+                        <c:otherwise>
+                            <!-- Formulaire Activer -->
+                            <form method="post" action="${pageContext.request.contextPath}/reservation"
+                                  onsubmit="return confirm('Activer cette réservation ?')" style="display: inline;">
+                                <input type="hidden" name="reservationId" value="${reservation.id}"/>
+                                <input type="hidden" name="action" value="activer"/>
+                                <button type="submit" class="btn btn-outline-warning btn-sm">
+                                    <i class="bi bi-check-circle"></i> Activer
+                                </button>
+                            </form>
+                        </c:otherwise>
+                    </c:choose>
                 </div>
             </td>
         </tr>
+        </c:forEach>
         </tbody>
     </table>
+    <c:if test="${pages>1}">
     <nav aria-label="Pagination">
         <ul class="pagination justify-content-center">
 
@@ -146,6 +169,7 @@
             </li>
         </ul>
     </nav>
+    </c:if>
 </section>
 
 

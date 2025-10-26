@@ -36,7 +36,11 @@ public class EventServlet extends HttpServlet {
     // Log4j
     private static final org.apache.log4j.Logger log = org.apache.log4j.Logger.getLogger(EventServlet.class);
 
-
+    /**
+     * Initialisation of the servlet with a message to be sur ethe servlet is activated
+     * @param config
+     * @throws ServletException
+     */
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
@@ -51,12 +55,7 @@ public class EventServlet extends HttpServlet {
      */
     private EventServiceImpl eventService;
     /**
-     * variable to create the business for event
-     */
-    private EventBusiness eventBusiness;
-    //private EntityManagerFactory entityManagerFactory;
-    /**
-     * Method to view the form
+     * Method to view the form and the list of events
      * @param request
      * @param response
      * @throws ServletException
