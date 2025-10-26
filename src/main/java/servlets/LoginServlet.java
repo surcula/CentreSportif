@@ -83,16 +83,16 @@ public class LoginServlet extends HttpServlet {
 
             String role;
             switch (roleId) {
-                case 1: role = "admin";      break;
-                case 2: role = "secretaire"; break;
-                case 3: role = "barman";     break;
-                default: role = "utilisateur";      break;
+                case 1: role = "ADMIN";      break;
+                case 2: role = "SECRETARY"; break;
+                case 3: role = "BARMAN";     break;
+                default: role = "USER";      break;
             }
             session.setAttribute("role", role);
             // redirection selon le role
-            String target = ("admin".equals(role) || "secretaire".equals(role) || "barman".equals(role))
-                    ? "/users"
-                    : "/home";
+            String target = ("ADMIN".equals(role) || "SECRETARY".equals(role) || "BARMAN".equals(role))
+                    ? "/home"
+                    : "/users";
             ServletUtils.redirectToURL(response, request.getContextPath() + target);
         } finally {
             em.close();
