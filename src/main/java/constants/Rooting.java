@@ -13,4 +13,5 @@ public class Rooting {
     public static final String RESERVATION_FORM_JSP = "/views/reservation-form.jsp";
     public static final String SPORT_JSP = "/views/sport.jsp";
     public static final String SPORT_FORM_JSP = "/views/sport-form.jsp";
+    public static final String SPORT_FIELD_FORM_JSP = "/views/sportField-form.jsp";
 }
