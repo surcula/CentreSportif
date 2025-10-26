@@ -16,8 +16,8 @@
 <c:set var="total" value="${empty totalElements ? fn:length(reservations) : totalElements}"/>
 <!-- formulaire version David -->
 <section class="page-section">
-    <h1>Debug JSP: ${reservations != null ? fn:length(reservations) : 'null'}</h1>
-    <p>Reservations list: ${not empty reservations ? reservations.size() : "vide ou null"}</p>
+    <!--<h1>Debug JSP: ${reservations != null ? fn:length(reservations) : 'null'}</h1>-->
+    <!--<p>Reservations list: ${not empty reservations ? reservations.size() : "vide ou null"}</p>-->
     <h2 class="page-section-heading text-center text-uppercase text-secondary mb-0">Les réservations</h2>
     <c:if test="${not empty error}">
     <div class="alert alert-danger text-center">${error}</div>
