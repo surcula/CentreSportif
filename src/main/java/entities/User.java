@@ -8,14 +8,64 @@ import javax.persistence.NamedQuery;
 import javax.persistence.*;
 import java.time.LocalDate;
 
+
+
 @Entity
-@NamedQueries({ //pour l'inscription ,connexion
-        @NamedQuery(name = "User.findByEmail", query = "SELECT u FROM User u WHERE u.email = :email"),
-        @NamedQuery(name = "User.countByEmail", query = "SELECT COUNT(u) FROM User u WHERE u.email = :email"),
-        @NamedQuery(name = "User.findByEmailWithRole", query = "SELECT u FROM User u LEFT JOIN FETCH u.role WHERE u.email = :email")
+@NamedQueries({
+        // inscription / connexion
+        @NamedQuery(name = "User.findByEmail",
+                query = "SELECT u FROM User u WHERE u.email = :email"),
+        @NamedQuery(name = "User.countByEmail",
+                query = "SELECT COUNT(u) FROM User u WHERE u.email = :email"),
+        @NamedQuery(name = "User.findByEmailWithRole",
+                query = "SELECT u FROM User u LEFT JOIN FETCH u.role WHERE u.email = :email"),
 
+        // listing simple
+        @NamedQuery(name = "User.findAllOrdered",
+                query = "SELECT u FROM User u ORDER BY u.lastName, u.firstName"),
+        @NamedQuery(name = "User.searchQ",
+                query = "SELECT u FROM User u " +
+                        "WHERE (:q IS NULL OR :q = '' OR " +
+                        "LOWER(u.lastName) LIKE LOWER(CONCAT('%',:q,'%')) OR " +
+                        "LOWER(u.firstName) LIKE LOWER(CONCAT('%',:q,'%')) OR " +
+                        "LOWER(u.email) LIKE LOWER(CONCAT('%',:q,'%'))) " +
+                        "ORDER BY u.lastName, u.firstName"),
+        @NamedQuery(name = "User.searchQStatus",
+                query = "SELECT u FROM User u " +
+                        "WHERE (:q IS NULL OR :q = '' OR " +
+                        "LOWER(u.lastName) LIKE LOWER(CONCAT('%',:q,'%')) OR " +
+                        "LOWER(u.firstName) LIKE LOWER(CONCAT('%',:q,'%')) OR " +
+                        "LOWER(u.email) LIKE LOWER(CONCAT('%',:q,'%'))) " +
+                        "AND (:status IS NULL OR u.active = :status) " +
+                        "ORDER BY u.lastName, u.firstName"),
+        @NamedQuery(name = "User.countQStatus",
+                query = "SELECT COUNT(u) FROM User u " +
+                        "WHERE (:q IS NULL OR :q = '' OR " +
+                        "LOWER(u.lastName) LIKE LOWER(CONCAT('%',:q,'%')) OR " +
+                        "LOWER(u.firstName) LIKE LOWER(CONCAT('%',:q,'%')) OR " +
+                        "LOWER(u.email) LIKE LOWER(CONCAT('%',:q,'%'))) " +
+                        "AND (:status IS NULL OR u.active = :status)"),
+
+
+        // recherche + filtre + exclusions de rôles pour la gestion d'utilisateurs
+        @NamedQuery(name = "User.searchQStatusExcl",
+                query = "SELECT u FROM User u " +
+                        "WHERE (:q IS NULL OR :q = '' OR " +
+                        "LOWER(u.lastName) LIKE LOWER(CONCAT('%',:q,'%')) OR " +
+                        "LOWER(u.firstName) LIKE LOWER(CONCAT('%',:q,'%')) OR " +
+                        "LOWER(u.email) LIKE LOWER(CONCAT('%',:q,'%'))) " +
+                        "AND (:status IS NULL OR u.active = :status) " +
+                        "AND u.role.roleName NOT IN :excl " +
+                        "ORDER BY u.lastName, u.firstName"),
+        @NamedQuery(name = "User.countQStatusExcl",
+                query = "SELECT COUNT(u) FROM User u " +
+                        "WHERE (:q IS NULL OR :q = '' OR " +
+                        "LOWER(u.lastName) LIKE LOWER(CONCAT('%',:q,'%')) OR " +
+                        "LOWER(u.firstName) LIKE LOWER(CONCAT('%',:q,'%')) OR " +
+                        "LOWER(u.email) LIKE LOWER(CONCAT('%',:q,'%'))) " +
+                        "AND (:status IS NULL OR u.active = :status) " +
+                        "AND u.role.roleName NOT IN :excl")
 })
-
 
 @Table(name = "users")
 public class User {
@@ -72,6 +122,9 @@ public class User {
         return blacklist;
     }
 
+    public Boolean getBlacklist() {
+        return blacklist;
+    }
     public void setBlacklist(Boolean blacklist) {
         this.blacklist = blacklist;
     }
