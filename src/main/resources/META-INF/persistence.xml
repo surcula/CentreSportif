@@ -21,6 +21,11 @@
         <class>entities.UsersSubscription</class>
         <class>entities.OrdersDiscount</class>
         <class>entities.OrdersSubscription</class>
+        <class>entities.Role</class>
+        <class>entities.Address</class>
+        <class>entities.City</class>
+        <class>entities.Country</class>
+
 
 
         <properties>

@@ -2,11 +2,20 @@ package dto;
 
 import java.time.LocalDate;
 
+/**
+ * Champs optionnels :
+ * - startDate / endDate / quantity peuvent être null => ne pas modifier
+ * - active est toujours fourni
+ */
 public class UsersSubscriptionUpdateForm {
-    private LocalDate startDate;
-    private LocalDate endDate;
-    private Integer quantity; // nouveau solde
+    private int usersSubscriptionId;
+    private LocalDate startDate;   // nullable
+    private LocalDate endDate;     // nullable
+    private Integer quantity;      // nullable
     private boolean active;
+
+    public int getUsersSubscriptionId() { return usersSubscriptionId; }
+    public void setUsersSubscriptionId(int usersSubscriptionId) { this.usersSubscriptionId = usersSubscriptionId; }
 
     public LocalDate getStartDate() { return startDate; }
     public void setStartDate(LocalDate startDate) { this.startDate = startDate; }

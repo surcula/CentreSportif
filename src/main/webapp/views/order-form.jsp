@@ -27,14 +27,33 @@
 
     <c:choose>
         <c:when test="${mode == 'edit'}">
+            <!-- Infos commande -->
             <div class="card mb-3">
                 <div class="card-body">
                     <p><b>ID :</b> ${order.id}</p>
                     <p><b>Date :</b> <fmt:formatDate value="${order.dateOrder}" pattern="yyyy-MM-dd HH:mm"/></p>
-                    <p><b>Total TTC :</b> <fmt:formatNumber value="${order.totalPrice}" type="currency"/></p>
                     <p><b>Statut :</b> ${order.status}</p>
                 </div>
             </div>
+
+            <!-- Récap remises + total -->
+            <c:if test="${not empty order}">
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title mb-2">Récapitulatif</h5>
+                        <c:if test="${not empty order.ordersDiscounts}">
+                            <ul class="mb-2">
+                                <c:forEach var="od" items="${order.ordersDiscounts}">
+                                    <li>- ${od.discount.discountName} :
+                                        <fmt:formatNumber value="${od.amountApplied}" type="currency"/>
+                                    </li>
+                                </c:forEach>
+                            </ul>
+                        </c:if>
+                        <p class="mb-0"><b>Total TTC :</b> <fmt:formatNumber value="${order.totalPrice}" type="currency"/></p>
+                    </div>
+                </div>
+            </c:if>
 
             <div class="d-flex flex-wrap gap-2">
                 <!-- Appliquer une remise -->
@@ -52,10 +71,24 @@
                     <button type="submit" class="btn btn-outline-success btn-sm">Payer par abonnement</button>
                 </form>
 
-                <!-- Payer en ligne (mock) -->
-                <form method="post" action="${pageContext.request.contextPath}/order">
+                <!-- Payer en ligne (mock) + promoCode + checkbox staff -->
+                <form method="post" action="${pageContext.request.contextPath}/order" class="d-flex align-items-center gap-2 flex-wrap">
                     <input type="hidden" name="action" value="payOnline"/>
                     <input type="hidden" name="orderId" value="${order.id}"/>
+
+                    <!-- Champ code promo côté client -->
+                    <div class="input-group input-group-sm" style="max-width:280px;">
+                        <span class="input-group-text">% Code</span>
+                        <input type="text" name="promoCode" class="form-control form-control-sm"
+                               placeholder="CLUB10" value="${param.promoCode}"/>
+                    </div>
+
+                    <!-- Checkbox staff (optionnelle) -->
+                    <label class="form-check-label d-flex align-items-center gap-1">
+                        <input type="checkbox" class="form-check-input" name="clubEligible"/>
+                        Appliquer -10% club
+                    </label>
+
                     <button type="submit" class="btn btn-outline-success btn-sm">Payer en ligne</button>
                 </form>
 

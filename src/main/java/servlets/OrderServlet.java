@@ -100,8 +100,6 @@ public class OrderServlet extends HttpServlet {
                 Result<Integer> sizeRes = ParamUtils.stringToInteger(request.getParameter("size"));
                 int size = sizeRes.isSuccess() ? Math.min(20, Math.max(1, sizeRes.getData())) : 10;
 
-                // Si tu veux filtrer “actives” vs “toutes”, on peut réutiliser Scope comme pour Sport.
-                // Ici, on liste toutes par défaut.
                 Result<Page<Order>> result = orderBusiness.getAllOrdersPaged(page, size, Scope.ALL);
 
                 if (result.isSuccess()) {
@@ -224,6 +222,21 @@ public class OrderServlet extends HttpServlet {
             try {
                 OrderService orderService = new OrderServiceImpl(em);
                 em.getTransaction().begin();
+
+                String promoCode = request.getParameter("promoCode");
+                if (promoCode == null) promoCode = "";
+                promoCode = promoCode.trim();
+
+                boolean clubEligible = "CLUB10".equalsIgnoreCase(promoCode)
+                        || request.getParameter("clubEligible") != null;
+
+                Result<Order> autoRes = orderService.applyAutoDiscounts(form.getData().getOrderId(), clubEligible);
+                if (!autoRes.isSuccess()) {
+                    em.getTransaction().rollback();
+                    ServletUtils.forwardWithErrors(request, response, autoRes.getErrors(), ORDER_JSP, TEMPLATE);
+                    return;
+                }
+
                 Result<Order> res = orderService.confirmByOnlinePayment(form.getData().getOrderId());
                 if (!res.isSuccess()) {
                     em.getTransaction().rollback();

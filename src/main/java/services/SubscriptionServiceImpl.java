@@ -1,13 +1,18 @@
 package services;
 
 import Tools.Result;
+import entities.Subscription;
+import entities.User;
 import entities.UsersSubscription;
 import interfaces.SubscriptionService;
 import org.apache.log4j.Logger;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.TypedQuery;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
 
 public class SubscriptionServiceImpl implements SubscriptionService {
 
@@ -18,55 +23,162 @@ public class SubscriptionServiceImpl implements SubscriptionService {
         this.em = em;
     }
 
+    /* ========= CREATE ========= */
+
     @Override
-    public Result<UsersSubscription> assignToUser(int subscriptionId, int userId, LocalDate start, LocalDate end, int quantity) {
-        // Implémentation back-office plus tard (création UsersSubscription)
-        return Result.fail(Collections.singletonMap("todo","assignToUser non implémenté"));
+    public Result<UsersSubscription> assignToUser(int subscriptionId, int userId,
+                                                  LocalDate start, LocalDate end, int quantity) {
+        try {
+            // Si l'id N'EST PAS auto-généré sur l'entité, on doit le setter :
+            Integer nextId = getNextUsersSubscriptionId();
+
+            UsersSubscription us = new UsersSubscription();
+            us.setId(nextId);
+            // getReference = évite un SELECT full (ok si FK existe)
+            us.setSubscription(em.getReference(Subscription.class, subscriptionId));
+            us.setUser(em.getReference(User.class, userId));
+            us.setStartDate(start);
+            us.setEndDate(end);
+            us.setQuantityMax(quantity);
+            us.setActive(true);
+
+            em.persist(us);
+            log.info("UsersSubscription créé: id=" + us.getId()
+                    + " subId=" + subscriptionId + " userId=" + userId);
+            return Result.ok(us);
+        } catch (Exception e) {
+            log.error("assignToUser error", e);
+            return Result.fail(Collections.singletonMap("assign", e.getMessage()));
+        }
     }
+
+    /** Calcule le prochain id pour UsersSubscription (si pas @GeneratedValue). */
+    private Integer getNextUsersSubscriptionId() {
+        try {
+            Integer max = em.createQuery("SELECT COALESCE(MAX(us.id), 0) FROM UsersSubscription us", Integer.class)
+                    .getSingleResult();
+            return max + 1;
+        } catch (Exception e) {
+            log.error("getNextUsersSubscriptionId error", e);
+            // fallback : id pseudo-unique
+            return (int) (System.currentTimeMillis() & 0x7FFFFFFF);
+        }
+    }
+
+    /* ========= READ ========= */
 
     @Override
     public Result<UsersSubscription> findUsersSubscription(int id) {
         UsersSubscription us = em.find(UsersSubscription.class, id);
-        if (us == null) return Result.fail(Collections.singletonMap("notFound","UsersSubscription "+id+" introuvable"));
+        if (us == null) return Result.fail(Collections.singletonMap("notFound", "UsersSubscription " + id + " introuvable"));
         return Result.ok(us);
     }
 
     @Override
     public Result<List<UsersSubscription>> findByUser(int userId) {
-        List<UsersSubscription> list = em.createNamedQuery("UsersSubscription.byUser", UsersSubscription.class)
+        // Si NamedQuery présente sur l'entité :
+        // List<UsersSubscription> list = em.createNamedQuery("UsersSubscription.byUser", UsersSubscription.class)
+        //         .setParameter("uid", userId).getResultList();
+
+        // Version JPQL inline (ok également)
+        List<UsersSubscription> list = em.createQuery(
+                        "SELECT us FROM UsersSubscription us " +
+                                "WHERE us.user.id = :uid ORDER BY us.startDate DESC",
+                        UsersSubscription.class)
                 .setParameter("uid", userId)
                 .getResultList();
-        log.info("UsersSubscription.findByUser size=" + list.size() + " userId=" + userId);
+
+        log.info("findByUser size=" + list.size() + " userId=" + userId);
         return Result.ok(list);
     }
 
+    /* ========= UPDATE (pour POST action=update) ========= */
+
+    @Override
+    public Result<UsersSubscription> updateUsersSubscription(int id, LocalDate start, LocalDate end, Integer quantity, boolean active) {
+        try {
+            UsersSubscription us = em.find(UsersSubscription.class, id);
+            if (us == null)
+                return Result.fail(Collections.singletonMap("notFound", "UsersSubscription " + id + " introuvable"));
+
+            if (start != null) us.setStartDate(start);
+            if (end != null)   us.setEndDate(end);
+            if (quantity != null && quantity.intValue() >= 0) us.setQuantityMax(quantity.intValue());
+            us.setActive(active);
+
+            em.merge(us);
+            log.info("UsersSubscription update id=" + id);
+            return Result.ok(us);
+        } catch (Exception e) {
+            log.error("updateUsersSubscription error", e);
+            return Result.fail(Collections.singletonMap("update", e.getMessage()));
+        }
+    }
+
+    /* ========= RÈGLES D’USAGE ========= */
+
     @Override
     public Result<Boolean> isValid(UsersSubscription us, LocalDate now) {
-        boolean ok = us != null && us.isActive()
-                && !now.isBefore(us.getStartDate())
-                && !now.isAfter(us.getEndDate())
+        boolean ok = us != null
+                && us.isActive()
+                && (now.isEqual(us.getStartDate()) || now.isAfter(us.getStartDate()))
+                && (now.isEqual(us.getEndDate())   || now.isBefore(us.getEndDate()))
                 && us.getQuantityMax() > 0;
+
         return Result.ok(Boolean.valueOf(ok));
     }
 
     @Override
     public Result<Boolean> debit(UsersSubscription us, int qty) {
         if (us == null) return Result.fail(Collections.singletonMap("subscription","UsersSubscription null"));
+        if (qty <= 0)    return Result.ok(Boolean.FALSE);
+
         UsersSubscription managed = em.find(UsersSubscription.class, us.getId());
-        if (managed.getQuantityMax() < qty) return Result.ok(Boolean.FALSE);
+        if (managed == null) return Result.fail(Collections.singletonMap("subscription","UsersSubscription introuvable"));
+
+        if (managed.getQuantityMax() < qty) {
+            log.info("debit refusé (insuffisant) id=" + managed.getId());
+            return Result.ok(Boolean.FALSE);
+        }
         managed.setQuantityMax(managed.getQuantityMax() - qty);
         em.merge(managed);
-        log.info("UsersSubscription.debit -"+qty+" id="+managed.getId()+" newQty="+managed.getQuantityMax());
+        log.info("debit -" + qty + " id=" + managed.getId() + " newQty=" + managed.getQuantityMax());
         return Result.ok(Boolean.TRUE);
     }
 
     @Override
     public Result<Boolean> credit(UsersSubscription us, int qty) {
         if (us == null) return Result.fail(Collections.singletonMap("subscription","UsersSubscription null"));
+        if (qty <= 0)    return Result.ok(Boolean.FALSE);
+
         UsersSubscription managed = em.find(UsersSubscription.class, us.getId());
+        if (managed == null) return Result.fail(Collections.singletonMap("subscription","UsersSubscription introuvable"));
+
         managed.setQuantityMax(managed.getQuantityMax() + qty);
         em.merge(managed);
-        log.info("UsersSubscription.credit +"+qty+" id="+managed.getId()+" newQty="+managed.getQuantityMax());
+        log.info("credit +" + qty + " id=" + managed.getId() + " newQty=" + managed.getQuantityMax());
         return Result.ok(Boolean.TRUE);
+    }
+
+    /* ========= UTIL ========= */
+
+    /** Retourne l’US actif du user pour un subscriptionId donné, sinon null. */
+    public UsersSubscription findActiveForUserAndSub(int userId, int subscriptionId, LocalDate now) {
+        try {
+            TypedQuery<UsersSubscription> q = em.createQuery(
+                    "SELECT us FROM UsersSubscription us " +
+                            "WHERE us.user.id = :uid AND us.subscription.id = :sid " +
+                            "AND us.active = true " +
+                            "AND :today >= us.startDate AND :today <= us.endDate " +
+                            "ORDER BY us.endDate DESC",
+                    UsersSubscription.class);
+            q.setParameter("uid", userId);
+            q.setParameter("sid", subscriptionId);
+            q.setParameter("today", now);
+            q.setMaxResults(1);
+            return q.getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 }

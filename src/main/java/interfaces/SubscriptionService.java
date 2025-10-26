@@ -15,6 +15,8 @@ public interface SubscriptionService {
     /* ===== Recherches ===== */
     Result<UsersSubscription> findUsersSubscription(int id);
     Result<List<UsersSubscription>> findByUser(int userId);
+    Result<UsersSubscription> updateUsersSubscription(int id, LocalDate start, LocalDate end, Integer quantity, boolean active);
+
 
     /* ===== Règles + opérations de solde ===== */
     Result<Boolean> isValid(UsersSubscription us, LocalDate now);

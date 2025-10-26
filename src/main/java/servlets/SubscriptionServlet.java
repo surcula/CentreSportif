@@ -162,12 +162,23 @@ public class SubscriptionServlet extends HttpServlet {
         }
 
         // --- CREATE (assignation STAFF) ---
-        if (idParam == null) {
+        if ("assign".equals(action) && idParam == null) {
             EntityManager em = null;
             try {
+                // validation minimale (l'utilisateur a pu taper sans cliquer)
+                String userIdRaw = request.getParameter("userId");
+                String subIdRaw  = request.getParameter("subscriptionId");
+                if (userIdRaw == null || userIdRaw.isEmpty() || subIdRaw == null || subIdRaw.isEmpty()) {
+                    ServletUtils.forwardWithError(request, response,
+                            "Sélectionne un utilisateur et un abonnement dans la liste.",
+                            SUBSCRIPTION_FORM_JSP, TEMPLATE);
+                    return;
+                }
+
+                // form builder existant (gère parse/erreurs métier)
                 Result<UsersSubscriptionAssignForm> formRes = SubscriptionBusiness.initAssignForm(
-                        request.getParameter("userId"),
-                        request.getParameter("subscriptionId"),
+                        userIdRaw,
+                        subIdRaw,
                         request.getParameter("startDate"),
                         request.getParameter("endDate"),
                         request.getParameter("quantity"),
@@ -183,6 +194,7 @@ public class SubscriptionServlet extends HttpServlet {
 
                 em.getTransaction().begin();
                 UsersSubscriptionAssignForm f = formRes.getData();
+                // ⚠️ ordre attendu par ton service: (subscriptionId, userId, ...)
                 Result<UsersSubscription> created = service.assignToUser(
                         f.getSubscriptionId(), f.getUserId(), f.getStartDate(), f.getEndDate(), f.getQuantity()
                 );
@@ -219,6 +231,7 @@ public class SubscriptionServlet extends HttpServlet {
             }
 
             Result<UsersSubscriptionUpdateForm> updRes = SubscriptionBusiness.initUpdateForm(
+                    request.getParameter("usersSubscriptionId"),
                     request.getParameter("startDate"),
                     request.getParameter("endDate"),
                     request.getParameter("quantity"),

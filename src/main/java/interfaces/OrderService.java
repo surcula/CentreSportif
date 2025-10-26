@@ -18,6 +18,7 @@ public interface OrderService {
 
     /* ===== Actions métier commande ===== */
     Result<Order> applyDiscount(int orderId, int discountId);          // crée OrdersDiscount + recalcule total
+    Result<Order> applyAutoDiscounts(Integer orderId, boolean clubEligible);
     Result<Order> linkUserSubscription(int orderId, int subscriptionId);// crée OrdersSubscription (Order ↔ Subscription)
 
     Result<Order> confirmBySubscription(int orderId);                   // vérifie UsersSubscription & débite
