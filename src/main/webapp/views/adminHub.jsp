@@ -71,6 +71,19 @@
                 </div>
             </div>
         </div>
+        <!-- Card Users -->
+        <div class="col">
+            <div class="card shadow-sm text-center">
+                <div class="p-3">
+                    <img src="assets/img/Utilisateurs.png" class="imgCard" alt="Utilisateurs">
+                </div>
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">Gestion des utilisateurs</h5>
+                    <p class="card-text">Activer/Désactiver, rôles, blacklist.</p>
+                    <a href="${pageContext.request.contextPath}/admin/users" class="btn btn-primary mt-auto">Gérer les utilisateurs</a>
+                </div>
+            </div>
+        </div>
 
     </div>
 
