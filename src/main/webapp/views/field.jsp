@@ -25,7 +25,6 @@
             <a class="btn btn-success"
                href="${pageContext.request.contextPath}/field">Retry</a>
         </div>
-
     </c:if>
     <c:if test="${empty error}">
         <c:if test="${sessionScope.role == 'ADMIN'
@@ -69,6 +68,11 @@
             </tr>
             </thead>
             <tbody>
+
+            <c:if test="${empty fields}">
+                <tr> <td>Aucunes données trouvées.</td> </tr>
+            </c:if>
+
             <c:forEach var="field" items="${fields}" varStatus="status">
                 <tr>
                     <td>${(page - 1) * size + status.index + 1}</td>
@@ -77,7 +81,7 @@
                     <c:if test="${sessionScope.role == 'ADMIN'
              or sessionScope.role == 'BARMAN'
              or sessionScope.role == 'SECRETARY'}">
-                        <td>${field.active}</td>
+                        <td>${field.active ? 'Actif' : 'Non actif'}</td>
                         <td>
                             <div class="btn-group" role="group" aria-label="Actions field">
                                 <!-- Bouton Modifier -->
@@ -91,7 +95,8 @@
                                     <c:when test="${field.active}">
                                         <!-- Formulaire Supprimer -->
                                         <form method="post" action="${pageContext.request.contextPath}/field"
-                                              onsubmit="return confirm('Supprimer ce terrain ?')" style="display: inline;">
+                                              onsubmit="return confirm('Supprimer ce terrain ?')"
+                                              style="display: inline;">
                                             <input type="hidden" name="fieldId" value="${field.id}"/>
                                             <input type="hidden" name="action" value="delete"/>
                                             <button type="submit" class="btn btn-outline-danger btn-sm">
@@ -102,7 +107,8 @@
                                     <c:otherwise>
                                         <!-- Formulaire Activer -->
                                         <form method="post" action="${pageContext.request.contextPath}/field"
-                                              onsubmit="return confirm('Activer ce terrain ?')" style="display: inline;">
+                                              onsubmit="return confirm('Activer ce terrain ?')"
+                                              style="display: inline;">
                                             <input type="hidden" name="fieldId" value="${field.id}"/>
                                             <input type="hidden" name="action" value="activer"/>
                                             <button type="submit" class="btn btn-outline-warning btn-sm">
