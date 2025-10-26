@@ -35,6 +35,17 @@
                 </li>
 
                 <!-- Lien admin -->
+
+                <c:if test="${sessionScope.role == 'ADMIN'
+             or sessionScope.role == 'BARMAN'
+             or sessionScope.role == 'SECRETARY'}">
+                    <li class="nav-item">
+                        <a class="nav-link fw-bold text-warning" href="${pageContext.request.contextPath}/admin">
+                            ADMIN
+                        </a>
+                    </li>
+                </c:if>
+
                 <c:if test="${sessionScope.role == 'admin' || sessionScope.role == 'secretaire' || sessionScope.role == 'barman'}">
                     <li class="nav-item">
                         <a class="nav-link fw-bold text-warning" href="${pageContext.request.contextPath}/users">Gestion utilisateurs</a>
