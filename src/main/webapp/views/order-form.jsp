@@ -6,6 +6,18 @@
     out.print("<!-- DBG: has linkedUS=" + (dbg != null) +
             " | has list=" + (request.getAttribute("ordersSubscriptions") != null) + " -->");
 %>
+<%
+    out.print("<!-- DBG linkedUS=" + (request.getAttribute("linkedUsersSubscription")!=null) +
+            " list=" + (request.getAttribute("ordersSubscriptions")!=null) + " -->");
+%>
+
+<%
+    boolean hasSub = request.getAttribute("linkedUsersSubscription") != null
+            || request.getAttribute("usersSubscription") != null
+            || request.getAttribute("ordersSubscriptions") != null;
+%>
+<button <%= hasSub ? "" : "disabled" %> ...>Payer via abonnement</button>
+
 
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
 

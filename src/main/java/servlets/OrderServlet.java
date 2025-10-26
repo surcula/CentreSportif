@@ -45,7 +45,7 @@ public class OrderServlet extends HttpServlet {
                 : null;
         boolean fullAccess = ServletUtils.isFullAuthorized(role);
 
-        // ===== Formulaire de création standard (réservé staff) =====
+        // ===== Formulaire de création standard (staff only) =====
         if (form != null && !"fromSubscription".equals(form)) {
             if (!fullAccess) { ServletUtils.redirectNoAuthorized(request, response); return; }
             OrderControllerHelper.handleFormDisplay(request, response);
@@ -55,12 +55,11 @@ public class OrderServlet extends HttpServlet {
         // ===== Formulaire PRÉ-REMPLI depuis un abonnement (user OU staff) =====
         if ("fromSubscription".equals(form)) {
             if (session == null || session.getAttribute("userId") == null) {
-                // même staff: on exige une session ouverte
                 ServletUtils.redirectNoAuthorized(request, response);
                 return;
             }
 
-            // id de UsersSubscription en param: ?subscriptionId=XXXX
+            // On attend l'ID **UsersSubscription** (PK de users_subscriptions)
             Result<Integer> usIdRes = ParamUtils.verifyId(request.getParameter("subscriptionId"));
             if (!usIdRes.isSuccess()) {
                 ServletUtils.forwardWithErrors(request, response, usIdRes.getErrors(), ORDER_JSP, TEMPLATE);
@@ -70,44 +69,69 @@ public class OrderServlet extends HttpServlet {
             EntityManager em = EMF.getEM();
             try {
                 int sessionUserId = (int) session.getAttribute("userId");
+                boolean isStaff = ServletUtils.isFullAuthorized(role);
+
                 SubscriptionServiceImpl subService = new SubscriptionServiceImpl(em);
                 OrderServiceImpl orderService = new OrderServiceImpl(em);
 
                 Result<UsersSubscription> usRes = subService.findUsersSubscription(usIdRes.getData());
-                if (!usRes.isSuccess()) {
+                if (!usRes.isSuccess() || usRes.getData() == null) {
                     ServletUtils.forwardWithError(request, response, "Abonnement introuvable.", ORDER_JSP, TEMPLATE);
                     return;
                 }
                 UsersSubscription us = usRes.getData();
 
-                // Ownership si non staff
-                if (!fullAccess && (us.getUser() == null || us.getUser().getId() != sessionUserId)) {
-                    ServletUtils.redirectNoAuthorized(request, response);
-                    return;
+                // Ownership si pas staff
+                if (!isStaff) {
+                    Integer ownerId = (us.getUser() != null) ? us.getUser().getId() : null;
+                    if (ownerId == null || ownerId.intValue() != sessionUserId) {
+                        ServletUtils.redirectNoAuthorized(request, response);
+                        return;
+                    }
                 }
 
-                // Devis pour pré-remplir
-                int sportId = us.getSubscription().getSport().getId();
-                Integer qBoxed = us.getQuantityMax(); // peut être null
+                // Devis (qty fallback à 1). Supporte Integer OU int selon ton getter.
+                Integer qBoxed = null;
+                try { qBoxed = us.getQuantityMax(); } catch (Throwable ignore) {}
                 int qty = (qBoxed != null && qBoxed > 0) ? qBoxed : 1;
 
+                int sportId = us.getSubscription().getSport().getId();
                 Result<Map<String, Double>> quote = orderService.quoteFromSport(sportId, qty, LocalDate.now());
-                if (!quote.isSuccess()) {
+                if (!quote.isSuccess() || quote.getData() == null) {
                     ServletUtils.forwardWithErrors(request, response, quote.getErrors(), ORDER_JSP, TEMPLATE);
                     return;
                 }
 
-                // ====== ATTRIBUTS ATTENDUS PAR order-form.jsp ======
+                // ===== Attributs JSP (toutes variantes safe) =====
                 request.setAttribute("fromSubscription", true);
 
-                // ✅ clé corrigée: le JSP attend "linkedUsersSubscription"
+                // clé principale + alias
                 request.setAttribute("linkedUsersSubscription", us);
+                request.setAttribute("usersSubscription", us);
+                request.setAttribute("hasLinkedSubscription", true);
+                request.setAttribute("linkedUsersSubscriptionId", us.getId());
 
+                // si la vue attend une liste d’abonnements liés
+                java.util.List<UsersSubscription> usList = java.util.Collections.singletonList(us);
+                request.setAttribute("ordersSubscriptions", usList);
+                request.setAttribute("orderSubscriptions", usList);
+                request.setAttribute("subscriptions", usList);
+
+                // petit Order "draft" pour forcer l’affichage
+                Order draft = new Order();
+                draft.setStatus(OrderStatus.ONHOLD);
+                draft.setUser(us.getUser());
+                draft.setDateOrder(Instant.now());
+                Double total = quote.getData().get("total");
+                if (total != null) draft.setTotalPrice(total);
+                request.setAttribute("order", draft);
+
+                // pré-remplissage
                 request.setAttribute("prefillUser", us.getUser());
                 request.setAttribute("prefillSport", us.getSubscription().getSport());
                 request.setAttribute("unitPrice", quote.getData().get("unit"));
                 request.setAttribute("quantity", qty);
-                request.setAttribute("total", quote.getData().get("total"));
+                request.setAttribute("total", total);
 
                 OrderControllerHelper.handleFormDisplay(request, response);
                 return;
@@ -121,7 +145,7 @@ public class OrderServlet extends HttpServlet {
             }
         }
 
-        // ===== Édition : autoriser STAFF ou PROPRIÉTAIRE =====
+        // ===== Édition : staff ou propriétaire =====
         if (editForm != null) {
             Result<Integer> orderUpdateId = ParamUtils.verifyId(editForm);
             if (!orderUpdateId.isSuccess()) {
@@ -160,7 +184,7 @@ public class OrderServlet extends HttpServlet {
             }
         }
 
-        // ===== Liste : réservé staff =====
+        // ===== Liste : staff only =====
         if (!fullAccess) {
             ServletUtils.redirectNoAuthorized(request, response);
             return;
@@ -219,7 +243,8 @@ public class OrderServlet extends HttpServlet {
 
         /* ========= One-click pay depuis l’abonnement (user + staff) ========= */
         if ("quickPayFromSubscription".equals(action)) {
-            Result<Integer> subIdRes = ParamUtils.verifyId(request.getParameter("subscriptionId")); // UsersSubscription.id attendu
+            // ID attendu = UsersSubscription.id
+            Result<Integer> subIdRes = ParamUtils.verifyId(request.getParameter("subscriptionId"));
             if (!subIdRes.isSuccess()) {
                 ServletUtils.forwardWithErrors(request, response, subIdRes.getErrors(), ORDER_JSP, TEMPLATE);
                 return;
@@ -231,7 +256,7 @@ public class OrderServlet extends HttpServlet {
                 SubscriptionServiceImpl subService = new SubscriptionServiceImpl(em);
 
                 Result<UsersSubscription> usRes = subService.findUsersSubscription(subIdRes.getData());
-                if (!usRes.isSuccess()) {
+                if (!usRes.isSuccess() || usRes.getData() == null) {
                     ServletUtils.forwardWithErrors(request, response, usRes.getErrors(), ORDER_JSP, TEMPLATE);
                     return;
                 }
@@ -240,22 +265,26 @@ public class OrderServlet extends HttpServlet {
                 boolean fullAccess = ServletUtils.isFullAuthorized(role);
                 if (!fullAccess) {
                     Integer sessionUserId = (Integer) (session != null ? session.getAttribute("userId") : null);
-                    if (sessionUserId == null || us.getUser() == null || us.getUser().getId() != sessionUserId) {
+                    Integer ownerId = (us.getUser() != null) ? us.getUser().getId() : null;
+                    if (sessionUserId == null || ownerId == null || !ownerId.equals(sessionUserId)) {
                         ServletUtils.redirectNoAuthorized(request, response);
                         return;
                     }
                 }
 
-                int sportId = us.getSubscription().getSport().getId();
-                Integer qBoxed = us.getQuantityMax();
+                // Devis
+                Integer qBoxed = null;
+                try { qBoxed = us.getQuantityMax(); } catch (Throwable ignore) {}
                 int qty = (qBoxed != null && qBoxed > 0) ? qBoxed : 1;
 
+                int sportId = us.getSubscription().getSport().getId();
                 Result<Map<String, Double>> quote = orderService.quoteFromSport(sportId, qty, LocalDate.now());
                 if (!quote.isSuccess()) {
                     ServletUtils.forwardWithErrors(request, response, quote.getErrors(), ORDER_JSP, TEMPLATE);
                     return;
                 }
 
+                // Persist + lien + paiement
                 em.getTransaction().begin();
 
                 Order o = new Order();
@@ -265,7 +294,7 @@ public class OrderServlet extends HttpServlet {
                 o.setStatus(OrderStatus.ONHOLD);
                 em.persist(o);
 
-                // ✅ CORRECTION: lier avec l'ID du UsersSubscription, pas Subscription
+                // Lier l’order avec **UsersSubscription.id** (pas Subscription.id)
                 Result<Order> linkRes = orderService.linkUserSubscription(o.getId(), us.getId());
                 if (!linkRes.isSuccess()) {
                     em.getTransaction().rollback();
