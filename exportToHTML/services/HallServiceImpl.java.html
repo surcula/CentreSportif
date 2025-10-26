@@ -1,0 +1,131 @@
+<html>
+<head>
+<title>HallServiceImpl.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cf8e6d;}
+.s1 { color: #bcbec4;}
+.s2 { color: #bcbec4;}
+.s3 { color: #7a7e85;}
+.s4 { color: #6aab73;}
+.s5 { color: #5f826b; font-style: italic;}
+.s6 { color: #2aacb8;}
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+HallServiceImpl.java</font>
+</center></td></tr></table>
+<pre><span class="s0">package </span><span class="s1">services</span><span class="s2">;</span>
+
+<span class="s0">import </span><span class="s1">Tools</span><span class="s2">.</span><span class="s1">Result</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">entities</span><span class="s2">.</span><span class="s1">Hall</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">javax</span><span class="s2">.</span><span class="s1">persistence</span><span class="s2">.</span><span class="s1">EntityManager</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">java</span><span class="s2">.</span><span class="s1">util</span><span class="s2">.</span><span class="s1">HashMap</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">java</span><span class="s2">.</span><span class="s1">util</span><span class="s2">.</span><span class="s1">List</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">java</span><span class="s2">.</span><span class="s1">util</span><span class="s2">.</span><span class="s1">Map</span><span class="s2">;</span>
+
+<span class="s0">public class </span><span class="s1">HallServiceImpl </span><span class="s0">implements </span><span class="s1">interfaces</span><span class="s2">.</span><span class="s1">HallService </span><span class="s2">{</span>
+
+    <span class="s0">private final </span><span class="s1">EntityManager em</span><span class="s2">;</span>
+    <span class="s3">// Log4j</span>
+    <span class="s0">private static final </span><span class="s1">org</span><span class="s2">.</span><span class="s1">apache</span><span class="s2">.</span><span class="s1">log4j</span><span class="s2">.</span><span class="s1">Logger log </span><span class="s2">= </span><span class="s1">org</span><span class="s2">.</span><span class="s1">apache</span><span class="s2">.</span><span class="s1">log4j</span><span class="s2">.</span><span class="s1">Logger</span><span class="s2">.</span><span class="s1">getLogger</span><span class="s2">(</span><span class="s1">HallServiceImpl</span><span class="s2">.</span><span class="s0">class</span><span class="s2">);</span>
+
+
+    <span class="s0">public </span><span class="s1">HallServiceImpl</span><span class="s2">(</span><span class="s1">EntityManager em</span><span class="s2">) {</span>
+
+        <span class="s0">this</span><span class="s2">.</span><span class="s1">em </span><span class="s2">= </span><span class="s1">em</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s1">@Override</span>
+    <span class="s0">public </span><span class="s1">Result create</span><span class="s2">(</span><span class="s1">Hall hallCreateForm</span><span class="s2">) {</span>
+        <span class="s1">em</span><span class="s2">.</span><span class="s1">persist</span><span class="s2">(</span><span class="s1">hallCreateForm</span><span class="s2">);</span>
+        <span class="s1">log</span><span class="s2">.</span><span class="s1">info</span><span class="s2">(</span><span class="s4">&quot;Hall created&quot;</span><span class="s2">);</span>
+        <span class="s0">return </span><span class="s1">Result</span><span class="s2">.</span><span class="s1">ok</span><span class="s2">();</span>
+    <span class="s2">}</span>
+
+    <span class="s1">@Override</span>
+    <span class="s0">public </span><span class="s1">Result update</span><span class="s2">(</span><span class="s1">Hall hall</span><span class="s2">) {</span>
+        <span class="s1">em</span><span class="s2">.</span><span class="s1">merge</span><span class="s2">(</span><span class="s1">hall</span><span class="s2">);</span>
+        <span class="s1">log</span><span class="s2">.</span><span class="s1">info</span><span class="s2">(</span><span class="s4">&quot;Hall &quot; </span><span class="s2">+ </span><span class="s1">hall</span><span class="s2">.</span><span class="s1">getId</span><span class="s2">() + </span><span class="s4">&quot; updated&quot;</span><span class="s2">);</span>
+        <span class="s0">return </span><span class="s1">Result</span><span class="s2">.</span><span class="s1">ok</span><span class="s2">();</span>
+    <span class="s2">}</span>
+
+    <span class="s1">@Override</span>
+    <span class="s0">public </span><span class="s1">Result softDelete</span><span class="s2">(</span><span class="s1">Hall hall</span><span class="s2">) {</span>
+        <span class="s1">em</span><span class="s2">.</span><span class="s1">merge</span><span class="s2">(</span><span class="s1">hall</span><span class="s2">);</span>
+        <span class="s1">log</span><span class="s2">.</span><span class="s1">info</span><span class="s2">(</span><span class="s4">&quot;Hall &quot; </span><span class="s2">+ </span><span class="s1">hall</span><span class="s2">.</span><span class="s1">getId</span><span class="s2">() + </span><span class="s4">&quot; is not active&quot;</span><span class="s2">);</span>
+        <span class="s0">return </span><span class="s1">Result</span><span class="s2">.</span><span class="s1">ok</span><span class="s2">();</span>
+    <span class="s2">}</span>
+
+    <span class="s1">@Override</span>
+    <span class="s0">public </span><span class="s1">Result</span><span class="s2">&lt;</span><span class="s1">Hall</span><span class="s2">&gt; </span><span class="s1">getOneById</span><span class="s2">(</span><span class="s0">int </span><span class="s1">id</span><span class="s2">) {</span>
+        <span class="s5">/**</span>
+         <span class="s5">* Il faut vériffier si l'objet existe no?-&gt; erreur</span>
+         <span class="s5">*/</span>
+        <span class="s1">Hall hall </span><span class="s2">= </span><span class="s1">em</span><span class="s2">.</span><span class="s1">find</span><span class="s2">(</span><span class="s1">Hall</span><span class="s2">.</span><span class="s0">class</span><span class="s2">, </span><span class="s1">id</span><span class="s2">);</span>
+        <span class="s0">if </span><span class="s2">(</span><span class="s1">hall </span><span class="s2">== </span><span class="s0">null</span><span class="s2">) {</span>
+            <span class="s1">log</span><span class="s2">.</span><span class="s1">warn</span><span class="s2">(</span><span class="s4">&quot;Hall &quot; </span><span class="s2">+ </span><span class="s1">id </span><span class="s2">+ </span><span class="s4">&quot; not found&quot;</span><span class="s2">);</span>
+            <span class="s1">Map</span><span class="s2">&lt;</span><span class="s1">String</span><span class="s2">, </span><span class="s1">String</span><span class="s2">&gt; </span><span class="s1">errors </span><span class="s2">= </span><span class="s0">new </span><span class="s1">HashMap</span><span class="s2">&lt;&gt;();</span>
+            <span class="s1">errors</span><span class="s2">.</span><span class="s1">put</span><span class="s2">(</span><span class="s4">&quot;notFound&quot;</span><span class="s2">, </span><span class="s4">&quot;Aucun hall trouvé avec l’ID &quot; </span><span class="s2">+ </span><span class="s1">id</span><span class="s2">);</span>
+            <span class="s0">return </span><span class="s1">Result</span><span class="s2">.</span><span class="s1">fail</span><span class="s2">(</span><span class="s1">errors</span><span class="s2">);</span>
+        <span class="s2">}</span>
+        <span class="s1">log</span><span class="s2">.</span><span class="s1">info</span><span class="s2">(</span><span class="s4">&quot;Hall &quot; </span><span class="s2">+ </span><span class="s1">hall</span><span class="s2">.</span><span class="s1">getId</span><span class="s2">() + </span><span class="s4">&quot; found&quot;</span><span class="s2">);</span>
+        <span class="s0">return </span><span class="s1">Result</span><span class="s2">.</span><span class="s1">ok</span><span class="s2">(</span><span class="s1">hall</span><span class="s2">);</span>
+    <span class="s2">}</span>
+
+    <span class="s1">@Override</span>
+    <span class="s0">public </span><span class="s1">Result</span><span class="s2">&lt;</span><span class="s1">List</span><span class="s2">&lt;</span><span class="s1">Hall</span><span class="s2">&gt;&gt; </span><span class="s1">getAllActiveHalls</span><span class="s2">(</span><span class="s0">int </span><span class="s1">offset</span><span class="s2">, </span><span class="s0">int </span><span class="s1">size</span><span class="s2">) {</span>
+        <span class="s1">offset </span><span class="s2">= </span><span class="s1">Math</span><span class="s2">.</span><span class="s1">max</span><span class="s2">(</span><span class="s1">offset</span><span class="s2">, </span><span class="s6">0</span><span class="s2">);</span>
+        <span class="s0">if</span><span class="s2">(</span><span class="s1">size </span><span class="s2">&lt;= </span><span class="s6">0</span><span class="s2">){</span>
+            <span class="s1">List</span><span class="s2">&lt;</span><span class="s1">Hall</span><span class="s2">&gt; </span><span class="s1">halls </span><span class="s2">= </span><span class="s1">em</span><span class="s2">.</span><span class="s1">createNamedQuery</span><span class="s2">(</span><span class="s4">&quot;getAllActiveHalls&quot;</span><span class="s2">, </span><span class="s1">Hall</span><span class="s2">.</span><span class="s0">class</span><span class="s2">)</span>
+                    <span class="s2">.</span><span class="s1">getResultList</span><span class="s2">();</span>
+            <span class="s1">log</span><span class="s2">.</span><span class="s1">info</span><span class="s2">(</span><span class="s4">&quot;getAllActiveHalls : &quot; </span><span class="s2">+ </span><span class="s1">halls</span><span class="s2">.</span><span class="s1">size</span><span class="s2">());</span>
+            <span class="s0">return </span><span class="s1">Result</span><span class="s2">.</span><span class="s1">ok</span><span class="s2">(</span><span class="s1">halls</span><span class="s2">);</span>
+        <span class="s2">}</span>
+        <span class="s1">List</span><span class="s2">&lt;</span><span class="s1">Hall</span><span class="s2">&gt; </span><span class="s1">halls </span><span class="s2">= </span><span class="s1">em</span><span class="s2">.</span><span class="s1">createNamedQuery</span><span class="s2">(</span><span class="s4">&quot;getAllActiveHalls&quot;</span><span class="s2">, </span><span class="s1">Hall</span><span class="s2">.</span><span class="s0">class</span><span class="s2">)</span>
+                <span class="s2">.</span><span class="s1">setFirstResult</span><span class="s2">(</span><span class="s1">offset</span><span class="s2">)</span>
+                <span class="s2">.</span><span class="s1">setMaxResults</span><span class="s2">(</span><span class="s1">size</span><span class="s2">)</span>
+                <span class="s2">.</span><span class="s1">getResultList</span><span class="s2">();</span>
+        <span class="s1">log</span><span class="s2">.</span><span class="s1">info</span><span class="s2">(</span><span class="s4">&quot;getAllActiveHalls : &quot; </span><span class="s2">+ </span><span class="s1">halls</span><span class="s2">.</span><span class="s1">size</span><span class="s2">());</span>
+        <span class="s0">return </span><span class="s1">Result</span><span class="s2">.</span><span class="s1">ok</span><span class="s2">(</span><span class="s1">halls</span><span class="s2">);</span>
+    <span class="s2">}</span>
+
+    <span class="s1">@Override</span>
+    <span class="s0">public </span><span class="s1">Result</span><span class="s2">&lt;</span><span class="s1">List</span><span class="s2">&lt;</span><span class="s1">Hall</span><span class="s2">&gt;&gt; </span><span class="s1">getAllHalls</span><span class="s2">(</span><span class="s0">int </span><span class="s1">offset</span><span class="s2">, </span><span class="s0">int </span><span class="s1">size</span><span class="s2">) {</span>
+        <span class="s1">offset </span><span class="s2">= </span><span class="s1">Math</span><span class="s2">.</span><span class="s1">max</span><span class="s2">(</span><span class="s1">offset</span><span class="s2">, </span><span class="s6">0</span><span class="s2">);</span>
+        <span class="s0">if</span><span class="s2">(</span><span class="s1">size </span><span class="s2">&lt;= </span><span class="s6">0</span><span class="s2">){</span>
+            <span class="s1">List</span><span class="s2">&lt;</span><span class="s1">Hall</span><span class="s2">&gt; </span><span class="s1">halls </span><span class="s2">= </span><span class="s1">em</span><span class="s2">.</span><span class="s1">createNamedQuery</span><span class="s2">(</span><span class="s4">&quot;getAllHalls&quot;</span><span class="s2">, </span><span class="s1">Hall</span><span class="s2">.</span><span class="s0">class</span><span class="s2">)</span>
+                    <span class="s2">.</span><span class="s1">getResultList</span><span class="s2">();</span>
+            <span class="s1">log</span><span class="s2">.</span><span class="s1">info</span><span class="s2">(</span><span class="s4">&quot;getAllHalls : &quot; </span><span class="s2">+ </span><span class="s1">halls</span><span class="s2">.</span><span class="s1">size</span><span class="s2">());</span>
+            <span class="s0">return </span><span class="s1">Result</span><span class="s2">.</span><span class="s1">ok</span><span class="s2">(</span><span class="s1">halls</span><span class="s2">);</span>
+        <span class="s2">}</span>
+        <span class="s1">List</span><span class="s2">&lt;</span><span class="s1">Hall</span><span class="s2">&gt; </span><span class="s1">halls </span><span class="s2">= </span><span class="s1">em</span><span class="s2">.</span><span class="s1">createNamedQuery</span><span class="s2">(</span><span class="s4">&quot;getAllHalls&quot;</span><span class="s2">, </span><span class="s1">Hall</span><span class="s2">.</span><span class="s0">class</span><span class="s2">)</span>
+                <span class="s2">.</span><span class="s1">setFirstResult</span><span class="s2">(</span><span class="s1">offset</span><span class="s2">)</span>
+                <span class="s2">.</span><span class="s1">setMaxResults</span><span class="s2">(</span><span class="s1">size</span><span class="s2">)</span>
+                <span class="s2">.</span><span class="s1">getResultList</span><span class="s2">();</span>
+        <span class="s1">log</span><span class="s2">.</span><span class="s1">info</span><span class="s2">(</span><span class="s4">&quot;getAllHalls : &quot; </span><span class="s2">+ </span><span class="s1">halls</span><span class="s2">.</span><span class="s1">size</span><span class="s2">());</span>
+        <span class="s0">return </span><span class="s1">Result</span><span class="s2">.</span><span class="s1">ok</span><span class="s2">(</span><span class="s1">halls</span><span class="s2">);</span>
+    <span class="s2">}</span>
+
+    <span class="s1">@Override</span>
+    <span class="s0">public </span><span class="s1">Result</span><span class="s2">&lt;</span><span class="s1">Long</span><span class="s2">&gt; </span><span class="s1">countActiveHalls</span><span class="s2">() {</span>
+        <span class="s1">Long countAllHalls </span><span class="s2">= </span><span class="s1">em</span><span class="s2">.</span><span class="s1">createNamedQuery</span><span class="s2">(</span><span class="s4">&quot;countAllActiveHalls&quot;</span><span class="s2">, </span><span class="s1">Long</span><span class="s2">.</span><span class="s0">class</span><span class="s2">).</span><span class="s1">getSingleResult</span><span class="s2">();</span>
+        <span class="s1">log</span><span class="s2">.</span><span class="s1">info</span><span class="s2">(</span><span class="s4">&quot;getAllHalls : &quot; </span><span class="s2">+ </span><span class="s1">countAllHalls</span><span class="s2">);</span>
+        <span class="s0">return </span><span class="s1">Result</span><span class="s2">.</span><span class="s1">ok</span><span class="s2">(</span><span class="s1">countAllHalls</span><span class="s2">);</span>
+    <span class="s2">}</span>
+
+    <span class="s1">@Override</span>
+    <span class="s0">public </span><span class="s1">Result</span><span class="s2">&lt;</span><span class="s1">Long</span><span class="s2">&gt; </span><span class="s1">countAllHalls</span><span class="s2">() {</span>
+        <span class="s1">Long countAllHalls </span><span class="s2">= </span><span class="s1">em</span><span class="s2">.</span><span class="s1">createNamedQuery</span><span class="s2">(</span><span class="s4">&quot;countAllHalls&quot;</span><span class="s2">, </span><span class="s1">Long</span><span class="s2">.</span><span class="s0">class</span><span class="s2">).</span><span class="s1">getSingleResult</span><span class="s2">();</span>
+        <span class="s1">log</span><span class="s2">.</span><span class="s1">info</span><span class="s2">(</span><span class="s4">&quot;getAllHalls : &quot; </span><span class="s2">+ </span><span class="s1">countAllHalls</span><span class="s2">);</span>
+        <span class="s0">return </span><span class="s1">Result</span><span class="s2">.</span><span class="s1">ok</span><span class="s2">(</span><span class="s1">countAllHalls</span><span class="s2">);</span>
+    <span class="s2">}</span>
+
+
+<span class="s2">}</span>
+</pre>
+</body>
+</html>

@@ -1,0 +1,94 @@
+<html>
+<head>
+<title>EventService.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cf8e6d;}
+.s1 { color: #bcbec4;}
+.s2 { color: #bcbec4;}
+.s3 { color: #5f826b; font-style: italic;}
+.s4 { color: #67a37c; font-style: italic;}
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+EventService.java</font>
+</center></td></tr></table>
+<pre><span class="s0">package </span><span class="s1">interfaces</span><span class="s2">;</span>
+
+<span class="s0">import </span><span class="s1">Tools</span><span class="s2">.</span><span class="s1">Result</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">dto</span><span class="s2">.</span><span class="s1">Page</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">entities</span><span class="s2">.</span><span class="s1">Event</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">java</span><span class="s2">.</span><span class="s1">util</span><span class="s2">.</span><span class="s1">List</span><span class="s2">;</span>
+
+<span class="s3">/**</span>
+ <span class="s3">* Service interface for managing Event entities</span>
+ <span class="s3">* It contains the contract operations in relation with create, update, delete and retrieve events</span>
+ <span class="s3">*/</span>
+<span class="s0">public interface </span><span class="s1">EventService </span><span class="s2">{</span>
+    <span class="s3">/**</span>
+     <span class="s3">* Create a new event</span>
+     <span class="s3">* </span><span class="s4">@param </span><span class="s3">event the event entity to create</span>
+     <span class="s3">* </span><span class="s4">@return </span><span class="s3">a {</span><span class="s4">@link </span><span class="s3">Result} indicating success or failure with error details</span>
+     <span class="s3">*/</span>
+    <span class="s1">Result create</span><span class="s2">(</span><span class="s1">Event event</span><span class="s2">);</span>
+    <span class="s3">/**</span>
+     <span class="s3">* Updates an existing event</span>
+     <span class="s3">* </span><span class="s4">@param </span><span class="s3">event the event entity with updated data</span>
+     <span class="s3">* </span><span class="s4">@return </span><span class="s3">a {</span><span class="s4">@link </span><span class="s3">Result} indicating success or failure with error details</span>
+     <span class="s3">*/</span>
+    <span class="s1">Result update</span><span class="s2">(</span><span class="s1">Event event</span><span class="s2">);</span>
+
+    <span class="s3">/**</span>
+     <span class="s3">* Delete an event in putting the status to inactive</span>
+     <span class="s3">* </span><span class="s4">@param </span><span class="s3">event the event entity to delete</span>
+     <span class="s3">* </span><span class="s4">@return </span><span class="s3">a {</span><span class="s4">@link </span><span class="s3">Result} indicating success or failure with error details</span>
+     <span class="s3">*/</span>
+    <span class="s1">Result delete</span><span class="s2">(</span><span class="s1">Event event</span><span class="s2">);</span>
+
+    <span class="s3">/**</span>
+     <span class="s3">* Search an id by its ID</span>
+     <span class="s3">* </span><span class="s4">@param </span><span class="s3">id the identifier of the event</span>
+     <span class="s3">* </span><span class="s4">@return </span><span class="s3">a {</span><span class="s4">@link </span><span class="s3">Result} containing the event if found, or errors otherwise</span>
+     <span class="s3">*/</span>
+    <span class="s1">Result</span><span class="s2">&lt;</span><span class="s1">Event</span><span class="s2">&gt; </span><span class="s1">getOneById</span><span class="s2">(</span><span class="s0">int </span><span class="s1">id</span><span class="s2">);</span>
+
+    <span class="s3">/**</span>
+     <span class="s3">* Search all the events which are active with pagination</span>
+     <span class="s3">* </span><span class="s4">@param </span><span class="s3">page the page number (starting at 1)</span>
+     <span class="s3">* </span><span class="s4">@param </span><span class="s3">size the number of events per page</span>
+     <span class="s3">* @ return a {</span><span class="s4">@link </span><span class="s3">Result} containing the list of active events</span>
+     <span class="s3">*/</span>
+    <span class="s1">Result</span><span class="s2">&lt;</span><span class="s1">List</span><span class="s2">&lt;</span><span class="s1">Event</span><span class="s2">&gt;&gt; </span><span class="s1">getAllActiveEvents</span><span class="s2">(</span><span class="s0">int </span><span class="s1">page</span><span class="s2">, </span><span class="s0">int </span><span class="s1">size</span><span class="s2">);</span>
+
+    <span class="s3">/**</span>
+     <span class="s3">* Search all events</span>
+     <span class="s3">* </span><span class="s4">@param </span><span class="s3">page the page number (starting at 1)</span>
+     <span class="s3">* </span><span class="s4">@param </span><span class="s3">size the number of events per page</span>
+     <span class="s3">* </span><span class="s4">@return </span><span class="s3">a list of all events</span>
+     <span class="s3">*/</span>
+    <span class="s1">Result</span><span class="s2">&lt;</span><span class="s1">Page</span><span class="s2">&lt;</span><span class="s1">Event</span><span class="s2">&gt;&gt; </span><span class="s1">getAllEvents</span><span class="s2">(</span><span class="s0">int </span><span class="s1">page</span><span class="s2">, </span><span class="s0">int </span><span class="s1">size</span><span class="s2">);</span>
+
+    <span class="s3">/**</span>
+     <span class="s3">* Method to search all events with a list to call in EventBusiness</span>
+     <span class="s3">* </span><span class="s4">@param </span><span class="s3">page the number of the page</span>
+     <span class="s3">* </span><span class="s4">@param </span><span class="s3">size the size of the items</span>
+     <span class="s3">*/</span>
+    <span class="s1">Result</span><span class="s2">&lt;</span><span class="s1">List</span><span class="s2">&lt;</span><span class="s1">Event</span><span class="s2">&gt;&gt; </span><span class="s1">getAllEvents2</span><span class="s2">(</span><span class="s0">int </span><span class="s1">page</span><span class="s2">, </span><span class="s0">int </span><span class="s1">size</span><span class="s2">);</span>
+
+    <span class="s3">/**</span>
+     <span class="s3">* count all active events</span>
+     <span class="s3">* </span><span class="s4">@return </span><span class="s3">a list of all active events</span>
+     <span class="s3">*/</span>
+    <span class="s1">Result</span><span class="s2">&lt;</span><span class="s1">Long</span><span class="s2">&gt; </span><span class="s1">countActiveEvents</span><span class="s2">();</span>
+    <span class="s3">/**</span>
+     <span class="s3">* count all events</span>
+     <span class="s3">* </span><span class="s4">@return </span><span class="s3">a liste of all events</span>
+     <span class="s3">*/</span>
+    <span class="s1">Result</span><span class="s2">&lt;</span><span class="s1">Long</span><span class="s2">&gt; </span><span class="s1">countAllEvents</span><span class="s2">();</span>
+<span class="s2">}</span>
+</pre>
+</body>
+</html>

@@ -1,0 +1,78 @@
+<html>
+<head>
+<title>ClosureService.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cf8e6d;}
+.s1 { color: #bcbec4;}
+.s2 { color: #bcbec4;}
+.s3 { color: #5f826b; font-style: italic;}
+.s4 { color: #67a37c; font-style: italic;}
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+ClosureService.java</font>
+</center></td></tr></table>
+<pre><span class="s0">package </span><span class="s1">interfaces</span><span class="s2">;</span>
+
+<span class="s0">import </span><span class="s1">Tools</span><span class="s2">.</span><span class="s1">Result</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">entities</span><span class="s2">.</span><span class="s1">Closure</span><span class="s2">;</span>
+
+<span class="s0">import </span><span class="s1">java</span><span class="s2">.</span><span class="s1">util</span><span class="s2">.</span><span class="s1">List</span><span class="s2">;</span>
+
+<span class="s0">public interface </span><span class="s1">ClosureService </span><span class="s2">{</span>
+    <span class="s3">/**</span>
+     <span class="s3">* Create a new closure</span>
+     <span class="s3">* </span><span class="s4">@param </span><span class="s3">closureCreateForm</span>
+     <span class="s3">*/</span>
+    <span class="s1">Result create</span><span class="s2">(</span><span class="s1">Closure closureCreateForm</span><span class="s2">) ;</span>
+
+    <span class="s3">/**</span>
+     <span class="s3">* Update an existing closure</span>
+     <span class="s3">* </span><span class="s4">@param </span><span class="s3">closure</span>
+     <span class="s3">*/</span>
+    <span class="s1">Result update</span><span class="s2">(</span><span class="s1">Closure  closure</span><span class="s2">) ;</span>
+
+    <span class="s3">/**</span>
+     <span class="s3">* soft-delete a closure by setting its isActive flag to false</span>
+     <span class="s3">* </span><span class="s4">@param </span><span class="s3">closure</span>
+     <span class="s3">*/</span>
+    <span class="s1">Result softDelete</span><span class="s2">(</span><span class="s1">Closure closure</span><span class="s2">) ;</span>
+
+    <span class="s3">/**</span>
+     <span class="s3">* retrieves a closure by its Id</span>
+     <span class="s3">* </span><span class="s4">@param </span><span class="s3">id</span>
+     <span class="s3">* </span><span class="s4">@return </span><span class="s3">Closure</span>
+     <span class="s3">*/</span>
+    <span class="s1">Result</span><span class="s2">&lt;</span><span class="s1">Closure</span><span class="s2">&gt; </span><span class="s1">getOneById</span><span class="s2">(</span><span class="s0">int </span><span class="s1">id</span><span class="s2">);</span>
+
+    <span class="s3">/**</span>
+     <span class="s3">* retrieves all ACTIVE closure</span>
+     <span class="s3">* </span><span class="s4">@return </span><span class="s3">a list of all closures</span>
+     <span class="s3">*/</span>
+    <span class="s1">Result</span><span class="s2">&lt;</span><span class="s1">List</span><span class="s2">&lt;</span><span class="s1">Closure</span><span class="s2">&gt;&gt; </span><span class="s1">getAllActiveClosures</span><span class="s2">(</span><span class="s0">int </span><span class="s1">offset</span><span class="s2">, </span><span class="s0">int </span><span class="s1">size</span><span class="s2">) ;</span>
+
+    <span class="s3">/**</span>
+     <span class="s3">* retrieves all closures</span>
+     <span class="s3">* </span><span class="s4">@return </span><span class="s3">a list of all closures</span>
+     <span class="s3">*/</span>
+    <span class="s1">Result</span><span class="s2">&lt;</span><span class="s1">List</span><span class="s2">&lt;</span><span class="s1">Closure</span><span class="s2">&gt;&gt; </span><span class="s1">getAllClosures</span><span class="s2">(</span><span class="s0">int </span><span class="s1">offset</span><span class="s2">, </span><span class="s0">int </span><span class="s1">size</span><span class="s2">) ;</span>
+
+    <span class="s3">/**</span>
+     <span class="s3">* count all active halls</span>
+     <span class="s3">* </span><span class="s4">@return </span><span class="s3">number</span>
+     <span class="s3">*/</span>
+    <span class="s1">Result</span><span class="s2">&lt;</span><span class="s1">Long</span><span class="s2">&gt; </span><span class="s1">countActiveClosures</span><span class="s2">() ;</span>
+
+    <span class="s3">/**</span>
+     <span class="s3">* count all closures</span>
+     <span class="s3">* </span><span class="s4">@return </span><span class="s3">number</span>
+     <span class="s3">*/</span>
+    <span class="s1">Result</span><span class="s2">&lt;</span><span class="s1">Long</span><span class="s2">&gt; </span><span class="s1">countAllClosures</span><span class="s2">() ;</span>
+<span class="s2">}</span>
+</pre>
+</body>
+</html>

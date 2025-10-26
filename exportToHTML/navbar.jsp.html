@@ -1,0 +1,90 @@
+<html>
+<head>
+<title>navbar.jsp</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #7a7e85;}
+.s1 { color: #bcbec4;}
+.s2 { color: #bcbec4;}
+.s3 { color: #cf8e6d; font-weight: bold;}
+.s4 { color: #bcbec4;}
+.s5 { color: #6aab73;}
+.s6 { color: #7a7e85;}
+.s7 { color: #d5b778;}
+.s8 { color: #bababa;}
+.s9 { color: #6aab73;}
+.s10 { color: #cf8e6d;}
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+navbar.jsp</font>
+</center></td></tr></table>
+<pre><span class="s0">&lt;%-- 
+  Created by IntelliJ IDEA. 
+  User: david 
+  Date: 6/22/2025 
+  Time: 6:40 PM 
+  To change this template use File | Settings | File Templates. 
+--%&gt;</span>
+<span class="s2">&lt;%@ </span><span class="s3">page </span><span class="s4">contentType</span><span class="s2">=&quot;</span><span class="s5">text/html;charset=UTF-8</span><span class="s2">&quot; </span><span class="s4">language</span><span class="s2">=&quot;</span><span class="s5">java</span><span class="s2">&quot; %&gt;</span>
+<span class="s2">&lt;%@ </span><span class="s3">taglib </span><span class="s4">prefix</span><span class="s2">=&quot;</span><span class="s5">c</span><span class="s2">&quot; </span><span class="s4">uri</span><span class="s2">=&quot;</span><span class="s5">http://java.sun.com/jsp/jstl/core</span><span class="s2">&quot; %&gt;</span>
+
+<span class="s6">&lt;!-- Navigation--&gt;</span>
+<span class="s7">&lt;nav </span><span class="s8">class</span><span class="s9">=&quot;navbar navbar-expand-lg bg-secondary text-uppercase fixed-top&quot; </span><span class="s8">id</span><span class="s9">=&quot;mainNav&quot;</span><span class="s7">&gt;</span>
+    <span class="s7">&lt;div </span><span class="s8">class</span><span class="s9">=&quot;container&quot;</span><span class="s7">&gt;</span>
+        <span class="s7">&lt;a </span><span class="s8">class</span><span class="s9">=&quot;navbar-brand&quot; </span><span class="s8">href</span><span class="s9">=&quot;#page-top&quot;</span><span class="s7">&gt;</span><span class="s1">FSSD</span><span class="s7">&lt;/a&gt;</span>
+        <span class="s7">&lt;button </span><span class="s8">class</span><span class="s9">=&quot;navbar-toggler text-uppercase font-weight-bold bg-primary text-white rounded&quot; </span><span class="s8">type</span><span class="s9">=&quot;button&quot;</span>
+                <span class="s8">data-bs-toggle</span><span class="s9">=&quot;collapse&quot; </span><span class="s8">data-bs-target</span><span class="s9">=&quot;#navbarResponsive&quot; </span><span class="s8">aria-controls</span><span class="s9">=&quot;navbarResponsive&quot;</span>
+                <span class="s8">aria-expanded</span><span class="s9">=&quot;false&quot; </span><span class="s8">aria-label</span><span class="s9">=&quot;Toggle navigation&quot;</span><span class="s7">&gt;</span>
+            <span class="s1">Menu</span>
+            <span class="s7">&lt;i </span><span class="s8">class</span><span class="s9">=&quot;fas fa-bars&quot;</span><span class="s7">&gt;&lt;/i&gt;</span>
+        <span class="s7">&lt;/button&gt;</span>
+        <span class="s7">&lt;div </span><span class="s8">class</span><span class="s9">=&quot;collapse navbar-collapse&quot; </span><span class="s8">id</span><span class="s9">=&quot;navbarResponsive&quot;</span><span class="s7">&gt;</span>
+            <span class="s7">&lt;ul </span><span class="s8">class</span><span class="s9">=&quot;navbar-nav ms-auto&quot;</span><span class="s7">&gt;</span>
+                <span class="s7">&lt;li </span><span class="s8">class</span><span class="s9">=&quot;nav-item mx-0 mx-lg-1&quot;</span><span class="s7">&gt;&lt;a </span><span class="s8">class</span><span class="s9">=&quot;nav-link py-3 px-0 px-lg-3 rounded&quot;</span>
+                                                     <span class="s8">href</span><span class="s9">=&quot;</span><span class="s10">${</span><span class="s4">pageContext.request.contextPath</span><span class="s10">}</span><span class="s9">/home&quot;</span><span class="s7">&gt;</span><span class="s1">Accueil</span><span class="s7">&lt;/a&gt;</span>
+                <span class="s7">&lt;/li&gt;</span>
+                <span class="s7">&lt;li </span><span class="s8">class</span><span class="s9">=&quot;nav-item mx-0 mx-lg-1&quot;</span><span class="s7">&gt;&lt;a </span><span class="s8">class</span><span class="s9">=&quot;nav-link py-3 px-0 px-lg-3 rounded&quot; </span><span class="s8">href</span><span class="s9">=&quot;</span><span class="s10">${</span><span class="s4">pageContext.request.contextPath</span><span class="s10">}</span><span class="s9">/views/template/template.jsp?content=../reservation.jsp&quot;</span><span class="s7">&gt;</span><span class="s1">Réservation</span><span class="s7">&lt;/a&gt;</span>
+                <span class="s7">&lt;/li&gt;</span>
+                <span class="s7">&lt;li </span><span class="s8">class</span><span class="s9">=&quot;nav-item mx-0 mx-lg-1&quot;</span><span class="s7">&gt;&lt;a </span><span class="s8">class</span><span class="s9">=&quot;nav-link py-3 px-0 px-lg-3 rounded&quot; </span><span class="s8">href</span><span class="s9">=&quot;</span><span class="s10">${</span><span class="s4">pageContext.request.contextPath</span><span class="s10">}</span><span class="s9">/event&quot;</span><span class="s7">&gt;</span><span class="s1">Evènements</span><span class="s7">&lt;/a&gt;</span>
+                <span class="s7">&lt;/li&gt;</span>
+                <span class="s7">&lt;li </span><span class="s8">class</span><span class="s9">=&quot;nav-item mx-0 mx-lg-1&quot;</span><span class="s7">&gt;&lt;a </span><span class="s8">class</span><span class="s9">=&quot;nav-link py-3 px-0 px-lg-3 rounded&quot; </span><span class="s8">href</span><span class="s9">=&quot;#&quot;</span><span class="s7">&gt;</span><span class="s1">Abonnements</span><span class="s7">&lt;/a&gt;</span>
+                <span class="s7">&lt;/li&gt;</span>
+                <span class="s7">&lt;li </span><span class="s8">class</span><span class="s9">=&quot;nav-item mx-0 mx-lg-1&quot;</span><span class="s7">&gt;&lt;a </span><span class="s8">class</span><span class="s9">=&quot;nav-link py-3 px-0 px-lg-3 rounded&quot;</span>
+                                                     <span class="s8">href</span><span class="s9">=&quot;</span><span class="s10">${</span><span class="s4">pageContext.request.contextPath</span><span class="s10">}</span><span class="s9">/views/template/template.jsp?content=../infosPratique.jsp&quot;</span><span class="s7">&gt;</span><span class="s1">Infos</span>
+                    <span class="s1">pratiques</span><span class="s7">&lt;/a&gt;&lt;/li&gt;</span>
+                <span class="s7">&lt;li </span><span class="s8">class</span><span class="s9">=&quot;nav-item mx-0 mx-lg-1&quot;</span><span class="s7">&gt;&lt;a </span><span class="s8">class</span><span class="s9">=&quot;nav-link py-3 px-0 px-lg-3 rounded&quot; </span><span class="s8">href</span><span class="s9">=&quot;#&quot;</span><span class="s7">&gt;</span><span class="s1">Sponsors</span><span class="s7">&lt;/a&gt;</span>
+                <span class="s7">&lt;/li&gt;</span>
+
+                <span class="s2">&lt;</span><span class="s3">c:if </span><span class="s4">test</span><span class="s5">=&quot;</span><span class="s10">${</span><span class="s4">sessionScope.role </span><span class="s2">== </span><span class="s5">'ADMIN'</span>
+             <span class="s10">or </span><span class="s4">sessionScope.role </span><span class="s2">== </span><span class="s5">'BARMAN'</span>
+             <span class="s10">or </span><span class="s4">sessionScope.role </span><span class="s2">== </span><span class="s5">'SECRETARY'</span><span class="s10">}</span><span class="s5">&quot;</span><span class="s2">&gt;</span>
+                    <span class="s7">&lt;li </span><span class="s8">class</span><span class="s9">=&quot;nav-item&quot;</span><span class="s7">&gt;</span>
+                        <span class="s7">&lt;a </span><span class="s8">class</span><span class="s9">=&quot;nav-link fw-bold text-warning&quot; </span><span class="s8">href</span><span class="s9">=&quot;</span><span class="s10">${</span><span class="s4">pageContext.request.contextPath</span><span class="s10">}</span><span class="s9">/admin&quot;</span><span class="s7">&gt;</span>
+                            <span class="s1">ADMIN</span>
+                        <span class="s7">&lt;/a&gt;</span>
+                    <span class="s7">&lt;/li&gt;</span>
+                <span class="s2">&lt;/</span><span class="s3">c:if</span><span class="s2">&gt;</span>
+
+                <span class="s2">&lt;</span><span class="s3">c:choose</span><span class="s2">&gt;</span>
+                    <span class="s2">&lt;</span><span class="s3">c:when </span><span class="s4">test</span><span class="s5">=&quot;</span><span class="s10">${not empty </span><span class="s4">sessionScope.role</span><span class="s10">}</span><span class="s5">&quot;</span><span class="s2">&gt;</span>
+                        <span class="s7">&lt;li </span><span class="s8">class</span><span class="s9">=&quot;nav-item mx-0 mx-lg-1&quot;</span><span class="s7">&gt;&lt;a </span><span class="s8">class</span><span class="s9">=&quot;nav-link py-3 px-0 px-lg-3 rounded&quot;</span>
+                                                             <span class="s8">href</span><span class="s9">=&quot;</span><span class="s10">${</span><span class="s4">pageContext.request.contextPath</span><span class="s10">}</span><span class="s9">/login?action=logout&quot;</span><span class="s7">&gt;</span><span class="s1">Se</span>
+                            <span class="s1">déconnecter</span><span class="s7">&lt;/a&gt;&lt;/li&gt;</span>
+                    <span class="s2">&lt;/</span><span class="s3">c:when</span><span class="s2">&gt;</span>
+                    <span class="s2">&lt;</span><span class="s3">c:otherwise</span><span class="s2">&gt;</span>
+                        <span class="s7">&lt;li </span><span class="s8">class</span><span class="s9">=&quot;nav-item mx-0 mx-lg-1&quot;</span><span class="s7">&gt;&lt;a </span><span class="s8">class</span><span class="s9">=&quot;nav-link py-3 px-0 px-lg-3 rounded&quot;</span>
+                                                             <span class="s8">href</span><span class="s9">=&quot;</span><span class="s10">${</span><span class="s4">pageContext.request.contextPath</span><span class="s10">}</span><span class="s9">/login&quot;</span><span class="s7">&gt;</span><span class="s1">Se</span>
+                            <span class="s1">connecter</span><span class="s7">&lt;/a&gt;&lt;/li&gt;</span>
+                    <span class="s2">&lt;/</span><span class="s3">c:otherwise</span><span class="s2">&gt;</span>
+                <span class="s2">&lt;/</span><span class="s3">c:choose</span><span class="s2">&gt;</span>
+            <span class="s7">&lt;/ul&gt;</span>
+        <span class="s7">&lt;/div&gt;</span>
+    <span class="s7">&lt;/div&gt;</span>
+<span class="s7">&lt;/nav&gt;</span>
+</pre>
+</body>
+</html>

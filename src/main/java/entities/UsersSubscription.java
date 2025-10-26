@@ -2,6 +2,22 @@ package entities;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+@NamedQueries({
+        @NamedQuery(
+                name = "UsersSubscription.byUser",
+                query = "SELECT us FROM UsersSubscription us " +
+                        "WHERE us.user.id = :uid " +
+                        "ORDER BY us.startDate DESC"
+        ),
+        @NamedQuery(
+                name = "UsersSubscription.byUserAndSubscriptionActive",
+                query = "SELECT us FROM UsersSubscription us " +
+                        "WHERE us.user.id = :uid " +
+                        "AND us.subscription.id = :sid " +
+                        "AND us.active = true " +
+                        "ORDER BY us.startDate DESC"
+        )
+})
 
 @Entity
 @Table(name = "users_subscriptions")

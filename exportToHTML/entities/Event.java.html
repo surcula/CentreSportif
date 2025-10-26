@@ -1,0 +1,212 @@
+<html>
+<head>
+<title>Event.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cf8e6d;}
+.s1 { color: #bcbec4;}
+.s2 { color: #bcbec4;}
+.s3 { color: #6aab73;}
+.s4 { color: #5f826b; font-style: italic;}
+.s5 { color: #67a37c; font-style: italic;}
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+Event.java</font>
+</center></td></tr></table>
+<pre><span class="s0">package </span><span class="s1">entities</span><span class="s2">;</span>
+
+<span class="s0">import </span><span class="s1">javax</span><span class="s2">.</span><span class="s1">persistence</span><span class="s2">.*;</span>
+<span class="s0">import </span><span class="s1">java</span><span class="s2">.</span><span class="s1">time</span><span class="s2">.</span><span class="s1">LocalDate</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">java</span><span class="s2">.</span><span class="s1">time</span><span class="s2">.</span><span class="s1">LocalDateTime</span><span class="s2">;</span>
+
+<span class="s1">@NamedQueries</span><span class="s2">({</span>
+        <span class="s1">@NamedQuery</span><span class="s2">(</span>
+                <span class="s1">name </span><span class="s2">= </span><span class="s3">&quot;Event.getAllActive&quot;</span><span class="s2">,</span>
+                <span class="s1">query </span><span class="s2">= </span><span class="s3">&quot;SELECT e FROM Event e WHERE e.active = true ORDER BY e.beginDateHour ASC&quot;</span>
+        <span class="s2">),</span>
+        <span class="s1">@NamedQuery</span><span class="s2">(</span>
+                <span class="s1">name </span><span class="s2">= </span><span class="s3">&quot;Event.count&quot;</span><span class="s2">,</span>
+                <span class="s1">query </span><span class="s2">= </span><span class="s3">&quot;SELECT count(e) FROM Event e&quot;</span>
+        <span class="s2">),</span>
+        <span class="s1">@NamedQuery</span><span class="s2">(</span>
+                <span class="s1">name </span><span class="s2">= </span><span class="s3">&quot;Event.countAllActive&quot;</span><span class="s2">,</span>
+                <span class="s1">query </span><span class="s2">= </span><span class="s3">&quot;SELECT count(e) FROM Event e WHERE e.active = true&quot;</span>
+        <span class="s2">),</span>
+        <span class="s1">@NamedQuery</span><span class="s2">(</span>
+                <span class="s1">name </span><span class="s2">= </span><span class="s3">&quot;Event.getAll&quot;</span><span class="s2">,</span>
+                <span class="s1">query </span><span class="s2">= </span><span class="s3">&quot;SELECT e FROM Event e ORDER BY e.beginDateHour DESC&quot;</span>
+        <span class="s2">)</span>
+<span class="s2">})</span>
+
+<span class="s4">/**</span>
+ <span class="s4">* Event entity to save the different event.</span>
+ <span class="s4">*</span>
+ <span class="s4">*/</span>
+<span class="s1">@Entity</span>
+<span class="s1">@Table</span><span class="s2">(</span><span class="s1">name </span><span class="s2">= </span><span class="s3">&quot;events&quot;</span><span class="s2">)</span>
+<span class="s0">public class </span><span class="s1">Event </span><span class="s2">{</span>
+    <span class="s4">/**</span>
+     <span class="s4">* Id of the event</span>
+     <span class="s4">* automatically generated</span>
+     <span class="s4">* </span><span class="s5">@param </span><span class="s4">id</span>
+     <span class="s4">*/</span>
+    <span class="s1">@Id</span>
+    <span class="s1">@Column</span><span class="s2">(</span><span class="s1">name </span><span class="s2">= </span><span class="s3">&quot;id&quot;</span><span class="s2">, </span><span class="s1">nullable </span><span class="s2">= </span><span class="s0">false</span><span class="s2">)</span>
+    <span class="s0">private int </span><span class="s1">id</span><span class="s2">;</span>
+    <span class="s4">/**</span>
+     <span class="s4">* Name of the event</span>
+     <span class="s4">* </span><span class="s5">@param </span><span class="s4">eventName</span>
+     <span class="s4">*/</span>
+    <span class="s1">@Column</span><span class="s2">(</span><span class="s1">name </span><span class="s2">= </span><span class="s3">&quot;event_name&quot;</span><span class="s2">, </span><span class="s1">nullable </span><span class="s2">= </span><span class="s0">false</span><span class="s2">)</span>
+    <span class="s0">private </span><span class="s1">String eventName</span><span class="s2">;</span>
+    <span class="s4">/**</span>
+     <span class="s4">* The starting date of the event</span>
+     <span class="s4">* </span><span class="s5">@param </span><span class="s4">beginDateHour</span>
+     <span class="s4">*/</span>
+    <span class="s1">@Column</span><span class="s2">(</span><span class="s1">name </span><span class="s2">= </span><span class="s3">&quot;begin_date_hour&quot;</span><span class="s2">, </span><span class="s1">nullable </span><span class="s2">= </span><span class="s0">false</span><span class="s2">)</span>
+    <span class="s0">private </span><span class="s1">LocalDateTime beginDateHour</span><span class="s2">;</span>
+    <span class="s4">/**</span>
+     <span class="s4">* The end date of the event</span>
+     <span class="s4">* </span><span class="s5">@param </span><span class="s4">endDateHour</span>
+     <span class="s4">*/</span>
+    <span class="s1">@Column</span><span class="s2">(</span><span class="s1">name </span><span class="s2">= </span><span class="s3">&quot;end_date_hour&quot;</span><span class="s2">, </span><span class="s1">nullable </span><span class="s2">= </span><span class="s0">false</span><span class="s2">)</span>
+    <span class="s0">private </span><span class="s1">LocalDateTime endDateHour</span><span class="s2">;</span>
+    <span class="s4">/**</span>
+     <span class="s4">* The description of the event</span>
+     <span class="s4">* </span><span class="s5">@param </span><span class="s4">info</span>
+     <span class="s4">*</span>
+     <span class="s4">*/</span>
+    <span class="s1">@Column</span><span class="s2">(</span><span class="s1">name </span><span class="s2">= </span><span class="s3">&quot;info&quot;</span><span class="s2">, </span><span class="s1">nullable </span><span class="s2">= </span><span class="s0">false</span><span class="s2">)</span>
+    <span class="s0">private </span><span class="s1">String info</span><span class="s2">;</span>
+    <span class="s4">/**</span>
+     <span class="s4">* The picture of the event</span>
+     <span class="s4">* </span><span class="s5">@param </span><span class="s4">picture</span>
+     <span class="s4">*/</span>
+    <span class="s1">@Column</span><span class="s2">(</span><span class="s1">name </span><span class="s2">= </span><span class="s3">&quot;picture&quot;</span><span class="s2">, </span><span class="s1">nullable </span><span class="s2">= </span><span class="s0">false</span><span class="s2">)</span>
+    <span class="s0">private </span><span class="s1">String picture</span><span class="s2">;</span>
+    <span class="s4">/**</span>
+     <span class="s4">* The status of the event</span>
+     <span class="s4">*</span>
+     <span class="s4">*/</span>
+    <span class="s1">@Column</span><span class="s2">(</span><span class="s1">name </span><span class="s2">= </span><span class="s3">&quot;is_active&quot;</span><span class="s2">, </span><span class="s1">nullable </span><span class="s2">= </span><span class="s0">false</span><span class="s2">)</span>
+    <span class="s0">private boolean </span><span class="s1">active </span><span class="s2">= </span><span class="s0">true</span><span class="s2">;</span>
+    <span class="s4">/**</span>
+     <span class="s4">* The method to get the id of the event</span>
+     <span class="s4">* </span><span class="s5">@return </span><span class="s4">id</span>
+     <span class="s4">*</span>
+     <span class="s4">*/</span>
+    <span class="s0">public int </span><span class="s1">getId</span><span class="s2">() {</span>
+        <span class="s0">return </span><span class="s1">id</span><span class="s2">;</span>
+    <span class="s2">}</span>
+    <span class="s4">/**</span>
+     <span class="s4">* The method to set the id of the event</span>
+     <span class="s4">* </span><span class="s5">@param </span><span class="s4">id</span>
+     <span class="s4">*</span>
+     <span class="s4">*/</span>
+    <span class="s0">public void </span><span class="s1">setId</span><span class="s2">(</span><span class="s0">int </span><span class="s1">id</span><span class="s2">) {</span>
+        <span class="s0">this</span><span class="s2">.</span><span class="s1">id </span><span class="s2">= </span><span class="s1">id</span><span class="s2">;</span>
+    <span class="s2">}</span>
+    <span class="s4">/**</span>
+     <span class="s4">* The method to get the name of the event</span>
+     <span class="s4">* </span><span class="s5">@return </span><span class="s4">eventName</span>
+     <span class="s4">*</span>
+     <span class="s4">*/</span>
+    <span class="s0">public </span><span class="s1">String getEventName</span><span class="s2">() {</span>
+        <span class="s0">return </span><span class="s1">eventName</span><span class="s2">;</span>
+    <span class="s2">}</span>
+    <span class="s4">/**</span>
+     <span class="s4">* The method to set the name of the event</span>
+     <span class="s4">* </span><span class="s5">@param </span><span class="s4">eventName</span>
+     <span class="s4">*</span>
+     <span class="s4">*/</span>
+    <span class="s0">public void </span><span class="s1">setEventName</span><span class="s2">(</span><span class="s1">String eventName</span><span class="s2">) {</span>
+        <span class="s0">this</span><span class="s2">.</span><span class="s1">eventName </span><span class="s2">= </span><span class="s1">eventName</span><span class="s2">;</span>
+    <span class="s2">}</span>
+    <span class="s4">/**</span>
+     <span class="s4">* The method to get the start date of the event</span>
+     <span class="s4">* </span><span class="s5">@return </span><span class="s4">beginDateHour</span>
+     <span class="s4">*</span>
+     <span class="s4">*/</span>
+    <span class="s0">public </span><span class="s1">LocalDateTime getBeginDateHour</span><span class="s2">() {</span>
+        <span class="s0">return </span><span class="s1">beginDateHour</span><span class="s2">;</span>
+    <span class="s2">}</span>
+    <span class="s4">/**</span>
+     <span class="s4">* The method to set the start date of the event</span>
+     <span class="s4">* </span><span class="s5">@param </span><span class="s4">beginDateHour</span>
+     <span class="s4">*</span>
+     <span class="s4">*/</span>
+    <span class="s0">public void </span><span class="s1">setBeginDateHour</span><span class="s2">(</span><span class="s1">LocalDateTime beginDateHour</span><span class="s2">) {</span>
+        <span class="s0">this</span><span class="s2">.</span><span class="s1">beginDateHour </span><span class="s2">= </span><span class="s1">beginDateHour</span><span class="s2">;</span>
+    <span class="s2">}</span>
+    <span class="s4">/**</span>
+     <span class="s4">* The method to get the end date of the event</span>
+     <span class="s4">* </span><span class="s5">@return </span><span class="s4">endDateHour</span>
+     <span class="s4">*</span>
+     <span class="s4">*/</span>
+    <span class="s0">public </span><span class="s1">LocalDateTime getEndDateHour</span><span class="s2">() {</span>
+        <span class="s0">return </span><span class="s1">endDateHour</span><span class="s2">;</span>
+    <span class="s2">}</span>
+    <span class="s4">/**</span>
+     <span class="s4">* The method to set the end date of the event</span>
+     <span class="s4">* </span><span class="s5">@param </span><span class="s4">endDateHour</span>
+     <span class="s4">*</span>
+     <span class="s4">*/</span>
+    <span class="s0">public void </span><span class="s1">setEndDateHour</span><span class="s2">(</span><span class="s1">LocalDateTime endDateHour</span><span class="s2">) {</span>
+        <span class="s0">this</span><span class="s2">.</span><span class="s1">endDateHour </span><span class="s2">= </span><span class="s1">endDateHour</span><span class="s2">;</span>
+    <span class="s2">}</span>
+    <span class="s4">/**</span>
+     <span class="s4">* The method to get the information about the event</span>
+     <span class="s4">* </span><span class="s5">@return </span><span class="s4">info</span>
+     <span class="s4">*</span>
+     <span class="s4">*/</span>
+    <span class="s0">public </span><span class="s1">String getInfo</span><span class="s2">() {</span>
+        <span class="s0">return </span><span class="s1">info</span><span class="s2">;</span>
+    <span class="s2">}</span>
+    <span class="s4">/**</span>
+     <span class="s4">* The method to set the information about the event</span>
+     <span class="s4">* </span><span class="s5">@param  </span><span class="s4">info</span>
+     <span class="s4">*</span>
+     <span class="s4">*/</span>
+    <span class="s0">public void </span><span class="s1">setInfo</span><span class="s2">(</span><span class="s1">String info</span><span class="s2">) {</span>
+        <span class="s0">this</span><span class="s2">.</span><span class="s1">info </span><span class="s2">= </span><span class="s1">info</span><span class="s2">;</span>
+    <span class="s2">}</span>
+    <span class="s4">/**</span>
+     <span class="s4">* The method to get the picture of the event</span>
+     <span class="s4">* </span><span class="s5">@return </span><span class="s4">picture</span>
+     <span class="s4">*</span>
+     <span class="s4">*/</span>
+    <span class="s0">public </span><span class="s1">String getPicture</span><span class="s2">() {</span>
+        <span class="s0">return </span><span class="s1">picture</span><span class="s2">;</span>
+    <span class="s2">}</span>
+    <span class="s4">/**</span>
+     <span class="s4">* The method to set the picture of the event</span>
+     <span class="s4">* </span><span class="s5">@param </span><span class="s4">picture</span>
+     <span class="s4">*</span>
+     <span class="s4">*/</span>
+    <span class="s0">public void </span><span class="s1">setPicture</span><span class="s2">(</span><span class="s1">String picture</span><span class="s2">) {</span>
+        <span class="s0">this</span><span class="s2">.</span><span class="s1">picture </span><span class="s2">= </span><span class="s1">picture</span><span class="s2">;</span>
+    <span class="s2">}</span>
+    <span class="s4">/**</span>
+     <span class="s4">* The method to get the status of the event</span>
+     <span class="s4">* </span><span class="s5">@return </span><span class="s4">active</span>
+     <span class="s4">*</span>
+     <span class="s4">*/</span>
+    <span class="s0">public boolean </span><span class="s1">isActive</span><span class="s2">() {</span>
+        <span class="s0">return </span><span class="s1">active</span><span class="s2">;</span>
+    <span class="s2">}</span>
+    <span class="s4">/**</span>
+     <span class="s4">* The method to set the status of the event</span>
+     <span class="s4">* </span><span class="s5">@param </span><span class="s4">active</span>
+     <span class="s4">*</span>
+     <span class="s4">*/</span>
+    <span class="s0">public void </span><span class="s1">setActive</span><span class="s2">(</span><span class="s0">boolean </span><span class="s1">active</span><span class="s2">) {</span>
+        <span class="s0">this</span><span class="s2">.</span><span class="s1">active </span><span class="s2">= </span><span class="s1">active</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+<span class="s2">}</span></pre>
+</body>
+</html>

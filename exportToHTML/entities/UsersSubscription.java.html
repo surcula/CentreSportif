@@ -1,0 +1,108 @@
+<html>
+<head>
+<title>UsersSubscription.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cf8e6d;}
+.s1 { color: #bcbec4;}
+.s2 { color: #bcbec4;}
+.s3 { color: #6aab73;}
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+UsersSubscription.java</font>
+</center></td></tr></table>
+<pre><span class="s0">package </span><span class="s1">entities</span><span class="s2">;</span>
+
+<span class="s0">import </span><span class="s1">javax</span><span class="s2">.</span><span class="s1">persistence</span><span class="s2">.*;</span>
+<span class="s0">import </span><span class="s1">java</span><span class="s2">.</span><span class="s1">time</span><span class="s2">.</span><span class="s1">LocalDate</span><span class="s2">;</span>
+
+<span class="s1">@Entity</span>
+<span class="s1">@Table</span><span class="s2">(</span><span class="s1">name </span><span class="s2">= </span><span class="s3">&quot;users_subscriptions&quot;</span><span class="s2">)</span>
+<span class="s0">public class </span><span class="s1">UsersSubscription </span><span class="s2">{</span>
+    <span class="s1">@Id</span>
+    <span class="s1">@Column</span><span class="s2">(</span><span class="s1">name </span><span class="s2">= </span><span class="s3">&quot;id&quot;</span><span class="s2">, </span><span class="s1">nullable </span><span class="s2">= </span><span class="s0">false</span><span class="s2">)</span>
+    <span class="s0">private int </span><span class="s1">id</span><span class="s2">;</span>
+
+    <span class="s1">@ManyToOne</span>
+    <span class="s1">@JoinColumn</span><span class="s2">(</span><span class="s1">name </span><span class="s2">= </span><span class="s3">&quot;user_id&quot;</span><span class="s2">)</span>
+    <span class="s0">private </span><span class="s1">User user</span><span class="s2">;</span>
+
+    <span class="s1">@ManyToOne</span>
+    <span class="s1">@JoinColumn</span><span class="s2">(</span><span class="s1">name </span><span class="s2">= </span><span class="s3">&quot;subscription_id&quot;</span><span class="s2">)</span>
+    <span class="s0">private </span><span class="s1">Subscription subscription</span><span class="s2">;</span>
+
+    <span class="s1">@Column</span><span class="s2">(</span><span class="s1">name </span><span class="s2">= </span><span class="s3">&quot;start_date&quot;</span><span class="s2">, </span><span class="s1">nullable </span><span class="s2">= </span><span class="s0">false</span><span class="s2">)</span>
+    <span class="s0">private </span><span class="s1">LocalDate startDate</span><span class="s2">;</span>
+
+    <span class="s1">@Column</span><span class="s2">(</span><span class="s1">name </span><span class="s2">= </span><span class="s3">&quot;end_date&quot;</span><span class="s2">, </span><span class="s1">nullable </span><span class="s2">= </span><span class="s0">false</span><span class="s2">)</span>
+    <span class="s0">private </span><span class="s1">LocalDate endDate</span><span class="s2">;</span>
+
+    <span class="s1">@Column</span><span class="s2">(</span><span class="s1">name </span><span class="s2">= </span><span class="s3">&quot;quantity_max&quot;</span><span class="s2">, </span><span class="s1">nullable </span><span class="s2">= </span><span class="s0">false</span><span class="s2">)</span>
+    <span class="s0">private int </span><span class="s1">quantityMax</span><span class="s2">;</span>
+
+    <span class="s1">@Column</span><span class="s2">(</span><span class="s1">name </span><span class="s2">= </span><span class="s3">&quot;is_active&quot;</span><span class="s2">, </span><span class="s1">nullable </span><span class="s2">= </span><span class="s0">false</span><span class="s2">)</span>
+    <span class="s0">private boolean </span><span class="s1">active </span><span class="s2">= </span><span class="s0">true</span><span class="s2">;</span>
+
+    <span class="s0">public int </span><span class="s1">getId</span><span class="s2">() {</span>
+        <span class="s0">return </span><span class="s1">id</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s0">public void </span><span class="s1">setId</span><span class="s2">(</span><span class="s0">int </span><span class="s1">id</span><span class="s2">) {</span>
+        <span class="s0">this</span><span class="s2">.</span><span class="s1">id </span><span class="s2">= </span><span class="s1">id</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s0">public </span><span class="s1">User getUser</span><span class="s2">() {</span>
+        <span class="s0">return </span><span class="s1">user</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s0">public void </span><span class="s1">setUser</span><span class="s2">(</span><span class="s1">User user</span><span class="s2">) {</span>
+        <span class="s0">this</span><span class="s2">.</span><span class="s1">user </span><span class="s2">= </span><span class="s1">user</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s0">public </span><span class="s1">Subscription getSubscription</span><span class="s2">() {</span>
+        <span class="s0">return </span><span class="s1">subscription</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s0">public void </span><span class="s1">setSubscription</span><span class="s2">(</span><span class="s1">Subscription subscription</span><span class="s2">) {</span>
+        <span class="s0">this</span><span class="s2">.</span><span class="s1">subscription </span><span class="s2">= </span><span class="s1">subscription</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s0">public </span><span class="s1">LocalDate getStartDate</span><span class="s2">() {</span>
+        <span class="s0">return </span><span class="s1">startDate</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s0">public void </span><span class="s1">setStartDate</span><span class="s2">(</span><span class="s1">LocalDate startDate</span><span class="s2">) {</span>
+        <span class="s0">this</span><span class="s2">.</span><span class="s1">startDate </span><span class="s2">= </span><span class="s1">startDate</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s0">public </span><span class="s1">LocalDate getEndDate</span><span class="s2">() {</span>
+        <span class="s0">return </span><span class="s1">endDate</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s0">public void </span><span class="s1">setEndDate</span><span class="s2">(</span><span class="s1">LocalDate endDate</span><span class="s2">) {</span>
+        <span class="s0">this</span><span class="s2">.</span><span class="s1">endDate </span><span class="s2">= </span><span class="s1">endDate</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s0">public int </span><span class="s1">getQuantityMax</span><span class="s2">() {</span>
+        <span class="s0">return </span><span class="s1">quantityMax</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s0">public void </span><span class="s1">setQuantityMax</span><span class="s2">(</span><span class="s0">int </span><span class="s1">quantityMax</span><span class="s2">) {</span>
+        <span class="s0">this</span><span class="s2">.</span><span class="s1">quantityMax </span><span class="s2">= </span><span class="s1">quantityMax</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s0">public boolean </span><span class="s1">isActive</span><span class="s2">() {</span>
+        <span class="s0">return </span><span class="s1">active</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s0">public void </span><span class="s1">setActive</span><span class="s2">(</span><span class="s0">boolean </span><span class="s1">active</span><span class="s2">) {</span>
+        <span class="s0">this</span><span class="s2">.</span><span class="s1">active </span><span class="s2">= </span><span class="s1">active</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+<span class="s2">}</span></pre>
+</body>
+</html>

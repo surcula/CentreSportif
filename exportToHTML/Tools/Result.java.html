@@ -1,0 +1,107 @@
+<html>
+<head>
+<title>Result.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cf8e6d;}
+.s1 { color: #bcbec4;}
+.s2 { color: #bcbec4;}
+.s3 { color: #5f826b; font-style: italic;}
+.s4 { color: #67a37c; font-style: italic;}
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+Result.java</font>
+</center></td></tr></table>
+<pre><span class="s0">package </span><span class="s1">Tools</span><span class="s2">;</span>
+
+<span class="s0">import </span><span class="s1">java</span><span class="s2">.</span><span class="s1">util</span><span class="s2">.</span><span class="s1">Map</span><span class="s2">;</span>
+
+<span class="s3">/**</span>
+ <span class="s3">* A generic wrapper class used to represent the outcome of an operation.</span>
+ <span class="s3">* It contains either a successful result with associated data or a failure with error messages.</span>
+ <span class="s3">*</span>
+ <span class="s3">* </span><span class="s4">@param </span><span class="s1">&lt;</span><span class="s3">T</span><span class="s1">&gt; </span><span class="s3">The type of data returned by the operation.</span>
+ <span class="s3">*/</span>
+<span class="s0">public class </span><span class="s1">Result</span><span class="s2">&lt;</span><span class="s1">T</span><span class="s2">&gt; {</span>
+    <span class="s0">private boolean </span><span class="s1">success</span><span class="s2">;</span>
+    <span class="s0">private </span><span class="s1">T data</span><span class="s2">;</span>
+    <span class="s0">private </span><span class="s1">Map</span><span class="s2">&lt;</span><span class="s1">String</span><span class="s2">, </span><span class="s1">String</span><span class="s2">&gt; </span><span class="s1">errors</span><span class="s2">;</span>
+
+    <span class="s3">/**</span>
+     <span class="s3">* Private constructor to initialize a Result instance.</span>
+     <span class="s3">*</span>
+     <span class="s3">* </span><span class="s4">@param </span><span class="s3">success Indicates if the operation was successful.</span>
+     <span class="s3">* </span><span class="s4">@param </span><span class="s3">errors  A map of error messages if the operation failed.</span>
+     <span class="s3">* </span><span class="s4">@param </span><span class="s3">data    The data returned if the operation succeeded.</span>
+     <span class="s3">*/</span>
+    <span class="s0">private </span><span class="s1">Result</span><span class="s2">(</span><span class="s0">boolean </span><span class="s1">success</span><span class="s2">, </span><span class="s1">Map</span><span class="s2">&lt;</span><span class="s1">String</span><span class="s2">, </span><span class="s1">String</span><span class="s2">&gt; </span><span class="s1">errors</span><span class="s2">, </span><span class="s1">T data</span><span class="s2">) {</span>
+        <span class="s0">this</span><span class="s2">.</span><span class="s1">success </span><span class="s2">= </span><span class="s1">success</span><span class="s2">;</span>
+        <span class="s0">this</span><span class="s2">.</span><span class="s1">errors </span><span class="s2">= </span><span class="s1">errors</span><span class="s2">;</span>
+        <span class="s0">this</span><span class="s2">.</span><span class="s1">data </span><span class="s2">= </span><span class="s1">data</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s3">/**</span>
+     <span class="s3">* Creates a successful Result with the provided data.</span>
+     <span class="s3">*</span>
+     <span class="s3">* </span><span class="s4">@param </span><span class="s3">data The data to return.</span>
+     <span class="s3">* </span><span class="s4">@param </span><span class="s1">&lt;</span><span class="s3">T</span><span class="s1">&gt;  </span><span class="s3">The type of the data.</span>
+     <span class="s3">* </span><span class="s4">@return </span><span class="s3">A Result object marked as successful containing the data.</span>
+     <span class="s3">*/</span>
+    <span class="s0">public static </span><span class="s2">&lt;</span><span class="s1">T</span><span class="s2">&gt; </span><span class="s1">Result</span><span class="s2">&lt;</span><span class="s1">T</span><span class="s2">&gt; </span><span class="s1">ok</span><span class="s2">(</span><span class="s1">T data</span><span class="s2">) {</span>
+        <span class="s0">return new </span><span class="s1">Result</span><span class="s2">&lt;&gt;(</span><span class="s0">true</span><span class="s2">, </span><span class="s0">null</span><span class="s2">, </span><span class="s1">data</span><span class="s2">);</span>
+    <span class="s2">}</span>
+
+    <span class="s3">/**</span>
+     <span class="s3">* Creates a successful Result without any data (typically for operations returning void).</span>
+     <span class="s3">*</span>
+     <span class="s3">* </span><span class="s4">@return </span><span class="s3">A Result object marked as successful with no data.</span>
+     <span class="s3">*/</span>
+    <span class="s0">public static </span><span class="s1">Result</span><span class="s2">&lt;</span><span class="s1">Void</span><span class="s2">&gt; </span><span class="s1">ok</span><span class="s2">() {</span>
+        <span class="s0">return new </span><span class="s1">Result</span><span class="s2">&lt;&gt;(</span><span class="s0">true</span><span class="s2">, </span><span class="s0">null</span><span class="s2">, </span><span class="s0">null</span><span class="s2">);</span>
+    <span class="s2">}</span>
+
+    <span class="s3">/**</span>
+     <span class="s3">* Creates a failed Result with the provided error messages.</span>
+     <span class="s3">*</span>
+     <span class="s3">* </span><span class="s4">@param </span><span class="s3">errors A map of error messages, typically with field names as keys.</span>
+     <span class="s3">* </span><span class="s4">@param </span><span class="s1">&lt;</span><span class="s3">T</span><span class="s1">&gt;    </span><span class="s3">The type of data expected if the operation had succeeded.</span>
+     <span class="s3">* </span><span class="s4">@return </span><span class="s3">A Result object marked as failed containing the errors.</span>
+     <span class="s3">*/</span>
+    <span class="s0">public static </span><span class="s2">&lt;</span><span class="s1">T</span><span class="s2">&gt; </span><span class="s1">Result</span><span class="s2">&lt;</span><span class="s1">T</span><span class="s2">&gt; </span><span class="s1">fail</span><span class="s2">(</span><span class="s1">Map</span><span class="s2">&lt;</span><span class="s1">String</span><span class="s2">, </span><span class="s1">String</span><span class="s2">&gt; </span><span class="s1">errors</span><span class="s2">) {</span>
+        <span class="s0">return new </span><span class="s1">Result</span><span class="s2">&lt;&gt;(</span><span class="s0">false</span><span class="s2">, </span><span class="s1">errors</span><span class="s2">, </span><span class="s0">null</span><span class="s2">);</span>
+    <span class="s2">}</span>
+
+    <span class="s3">/**</span>
+     <span class="s3">* Indicates whether the operation was successful.</span>
+     <span class="s3">*</span>
+     <span class="s3">* </span><span class="s4">@return </span><span class="s3">true if the operation succeeded, false otherwise.</span>
+     <span class="s3">*/</span>
+    <span class="s0">public boolean </span><span class="s1">isSuccess</span><span class="s2">() {</span>
+        <span class="s0">return </span><span class="s1">success</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s3">/**</span>
+     <span class="s3">* Returns the data associated with a successful operation.</span>
+     <span class="s3">*</span>
+     <span class="s3">* </span><span class="s4">@return </span><span class="s3">The data if present, or null if the operation failed or returned no data.</span>
+     <span class="s3">*/</span>
+    <span class="s0">public </span><span class="s1">T getData</span><span class="s2">() {</span>
+        <span class="s0">return </span><span class="s1">data</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s3">/**</span>
+     <span class="s3">* Returns the error messages associated with a failed operation.</span>
+     <span class="s3">*</span>
+     <span class="s3">* </span><span class="s4">@return </span><span class="s3">A map of errors, or null if the operation was successful.</span>
+     <span class="s3">*/</span>
+    <span class="s0">public </span><span class="s1">Map</span><span class="s2">&lt;</span><span class="s1">String</span><span class="s2">, </span><span class="s1">String</span><span class="s2">&gt; </span><span class="s1">getErrors</span><span class="s2">() {</span>
+        <span class="s0">return </span><span class="s1">errors</span><span class="s2">;</span>
+    <span class="s2">}</span>
+<span class="s2">}</span>
+</pre>
+</body>
+</html>

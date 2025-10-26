@@ -1,0 +1,215 @@
+<html>
+<head>
+<title>EventServiceImpl.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cf8e6d;}
+.s1 { color: #bcbec4;}
+.s2 { color: #bcbec4;}
+.s3 { color: #5f826b; font-style: italic;}
+.s4 { color: #67a37c; font-style: italic;}
+.s5 { color: #7a7e85;}
+.s6 { color: #6aab73;}
+.s7 { color: #2aacb8;}
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+EventServiceImpl.java</font>
+</center></td></tr></table>
+<pre><span class="s0">package </span><span class="s1">services</span><span class="s2">;</span>
+
+<span class="s0">import </span><span class="s1">Tools</span><span class="s2">.</span><span class="s1">Result</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">entities</span><span class="s2">.</span><span class="s1">Event</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">javax</span><span class="s2">.</span><span class="s1">persistence</span><span class="s2">.</span><span class="s1">EntityManager</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">java</span><span class="s2">.</span><span class="s1">util</span><span class="s2">.</span><span class="s1">HashMap</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">java</span><span class="s2">.</span><span class="s1">util</span><span class="s2">.</span><span class="s1">List</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">java</span><span class="s2">.</span><span class="s1">util</span><span class="s2">.</span><span class="s1">Map</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">dto</span><span class="s2">.</span><span class="s1">EMF</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">dto</span><span class="s2">.</span><span class="s1">Page</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">interfaces</span><span class="s2">.</span><span class="s1">EventService</span><span class="s2">;</span>
+
+<span class="s3">/**</span>
+ <span class="s3">* Implementation of the {</span><span class="s4">@link </span><span class="s3">EventService} interface</span>
+ <span class="s3">* Provide concrete persistence operations for event entities</span>
+ <span class="s3">* using the injected {</span><span class="s4">@link </span><span class="s3">javax.persistence.EntityManager}</span>
+ <span class="s3">*/</span>
+<span class="s0">public class </span><span class="s1">EventServiceImpl </span><span class="s0">implements </span><span class="s1">interfaces</span><span class="s2">.</span><span class="s1">EventService </span><span class="s2">{</span>
+
+    <span class="s0">private </span><span class="s1">EntityManager em</span><span class="s2">;</span>
+    <span class="s0">private static final </span><span class="s1">org</span><span class="s2">.</span><span class="s1">apache</span><span class="s2">.</span><span class="s1">log4j</span><span class="s2">.</span><span class="s1">Logger log </span><span class="s2">= </span><span class="s1">org</span><span class="s2">.</span><span class="s1">apache</span><span class="s2">.</span><span class="s1">log4j</span><span class="s2">.</span><span class="s1">Logger</span><span class="s2">.</span><span class="s1">getLogger</span><span class="s2">(</span><span class="s1">EventServiceImpl</span><span class="s2">.</span><span class="s0">class</span><span class="s2">);</span>
+
+    <span class="s3">/**</span>
+     <span class="s3">* Constructor for an EventServiceImpl with the specified EntityManager</span>
+     <span class="s3">* </span><span class="s4">@param </span><span class="s3">em the EntityManager to use for database operatons</span>
+     <span class="s3">*/</span>
+    <span class="s0">public </span><span class="s1">EventServiceImpl</span><span class="s2">(</span><span class="s1">EntityManager em</span><span class="s2">){</span>
+        <span class="s0">this</span><span class="s2">.</span><span class="s1">em </span><span class="s2">= </span><span class="s1">em</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s3">/**</span>
+     <span class="s3">* Method to create a new Event.</span>
+     <span class="s3">* </span><span class="s4">@param </span><span class="s3">event the new event created</span>
+     <span class="s3">* </span><span class="s4">@return </span><span class="s3">Result.ok method</span>
+     <span class="s3">*/</span>
+    <span class="s1">@Override</span>
+    <span class="s0">public </span><span class="s1">Result create</span><span class="s2">(</span><span class="s1">Event event</span><span class="s2">) {</span>
+        <span class="s1">em</span><span class="s2">.</span><span class="s1">persist</span><span class="s2">(</span><span class="s1">event</span><span class="s2">);</span>
+        <span class="s0">return </span><span class="s1">Result</span><span class="s2">.</span><span class="s1">ok</span><span class="s2">();</span>
+    <span class="s2">}</span>
+
+    <span class="s3">/**</span>
+     <span class="s3">* Method to update an event exist yet.</span>
+     <span class="s3">* </span><span class="s4">@param </span><span class="s3">event the event updated</span>
+     <span class="s3">* </span><span class="s4">@return </span><span class="s3">Result.ok method</span>
+     <span class="s3">*/</span>
+    <span class="s1">@Override</span>
+    <span class="s0">public </span><span class="s1">Result update</span><span class="s2">(</span><span class="s1">Event event</span><span class="s2">) {</span>
+        <span class="s1">em</span><span class="s2">.</span><span class="s1">merge</span><span class="s2">(</span><span class="s1">event</span><span class="s2">);</span>
+        <span class="s0">return </span><span class="s1">Result</span><span class="s2">.</span><span class="s1">ok</span><span class="s2">();</span>
+    <span class="s2">}</span>
+
+    <span class="s3">/**</span>
+     <span class="s3">* Method to delete an event exist yet (it puts the active =&gt; inactive)</span>
+     <span class="s3">* </span><span class="s4">@param </span><span class="s3">event the event entity to delete</span>
+     <span class="s3">* </span><span class="s4">@return </span><span class="s3">Result.ok method</span>
+     <span class="s3">*/</span>
+    <span class="s1">@Override</span>
+    <span class="s0">public </span><span class="s1">Result delete</span><span class="s2">(</span><span class="s1">Event event</span><span class="s2">) {</span>
+        <span class="s1">event</span><span class="s2">.</span><span class="s1">setActive</span><span class="s2">(</span><span class="s0">false</span><span class="s2">);</span><span class="s5">//it is a soft delete</span>
+        <span class="s1">em</span><span class="s2">.</span><span class="s1">merge</span><span class="s2">(</span><span class="s1">event</span><span class="s2">);</span>
+        <span class="s0">return </span><span class="s1">Result</span><span class="s2">.</span><span class="s1">ok</span><span class="s2">();</span>
+    <span class="s2">}</span>
+
+    <span class="s3">/**</span>
+     <span class="s3">* Method to get an event with his ID</span>
+     <span class="s3">* </span><span class="s4">@param </span><span class="s3">id the identifier of the event</span>
+     <span class="s3">* </span><span class="s4">@return </span><span class="s3">Result.ok method</span>
+     <span class="s3">*/</span>
+    <span class="s1">@Override</span>
+    <span class="s0">public </span><span class="s1">Result getOneById</span><span class="s2">(</span><span class="s0">int </span><span class="s1">id</span><span class="s2">) {</span>
+        <span class="s1">Event event </span><span class="s2">= </span><span class="s1">em</span><span class="s2">.</span><span class="s1">find</span><span class="s2">(</span><span class="s1">Event</span><span class="s2">.</span><span class="s0">class</span><span class="s2">, </span><span class="s1">id</span><span class="s2">);</span>
+        <span class="s0">if</span><span class="s2">(</span><span class="s1">event </span><span class="s2">== </span><span class="s0">null</span><span class="s2">) {</span>
+            <span class="s1">Map</span><span class="s2">&lt;</span><span class="s1">String</span><span class="s2">, </span><span class="s1">String</span><span class="s2">&gt; </span><span class="s1">errors </span><span class="s2">= </span><span class="s0">new </span><span class="s1">HashMap</span><span class="s2">&lt;&gt;();</span>
+            <span class="s1">errors</span><span class="s2">.</span><span class="s1">put</span><span class="s2">(</span><span class="s6">&quot;Introuvable&quot;</span><span class="s2">, </span><span class="s6">&quot;No event found with ID &quot; </span><span class="s2">+ </span><span class="s1">id</span><span class="s2">);</span>
+            <span class="s0">return </span><span class="s1">Result</span><span class="s2">.</span><span class="s1">fail</span><span class="s2">(</span><span class="s1">errors</span><span class="s2">);</span>
+        <span class="s2">}</span>
+        <span class="s0">return </span><span class="s1">Result</span><span class="s2">.</span><span class="s1">ok</span><span class="s2">(</span><span class="s1">event</span><span class="s2">);</span>
+    <span class="s2">}</span>
+
+    <span class="s3">/**</span>
+     <span class="s3">* Method to get the list of all active event</span>
+     <span class="s3">* </span><span class="s4">@param </span><span class="s3">page the page number (starting at 1)</span>
+     <span class="s3">* </span><span class="s4">@param </span><span class="s3">size the number of events per page</span>
+     <span class="s3">* @ return a {</span><span class="s4">@link </span><span class="s3">Result} containing the list of active events</span>
+     <span class="s3">* </span><span class="s4">@return </span><span class="s3">result.ok method</span>
+     <span class="s3">*/</span>
+    <span class="s1">@Override</span>
+    <span class="s0">public </span><span class="s1">Result</span><span class="s2">&lt;</span><span class="s1">List</span><span class="s2">&lt;</span><span class="s1">Event</span><span class="s2">&gt;&gt; </span><span class="s1">getAllActiveEvents</span><span class="s2">(</span><span class="s0">int </span><span class="s1">page</span><span class="s2">, </span><span class="s0">int </span><span class="s1">size</span><span class="s2">) {</span>
+        <span class="s1">List</span><span class="s2">&lt;</span><span class="s1">Event</span><span class="s2">&gt; </span><span class="s1">events </span><span class="s2">= </span><span class="s1">em</span><span class="s2">.</span><span class="s1">createNamedQuery</span><span class="s2">(</span><span class="s6">&quot;Event.getAllActive&quot;</span><span class="s2">, </span><span class="s1">Event</span><span class="s2">.</span><span class="s0">class</span><span class="s2">)</span>
+                <span class="s2">.</span><span class="s1">setFirstResult</span><span class="s2">((</span><span class="s1">page</span><span class="s2">-</span><span class="s7">1</span><span class="s2">) * </span><span class="s1">size</span><span class="s2">)</span>
+                <span class="s2">.</span><span class="s1">setMaxResults</span><span class="s2">(</span><span class="s1">size</span><span class="s2">)</span>
+                <span class="s2">.</span><span class="s1">getResultList</span><span class="s2">();</span>
+        <span class="s0">return </span><span class="s1">Result</span><span class="s2">.</span><span class="s1">ok</span><span class="s2">(</span><span class="s1">events</span><span class="s2">);</span>
+    <span class="s2">}</span>
+
+    <span class="s3">/**</span>
+     <span class="s3">* Method to get the list of all events</span>
+     <span class="s3">* </span><span class="s4">@param </span><span class="s3">page the page number (starting at 1)</span>
+     <span class="s3">* </span><span class="s4">@param </span><span class="s3">size the number of events per page</span>
+     <span class="s3">* </span><span class="s4">@return </span><span class="s3">Result.okj method</span>
+     <span class="s3">*/</span>
+    <span class="s1">@Override</span>
+    <span class="s0">public </span><span class="s1">Result</span><span class="s2">&lt;</span><span class="s1">Page</span><span class="s2">&lt;</span><span class="s1">Event</span><span class="s2">&gt;&gt; </span><span class="s1">getAllEvents</span><span class="s2">(</span><span class="s0">int </span><span class="s1">page</span><span class="s2">, </span><span class="s0">int </span><span class="s1">size</span><span class="s2">) {</span>
+        <span class="s1">em </span><span class="s2">= </span><span class="s1">EMF</span><span class="s2">.</span><span class="s1">getEM</span><span class="s2">();</span>
+        <span class="s0">try </span><span class="s2">{</span>
+            <span class="s5">//Vérification que les valeurs entrées sont valies (suite à un problème de negative start position</span>
+            <span class="s0">if </span><span class="s2">(</span><span class="s1">page </span><span class="s2">&lt; </span><span class="s7">1</span><span class="s2">) </span><span class="s1">page </span><span class="s2">= </span><span class="s7">1</span><span class="s2">;</span>
+            <span class="s0">if </span><span class="s2">(</span><span class="s1">size </span><span class="s2">&lt; </span><span class="s7">1</span><span class="s2">) </span><span class="s1">size </span><span class="s2">= </span><span class="s7">10</span><span class="s2">;</span>
+            <span class="s5">//-------------------------------------------------------------</span>
+            <span class="s0">int </span><span class="s1">firstResult </span><span class="s2">= (</span><span class="s1">page </span><span class="s2">- </span><span class="s7">1</span><span class="s2">) * </span><span class="s1">size</span><span class="s2">;</span>
+            <span class="s0">if</span><span class="s2">(</span><span class="s1">firstResult </span><span class="s2">&lt; </span><span class="s7">0</span><span class="s2">){</span>
+                <span class="s1">System</span><span class="s2">.</span><span class="s1">err</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s6">&quot;ERREUR GRAVE : firstResult est négatif. Valeur calculée : &quot; </span><span class="s2">+ </span><span class="s1">firstResult </span><span class="s2">+ </span><span class="s6">&quot; (page= &quot; </span><span class="s2">+ </span><span class="s1">page </span><span class="s2">+ </span><span class="s6">&quot;, size=&quot; </span><span class="s2">+ </span><span class="s1">size </span><span class="s2">+ </span><span class="s6">&quot;)&quot;</span><span class="s2">);</span>
+                <span class="s1">firstResult </span><span class="s2">= </span><span class="s7">0</span><span class="s2">;</span><span class="s5">//réinitialisation pour empêcher l'exception.</span>
+            <span class="s2">}</span>
+            <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s6">&quot;&gt;&gt; Pagination : page = &quot; </span><span class="s2">+ </span><span class="s1">page </span><span class="s2">+ </span><span class="s6">&quot;, size = &quot; </span><span class="s2">+ </span><span class="s1">size </span><span class="s2">);</span>
+
+            <span class="s1">List</span><span class="s2">&lt;</span><span class="s1">Event</span><span class="s2">&gt; </span><span class="s1">events </span><span class="s2">= </span><span class="s1">em</span><span class="s2">.</span><span class="s1">createNamedQuery</span><span class="s2">(</span><span class="s6">&quot;Event.getAll&quot;</span><span class="s2">, </span><span class="s1">Event</span><span class="s2">.</span><span class="s0">class</span><span class="s2">)</span>
+                    <span class="s2">.</span><span class="s1">setFirstResult</span><span class="s2">(</span><span class="s1">firstResult</span><span class="s2">)</span>
+                    <span class="s2">.</span><span class="s1">setMaxResults</span><span class="s2">(</span><span class="s1">size</span><span class="s2">)</span>
+                    <span class="s2">.</span><span class="s1">getResultList</span><span class="s2">();</span>
+            <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s6">&quot;&gt;&gt; Evènements récupérés : &quot; </span><span class="s2">+ </span><span class="s1">events</span><span class="s2">.</span><span class="s1">size</span><span class="s2">() );</span>
+            <span class="s0">for </span><span class="s2">(</span><span class="s1">Event e </span><span class="s2">: </span><span class="s1">events</span><span class="s2">) {</span>
+                <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s6">&quot;Event: &quot; </span><span class="s2">+ </span><span class="s1">e</span><span class="s2">.</span><span class="s1">getEventName</span><span class="s2">() + </span><span class="s6">&quot; / Active :&quot; </span><span class="s2">+ </span><span class="s1">e</span><span class="s2">.</span><span class="s1">isActive</span><span class="s2">());</span>
+            <span class="s2">}</span>
+            <span class="s1">Long totalElements </span><span class="s2">= </span><span class="s1">em</span><span class="s2">.</span><span class="s1">createQuery</span><span class="s2">(</span><span class="s6">&quot;Select count(e) from Event e&quot;</span><span class="s2">, </span><span class="s1">Long</span><span class="s2">.</span><span class="s0">class</span><span class="s2">)</span>
+                    <span class="s2">.</span><span class="s1">getSingleResult</span><span class="s2">();</span>
+            <span class="s1">Page</span><span class="s2">&lt;</span><span class="s1">Event</span><span class="s2">&gt; </span><span class="s1">pageData </span><span class="s2">= </span><span class="s1">Page</span><span class="s2">.</span><span class="s1">of</span><span class="s2">(</span><span class="s1">events</span><span class="s2">, </span><span class="s1">page</span><span class="s2">, </span><span class="s1">size</span><span class="s2">, </span><span class="s1">totalElements</span><span class="s2">);</span>
+            <span class="s0">return </span><span class="s1">Result</span><span class="s2">.</span><span class="s1">ok</span><span class="s2">(</span><span class="s1">pageData</span><span class="s2">);</span>
+        <span class="s2">}</span><span class="s0">catch </span><span class="s2">(</span><span class="s1">Exception e</span><span class="s2">){</span>
+            <span class="s1">e</span><span class="s2">.</span><span class="s1">printStackTrace</span><span class="s2">();</span>
+            <span class="s1">Map</span><span class="s2">&lt;</span><span class="s1">String</span><span class="s2">, </span><span class="s1">String</span><span class="s2">&gt; </span><span class="s1">errors </span><span class="s2">= </span><span class="s0">new </span><span class="s1">HashMap</span><span class="s2">&lt;&gt;();</span>
+            <span class="s1">errors</span><span class="s2">.</span><span class="s1">put</span><span class="s2">(</span><span class="s6">&quot;Introuvable&quot;</span><span class="s2">, </span><span class="s6">&quot;erreur lors du chargement des évènements &quot; </span><span class="s2">+ </span><span class="s1">e</span><span class="s2">.</span><span class="s1">getMessage</span><span class="s2">());</span>
+            <span class="s0">return </span><span class="s1">Result</span><span class="s2">.</span><span class="s1">fail</span><span class="s2">(</span><span class="s1">errors</span><span class="s2">);</span>
+        <span class="s2">}</span>
+    <span class="s2">}</span>
+    <span class="s0">public </span><span class="s1">Result</span><span class="s2">&lt;</span><span class="s1">List</span><span class="s2">&lt;</span><span class="s1">Event</span><span class="s2">&gt;&gt; </span><span class="s1">getAllEvents2</span><span class="s2">(</span><span class="s0">int </span><span class="s1">page</span><span class="s2">, </span><span class="s0">int </span><span class="s1">size</span><span class="s2">){</span>
+        <span class="s1">em </span><span class="s2">= </span><span class="s1">EMF</span><span class="s2">.</span><span class="s1">getEM</span><span class="s2">();</span>
+        <span class="s5">//EventService eventService = new EventServiceImpl(em);</span>
+        <span class="s5">//Vérification que les valeurs entrées sont valies (suite à un problème de negative start position</span>
+        <span class="s0">if </span><span class="s2">(</span><span class="s1">page </span><span class="s2">&lt; </span><span class="s7">1</span><span class="s2">) </span><span class="s1">page </span><span class="s2">= </span><span class="s7">1</span><span class="s2">;</span>
+        <span class="s0">if </span><span class="s2">(</span><span class="s1">size </span><span class="s2">&lt; </span><span class="s7">1</span><span class="s2">) </span><span class="s1">size </span><span class="s2">= </span><span class="s7">10</span><span class="s2">;</span>
+        <span class="s5">//-------------------------------------------------------------</span>
+        <span class="s0">try </span><span class="s2">{</span>
+            <span class="s5">//Vérification que les valeurs entrées sont valies (suite à un problème de negative start position</span>
+            <span class="s0">if </span><span class="s2">(</span><span class="s1">page </span><span class="s2">&lt; </span><span class="s7">1</span><span class="s2">) </span><span class="s1">page </span><span class="s2">= </span><span class="s7">1</span><span class="s2">;</span>
+            <span class="s0">if </span><span class="s2">(</span><span class="s1">size </span><span class="s2">&lt; </span><span class="s7">1</span><span class="s2">) </span><span class="s1">size </span><span class="s2">= </span><span class="s7">10</span><span class="s2">;</span>
+            <span class="s5">//-------------------------------------------------------------</span>
+            <span class="s0">int </span><span class="s1">firstResult </span><span class="s2">= (</span><span class="s1">page </span><span class="s2">- </span><span class="s7">1</span><span class="s2">) * </span><span class="s1">size</span><span class="s2">;</span>
+            <span class="s0">if</span><span class="s2">(</span><span class="s1">firstResult </span><span class="s2">&lt; </span><span class="s7">0</span><span class="s2">){</span>
+                <span class="s1">System</span><span class="s2">.</span><span class="s1">err</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s6">&quot;ERREUR GRAVE : firstResult est négatif. Valeur calculée : &quot; </span><span class="s2">+ </span><span class="s1">firstResult </span><span class="s2">+ </span><span class="s6">&quot; (page= &quot; </span><span class="s2">+ </span><span class="s1">page </span><span class="s2">+ </span><span class="s6">&quot;, size=&quot; </span><span class="s2">+ </span><span class="s1">size </span><span class="s2">+ </span><span class="s6">&quot;)&quot;</span><span class="s2">);</span>
+                <span class="s1">firstResult </span><span class="s2">= </span><span class="s7">0</span><span class="s2">;</span><span class="s5">//réinitialisation pour empêcher l'exception.</span>
+            <span class="s2">}</span>
+            <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s6">&quot;&gt;&gt; Pagination : page = &quot; </span><span class="s2">+ </span><span class="s1">page </span><span class="s2">+ </span><span class="s6">&quot;, size = &quot; </span><span class="s2">+ </span><span class="s1">size </span><span class="s2">);</span>
+            <span class="s1">List</span><span class="s2">&lt;</span><span class="s1">Event</span><span class="s2">&gt; </span><span class="s1">events </span><span class="s2">= </span><span class="s1">em</span><span class="s2">.</span><span class="s1">createNamedQuery</span><span class="s2">(</span><span class="s6">&quot;Event.getAll&quot;</span><span class="s2">, </span><span class="s1">Event</span><span class="s2">.</span><span class="s0">class</span><span class="s2">)</span>
+                    <span class="s2">.</span><span class="s1">setFirstResult</span><span class="s2">(</span><span class="s1">firstResult</span><span class="s2">)</span>
+                    <span class="s2">.</span><span class="s1">setMaxResults</span><span class="s2">(</span><span class="s1">size</span><span class="s2">)</span>
+                    <span class="s2">.</span><span class="s1">getResultList</span><span class="s2">();</span>
+            <span class="s1">System</span><span class="s2">.</span><span class="s1">out</span><span class="s2">.</span><span class="s1">println</span><span class="s2">(</span><span class="s6">&quot;&gt;&gt; Evènements récupérés : &quot; </span><span class="s2">+ </span><span class="s1">events</span><span class="s2">.</span><span class="s1">size</span><span class="s2">() );</span>
+            <span class="s0">return </span><span class="s1">Result</span><span class="s2">.</span><span class="s1">ok</span><span class="s2">(</span><span class="s1">events</span><span class="s2">);</span>
+        <span class="s2">}</span><span class="s0">catch </span><span class="s2">(</span><span class="s1">Exception e</span><span class="s2">){</span>
+            <span class="s1">e</span><span class="s2">.</span><span class="s1">printStackTrace</span><span class="s2">();</span>
+            <span class="s1">Map</span><span class="s2">&lt;</span><span class="s1">String</span><span class="s2">, </span><span class="s1">String</span><span class="s2">&gt; </span><span class="s1">errors </span><span class="s2">= </span><span class="s0">new </span><span class="s1">HashMap</span><span class="s2">&lt;&gt;();</span>
+            <span class="s1">errors</span><span class="s2">.</span><span class="s1">put</span><span class="s2">(</span><span class="s6">&quot;Introuvable&quot;</span><span class="s2">, </span><span class="s6">&quot;erreur lors du chargement des évènements &quot; </span><span class="s2">+ </span><span class="s1">e</span><span class="s2">.</span><span class="s1">getMessage</span><span class="s2">());</span>
+            <span class="s0">return </span><span class="s1">Result</span><span class="s2">.</span><span class="s1">fail</span><span class="s2">(</span><span class="s1">errors</span><span class="s2">);</span>
+        <span class="s2">}</span>
+    <span class="s2">}</span>
+
+    <span class="s3">/**</span>
+     <span class="s3">* Method to count the active events</span>
+     <span class="s3">* </span><span class="s4">@return </span><span class="s3">result method</span>
+     <span class="s3">*/</span>
+    <span class="s1">@Override</span>
+    <span class="s0">public </span><span class="s1">Result</span><span class="s2">&lt;</span><span class="s1">Long</span><span class="s2">&gt; </span><span class="s1">countActiveEvents</span><span class="s2">() {</span>
+        <span class="s1">Long countAllEvents </span><span class="s2">= </span><span class="s1">em</span><span class="s2">.</span><span class="s1">createNamedQuery</span><span class="s2">(</span><span class="s6">&quot;Event.countAllActive&quot;</span><span class="s2">, </span><span class="s1">Long</span><span class="s2">.</span><span class="s0">class</span><span class="s2">).</span><span class="s1">getSingleResult</span><span class="s2">();</span>
+        <span class="s1">log</span><span class="s2">.</span><span class="s1">info</span><span class="s2">(</span><span class="s6">&quot;getAllEvents : &quot; </span><span class="s2">+ </span><span class="s1">countAllEvents</span><span class="s2">);</span>
+        <span class="s0">return </span><span class="s1">Result</span><span class="s2">.</span><span class="s1">ok</span><span class="s2">(</span><span class="s1">countAllEvents</span><span class="s2">);</span>
+
+    <span class="s2">}</span>
+
+    <span class="s3">/**</span>
+     <span class="s3">* Method to count all the events</span>
+     <span class="s3">* </span><span class="s4">@return </span><span class="s3">result method</span>
+     <span class="s3">*/</span>
+    <span class="s1">@Override</span>
+    <span class="s0">public </span><span class="s1">Result</span><span class="s2">&lt;</span><span class="s1">Long</span><span class="s2">&gt; </span><span class="s1">countAllEvents</span><span class="s2">() {</span>
+        <span class="s1">Long countAllEvents </span><span class="s2">= </span><span class="s1">em</span><span class="s2">.</span><span class="s1">createNamedQuery</span><span class="s2">(</span><span class="s6">&quot;Event.getAll&quot;</span><span class="s2">, </span><span class="s1">Long</span><span class="s2">.</span><span class="s0">class</span><span class="s2">).</span><span class="s1">getSingleResult</span><span class="s2">();</span>
+        <span class="s1">log</span><span class="s2">.</span><span class="s1">info</span><span class="s2">(</span><span class="s6">&quot;getAllEvents : &quot; </span><span class="s2">+ </span><span class="s1">countAllEvents</span><span class="s2">);</span>
+        <span class="s0">return </span><span class="s1">Result</span><span class="s2">.</span><span class="s1">ok</span><span class="s2">(</span><span class="s1">countAllEvents</span><span class="s2">);</span>
+    <span class="s2">}</span>
+<span class="s2">}</span>
+</pre>
+</body>
+</html>

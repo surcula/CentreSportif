@@ -1,0 +1,212 @@
+<html>
+<head>
+<title>HallBusiness.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cf8e6d;}
+.s1 { color: #bcbec4;}
+.s2 { color: #bcbec4;}
+.s3 { color: #7a7e85;}
+.s4 { color: #5f826b; font-style: italic;}
+.s5 { color: #67a37c; font-style: italic;}
+.s6 { color: #6aab73;}
+.s7 { color: #2aacb8;}
+</style>
+</head>
+<body bgcolor="#1e1f22">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+HallBusiness.java</font>
+</center></td></tr></table>
+<pre><span class="s0">package </span><span class="s1">business</span><span class="s2">;</span>
+
+<span class="s0">import </span><span class="s1">Tools</span><span class="s2">.</span><span class="s1">Result</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">dto</span><span class="s2">.</span><span class="s1">HallUpdateForm</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">dto</span><span class="s2">.</span><span class="s1">Page</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">entities</span><span class="s2">.</span><span class="s1">Hall</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">enums</span><span class="s2">.</span><span class="s1">Scope</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">services</span><span class="s2">.</span><span class="s1">HallServiceImpl</span><span class="s2">;</span>
+
+<span class="s0">import </span><span class="s1">java</span><span class="s2">.</span><span class="s1">util</span><span class="s2">.</span><span class="s1">HashMap</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">java</span><span class="s2">.</span><span class="s1">util</span><span class="s2">.</span><span class="s1">List</span><span class="s2">;</span>
+<span class="s0">import </span><span class="s1">java</span><span class="s2">.</span><span class="s1">util</span><span class="s2">.</span><span class="s1">Map</span><span class="s2">;</span>
+
+<span class="s0">public class </span><span class="s1">HallBusiness </span><span class="s2">{</span>
+
+    <span class="s0">public </span><span class="s1">HallBusiness</span><span class="s2">(</span><span class="s1">HallServiceImpl hallService</span><span class="s2">) {</span>
+        <span class="s0">this</span><span class="s2">.</span><span class="s1">hallService </span><span class="s2">= </span><span class="s1">hallService</span><span class="s2">;</span>
+    <span class="s2">}</span>
+
+    <span class="s0">private </span><span class="s1">HallServiceImpl hallService</span><span class="s2">;</span>
+    <span class="s3">// Log4j</span>
+    <span class="s0">private static final </span><span class="s1">org</span><span class="s2">.</span><span class="s1">apache</span><span class="s2">.</span><span class="s1">log4j</span><span class="s2">.</span><span class="s1">Logger log </span><span class="s2">= </span><span class="s1">org</span><span class="s2">.</span><span class="s1">apache</span><span class="s2">.</span><span class="s1">log4j</span><span class="s2">.</span><span class="s1">Logger</span><span class="s2">.</span><span class="s1">getLogger</span><span class="s2">(</span><span class="s1">HallBusiness</span><span class="s2">.</span><span class="s0">class</span><span class="s2">);</span>
+
+    <span class="s4">/**</span>
+     <span class="s4">* validate data submitted by CreateForm</span>
+     <span class="s4">*</span>
+     <span class="s4">* </span><span class="s5">@param </span><span class="s4">strHallName</span>
+     <span class="s4">* </span><span class="s5">@param </span><span class="s4">strWidth</span>
+     <span class="s4">* </span><span class="s5">@param </span><span class="s4">strLength</span>
+     <span class="s4">* </span><span class="s5">@param </span><span class="s4">strHeight</span>
+     <span class="s4">* </span><span class="s5">@param </span><span class="s4">strActive</span>
+     <span class="s4">* </span><span class="s5">@return</span>
+     <span class="s4">*/</span>
+    <span class="s0">public static </span><span class="s1">Result</span><span class="s2">&lt;</span><span class="s1">Hall</span><span class="s2">&gt; </span><span class="s1">initCreateForm</span><span class="s2">(</span><span class="s1">String strHallName</span><span class="s2">, </span><span class="s1">String strWidth</span><span class="s2">, </span><span class="s1">String strLength</span><span class="s2">, </span><span class="s1">String strHeight</span><span class="s2">, </span><span class="s1">String strActive</span><span class="s2">) {</span>
+        <span class="s1">Map</span><span class="s2">&lt;</span><span class="s1">String</span><span class="s2">, </span><span class="s1">String</span><span class="s2">&gt; </span><span class="s1">errors </span><span class="s2">= </span><span class="s0">new </span><span class="s1">HashMap</span><span class="s2">&lt;&gt;();</span>
+
+        <span class="s1">Result</span><span class="s2">&lt;</span><span class="s1">String</span><span class="s2">&gt; </span><span class="s1">hallName </span><span class="s2">= </span><span class="s1">ValidateForm</span><span class="s2">.</span><span class="s1">stringIsEmpty</span><span class="s2">(</span><span class="s1">strHallName</span><span class="s2">, </span><span class="s6">&quot;errorHallName&quot;</span><span class="s2">, </span><span class="s6">&quot;HallName&quot;</span><span class="s2">, </span><span class="s1">errors</span><span class="s2">);</span>
+        <span class="s0">if </span><span class="s2">(!</span><span class="s1">hallName</span><span class="s2">.</span><span class="s1">isSuccess</span><span class="s2">()) </span><span class="s1">errors</span><span class="s2">.</span><span class="s1">putAll</span><span class="s2">(</span><span class="s1">hallName</span><span class="s2">.</span><span class="s1">getErrors</span><span class="s2">());</span>
+
+        <span class="s1">Result</span><span class="s2">&lt;</span><span class="s1">String</span><span class="s2">&gt; </span><span class="s1">hallNameLength </span><span class="s2">= </span><span class="s1">ValidateForm</span><span class="s2">.</span><span class="s1">stringLength</span><span class="s2">(</span><span class="s1">strHallName</span><span class="s2">, </span><span class="s7">0</span><span class="s2">, </span><span class="s7">255</span><span class="s2">);</span>
+        <span class="s0">if </span><span class="s2">(!</span><span class="s1">hallNameLength</span><span class="s2">.</span><span class="s1">isSuccess</span><span class="s2">()) </span><span class="s1">errors</span><span class="s2">.</span><span class="s1">putAll</span><span class="s2">(</span><span class="s1">hallNameLength</span><span class="s2">.</span><span class="s1">getErrors</span><span class="s2">());</span>
+
+        <span class="s1">Result</span><span class="s2">&lt;</span><span class="s1">Double</span><span class="s2">&gt; </span><span class="s1">height </span><span class="s2">= </span><span class="s1">ValidateForm</span><span class="s2">.</span><span class="s1">parseDouble</span><span class="s2">(</span><span class="s1">strHeight</span><span class="s2">, </span><span class="s6">&quot;errorHeight&quot;</span><span class="s2">, </span><span class="s6">&quot;Height&quot;</span><span class="s2">, </span><span class="s1">errors</span><span class="s2">);</span>
+        <span class="s0">if </span><span class="s2">(!</span><span class="s1">height</span><span class="s2">.</span><span class="s1">isSuccess</span><span class="s2">()) </span><span class="s1">errors</span><span class="s2">.</span><span class="s1">putAll</span><span class="s2">(</span><span class="s1">height</span><span class="s2">.</span><span class="s1">getErrors</span><span class="s2">());</span>
+
+        <span class="s1">Result</span><span class="s2">&lt;</span><span class="s1">Double</span><span class="s2">&gt; </span><span class="s1">length </span><span class="s2">= </span><span class="s1">ValidateForm</span><span class="s2">.</span><span class="s1">parseDouble</span><span class="s2">(</span><span class="s1">strLength</span><span class="s2">, </span><span class="s6">&quot;errorLength&quot;</span><span class="s2">, </span><span class="s6">&quot;Length&quot;</span><span class="s2">, </span><span class="s1">errors</span><span class="s2">);</span>
+        <span class="s0">if </span><span class="s2">(!</span><span class="s1">length</span><span class="s2">.</span><span class="s1">isSuccess</span><span class="s2">()) </span><span class="s1">errors</span><span class="s2">.</span><span class="s1">putAll</span><span class="s2">(</span><span class="s1">length</span><span class="s2">.</span><span class="s1">getErrors</span><span class="s2">());</span>
+
+        <span class="s1">Result</span><span class="s2">&lt;</span><span class="s1">Double</span><span class="s2">&gt; </span><span class="s1">width </span><span class="s2">= </span><span class="s1">ValidateForm</span><span class="s2">.</span><span class="s1">parseDouble</span><span class="s2">(</span><span class="s1">strWidth</span><span class="s2">, </span><span class="s6">&quot;errorWidth&quot;</span><span class="s2">, </span><span class="s6">&quot;Width&quot;</span><span class="s2">, </span><span class="s1">errors</span><span class="s2">);</span>
+        <span class="s0">if </span><span class="s2">(!</span><span class="s1">width</span><span class="s2">.</span><span class="s1">isSuccess</span><span class="s2">()) </span><span class="s1">errors</span><span class="s2">.</span><span class="s1">putAll</span><span class="s2">(</span><span class="s1">width</span><span class="s2">.</span><span class="s1">getErrors</span><span class="s2">());</span>
+
+        <span class="s1">Result</span><span class="s2">&lt;</span><span class="s1">Boolean</span><span class="s2">&gt; </span><span class="s1">active </span><span class="s2">= </span><span class="s1">ValidateForm</span><span class="s2">.</span><span class="s1">parseBoolean</span><span class="s2">(</span><span class="s1">strActive</span><span class="s2">, </span><span class="s6">&quot;errorActive&quot;</span><span class="s2">, </span><span class="s6">&quot;Active&quot;</span><span class="s2">, </span><span class="s1">errors</span><span class="s2">);</span>
+        <span class="s0">if </span><span class="s2">(!</span><span class="s1">active</span><span class="s2">.</span><span class="s1">isSuccess</span><span class="s2">()) </span><span class="s1">errors</span><span class="s2">.</span><span class="s1">putAll</span><span class="s2">(</span><span class="s1">active</span><span class="s2">.</span><span class="s1">getErrors</span><span class="s2">());</span>
+
+        <span class="s0">if </span><span class="s2">(!</span><span class="s1">errors</span><span class="s2">.</span><span class="s1">isEmpty</span><span class="s2">()) {</span>
+            <span class="s0">return </span><span class="s1">Result</span><span class="s2">.</span><span class="s1">fail</span><span class="s2">(</span><span class="s1">errors</span><span class="s2">);</span>
+        <span class="s2">} </span><span class="s0">else </span><span class="s2">{</span>
+            <span class="s1">Result</span><span class="s2">&lt;</span><span class="s1">Hall</span><span class="s2">&gt; </span><span class="s1">hallCreateForm </span><span class="s2">= </span><span class="s1">toEntity</span><span class="s2">(</span><span class="s1">hallName</span><span class="s2">.</span><span class="s1">getData</span><span class="s2">(), </span><span class="s1">width</span><span class="s2">.</span><span class="s1">getData</span><span class="s2">(), </span><span class="s1">length</span><span class="s2">.</span><span class="s1">getData</span><span class="s2">(), </span><span class="s1">height</span><span class="s2">.</span><span class="s1">getData</span><span class="s2">(), </span><span class="s1">active</span><span class="s2">.</span><span class="s1">getData</span><span class="s2">());</span>
+            <span class="s0">return </span><span class="s1">Result</span><span class="s2">.</span><span class="s1">ok</span><span class="s2">(</span><span class="s1">hallCreateForm</span><span class="s2">.</span><span class="s1">getData</span><span class="s2">());</span>
+        <span class="s2">}</span>
+
+    <span class="s2">}</span>
+
+    <span class="s4">/**</span>
+     <span class="s4">* validate data submitted by CreateForm</span>
+     <span class="s4">*</span>
+     <span class="s4">* </span><span class="s5">@param </span><span class="s4">strHallName</span>
+     <span class="s4">* </span><span class="s5">@param </span><span class="s4">strWidth</span>
+     <span class="s4">* </span><span class="s5">@param </span><span class="s4">strLength</span>
+     <span class="s4">* </span><span class="s5">@param </span><span class="s4">strHeight</span>
+     <span class="s4">* </span><span class="s5">@param </span><span class="s4">strActive</span>
+     <span class="s4">* </span><span class="s5">@return</span>
+     <span class="s4">*/</span>
+    <span class="s0">public static </span><span class="s1">Result</span><span class="s2">&lt;</span><span class="s1">HallUpdateForm</span><span class="s2">&gt; </span><span class="s1">initUpdateForm</span><span class="s2">(</span><span class="s1">String strHallName</span><span class="s2">, </span><span class="s1">String strWidth</span><span class="s2">, </span><span class="s1">String strLength</span><span class="s2">, </span><span class="s1">String strHeight</span><span class="s2">, </span><span class="s1">String strActive</span><span class="s2">) {</span>
+        <span class="s1">Map</span><span class="s2">&lt;</span><span class="s1">String</span><span class="s2">, </span><span class="s1">String</span><span class="s2">&gt; </span><span class="s1">errors </span><span class="s2">= </span><span class="s0">new </span><span class="s1">HashMap</span><span class="s2">&lt;&gt;();</span>
+
+        <span class="s1">Result</span><span class="s2">&lt;</span><span class="s1">String</span><span class="s2">&gt; </span><span class="s1">hallName </span><span class="s2">= </span><span class="s1">ValidateForm</span><span class="s2">.</span><span class="s1">stringIsEmpty</span><span class="s2">(</span><span class="s1">strHallName</span><span class="s2">, </span><span class="s6">&quot;errorHallName&quot;</span><span class="s2">, </span><span class="s6">&quot;HallName&quot;</span><span class="s2">, </span><span class="s1">errors</span><span class="s2">);</span>
+        <span class="s0">if </span><span class="s2">(!</span><span class="s1">hallName</span><span class="s2">.</span><span class="s1">isSuccess</span><span class="s2">()) </span><span class="s1">errors</span><span class="s2">.</span><span class="s1">putAll</span><span class="s2">(</span><span class="s1">hallName</span><span class="s2">.</span><span class="s1">getErrors</span><span class="s2">());</span>
+
+        <span class="s1">Result</span><span class="s2">&lt;</span><span class="s1">String</span><span class="s2">&gt; </span><span class="s1">hallNameLength </span><span class="s2">= </span><span class="s1">ValidateForm</span><span class="s2">.</span><span class="s1">stringLength</span><span class="s2">(</span><span class="s1">strHallName</span><span class="s2">, </span><span class="s7">0</span><span class="s2">, </span><span class="s7">255</span><span class="s2">);</span>
+        <span class="s0">if </span><span class="s2">(!</span><span class="s1">hallNameLength</span><span class="s2">.</span><span class="s1">isSuccess</span><span class="s2">()) </span><span class="s1">errors</span><span class="s2">.</span><span class="s1">putAll</span><span class="s2">(</span><span class="s1">hallNameLength</span><span class="s2">.</span><span class="s1">getErrors</span><span class="s2">());</span>
+
+        <span class="s1">Result</span><span class="s2">&lt;</span><span class="s1">Double</span><span class="s2">&gt; </span><span class="s1">height </span><span class="s2">= </span><span class="s1">ValidateForm</span><span class="s2">.</span><span class="s1">parseDouble</span><span class="s2">(</span><span class="s1">strHeight</span><span class="s2">, </span><span class="s6">&quot;errorHeight&quot;</span><span class="s2">, </span><span class="s6">&quot;Height&quot;</span><span class="s2">, </span><span class="s1">errors</span><span class="s2">);</span>
+        <span class="s0">if </span><span class="s2">(!</span><span class="s1">height</span><span class="s2">.</span><span class="s1">isSuccess</span><span class="s2">()) </span><span class="s1">errors</span><span class="s2">.</span><span class="s1">putAll</span><span class="s2">(</span><span class="s1">height</span><span class="s2">.</span><span class="s1">getErrors</span><span class="s2">());</span>
+
+        <span class="s1">Result</span><span class="s2">&lt;</span><span class="s1">Double</span><span class="s2">&gt; </span><span class="s1">length </span><span class="s2">= </span><span class="s1">ValidateForm</span><span class="s2">.</span><span class="s1">parseDouble</span><span class="s2">(</span><span class="s1">strLength</span><span class="s2">, </span><span class="s6">&quot;errorLength&quot;</span><span class="s2">, </span><span class="s6">&quot;Length&quot;</span><span class="s2">, </span><span class="s1">errors</span><span class="s2">);</span>
+        <span class="s0">if </span><span class="s2">(!</span><span class="s1">length</span><span class="s2">.</span><span class="s1">isSuccess</span><span class="s2">()) </span><span class="s1">errors</span><span class="s2">.</span><span class="s1">putAll</span><span class="s2">(</span><span class="s1">length</span><span class="s2">.</span><span class="s1">getErrors</span><span class="s2">());</span>
+
+        <span class="s1">Result</span><span class="s2">&lt;</span><span class="s1">Double</span><span class="s2">&gt; </span><span class="s1">width </span><span class="s2">= </span><span class="s1">ValidateForm</span><span class="s2">.</span><span class="s1">parseDouble</span><span class="s2">(</span><span class="s1">strWidth</span><span class="s2">, </span><span class="s6">&quot;errorWidth&quot;</span><span class="s2">, </span><span class="s6">&quot;Width&quot;</span><span class="s2">, </span><span class="s1">errors</span><span class="s2">);</span>
+        <span class="s0">if </span><span class="s2">(!</span><span class="s1">width</span><span class="s2">.</span><span class="s1">isSuccess</span><span class="s2">()) </span><span class="s1">errors</span><span class="s2">.</span><span class="s1">putAll</span><span class="s2">(</span><span class="s1">width</span><span class="s2">.</span><span class="s1">getErrors</span><span class="s2">());</span>
+
+        <span class="s1">Result</span><span class="s2">&lt;</span><span class="s1">Boolean</span><span class="s2">&gt; </span><span class="s1">active </span><span class="s2">= </span><span class="s1">ValidateForm</span><span class="s2">.</span><span class="s1">parseBoolean</span><span class="s2">(</span><span class="s1">strActive</span><span class="s2">, </span><span class="s6">&quot;errorActive&quot;</span><span class="s2">, </span><span class="s6">&quot;Active&quot;</span><span class="s2">, </span><span class="s1">errors</span><span class="s2">);</span>
+        <span class="s0">if </span><span class="s2">(!</span><span class="s1">active</span><span class="s2">.</span><span class="s1">isSuccess</span><span class="s2">()) </span><span class="s1">errors</span><span class="s2">.</span><span class="s1">putAll</span><span class="s2">(</span><span class="s1">active</span><span class="s2">.</span><span class="s1">getErrors</span><span class="s2">());</span>
+
+        <span class="s0">if </span><span class="s2">(!</span><span class="s1">errors</span><span class="s2">.</span><span class="s1">isEmpty</span><span class="s2">()) {</span>
+            <span class="s0">return </span><span class="s1">Result</span><span class="s2">.</span><span class="s1">fail</span><span class="s2">(</span><span class="s1">errors</span><span class="s2">);</span>
+        <span class="s2">} </span><span class="s0">else </span><span class="s2">{</span>
+            <span class="s1">Result</span><span class="s2">&lt;</span><span class="s1">HallUpdateForm</span><span class="s2">&gt; </span><span class="s1">hallUpdateForm </span><span class="s2">= </span><span class="s1">toUpdateForm</span><span class="s2">(</span><span class="s1">hallName</span><span class="s2">.</span><span class="s1">getData</span><span class="s2">(), </span><span class="s1">width</span><span class="s2">.</span><span class="s1">getData</span><span class="s2">(), </span><span class="s1">length</span><span class="s2">.</span><span class="s1">getData</span><span class="s2">(), </span><span class="s1">height</span><span class="s2">.</span><span class="s1">getData</span><span class="s2">(), </span><span class="s1">active</span><span class="s2">.</span><span class="s1">getData</span><span class="s2">());</span>
+            <span class="s0">return </span><span class="s1">Result</span><span class="s2">.</span><span class="s1">ok</span><span class="s2">(</span><span class="s1">hallUpdateForm</span><span class="s2">.</span><span class="s1">getData</span><span class="s2">());</span>
+        <span class="s2">}</span>
+
+    <span class="s2">}</span>
+
+
+    <span class="s4">/**</span>
+     <span class="s4">* Pagination ALL Halls</span>
+     <span class="s4">*</span>
+     <span class="s4">* </span><span class="s5">@param </span><span class="s4">page</span>
+     <span class="s4">* </span><span class="s5">@param </span><span class="s4">size</span>
+     <span class="s4">* </span><span class="s5">@return</span>
+     <span class="s4">*/</span>
+    <span class="s0">public </span><span class="s1">Result</span><span class="s2">&lt;</span><span class="s1">Page</span><span class="s2">&lt;</span><span class="s1">Hall</span><span class="s2">&gt;&gt; </span><span class="s1">getAllHallsPaged</span><span class="s2">(</span><span class="s0">int </span><span class="s1">page</span><span class="s2">, </span><span class="s0">int </span><span class="s1">size</span><span class="s2">, </span><span class="s1">Scope scope</span><span class="s2">) {</span>
+
+        <span class="s0">int </span><span class="s1">pageNumber </span><span class="s2">= </span><span class="s1">Math</span><span class="s2">.</span><span class="s1">max</span><span class="s2">(</span><span class="s7">1</span><span class="s2">, </span><span class="s1">page</span><span class="s2">);</span>
+        <span class="s0">int </span><span class="s1">pageSize </span><span class="s2">= </span><span class="s1">Math</span><span class="s2">.</span><span class="s1">max</span><span class="s2">(</span><span class="s7">1</span><span class="s2">, </span><span class="s1">size</span><span class="s2">);</span>
+        <span class="s0">int </span><span class="s1">offset </span><span class="s2">= (</span><span class="s1">pageNumber </span><span class="s2">- </span><span class="s7">1</span><span class="s2">) * </span><span class="s1">pageSize</span><span class="s2">;</span>
+
+        <span class="s1">Result</span><span class="s2">&lt;</span><span class="s1">List</span><span class="s2">&lt;</span><span class="s1">Hall</span><span class="s2">&gt;&gt; </span><span class="s1">content </span><span class="s2">= </span><span class="s1">scope </span><span class="s2">== </span><span class="s1">Scope</span><span class="s2">.</span><span class="s1">ALL </span><span class="s2">?</span>
+                <span class="s1">paginationGetAllHall</span><span class="s2">(</span><span class="s1">offset</span><span class="s2">, </span><span class="s1">pageSize</span><span class="s2">) :</span>
+                <span class="s1">paginationGetAllActiveHall</span><span class="s2">(</span><span class="s1">offset</span><span class="s2">, </span><span class="s1">pageSize</span><span class="s2">);</span>
+        <span class="s0">if </span><span class="s2">(!</span><span class="s1">content</span><span class="s2">.</span><span class="s1">isSuccess</span><span class="s2">()) {</span>
+            <span class="s1">log</span><span class="s2">.</span><span class="s1">error</span><span class="s2">(</span><span class="s1">content</span><span class="s2">.</span><span class="s1">getErrors</span><span class="s2">());</span>
+            <span class="s0">return </span><span class="s1">Result</span><span class="s2">.</span><span class="s1">fail</span><span class="s2">(</span><span class="s1">content</span><span class="s2">.</span><span class="s1">getErrors</span><span class="s2">());</span>
+        <span class="s2">}</span>
+
+        <span class="s1">Result</span><span class="s2">&lt;</span><span class="s1">Long</span><span class="s2">&gt; </span><span class="s1">total </span><span class="s2">= (</span><span class="s1">scope </span><span class="s2">== </span><span class="s1">Scope</span><span class="s2">.</span><span class="s1">ALL</span><span class="s2">)</span>
+                <span class="s2">? </span><span class="s1">hallService</span><span class="s2">.</span><span class="s1">countAllHalls</span><span class="s2">()</span>
+                <span class="s2">: </span><span class="s1">hallService</span><span class="s2">.</span><span class="s1">countActiveHalls</span><span class="s2">();</span>
+        <span class="s0">if </span><span class="s2">(!</span><span class="s1">total</span><span class="s2">.</span><span class="s1">isSuccess</span><span class="s2">()) {</span>
+            <span class="s1">log</span><span class="s2">.</span><span class="s1">error</span><span class="s2">(</span><span class="s1">content</span><span class="s2">.</span><span class="s1">getErrors</span><span class="s2">());</span>
+            <span class="s0">return </span><span class="s1">Result</span><span class="s2">.</span><span class="s1">fail</span><span class="s2">(</span><span class="s1">total</span><span class="s2">.</span><span class="s1">getErrors</span><span class="s2">());</span>
+        <span class="s2">}</span>
+
+        <span class="s3">// Création de la page</span>
+        <span class="s1">Page</span><span class="s2">&lt;</span><span class="s1">Hall</span><span class="s2">&gt; </span><span class="s1">pageObj </span><span class="s2">= </span><span class="s1">Page</span><span class="s2">.</span><span class="s1">of</span><span class="s2">(</span><span class="s1">content</span><span class="s2">.</span><span class="s1">getData</span><span class="s2">(), </span><span class="s1">pageNumber</span><span class="s2">, </span><span class="s1">pageSize</span><span class="s2">, </span><span class="s1">total</span><span class="s2">.</span><span class="s1">getData</span><span class="s2">());</span>
+        <span class="s1">log</span><span class="s2">.</span><span class="s1">info</span><span class="s2">(</span><span class="s6">&quot;Pagination réussie[allHAlls] → &quot; </span><span class="s2">+ </span><span class="s1">pageObj</span><span class="s2">);</span>
+        <span class="s0">return </span><span class="s1">Result</span><span class="s2">.</span><span class="s1">ok</span><span class="s2">(</span><span class="s1">pageObj</span><span class="s2">);</span>
+    <span class="s2">}</span>
+
+    <span class="s4">/**</span>
+     <span class="s4">* Retrieves HAll for PAgination</span>
+     <span class="s4">*</span>
+     <span class="s4">* </span><span class="s5">@param </span><span class="s4">page</span>
+     <span class="s4">* </span><span class="s5">@param </span><span class="s4">size</span>
+     <span class="s4">* </span><span class="s5">@return</span>
+     <span class="s4">*/</span>
+    <span class="s0">private </span><span class="s1">Result</span><span class="s2">&lt;</span><span class="s1">List</span><span class="s2">&lt;</span><span class="s1">Hall</span><span class="s2">&gt;&gt; </span><span class="s1">paginationGetAllHall</span><span class="s2">(</span><span class="s0">int </span><span class="s1">page</span><span class="s2">, </span><span class="s0">int </span><span class="s1">size</span><span class="s2">) {</span>
+        <span class="s0">return </span><span class="s1">hallService</span><span class="s2">.</span><span class="s1">getAllHalls</span><span class="s2">(</span><span class="s1">page</span><span class="s2">, </span><span class="s1">size</span><span class="s2">);</span>
+    <span class="s2">}</span>
+
+    <span class="s4">/**</span>
+     <span class="s4">* Retrieves ActiveHall for PAgination</span>
+     <span class="s4">*</span>
+     <span class="s4">* </span><span class="s5">@param </span><span class="s4">page</span>
+     <span class="s4">* </span><span class="s5">@param </span><span class="s4">size</span>
+     <span class="s4">* </span><span class="s5">@return</span>
+     <span class="s4">*/</span>
+    <span class="s0">private </span><span class="s1">Result</span><span class="s2">&lt;</span><span class="s1">List</span><span class="s2">&lt;</span><span class="s1">Hall</span><span class="s2">&gt;&gt; </span><span class="s1">paginationGetAllActiveHall</span><span class="s2">(</span><span class="s0">int </span><span class="s1">page</span><span class="s2">, </span><span class="s0">int </span><span class="s1">size</span><span class="s2">) {</span>
+        <span class="s0">return </span><span class="s1">hallService</span><span class="s2">.</span><span class="s1">getAllActiveHalls</span><span class="s2">(</span><span class="s1">page</span><span class="s2">, </span><span class="s1">size</span><span class="s2">);</span>
+    <span class="s2">}</span>
+
+    <span class="s4">/**</span>
+     <span class="s4">* create hall with form params validates</span>
+     <span class="s4">* </span><span class="s5">@return</span>
+     <span class="s4">*/</span>
+    <span class="s0">private static </span><span class="s1">Result</span><span class="s2">&lt;</span><span class="s1">Hall</span><span class="s2">&gt; </span><span class="s1">toEntity</span><span class="s2">(</span><span class="s1">String hallName</span><span class="s2">, </span><span class="s0">double </span><span class="s1">width</span><span class="s2">, </span><span class="s0">double </span><span class="s1">length</span><span class="s2">, </span><span class="s0">double </span><span class="s1">height</span><span class="s2">, </span><span class="s0">boolean </span><span class="s1">active</span><span class="s2">){</span>
+        <span class="s1">Hall hall </span><span class="s2">= </span><span class="s0">new </span><span class="s1">Hall</span><span class="s2">();</span>
+        <span class="s1">hall</span><span class="s2">.</span><span class="s1">setHallName</span><span class="s2">(</span><span class="s1">hallName</span><span class="s2">);</span>
+        <span class="s1">hall</span><span class="s2">.</span><span class="s1">setWidth</span><span class="s2">(</span><span class="s1">width</span><span class="s2">);</span>
+        <span class="s1">hall</span><span class="s2">.</span><span class="s1">setLength</span><span class="s2">(</span><span class="s1">length</span><span class="s2">);</span>
+        <span class="s1">hall</span><span class="s2">.</span><span class="s1">setHeight</span><span class="s2">(</span><span class="s1">height</span><span class="s2">);</span>
+        <span class="s1">hall</span><span class="s2">.</span><span class="s1">setActive</span><span class="s2">(</span><span class="s1">active</span><span class="s2">);</span>
+        <span class="s0">return </span><span class="s1">Result</span><span class="s2">.</span><span class="s1">ok</span><span class="s2">(</span><span class="s1">hall</span><span class="s2">);</span>
+    <span class="s2">}</span>
+
+    <span class="s4">/**</span>
+     <span class="s4">* create hall with form params validates</span>
+     <span class="s4">* </span><span class="s5">@return</span>
+     <span class="s4">*/</span>
+    <span class="s0">private static </span><span class="s1">Result</span><span class="s2">&lt;</span><span class="s1">HallUpdateForm</span><span class="s2">&gt; </span><span class="s1">toUpdateForm</span><span class="s2">(</span><span class="s1">String hallName</span><span class="s2">, </span><span class="s0">double </span><span class="s1">width</span><span class="s2">, </span><span class="s0">double </span><span class="s1">length</span><span class="s2">, </span><span class="s0">double </span><span class="s1">height</span><span class="s2">, </span><span class="s0">boolean </span><span class="s1">active</span><span class="s2">){</span>
+        <span class="s1">HallUpdateForm hallUpdateForm </span><span class="s2">= </span><span class="s0">new </span><span class="s1">HallUpdateForm</span><span class="s2">();</span>
+        <span class="s1">hallUpdateForm</span><span class="s2">.</span><span class="s1">setHallName</span><span class="s2">(</span><span class="s1">hallName</span><span class="s2">);</span>
+        <span class="s1">hallUpdateForm</span><span class="s2">.</span><span class="s1">setWidth</span><span class="s2">(</span><span class="s1">width</span><span class="s2">);</span>
+        <span class="s1">hallUpdateForm</span><span class="s2">.</span><span class="s1">setLength</span><span class="s2">(</span><span class="s1">length</span><span class="s2">);</span>
+        <span class="s1">hallUpdateForm</span><span class="s2">.</span><span class="s1">setHeight</span><span class="s2">(</span><span class="s1">height</span><span class="s2">);</span>
+        <span class="s1">hallUpdateForm</span><span class="s2">.</span><span class="s1">setActive</span><span class="s2">(</span><span class="s1">active</span><span class="s2">);</span>
+        <span class="s0">return </span><span class="s1">Result</span><span class="s2">.</span><span class="s1">ok</span><span class="s2">(</span><span class="s1">hallUpdateForm</span><span class="s2">);</span>
+    <span class="s2">}</span>
+<span class="s2">}</span></pre>
+</body>
+</html>
